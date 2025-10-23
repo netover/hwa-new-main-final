@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "sentry": {
+      "command": "uvx",
+      "args": [
+        "mcp-server-sentry",
+        "--auth-token",
+        "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"
+      ]
+    }
+  }
+}

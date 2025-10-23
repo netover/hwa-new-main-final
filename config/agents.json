@@ -1,0 +1,13 @@
+{
+  "agents": [
+    {
+      "id": "test-agent-1",
+      "name": "Test Agent 1",
+      "role": "Test Role",
+      "goal": "Test Goal",
+      "backstory": "Test Backstory",
+      "tools": ["tws_status_tool"],
+      "model_name": "gpt-4"
+    }
+  ]
+}

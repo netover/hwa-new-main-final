@@ -1,0 +1,404 @@
+resync/app_factory.py:12:1: 'typing.Dict' imported but unused
+resync/app_factory.py:12:1: 'typing.Any' imported but unused
+resync/app_factory.py:17:1: 'fastapi.staticfiles.StaticFiles' imported but unused
+resync/app_factory.py:140:19: f-string is missing placeholders
+resync/app_factory.py:145:13: undefined name 'sys'
+resync/app_factory.py:148:19: f-string is missing placeholders
+resync/app_factory.py:152:19: f-string is missing placeholders
+resync/app_factory.py:153:19: f-string is missing placeholders
+resync/app_factory.py:155:13: undefined name 'sys'
+resync/app_factory.py:158:19: f-string is missing placeholders
+resync/app_factory.py:162:19: f-string is missing placeholders
+resync/app_factory.py:163:19: f-string is missing placeholders
+resync/app_factory.py:164:19: f-string is missing placeholders
+resync/app_factory.py:165:19: f-string is missing placeholders
+resync/app_factory.py:167:13: undefined name 'sys'
+resync/app_factory.py:170:19: f-string is missing placeholders
+resync/app_factory.py:175:13: undefined name 'sys'
+resync/app_factory.py:178:19: f-string is missing placeholders
+resync/app_factory.py:183:13: undefined name 'sys'
+resync/app_factory.py:526:13: 'resync.csp_validation.CSPValidationError' imported but unused
+resync/csp_validation.py:5:1: 'typing.List' imported but unused
+resync/csp_validation.py:11:5: 'fastapi.Response' imported but unused
+resync/main.py:29:15: f-string is missing placeholders
+resync/settings.py:8:1: 'pydantic.computed_field' imported but unused
+resync/api\admin.py:15:1: 'fastapi.templating.Jinja2Templates' imported but unused
+resync/api\admin.py:82:9: redefinition of unused 'Jinja2Templates' from line 15
+resync/api\admin.py:84:9: 'os' imported but unused
+resync/api\agents.py:1:1: 'typing.List' imported but unused
+resync/api\agents.py:5:1: 'resync.core.agent_manager.AgentConfig' imported but unused
+resync/api\agents.py:8:1: 'resync.core.interfaces.IAgentManager' imported but unused
+resync/api\agents.py:9:1: 'resync.core.rate_limiter.critical_rate_limit' imported but unused
+resync/api\audit.py:13:1: 'fastapi.security.HTTPBearer' imported but unused
+resync/api\audit.py:18:1: 'resync.models.validation.AuditRecord' imported but unused
+resync/api\auth.py:8:1: 'typing.Tuple' imported but unused
+resync/api\cache.py:3:1: 'typing.Dict' imported but unused
+resync/api\cache.py:3:1: 'typing.Any' imported but unused
+resync/api\cache.py:4:1: 'pydantic.Field' imported but unused
+resync/api\cache.py:7:1: 'resync.core.async_cache.AsyncTTLCache' imported but unused
+resync/api\chat.py:4:1: 'json' imported but unused
+resync/api\chat.py:11:1: 'resync.core.exceptions.AgentError' imported but unused
+resync/api\chat.py:11:1: 'resync.core.exceptions.ConfigurationError' imported but unused
+resync/api\chat.py:27:1: 'resync.core.interfaces.IConnectionManager' imported but unused
+resync/api\chat.py:29:1: 'resync.core.rate_limiter.websocket_rate_limit' imported but unused
+resync/api\dependencies.py:8:1: 'fastapi.HTTPException' imported but unused
+resync/api\dependencies.py:8:1: 'fastapi.status' imported but unused
+resync/api\dependencies.py:133:9: local variable '_idempotency_manager' is assigned to but never used
+resync/api\endpoints.py:19:1: 'resync.models.tws.SystemStatus' imported but unused
+resync/api\endpoints.py:23:1: 'resync.cqrs.dispatcher.initialize_dispatcher' imported but unused
+resync/api\endpoints.py:24:1: 'resync.cqrs.commands.GetSystemStatusCommand' imported but unused
+resync/api\endpoints.py:24:1: 'resync.cqrs.commands.GetWorkstationsStatusCommand' imported but unused
+resync/api\endpoints.py:24:1: 'resync.cqrs.commands.GetJobsStatusCommand' imported but unused
+resync/api\endpoints.py:25:1: 'resync.cqrs.queries.GetSystemStatusQuery' imported but unused
+resync/api\endpoints.py:26:1: 'resync.api_gateway.container.container' imported but unused
+resync/api\endpoints.py:26:1: 'resync.api_gateway.container.setup_dependencies' imported but unused
+resync/api\endpoints.py:27:1: 'resync.api_gateway.services.ITWSService' imported but unused
+resync/api\endpoints.py:27:1: 'resync.api_gateway.services.IAgentService' imported but unused
+resync/api\endpoints.py:27:1: 'resync.api_gateway.services.IKnowledgeService' imported but unused
+resync/api\endpoints.py:30:1: 'resync.api.middleware.endpoint_utils.with_monitoring' imported but unused
+resync/api\endpoints.py:30:1: 'resync.api.middleware.endpoint_utils.handle_endpoint_errors' imported but unused
+resync/api\endpoints.py:30:1: 'resync.api.middleware.endpoint_utils.with_security_validation' imported but unused
+resync/api\endpoints.py:882:1: 'resync.core.benchmarking.SystemBenchmarkRunner' imported but unused
+resync/api\endpoints.py:884:1: redefinition of unused 'ITWSClient' from line 14
+resync/api\endpoints.py:884:1: redefinition of unused 'IAgentManager' from line 14
+resync/api\exception_handlers.py:14:1: 'resync.core.exceptions.TimeoutError' imported but unused
+resync/api\exception_handlers.py:14:1: 'resync.core.exceptions.BusinessError' imported but unused
+resync/api\exception_handlers.py:14:1: 'resync.core.exceptions.IntegrationError' imported but unused
+resync/api\exception_handlers.py:14:1: 'resync.core.exceptions.ServiceUnavailableError' imported but unused
+resync/api\exception_handlers.py:14:1: 'resync.core.exceptions.CircuitBreakerError' imported but unused
+resync/api\operations.py:11:1: 'fastapi.HTTPException' imported but unused
+resync/api\operations.py:21:1: 'resync.core.exceptions.ValidationError' imported but unused
+resync/api\operations.py:21:1: 'resync.core.exceptions.ResourceConflictError' imported but unused
+resync/api\rag_upload.py:4:1: 'asyncio' imported but unused
+resync/api\rag_upload.py:12:1: 'resync.core.llm_wrapper.optimized_llm' imported but unused
+resync/api\rfc_examples.py:14:1: 'fastapi.Depends' imported but unused
+resync/api\rfc_examples.py:17:1: 'resync.api.models.responses.ProblemDetail' imported but unused
+resync/api\rfc_examples.py:17:1: 'resync.api.models.responses.create_success_response' imported but unused
+resync/api\rfc_examples.py:22:1: 'resync.api.models.links.add_hateoas_links' imported but unused
+resync/api\middleware\cors_config.py:203:9: local variable 'port' is assigned to but never used
+resync/api\middleware\cors_monitoring.py:13:1: 'fastapi.Response' imported but unused
+resync/api\middleware\cors_monitoring.py:14:1: 'fastapi.middleware.cors.CORSMiddleware' imported but unused
+resync/api\middleware\cors_monitoring.py:15:1: 'pydantic.Field' imported but unused
+resync/api\middleware\csp_middleware.py:6:1: 'typing.Optional' imported but unused
+resync/api\middleware\csp_middleware.py:6:1: 'typing.Dict' imported but unused
+resync/api\middleware\csp_middleware.py:6:1: 'typing.List' imported but unused
+resync/api\middleware\csp_middleware.py:6:1: 'typing.Any' imported but unused
+resync/api\middleware\csrf_protection.py:5:1: 'typing.Optional' imported but unused
+resync/api\middleware\csrf_protection.py:6:1: 'datetime.datetime' imported but unused
+resync/api\middleware\csrf_protection.py:8:1: 'resync.settings.settings' imported but unused
+resync/api\middleware\endpoint_utils.py:8:1: 'typing.Any' imported but unused
+resync/api\middleware\idempotency.py:95:28: f-string is missing placeholders
+resync/api\models\links.py:9:1: 'typing.List' imported but unused
+resync/api\models\responses.py:562:1: redefinition of unused 'create_paginated_response' from line 374
+resync/api\validation\agents.py:114:18: undefined name 'Optional'
+resync/api\validation\agents.py:135:17: undefined name 'Optional'
+resync/api\validation\agents.py:142:18: undefined name 'Optional'
+resync/api\validation\agents.py:252:11: undefined name 'Optional'
+resync/api\validation\agents.py:261:11: undefined name 'Optional'
+resync/api\validation\agents.py:266:11: undefined name 'Optional'
+resync/api\validation\agents.py:271:16: undefined name 'Optional'
+resync/api\validation\agents.py:276:12: undefined name 'Optional'
+resync/api\validation\agents.py:282:17: undefined name 'Optional'
+resync/api\validation\agents.py:287:13: undefined name 'Optional'
+resync/api\validation\agents.py:292:14: undefined name 'Optional'
+resync/api\validation\agents.py:297:11: undefined name 'Optional'
+resync/api\validation\agents.py:302:13: undefined name 'Optional'
+resync/api\validation\agents.py:307:18: undefined name 'Optional'
+resync/api\validation\agents.py:316:20: undefined name 'Optional'
+resync/api\validation\agents.py:322:11: undefined name 'Optional'
+resync/api\validation\agents.py:328:17: undefined name 'Optional'
+resync/api\validation\agents.py:335:18: undefined name 'Optional'
+resync/api\validation\agents.py:398:15: undefined name 'Optional'
+resync/api\validation\agents.py:403:11: undefined name 'Optional'
+resync/api\validation\agents.py:408:11: undefined name 'Optional'
+resync/api\validation\agents.py:413:13: undefined name 'Optional'
+resync/api\validation\agents.py:418:11: undefined name 'Optional'
+resync/api\validation\agents.py:429:14: undefined name 'Optional'
+resync/api\validation\agents.py:435:17: undefined name 'Optional'
+resync/api\validation\agents.py:474:25: undefined name 'Optional'
+resync/api\validation\auth.py:41:17: syntax error in forward annotation '^[a-zA-Z0-9_.-]+$'
+resync/api\validation\auth.py:129:17: syntax error in forward annotation '^[a-zA-Z0-9_.-]+$'
+resync/api\validation\auth.py:276:17: syntax error in forward annotation '^[a-zA-Z0-9_.-]+$'
+resync/api\validation\auth.py:506:17: syntax error in forward annotation '^[0-9]+$'
+resync/api\validation\config.py:5:1: 'typing.Dict' imported but unused
+resync/api\validation\config.py:226:20: undefined name 're'
+resync/api\validation\enhanced_security.py:3:1: 'asyncio' imported but unused
+resync/api\validation\enhanced_security.py:4:1: 'hashlib' imported but unused
+resync/api\validation\enhanced_security.py:7:1: 'json' imported but unused
+resync/api\validation\enhanced_security.py:8:1: 'logging' imported but unused
+resync/api\validation\enhanced_security.py:15:1: 'datetime.timedelta' imported but unused
+resync/api\validation\enhanced_security.py:18:1: 'typing.Awaitable' imported but unused
+resync/api\validation\enhanced_security.py:18:1: 'typing.Callable' imported but unused
+resync/api\validation\enhanced_security.py:18:1: 'typing.Set' imported but unused
+resync/api\validation\enhanced_security.py:18:1: 'typing.cast' imported but unused
+resync/api\validation\enhanced_security.py:34:1: 'urllib.parse.urlparse' imported but unused
+resync/api\validation\enhanced_security.py:37:1: 'fastapi.Depends' imported but unused
+resync/api\validation\enhanced_security.py:37:1: 'fastapi.HTTPException' imported but unused
+resync/api\validation\enhanced_security.py:37:1: 'fastapi.Request' imported but unused
+resync/api\validation\enhanced_security.py:37:1: 'fastapi.Response' imported but unused
+resync/api\validation\enhanced_security.py:37:1: 'fastapi.status' imported but unused
+resync/api\validation\enhanced_security.py:48:1: 'pydantic.EmailStr' imported but unused
+resync/api\validation\enhanced_security.py:48:1: 'pydantic.ValidationError' imported but unused
+resync/api\validation\enhanced_security.py:48:1: 'pydantic.validator' imported but unused
+resync/api\validation\enhanced_security.py:49:1: 'starlette.datastructures.Headers' imported but unused
+resync/api\validation\enhanced_security.py:51:1: 'resync.api.validation.common.BaseValidatedModel' imported but unused
+resync/api\validation\enhanced_security.py:51:1: 'resync.api.validation.common.NumericConstraints' imported but unused
+resync/api\validation\enhanced_security.py:51:1: 'resync.api.validation.common.StringConstraints' imported but unused
+resync/api\validation\enhanced_security.py:51:1: 'resync.api.validation.common.ValidationPatterns' imported but unused
+resync/api\validation\enhanced_security.py:59:1: 'resync.core.exceptions_enhanced.ResyncException' imported but unused
+resync/api\validation\enhanced_security.py:703:9: local variable 'window_start' is assigned to but never used
+resync/api\validation\enhanced_security.py:842:5: redefinition of unused 'validator' from line 48
+resync/api\validation\enhanced_security.py:861:5: redefinition of unused 'validator' from line 48
+resync/api\validation\enhanced_security.py:880:5: redefinition of unused 'validator' from line 48
+resync/api\validation\enhanced_security_fixed.py:3:1: 'asyncio' imported but unused
+resync/api\validation\enhanced_security_fixed.py:4:1: 'hashlib' imported but unused
+resync/api\validation\enhanced_security_fixed.py:7:1: 'json' imported but unused
+resync/api\validation\enhanced_security_fixed.py:8:1: 'logging' imported but unused
+resync/api\validation\enhanced_security_fixed.py:15:1: 'datetime.timedelta' imported but unused
+resync/api\validation\enhanced_security_fixed.py:18:1: 'typing.Awaitable' imported but unused
+resync/api\validation\enhanced_security_fixed.py:18:1: 'typing.Callable' imported but unused
+resync/api\validation\enhanced_security_fixed.py:18:1: 'typing.Set' imported but unused
+resync/api\validation\enhanced_security_fixed.py:18:1: 'typing.Type' imported but unused
+resync/api\validation\enhanced_security_fixed.py:18:1: 'typing.cast' imported but unused
+resync/api\validation\enhanced_security_fixed.py:34:1: 'urllib.parse.urlparse' imported but unused
+resync/api\validation\enhanced_security_fixed.py:37:1: 'fastapi.Depends' imported but unused
+resync/api\validation\enhanced_security_fixed.py:37:1: 'fastapi.HTTPException' imported but unused
+resync/api\validation\enhanced_security_fixed.py:37:1: 'fastapi.Request' imported but unused
+resync/api\validation\enhanced_security_fixed.py:37:1: 'fastapi.Response' imported but unused
+resync/api\validation\enhanced_security_fixed.py:37:1: 'fastapi.status' imported but unused
+resync/api\validation\enhanced_security_fixed.py:48:1: 'pydantic.EmailStr' imported but unused
+resync/api\validation\enhanced_security_fixed.py:48:1: 'pydantic.ValidationError' imported but unused
+resync/api\validation\enhanced_security_fixed.py:48:1: 'pydantic.validator' imported but unused
+resync/api\validation\enhanced_security_fixed.py:49:1: 'starlette.datastructures.Headers' imported but unused
+resync/api\validation\enhanced_security_fixed.py:51:1: 'resync.api.validation.common.BaseValidatedModel' imported but unused
+resync/api\validation\enhanced_security_fixed.py:51:1: 'resync.api.validation.common.NumericConstraints' imported but unused
+resync/api\validation\enhanced_security_fixed.py:51:1: 'resync.api.validation.common.StringConstraints' imported but unused
+resync/api\validation\enhanced_security_fixed.py:51:1: 'resync.api.validation.common.ValidationPatterns' imported but unused
+resync/api\validation\enhanced_security_fixed.py:59:1: 'resync.core.exceptions_enhanced.ResyncException' imported but unused
+resync/api\validation\enhanced_security_fixed.py:716:9: local variable 'window_start' is assigned to but never used
+resync/api\validation\enhanced_security_fixed.py:880:5: redefinition of unused 'validator' from line 48
+resync/api\validation\enhanced_security_fixed.py:899:5: redefinition of unused 'validator' from line 48
+resync/api\validation\enhanced_security_fixed.py:918:5: redefinition of unused 'validator' from line 48
+resync/api\validation\__init__.py:83:1: redefinition of unused 'AgentQueryParams' from line 3
+resync/api_gateway\core.py:11:1: 'resync.core.rate_limiter.authenticated_rate_limit' imported but unused
+resync/api_gateway\core.py:11:1: 'resync.core.rate_limiter.public_rate_limit' imported but unused
+resync/api_gateway\core.py:12:1: 'resync.core.audit_log.get_audit_log_manager' imported but unused
+resync/api_gateway\core.py:70:20: undefined name 'validate_api_key'
+resync/api_gateway\core.py:120:20: undefined name 'validate_api_key'
+resync/api_gateway\core.py:194:9: local variable 'e' is assigned to but never used
+resync/api_gateway\core.py:211:9: undefined name 'audit_log'
+resync/api_gateway\core.py:226:9: undefined name 'audit_log'
+resync/api_gateway\services.py:9:1: 'typing.Union' imported but unused
+resync/api_gateway\services.py:11:1: 'asyncio' imported but unused
+resync/config\csp.py:10:1: 'starlette.responses.Response' imported but unused
+resync/config\csp.py:11:1: 'starlette.types.ASGIApp' imported but unused
+resync/config\security.py:5:1: 'typing.Optional' imported but unused
+resync/config\security.py:10:1: 'starlette.responses.Response' imported but unused
+resync/core\agent_manager.py:5:1: 'json' imported but unused
+resync/core\agent_manager.py:7:1: 're' imported but unused
+resync/core\agent_manager.py:8:1: 'traceback' imported but unused
+resync/core\agent_manager.py:9:1: 'datetime.datetime' imported but unused
+resync/core\agent_manager.py:9:1: 'datetime.timezone' imported but unused
+resync/core\agent_manager.py:10:1: 'pathlib.Path' imported but unused
+resync/core\agent_manager.py:11:1: 'time.time' imported but unused
+resync/core\agent_manager.py:14:1: 'aiofiles' imported but unused
+resync/core\agent_manager.py:113:1: 'resync.core.exceptions.ConfigurationError' imported but unused
+resync/core\agent_manager.py:113:1: 'resync.core.exceptions.InvalidConfigError' imported but unused
+resync/core\agent_manager.py:113:1: 'resync.core.exceptions.MissingConfigError' imported but unused
+resync/core\agent_manager.py:113:1: 'resync.core.exceptions.NetworkError' imported but unused
+resync/core\agent_manager.py:113:1: 'resync.core.exceptions.ParsingError' imported but unused
+resync/core\agent_manager.py:121:1: 'resync.core.metrics.log_with_correlation' imported but unused
+resync/core\agent_manager.py:125:1: 'resync.tool_definitions.tws_tools.TWSToolReadOnly' imported but unused
+resync/core\agent_manager.py:125:1: 'resync.tool_definitions.tws_tools.tws_status_tool' imported but unused
+resync/core\agent_manager.py:125:1: 'resync.tool_definitions.tws_tools.tws_troubleshooting_tool' imported but unused
+resync/core\agent_manager.py:252:13: redefinition of unused 'tws_status_tool' from line 125
+resync/core\agent_manager.py:252:13: redefinition of unused 'tws_troubleshooting_tool' from line 125
+resync/core\alerting.py:4:1: 'asyncio' imported but unused
+resync/core\alerting.py:8:1: 'dataclasses.asdict' imported but unused
+resync/core\async_cache.py:592:17: local variable 'bounds_ok' is assigned to but never used
+resync/core\audit_log.py:17:1: 'sqlalchemy.orm.DeclarativeBase' imported but unused
+resync/core\benchmarking.py:7:1: 'typing.Tuple' imported but unused
+resync/core\cache.py:15:1: 'time' imported but unused
+resync/core\cache.py:19:1: 'typing.List' imported but unused
+resync/core\cache.py:21:1: 'resync.core.metrics.runtime_metrics' imported but unused
+resync/core\chaos_engineering.py:62:28: undefined name 'Dict'
+resync/core\chaos_engineering.py:342:27: undefined name 'get_audit_metrics'
+resync/core\csp_jinja_extension.py:3:1: 'typing.Optional' imported but unused
+resync/core\distributed_tracing.py:14:1: 'fastapi.responses.Response' imported but unused
+resync/core\di_container.py:4:1: 'inspect' imported but unused
+resync/core\di_container.py:5:1: 'logging' imported but unused
+resync/core\di_container.py:6:1: 'datetime.datetime' imported but unused
+resync/core\di_container.py:7:1: 'enum.auto' imported but unused
+resync/core\di_container.py:8:1: 'typing.Generic' imported but unused
+resync/core\di_container.py:8:1: 'typing.Optional' imported but unused
+resync/core\di_container.py:8:1: 'typing.Protocol' imported but unused
+resync/core\di_container.py:8:1: 'typing.Type' imported but unused
+resync/core\di_container.py:8:1: 'typing.cast' imported but unused
+resync/core\di_container.py:8:1: 'typing.get_type_hints' imported but unused
+resync/core\enhanced_cache.py:6:1: 'typing.Tuple' imported but unused
+resync/core\enhanced_cache_improved.py:6:1: 'typing.Tuple' imported but unused
+resync/core\fastapi_di.py:167:1: redefinition of unused 'get_teams_integration' from line 30
+resync/core\global_utils.py:3:1: 'os' imported but unused
+resync/core\global_utils.py:4:1: 'threading' imported but unused
+resync/core\global_utils.py:25:9: redefinition of unused 'os' from line 3
+resync/core\health_service.py:1096:45: undefined name 'Any'
+resync/core\health_service.py:1108:48: undefined name 'Any'
+resync/core\health_utils.py:3:1: 'asyncio' imported but unused
+resync/core\health_utils.py:7:1: '.exceptions.HealthCheckError' imported but unused
+resync/core\idempotency.py:24:1: 'typing.Union' imported but unused
+resync/core\idempotency.py:28:1: 'resync.core.exceptions.BusinessError' imported but unused
+resync/core\improved_cache.py:16:1: 'typing.Dict' imported but unused
+resync/core\improved_cache.py:17:1: 'datetime.datetime' imported but unused
+resync/core\improved_cache.py:17:1: 'datetime.timedelta' imported but unused
+resync/core\improved_cache.py:18:1: 'threading.Lock' imported but unused
+resync/core\litellm_init.py:13:1: 'typing.Optional' imported but unused
+resync/core\litellm_init.py:32:9: 'litellm.completion_cost' imported but unused
+resync/core\litellm_init.py:35:9: local variable 'config_path' is assigned to but never used
+resync/core\logger.py:4:1: 'json' imported but unused
+resync/core\metrics.py:341:9: local variable 'e' is assigned to but never used
+resync/core\metrics.py:365:9: local variable 'e' is assigned to but never used
+resync/core\migration_managers.py:17:1: 'resync.services.tws_client_factory.TWSConfig' imported but unused
+resync/core\performance_optimizer.py:15:1: 'time' imported but unused
+resync/core\performance_optimizer.py:17:1: 'datetime.timedelta' imported but unused
+resync/core\redis_init.py:6:1: 'contextlib.asynccontextmanager' imported but unused
+resync/core\redis_init.py:18:1: 'resync.core.metrics.runtime_metrics' imported but unused
+resync/core\redis_init.py:20:1: 'resync.core.container.app_container' imported but unused
+resync/core\redis_init.py:21:1: 'resync.core.idempotency.IdempotencyManager' imported but unused
+resync/core\redis_init.py:23:10: undefined name 'logging'
+resync/core\redis_init.py:101:25: local variable 'idempotency_manager' is assigned to but never used
+resync/core\redis_init.py:150:17: local variable 'e' is assigned to but never used
+resync/core\redis_init.py:152:25: f-string is missing placeholders
+resync/core\redis_init.py:180:9: redefinition of unused 'app_container' from line 20
+resync/core\redis_init.py:181:9: redefinition of unused 'IdempotencyManager' from line 21
+resync/core\redis_init.py:198:13: local variable 'e' is assigned to but never used
+resync/core\redis_init.py:206:13: local variable 'e' is assigned to but never used
+resync/core\resilience.py:20:1: 'time' imported but unused
+resync/core\resilience.py:21:1: 'dataclasses.field' imported but unused
+resync/core\resilience.py:22:1: 'datetime.timedelta' imported but unused
+resync/core\resilience.py:25:1: 'typing.Union' imported but unused
+resync/core\resource_manager.py:176:13: local variable 'connection' is assigned to but never used
+resync/core\resource_manager.py:322:71: undefined name 'List'
+resync/core\resource_manager.py:392:25: undefined name 'List'
+resync/core\security.py:7:1: 'fastapi.Query' imported but unused
+resync/core\security.py:56:22: undefined name 'logging'
+resync/core\structured_logger.py:16:1: 'typing.Union' imported but unused
+resync/core\structured_logger.py:16:1: 'typing.Tuple' imported but unused
+resync/core\structured_logger.py:22:1: 'fastapi.Response' imported but unused
+resync/core\teams_integration.py:40:1: redefinition of unused 'TeamsNotification' from line 18
+resync/core\websocket_pool_manager.py:156:48: undefined name 'settings'
+resync/core\write_ahead_log.py:318:5: redefinition of unused 'cleanup_old_logs' from line 301
+resync/core\__init__.py:8:1: 'asyncio' imported but unused
+resync/core\__init__.py:11:1: 're' imported but unused
+resync/core\__init__.py:20:1: '.async_cache.AsyncTTLCache' imported but unused
+resync/core\__init__.py:21:1: '.config_watcher.handle_config_change' imported but unused
+resync/core\__init__.py:22:1: '.metrics.runtime_metrics' imported but unused
+resync/core\__init__.py:25:1: '.global_utils.get_global_correlation_id' imported but unused
+resync/core\__init__.py:25:1: '.global_utils.get_environment_tags' imported but unused
+resync/core\__init__.py:86:5: redefinition of unused 'get_global_correlation_id' from line 25
+resync/core\__init__.py:90:5: redefinition of unused 'get_environment_tags' from line 25
+resync/core\pools\base_pool.py:10:1: 'time' imported but unused
+resync/core\pools\base_pool.py:15:1: 'typing.Any' imported but unused
+resync/core\pools\base_pool.py:15:1: 'typing.Dict' imported but unused
+resync/core\pools\base_pool.py:15:1: 'typing.List' imported but unused
+resync/core\pools\base_pool.py:18:1: 'resync.core.metrics.runtime_metrics' imported but unused
+resync/core\pools\base_pool.py:139:49: local variable 'conn' is assigned to but never used
+resync/core\pools\db_pool.py:12:1: 'typing.TYPE_CHECKING' imported but unused
+resync/core\pools\db_pool.py:14:1: 'sqlalchemy as sa' imported but unused
+resync/core\pools\db_pool.py:15:1: 'sqlalchemy.Engine' imported but unused
+resync/core\pools\db_pool.py:15:1: 'sqlalchemy.create_engine' imported but unused
+resync/core\pools\db_pool.py:17:1: 'sqlalchemy.pool.StaticPool' imported but unused
+resync/core\pools\db_pool.py:21:1: 'resync.core.metrics.runtime_metrics' imported but unused
+resync/core\pools\db_pool.py:22:1: 'resync.settings.settings' imported but unused
+resync/core\pools\http_pool.py:8:1: 'asyncio' imported but unused
+resync/core\pools\http_pool.py:17:1: 'resync.core.metrics.runtime_metrics' imported but unused
+resync/core\pools\pool_manager.py:18:1: redefinition of unused 'ConnectionPool' from line 13
+resync/core\pools\pool_manager.py:18:1: redefinition of unused 'ConnectionPoolConfig' from line 13
+resync/core\pools\pool_manager.py:18:1: redefinition of unused 'ConnectionPoolStats' from line 13
+resync/core\pools\pool_manager.py:19:1: redefinition of unused 'settings' from line 14
+resync/core\pools\pool_manager.py:25:5: 'sqlalchemy.ext.asyncio.AsyncEngine' imported but unused
+resync/core\pools\pool_manager.py:26:5: 'redis.asyncio as redis' imported but unused
+resync/core\pools\pool_manager.py:27:5: 'httpx' imported but unused
+resync/core\pools\redis_pool.py:8:1: 'asyncio' imported but unused
+resync/core\pools\redis_pool.py:20:1: 'resync.core.metrics.runtime_metrics' imported but unused
+resync/core\pools\redis_pool.py:76:9: local variable 'connection' is assigned to but never used
+resync/core\utils\common_error_handlers.py:9:1: 'typing.Union' imported but unused
+resync/core\utils\error_utils.py:16:1: 'resync.core.logger.log_with_correlation' imported but unused
+resync/core\utils\llm.py:5:1: 'litellm.acompletion' imported but unused
+resync/core\utils\llm.py:85:13: redefinition of unused 'acompletion' from line 5
+resync/core\utils\validation.py:174:5: 'fastapi.HTTPException' imported but unused
+resync/core\utils\validation.py:198:9: local variable 'e' is assigned to but never used
+resync/cqrs\commands.py:5:1: 'typing.Optional' imported but unused
+resync/cqrs\commands.py:7:1: 'resync.models.tws.JobStatus' imported but unused
+resync/cqrs\commands.py:7:1: 'resync.models.tws.WorkstationStatus' imported but unused
+resync/cqrs\commands.py:7:1: 'resync.models.tws.CriticalJob' imported but unused
+resync/cqrs\command_handlers.py:4:1: 'typing.List' imported but unused
+resync/cqrs\command_handlers.py:12:1: 'resync.services.tws_service.OptimizedTWSClient' imported but unused
+resync/cqrs\command_handlers.py:13:1: 'resync.models.tws.SystemStatus' imported but unused
+resync/cqrs\dispatcher.py:4:1: 'typing.Any' imported but unused
+resync/cqrs\dispatcher.py:4:1: 'typing.Union' imported but unused
+resync/cqrs\dispatcher.py:6:1: 'from resync.cqrs.commands import *' used; unable to detect undefined names
+resync/cqrs\dispatcher.py:7:1: 'from resync.cqrs.queries import *' used; unable to detect undefined names
+resync/cqrs\dispatcher.py:8:1: 'from resync.cqrs.command_handlers import *' used; unable to detect undefined names
+resync/cqrs\dispatcher.py:9:1: 'from resync.cqrs.query_handlers import *' used; unable to detect undefined names
+resync/cqrs\dispatcher.py:63:9: 'GetSystemStatusCommand' may be undefined, or defined from star imports: resync.cqrs.command_handlers, resync.cqrs.commands, resync.cqrs.queries, resync.cqrs.query_handlers
+resync/cqrs\dispatcher.py:64:9: 'GetSystemStatusCommandHandler' may be undefined, or defined from star imports: resync.cqrs.command_handlers, resync.cqrs.commands, resync.cqrs.queries, resync.cqrs.query_handlers
+resync/cqrs\dispatcher.py:67:9: 'GetWorkstationsStatusCommand' may be undefined, or defined from star imports: resync.cqrs.command_handlers, resync.cqrs.commands, resync.cqrs.queries, resync.cqrs.query_handlers
+resync/cqrs\dispatcher.py:68:9: 'GetWorkstationsStatusCommandHandler' may be undefined, or defined from star imports: resync.cqrs.command_handlers, resync.cqrs.commands, resync.cqrs.queries, resync.cqrs.query_handlers
+resync/cqrs\dispatcher.py:71:9: 'GetJobsStatusCommand' may be undefined, or defined from star imports: resync.cqrs.command_handlers, resync.cqrs.commands, resync.cqrs.queries, resync.cqrs.query_handlers
+resync/cqrs\dispatcher.py:72:9: 'GetJobsStatusCommandHandler' may be undefined, or defined from star imports: resync.cqrs.command_handlers, resync.cqrs.commands, resync.cqrs.queries, resync.cqrs.query_handlers
+resync/cqrs\dispatcher.py:75:9: 'GetCriticalPathStatusCommand' may be undefined, or defined from star imports: resync.cqrs.command_handlers, resync.cqrs.commands, resync.cqrs.queries, resync.cqrs.query_handlers
+resync/cqrs\dispatcher.py:76:9: 'GetCriticalPathStatusCommandHandler' may be undefined, or defined from star imports: resync.cqrs.command_handlers, resync.cqrs.commands, resync.cqrs.queries, resync.cqrs.query_handlers
+resync/cqrs\dispatcher.py:79:9: 'GetJobStatusBatchCommand' may be undefined, or defined from star imports: resync.cqrs.command_handlers, resync.cqrs.commands, resync.cqrs.queries, resync.cqrs.query_handlers
+resync/cqrs\dispatcher.py:80:9: 'GetJobStatusBatchCommandHandler' may be undefined, or defined from star imports: resync.cqrs.command_handlers, resync.cqrs.commands, resync.cqrs.queries, resync.cqrs.query_handlers
+resync/cqrs\dispatcher.py:83:9: 'UpdateJobStatusCommand' may be undefined, or defined from star imports: resync.cqrs.command_handlers, resync.cqrs.commands, resync.cqrs.queries, resync.cqrs.query_handlers
+resync/cqrs\dispatcher.py:84:9: 'UpdateJobStatusCommandHandler' may be undefined, or defined from star imports: resync.cqrs.command_handlers, resync.cqrs.commands, resync.cqrs.queries, resync.cqrs.query_handlers
+resync/cqrs\dispatcher.py:87:9: 'ExecuteJobCommand' may be undefined, or defined from star imports: resync.cqrs.command_handlers, resync.cqrs.commands, resync.cqrs.queries, resync.cqrs.query_handlers
+resync/cqrs\dispatcher.py:88:9: 'ExecuteJobCommandHandler' may be undefined, or defined from star imports: resync.cqrs.command_handlers, resync.cqrs.commands, resync.cqrs.queries, resync.cqrs.query_handlers
+resync/cqrs\dispatcher.py:91:9: 'GetSystemHealthCommand' may be undefined, or defined from star imports: resync.cqrs.command_handlers, resync.cqrs.commands, resync.cqrs.queries, resync.cqrs.query_handlers
+resync/cqrs\dispatcher.py:92:9: 'GetSystemHealthCommandHandler' may be undefined, or defined from star imports: resync.cqrs.command_handlers, resync.cqrs.commands, resync.cqrs.queries, resync.cqrs.query_handlers
+resync/cqrs\dispatcher.py:97:9: 'GetSystemStatusQuery' may be undefined, or defined from star imports: resync.cqrs.command_handlers, resync.cqrs.commands, resync.cqrs.queries, resync.cqrs.query_handlers
+resync/cqrs\dispatcher.py:98:9: 'GetSystemStatusQueryHandler' may be undefined, or defined from star imports: resync.cqrs.command_handlers, resync.cqrs.commands, resync.cqrs.queries, resync.cqrs.query_handlers
+resync/cqrs\dispatcher.py:101:9: 'GetWorkstationsStatusQuery' may be undefined, or defined from star imports: resync.cqrs.command_handlers, resync.cqrs.commands, resync.cqrs.queries, resync.cqrs.query_handlers
+resync/cqrs\dispatcher.py:102:9: 'GetWorkstationsStatusQueryHandler' may be undefined, or defined from star imports: resync.cqrs.command_handlers, resync.cqrs.commands, resync.cqrs.queries, resync.cqrs.query_handlers
+resync/cqrs\dispatcher.py:105:9: 'GetJobsStatusQuery' may be undefined, or defined from star imports: resync.cqrs.command_handlers, resync.cqrs.commands, resync.cqrs.queries, resync.cqrs.query_handlers
+resync/cqrs\dispatcher.py:106:9: 'GetJobsStatusQueryHandler' may be undefined, or defined from star imports: resync.cqrs.command_handlers, resync.cqrs.commands, resync.cqrs.queries, resync.cqrs.query_handlers
+resync/cqrs\dispatcher.py:109:9: 'GetCriticalPathStatusQuery' may be undefined, or defined from star imports: resync.cqrs.command_handlers, resync.cqrs.commands, resync.cqrs.queries, resync.cqrs.query_handlers
+resync/cqrs\dispatcher.py:110:9: 'GetCriticalPathStatusQueryHandler' may be undefined, or defined from star imports: resync.cqrs.command_handlers, resync.cqrs.commands, resync.cqrs.queries, resync.cqrs.query_handlers
+resync/cqrs\dispatcher.py:113:9: 'GetJobStatusQuery' may be undefined, or defined from star imports: resync.cqrs.command_handlers, resync.cqrs.commands, resync.cqrs.queries, resync.cqrs.query_handlers
+resync/cqrs\dispatcher.py:114:9: 'GetJobStatusQueryHandler' may be undefined, or defined from star imports: resync.cqrs.command_handlers, resync.cqrs.commands, resync.cqrs.queries, resync.cqrs.query_handlers
+resync/cqrs\dispatcher.py:117:9: 'GetJobStatusBatchQuery' may be undefined, or defined from star imports: resync.cqrs.command_handlers, resync.cqrs.commands, resync.cqrs.queries, resync.cqrs.query_handlers
+resync/cqrs\dispatcher.py:118:9: 'GetJobStatusBatchQueryHandler' may be undefined, or defined from star imports: resync.cqrs.command_handlers, resync.cqrs.commands, resync.cqrs.queries, resync.cqrs.query_handlers
+resync/cqrs\dispatcher.py:121:9: 'GetSystemHealthQuery' may be undefined, or defined from star imports: resync.cqrs.command_handlers, resync.cqrs.commands, resync.cqrs.queries, resync.cqrs.query_handlers
+resync/cqrs\dispatcher.py:122:9: 'GetSystemHealthQueryHandler' may be undefined, or defined from star imports: resync.cqrs.command_handlers, resync.cqrs.commands, resync.cqrs.queries, resync.cqrs.query_handlers
+resync/cqrs\dispatcher.py:125:9: 'SearchJobsQuery' may be undefined, or defined from star imports: resync.cqrs.command_handlers, resync.cqrs.commands, resync.cqrs.queries, resync.cqrs.query_handlers
+resync/cqrs\dispatcher.py:126:9: 'SearchJobsQueryHandler' may be undefined, or defined from star imports: resync.cqrs.command_handlers, resync.cqrs.commands, resync.cqrs.queries, resync.cqrs.query_handlers
+resync/cqrs\dispatcher.py:129:9: 'GetPerformanceMetricsQuery' may be undefined, or defined from star imports: resync.cqrs.command_handlers, resync.cqrs.commands, resync.cqrs.queries, resync.cqrs.query_handlers
+resync/cqrs\dispatcher.py:130:9: 'GetPerformanceMetricsQueryHandler' may be undefined, or defined from star imports: resync.cqrs.command_handlers, resync.cqrs.commands, resync.cqrs.queries, resync.cqrs.query_handlers
+resync/cqrs\dispatcher.py:133:9: 'CheckTWSConnectionQuery' may be undefined, or defined from star imports: resync.cqrs.command_handlers, resync.cqrs.commands, resync.cqrs.queries, resync.cqrs.query_handlers
+resync/cqrs\dispatcher.py:134:9: 'CheckTWSConnectionQueryHandler' may be undefined, or defined from star imports: resync.cqrs.command_handlers, resync.cqrs.commands, resync.cqrs.queries, resync.cqrs.query_handlers
+resync/cqrs\queries.py:5:1: 'typing.Optional' imported but unused
+resync/cqrs\queries.py:5:1: 'typing.Dict' imported but unused
+resync/cqrs\queries.py:5:1: 'typing.Any' imported but unused
+resync/cqrs\queries.py:7:1: 'resync.models.tws.JobStatus' imported but unused
+resync/cqrs\queries.py:7:1: 'resync.models.tws.WorkstationStatus' imported but unused
+resync/cqrs\queries.py:7:1: 'resync.models.tws.CriticalJob' imported but unused
+resync/cqrs\query_handlers.py:4:1: 'typing.List' imported but unused
+resync/cqrs\query_handlers.py:4:1: 'typing.Dict' imported but unused
+resync/cqrs\query_handlers.py:4:1: 'typing.Any' imported but unused
+resync/cqrs\query_handlers.py:12:1: 'resync.models.tws.SystemStatus' imported but unused
+resync/cqrs\query_handlers.py:12:1: 'resync.models.tws.WorkstationStatus' imported but unused
+resync/cqrs\query_handlers.py:12:1: 'resync.models.tws.JobStatus' imported but unused
+resync/cqrs\query_handlers.py:12:1: 'resync.models.tws.CriticalJob' imported but unused
+resync/models\error_models.py:5:1: 'typing.Union' imported but unused
+resync/models\error_models.py:301:36: f-string is missing placeholders
+resync/models\error_models.py:325:36: f-string is missing placeholders
+resync/models\validation.py:7:1: 'typing.Any' imported but unused
+resync/models\validation.py:7:1: 'typing.Dict' imported but unused
+resync/models\validation.py:10:1: 'pydantic.EmailStr' imported but unused
+resync/services\mock_tws_service.py:370:28: f-string is missing placeholders
+resync/services\tws_client_factory.py:15:1: 'resync.services.mock_tws_service.MockTWSClient' imported but unused
+resync/services\tws_service.py:224:17: f-string is missing placeholders
+scripts/check_requirements.py:13:1: 'typing.Set' imported but unused
+scripts/check_requirements.py:13:1: 'typing.Tuple' imported but unused
+scripts/configure_security.py:3:1: 'time' imported but unused
+scripts/validate_config.py:49:15: f-string is missing placeholders

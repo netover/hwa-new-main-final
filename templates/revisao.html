@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revisão de Memórias | Resync</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            color: #444;
+        }
+        .controls {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .controls label {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .controls input[type="text"],
+        .controls select {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-right: 15px;
+        }
+        .controls button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+        }
+        .metrics {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #e9f7ef;
+            color: #28a745;
+        }
+        .metrics p {
+            margin: 5px 0;
+        }
+        .review-item {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 15px;
+            background-color: #fafafa;
+        }
+        .review-item p {
+            margin: 0 0 10px 0;
+        }
+        .review-item .label {
+            font-weight: bold;
+        }
+        .review-item pre {
+            background-color: #eee;
+            padding: 10px;
+            border-radius: 4px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .review-item .actions {
+            margin-top: 15px;
+        }
+        .review-item button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        .approve-btn {
+            background-color: #28a745;
+            color: white;
+        }
+        .reject-btn {
+            background-color: #dc3545;
+            color: white;
+        }
+        .status {
+            font-style: italic;
+            color: #666;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Revisão de Memórias Sinalizadas</h1>
+        <p>Revise as memórias que a IA marcou como potencialmente incorretas.</p>
+
+        <div class="metrics">
+            <h2>Métricas de Auditoria</h2>
+            <p>Total de Pendentes: <span id="metric-pending">0</span></p>
+            <p>Total de Aprovados: <span id="metric-approved">0</span></p>
+            <p>Total de Rejeitados: <span id="metric-rejected">0</span></p>
+        </div>
+
+        <div class="controls">
+            <label for="filter-status">Status:</label>
+            <select id="filter-status">
+                <option value="pending">Pendentes</option>
+                <option value="approved">Aprovados</option>
+                <option value="rejected">Rejeitados</option>
+                <option value="all">Todos</option>
+            </select>
+
+            <label for="search-query">Buscar:</label>
+            <input type="text" id="search-query" placeholder="Buscar por query ou resposta">
+            <button id="apply-filters">Aplicar Filtros</button>
+        </div>
+
+        <div id="review-list">
+            <!-- Itens de revisão serão inseridos aqui pelo JavaScript -->
+        </div>
+
+        <div id="status-message"></div>
+    </div>
+
+    <script src="/static/js/revisao.js" nonce="{{ request.state.csp_nonce if request and request.state.csp_nonce else '' }}"></script>
+</body>
+</html>

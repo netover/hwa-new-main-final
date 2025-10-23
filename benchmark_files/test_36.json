@@ -1,0 +1,19 @@
+{
+  "id": "test_36",
+  "name": "Test Item 36",
+  "value": 54.0,
+  "tags": [
+    "tag_0",
+    "tag_1",
+    "tag_2",
+    "tag_3",
+    "tag_4"
+  ],
+  "nested": {
+    "level1": {
+      "level2": {
+        "value": 36
+      }
+    }
+  }
+}

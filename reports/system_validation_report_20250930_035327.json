@@ -1,0 +1,455 @@
+{
+  "validation_summary": {
+    "correlation_id": "core_boot_1759215196_c2da1442",
+    "duration_seconds": 10.355948448181152,
+    "timestamp": 1759215207.2743838,
+    "environment": {
+      "environment": "production",
+      "is_production": true,
+      "is_testing": false,
+      "security_level": "high",
+      "should_use_mocks": false,
+      "correlation_id": "core_boot_1759215196_c2da1442",
+      "boot_timestamp": 1759215196.1742034
+    },
+    "overall_score": 67,
+    "scores": {
+      "health": 70,
+      "chaos_resilience": 66,
+      "fuzzing_resilience": 40,
+      "stress_resilience": 100,
+      "overall": 67
+    }
+  },
+  "test_results": {
+    "health_check": {
+      "overall_status": "degraded",
+      "boot_status": {
+        "correlation_id": "core_boot_1759215196_c2da1442",
+        "total_components": 5,
+        "total_boot_time": 9.5367431640625e-07,
+        "failed_imports": [
+          "agent_manager",
+          "AsyncKnowledgeGraph"
+        ],
+        "failed_count": 2,
+        "components": {
+          "AsyncTTLCache": {
+            "boot_time": 2.384185791015625e-07,
+            "health": {
+              "status": "unknown",
+              "message": "No health check available"
+            }
+          },
+          "handle_config_change": {
+            "boot_time": 2.384185791015625e-07,
+            "health": {
+              "status": "unknown",
+              "message": "No health check available"
+            }
+          },
+          "runtime_metrics": {
+            "boot_time": 0.0,
+            "health": {
+              "status": "unknown",
+              "message": "No health check available"
+            }
+          },
+          "connection_manager": {
+            "boot_time": 2.384185791015625e-07,
+            "health": {
+              "status": "unknown",
+              "message": "No health check available"
+            }
+          },
+          "encryption_service": {
+            "boot_time": 2.384185791015625e-07,
+            "health": {
+              "status": "healthy",
+              "service": "encryption",
+              "mock_mode": false,
+              "security_level": "high",
+              "test_encryption": true,
+              "test_decryption": true,
+              "timestamp": 1759215196.8611927
+            }
+          }
+        },
+        "overall_status": "degraded",
+        "global_context": {
+          "boot_id": "core_boot_1759215196_c2da1442",
+          "environment": "production",
+          "security_level": "high",
+          "start_time": 1759215196.1742034,
+          "events": []
+        }
+      },
+      "environment": {
+        "environment": "production",
+        "is_production": true,
+        "is_testing": false,
+        "security_level": "high",
+        "should_use_mocks": false,
+        "correlation_id": "core_boot_1759215196_c2da1442",
+        "boot_timestamp": 1759215196.1742034
+      },
+      "component_health": {
+        "total_components": 5,
+        "healthy_components": 1,
+        "health_issues": [
+          "AsyncTTLCache: No health check available",
+          "handle_config_change: No health check available",
+          "runtime_metrics: No health check available",
+          "connection_manager: No health check available"
+        ]
+      },
+      "runtime_metrics": {
+        "cache_hit_rate": 0,
+        "agent_success_rate": 0,
+        "audit_approval_rate": 0
+      },
+      "timestamp": 1759215196.9184752
+    },
+    "chaos_engineering": {
+      "correlation_id": "f4104580-ef6e-4c92-b853-d640517136f3",
+      "duration": 2.5861732959747314,
+      "total_tests": 6,
+      "successful_tests": 4,
+      "success_rate": 0.6666666666666666,
+      "total_anomalies": 4,
+      "test_results": [
+        {
+          "test_name": "cache_race_condition_fuzzing",
+          "component": "async_cache",
+          "duration": 0.07964897155761719,
+          "success": true,
+          "error_count": 0,
+          "operations_performed": 1000,
+          "anomalies_detected": [],
+          "correlation_id": "7457ff2c-0c51-4c67-a795-4401f7e797f4",
+          "details": {
+            "cache_metrics": {
+              "size": 334,
+              "num_shards": 8,
+              "ttl_seconds": 10,
+              "cleanup_interval": 30,
+              "hits": 0,
+              "misses": 328,
+              "sets": 335,
+              "evictions": 0,
+              "cleanup_cycles": 0,
+              "hit_rate": 0.0,
+              "miss_rate": 1.0,
+              "eviction_rate": 0.0,
+              "shard_distribution": [
+                45,
+                39,
+                42,
+                34,
+                47,
+                32,
+                51,
+                44
+              ],
+              "is_running": true,
+              "health_status": {
+                "status": "miss_rate",
+                "timestamp": 1759215196.9937778,
+                "details": {
+                  "miss_rate": 1.0,
+                  "total_requests": 328
+                }
+              }
+            }
+          }
+        },
+        {
+          "test_name": "agent_concurrent_initialization_chaos",
+          "component": "agent_manager",
+          "duration": 0.07921504974365234,
+          "success": true,
+          "error_count": 0,
+          "operations_performed": 5,
+          "anomalies_detected": [],
+          "correlation_id": "5e6e94b1-56d2-4725-86bc-ace37337cf51",
+          "details": {}
+        },
+        {
+          "test_name": "audit_db_failure_injection",
+          "component": "audit_db",
+          "duration": 0.07552099227905273,
+          "success": false,
+          "error_count": 1,
+          "operations_performed": 61,
+          "anomalies_detected": [
+            "Auto sweep failed: module 'resync' has no attribute 'auto_sweep_pending_audits'"
+          ],
+          "correlation_id": "bdbd447c-165f-4d8f-9631-f556110196e1",
+          "details": {}
+        },
+        {
+          "test_name": "memory_pressure_simulation",
+          "component": "memory_pressure",
+          "duration": 2.541858196258545,
+          "success": false,
+          "error_count": 0,
+          "operations_performed": 100,
+          "anomalies_detected": [
+            "Cache growing too large at iteration 60: 61",
+            "Cache growing too large at iteration 80: 81",
+            "Cleanup ineffective: 100 items remaining"
+          ],
+          "correlation_id": "2117e053-59ac-42d5-ace7-6049a718526d",
+          "details": {
+            "final_cache_metrics": {
+              "size": 100,
+              "num_shards": 4,
+              "ttl_seconds": 1,
+              "cleanup_interval": 30,
+              "hits": 0,
+              "misses": 328,
+              "sets": 434,
+              "evictions": 0,
+              "cleanup_cycles": 0,
+              "hit_rate": 0.0,
+              "miss_rate": 1.0,
+              "eviction_rate": 0.0,
+              "shard_distribution": [
+                28,
+                22,
+                21,
+                29
+              ],
+              "is_running": true,
+              "health_status": {
+                "status": "miss_rate",
+                "timestamp": 1759215196.9937778,
+                "details": {
+                  "miss_rate": 1.0,
+                  "total_requests": 328
+                }
+              }
+            }
+          }
+        },
+        {
+          "test_name": "network_partition_simulation",
+          "component": "network_simulation",
+          "duration": 0.0016567707061767578,
+          "success": true,
+          "error_count": 0,
+          "operations_performed": 20,
+          "anomalies_detected": [],
+          "correlation_id": "2f1f2c58-db32-4fbb-a749-ad33405fbc44",
+          "details": {}
+        },
+        {
+          "test_name": "component_isolation_testing",
+          "component": "component_isolation",
+          "duration": 0.0333096981048584,
+          "success": true,
+          "error_count": 0,
+          "operations_performed": 2,
+          "anomalies_detected": [],
+          "correlation_id": "5ee03c88-b9e2-42af-94d8-f5b9b1c3df66",
+          "details": {}
+        }
+      ],
+      "environment": {
+        "environment": "production",
+        "is_production": true,
+        "is_testing": false,
+        "security_level": "high",
+        "should_use_mocks": false,
+        "correlation_id": "core_boot_1759215196_c2da1442",
+        "boot_timestamp": 1759215196.1742034
+      }
+    },
+    "fuzzing": {
+      "correlation_id": "6750bfa4-a103-47ce-ac6a-beacfa41ffc1",
+      "campaign_duration": 0.018090009689331055,
+      "total_scenarios": 5,
+      "successful_scenarios": 2,
+      "success_rate": 0.4,
+      "results": [
+        {
+          "scenario": "cache_key_fuzzing",
+          "description": "Fuzz cache keys with edge cases",
+          "duration": 0.0012521743774414062,
+          "success": false,
+          "error": "no running event loop"
+        },
+        {
+          "scenario": "cache_value_fuzzing",
+          "description": "Fuzz cache values with complex objects",
+          "duration": 0.0010623931884765625,
+          "success": false,
+          "error": "no running event loop"
+        },
+        {
+          "scenario": "cache_ttl_fuzzing",
+          "description": "Fuzz TTL values with edge cases",
+          "duration": 0.0010943412780761719,
+          "success": false,
+          "error": "no running event loop"
+        },
+        {
+          "scenario": "agent_config_fuzzing",
+          "description": "Fuzz agent configurations",
+          "duration": 0.01209402084350586,
+          "success": true,
+          "result": {
+            "passed": 3,
+            "failed": 2,
+            "errors": [
+              "Config 2: 1 validation error for AgentConfig\nname\n  Input should be a valid string [type=string_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.11/v/string_type",
+              "Config 3: 1 validation error for AgentConfig\ntools\n  Input should be a valid list [type=list_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.11/v/list_type"
+            ]
+          }
+        },
+        {
+          "scenario": "audit_record_fuzzing",
+          "description": "Fuzz audit record structures",
+          "duration": 0.0025756359100341797,
+          "success": true,
+          "result": {
+            "passed": 5,
+            "failed": 0,
+            "errors": []
+          }
+        }
+      ],
+      "environment": {
+        "environment": "production",
+        "is_production": true,
+        "is_testing": false,
+        "security_level": "high",
+        "should_use_mocks": false,
+        "correlation_id": "core_boot_1759215196_c2da1442",
+        "boot_timestamp": 1759215196.1742034
+      }
+    },
+    "stress_testing": {
+      "correlation_id": "03f2d0eb-ab98-42ab-8d28-35807c548c09",
+      "total_duration": 7.741926908493042,
+      "total_tests": 7,
+      "total_operations": 1100.0,
+      "overall_ops_per_second": 142.08349071253554,
+      "overall_error_rate": 0.0,
+      "average_peak_memory_mb": 21.776911735534668,
+      "total_memory_leaks": 0,
+      "test_results": [
+        {
+          "test_name": "cache_cache_light_load",
+          "duration": 0.0011489391326904297,
+          "operations_per_second": 0.0,
+          "peak_memory_mb": 0.04296875,
+          "average_latency_ms": 0,
+          "error_rate": 0,
+          "cpu_usage_percent": 0.0,
+          "memory_leaks_detected": 0,
+          "anomalies": [],
+          "performance_degradation": 0.0
+        },
+        {
+          "test_name": "cache_cache_medium_load",
+          "duration": 0.0007808208465576172,
+          "operations_per_second": 0.0,
+          "peak_memory_mb": 0.03515625,
+          "average_latency_ms": 0,
+          "error_rate": 0,
+          "cpu_usage_percent": 0.0,
+          "memory_leaks_detected": 0,
+          "anomalies": [],
+          "performance_degradation": 0.0
+        },
+        {
+          "test_name": "cache_cache_heavy_load",
+          "duration": 0.0017426013946533203,
+          "operations_per_second": 0.0,
+          "peak_memory_mb": 0.05078125,
+          "average_latency_ms": 0,
+          "error_rate": 0,
+          "cpu_usage_percent": 0.0,
+          "memory_leaks_detected": 0,
+          "anomalies": [],
+          "performance_degradation": 0.0
+        },
+        {
+          "test_name": "agent_manager_stress",
+          "duration": 0.00791311264038086,
+          "operations_per_second": 0.0,
+          "peak_memory_mb": 0.0,
+          "average_latency_ms": 0.3608822822570801,
+          "error_rate": 0,
+          "cpu_usage_percent": 0.0,
+          "memory_leaks_detected": 0,
+          "anomalies": [],
+          "performance_degradation": 0.0
+        },
+        {
+          "test_name": "audit_db_stress",
+          "duration": 0.00039386749267578125,
+          "operations_per_second": 0.0,
+          "peak_memory_mb": 0.00390625,
+          "average_latency_ms": 0.006008148193359375,
+          "error_rate": 0,
+          "cpu_usage_percent": 0.0,
+          "memory_leaks_detected": 0,
+          "anomalies": [],
+          "performance_degradation": 0.0
+        },
+        {
+          "test_name": "memory_leak_detection",
+          "duration": 0.5356917381286621,
+          "operations_per_second": 186.67452357830103,
+          "peak_memory_mb": 0.01650714874267578,
+          "average_latency_ms": 0,
+          "error_rate": 0,
+          "cpu_usage_percent": 0.0,
+          "memory_leaks_detected": 0,
+          "anomalies": [],
+          "performance_degradation": 0.0
+        },
+        {
+          "test_name": "performance_degradation",
+          "duration": 0.014824867248535156,
+          "operations_per_second": 67454.22965583789,
+          "peak_memory_mb": 152.2890625,
+          "average_latency_ms": 0.07644891738891602,
+          "error_rate": 0,
+          "cpu_usage_percent": 0.0,
+          "memory_leaks_detected": 0,
+          "anomalies": [],
+          "performance_degradation": 9.601449275362318
+        }
+      ],
+      "environment": {
+        "environment": "production",
+        "is_production": true,
+        "is_testing": false,
+        "security_level": "high",
+        "should_use_mocks": false,
+        "correlation_id": "core_boot_1759215196_c2da1442",
+        "boot_timestamp": 1759215196.1742034
+      },
+      "system_info": {
+        "cpu_count": 24,
+        "total_memory_gb": 23.741249084472656,
+        "python_version": "3.13"
+      }
+    }
+  },
+  "recommendations": [
+    " CRITICAL: System health is degraded. Check component initialization and dependencies.",
+    " HIGH: System shows vulnerabilities under chaos conditions. Implement better error handling and circuit breakers.",
+    " MEDIUM: Fuzzing tests reveal input validation issues. Strengthen input sanitization and bounds checking.",
+    " POOR: System requires immediate attention. Multiple critical issues detected.",
+    " Enhance input validation with comprehensive schema validation and sanitization."
+  ],
+  "system_info": {
+    "python_version": "3.13.7",
+    "platform": "win32",
+    "architecture": "64-bit"
+  }
+}

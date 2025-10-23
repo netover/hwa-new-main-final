@@ -1,0 +1,22 @@
+{
+  "mcpServers": {
+    "github.com/upstash/context7-mcp": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"],
+      "disabled": false,
+      "autoApprove": []
+    },
+    "github.com/modelcontextprotocol/servers/tree/main/src/sequentialthinking": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"],
+      "disabled": false,
+      "autoApprove": []
+    },
+    "oraios-serena": {
+      "command": "serena-mcp-server",
+      "args": [],
+      "disabled": false,
+      "autoApprove": []
+    }
+  }
+}

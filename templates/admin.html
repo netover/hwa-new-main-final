@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resync Admin Configuration</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #6c757d;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --dark-color: #343a40;
+            --light-color: #f8f9fa;
+        }
+        
+        body {
+            background-color: #f5f7fb;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .admin-header {
+            background: linear-gradient(135deg, var(--primary-color), #0056b3);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .sidebar {
+            background-color: white;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+            height: calc(100vh - 70px);
+            position: sticky;
+            top: 70px;
+        }
+        
+        .nav-link {
+            color: var(--secondary-color);
+            border-left: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            color: var(--primary-color);
+            background-color: rgba(0,123,255,0.1);
+            border-left: 3px solid var(--primary-color);
+        }
+        
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-header {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            border-radius: 10px 10px 0 0 !important;
+            font-weight: 600;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), #0069d9);
+            border: none;
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, var(--success-color), #218838);
+            border: none;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .status-connected {
+            background-color: var(--success-color);
+        }
+        
+        .status-disconnected {
+            background-color: var(--danger-color);
+        }
+        
+        .status-warning {
+            background-color: var(--warning-color);
+        }
+        
+        .section-divider {
+            border-top: 1px solid rgba(0,0,0,0.1);
+            margin: 2rem 0;
+        }
+        
+        .config-section {
+            display: none;
+        }
+        
+        .config-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+        
+        .toast {
+            background-color: white;
+            border-left: 4px solid var(--primary-color);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+        
+        .toast.success {
+            border-left-color: var(--success-color);
+        }
+        
+        .toast.error {
+            border-left-color: var(--danger-color);
+        }
+        
+        .toast.warning {
+            border-left-color: var(--warning-color);
+        }
+    </style>
+</head>
+<body>
+    <!-- Toast Container -->
+    <div class="toast-container"></div>
+    
+    <!-- Header -->
+    <header class="admin-header">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h1><i class="fas fa-cogs me-2"></i>Resync Administration</h1>
+                    <p class="mb-0">System Configuration & Management Console</p>
+                </div>
+                <div class="col-md-6 text-end">
+                    <div class="btn-group">
+                        <button class="btn btn-outline-light" id="refreshBtn">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                        <button class="btn btn-outline-light" id="logoutBtn">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container-fluid mt-4">
+        <div class="row">
+            <!-- Sidebar Navigation -->
+            <div class="col-md-3 col-lg-2 sidebar">
+                <nav class="nav flex-column pt-3">
+                    <h6 class="px-3 text-muted">CONFIGURATION</h6>
+                    <a class="nav-link active" href="#" data-target="teams-config">
+                        <i class="fab fa-microsoft me-2"></i>Teams Integration
+                    </a>
+                    <a class="nav-link" href="#" data-target="tws-config">
+                        <i class="fas fa-server me-2"></i>TWS Configuration
+                    </a>
+                    <a class="nav-link" href="#" data-target="system-config">
+                        <i class="fas fa-sliders-h me-2"></i>System Settings
+                    </a>
+                    
+                    <h6 class="px-3 mt-4 text-muted">MONITORING</h6>
+                    <a class="nav-link" href="#" data-target="health-monitoring">
+                        <i class="fas fa-heartbeat me-2"></i>System Health
+                    </a>
+                    <a class="nav-link" href="#" data-target="notifications">
+                        <i class="fas fa-bell me-2"></i>Notifications
+                    </a>
+                    <a class="nav-link" href="#" data-target="logs">
+                        <i class="fas fa-file-alt me-2"></i>System Logs
+                    </a>
+                    
+                    <h6 class="px-3 mt-4 text-muted">TOOLS</h6>
+                    <a class="nav-link" href="#" data-target="backup-restore">
+                        <i class="fas fa-database me-2"></i>Backup & Restore
+                    </a>
+                    <a class="nav-link" href="#" data-target="audit">
+                        <i class="fas fa-scroll me-2"></i>Audit Log
+                    </a>
+                    <a class="nav-link" href="#" data-target="maintenance">
+                        <i class="fas fa-tools me-2"></i>Maintenance
+                    </a>
+                </nav>
+            </div>
+            
+            <!-- Main Content Area -->
+            <div class="col-md-9 col-lg-10">
+                <!-- Teams Configuration Section -->
+                <div id="teams-config" class="config-section active">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2><i class="fab fa-microsoft me-2"></i>Microsoft Teams Integration</h2>
+                        <button class="btn btn-success" id="saveTeamsConfig">
+                            <i class="fas fa-save me-1"></i>Save Configuration
+                        </button>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-xl-8">
+                            <!-- Basic Configuration Card -->
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <h5 class="mb-0"><i class="fas fa-cog me-2"></i>Basic Configuration</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-check form-switch mb-3">
+                                        <input class="form-check-input" type="checkbox" id="teamsEnabled" checked>
+                                        <label class="form-check-label" for="teamsEnabled">
+                                            <strong>Enable Teams Integration</strong>
+                                            <small class="d-block text-muted">Toggle to enable/disable Teams notifications</small>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="webhookUrl" class="form-label">Teams Webhook URL</label>
+                                        <input type="url" class="form-control" id="webhookUrl" 
+                                               placeholder="https://yourcompany.webhook.office.com/webhook...">
+                                        <div class="form-text">Incoming webhook URL for your Teams channel</div>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="channelName" class="form-label">Channel Name</label>
+                                                <input type="text" class="form-control" id="channelName" 
+                                                       placeholder="Resync Notifications">
+                                                <div class="form-text">Name of the Teams channel</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="botName" class="form-label">Bot Display Name</label>
+                                                <input type="text" class="form-control" id="botName" 
+                                                       value="Resync Bot">
+                                                <div class="form-text">Name displayed in Teams notifications</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="avatarUrl" class="form-label">Bot Avatar URL</label>
+                                        <input type="url" class="form-control" id="avatarUrl" 
+                                               placeholder="https://example.com/avatar.png">
+                                        <div class="form-text">URL to avatar image for the bot (optional)</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Advanced Features Card -->
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <h5 class="mb-0"><i class="fas fa-star me-2"></i>Advanced Features</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-check form-switch mb-3">
+                                        <input class="form-check-input" type="checkbox" id="conversationLearning" checked>
+                                        <label class="form-check-label" for="conversationLearning">
+                                            <strong>Enable Conversation Learning</strong>
+                                            <small class="d-block text-muted">Allow bot to learn from Teams conversations</small>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="form-check form-switch mb-3">
+                                        <input class="form-check-input" type="checkbox" id="jobNotifications" checked>
+                                        <label class="form-check-label" for="jobNotifications">
+                                            <strong>Enable Job Status Notifications</strong>
+                                            <small class="d-block text-muted">Send notifications for job status changes</small>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label">Monitored TWS Instances</label>
+                                        <div class="input-group mb-2">
+                                            <input type="text" class="form-control" id="newInstanceInput" 
+                                                   placeholder="Enter TWS instance name">
+                                            <button class="btn btn-outline-secondary" type="button" id="addInstanceBtn">
+                                                <i class="fas fa-plus"></i>
+                                            </button>
+                                        </div>
+                                        <div id="instancesList" class="mt-2">
+                                            <!-- Instances will be added here dynamically -->
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label">Job Status Filters</label>
+                                        <select multiple class="form-select" id="jobStatusFilters" size="4">
+                                            <option value="ABEND" selected>ABEND (Abnormal End)</option>
+                                            <option value="ERROR" selected>Error</option>
+                                            <option value="FAILED" selected>Failed</option>
+                                            <option value="TIMEOUT">Timeout</option>
+                                            <option value="CANCELLED">Cancelled</option>
+                                            <option value="WARNING">Warning</option>
+                                        </select>
+                                        <div class="form-text">Select job statuses that trigger notifications</div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label">Notification Types</label>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="job_status" 
+                                                   id="notifyJobStatus" checked>
+                                            <label class="form-check-label" for="notifyJobStatus">
+                                                Job Status Changes
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="alerts" 
+                                                   id="notifyAlerts" checked>
+                                            <label class="form-check-label" for="notifyAlerts">
+                                                System Alerts
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="performance" 
+                                                   id="notifyPerformance" checked>
+                                            <label class="form-check-label" for="notifyPerformance">
+                                                Performance Issues
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-xl-4">
+                            <!-- Health Status Card -->
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <h5 class="mb-0"><i class="fas fa-heartbeat me-2"></i>Integration Status</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="text-center mb-3">
+                                        <div class="status-indicator status-connected"></div>
+                                        <span class="fw-bold">Connected</span>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label">Last Health Check</label>
+                                        <div class="text-muted" id="lastHealthCheck">2 minutes ago</div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label">Connection Status</label>
+                                        <div class="text-success">
+                                            <i class="fas fa-check-circle me-1"></i> Webhook Accessible
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label">Features Enabled</label>
+                                        <ul class="list-unstyled small">
+                                            <li><i class="fas fa-check text-success me-1"></i> Notifications</li>
+                                            <li><i class="fas fa-check text-success me-1"></i> Learning</li>
+                                            <li><i class="fas fa-times text-danger me-1"></i> Conversations</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <button class="btn btn-outline-primary w-100" id="testNotificationBtn">
+                                        <i class="fas fa-paper-plane me-1"></i> Send Test Notification
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Quick Actions Card -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0"><i class="fas fa-bolt me-2"></i>Quick Actions</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-grid gap-2">
+                                        <button class="btn btn-outline-info" id="refreshHealthBtn">
+                                            <i class="fas fa-sync me-1"></i> Refresh Health Status
+                                        </button>
+                                        <button class="btn btn-outline-warning">
+                                            <i class="fas fa-exclamation-triangle me-1"></i> View Recent Errors
+                                        </button>
+                                        <button class="btn btn-outline-secondary">
+                                            <i class="fas fa-history me-1"></i> View Notification History
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- TWS Configuration Section (Hidden by default) -->
+                <div id="tws-config" class="config-section">
+                    <h2><i class="fas fa-server me-2"></i>TWS Configuration</h2>
+                    <p class="text-muted">Configure connections to HCL Workload Automation instances</p>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Primary TWS Instance</label>
+                                    <input type="text" id="primaryTwsInstance" class="form-control" placeholder="Primary instance">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Monitored TWS Instances (Up to 10)</label>
+                                <div id="twsInstancesList" class="mb-2">
+                                    <!-- Instances will be added here dynamically -->
+                                </div>
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" id="newTwsInstanceInput" placeholder="Enter instance name">
+                                    <button class="btn btn-outline-secondary" type="button" id="addTwsInstanceBtn">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <button class="btn btn-success" id="saveTwsConfig">
+                                <i class="fas fa-save me-1"></i>Save TWS Configuration
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- System Configuration Section (Hidden by default) -->
+                <div id="system-config" class="config-section">
+                    <h2><i class="fas fa-sliders-h me-2"></i>System Settings</h2>
+                    <p class="text-muted">Configure global system parameters and behaviors</p>
+                    
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="alert alert-warning">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                Changes to system settings require application restart to take effect.
+                            </div>
+                            
+                            <!-- General Settings -->
+                            <h5 class="border-bottom pb-2 mb-3">General Settings</h5>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Environment</label>
+                                        <select class="form-select" id="envSelect">
+                                            <option value="Development">Development</option>
+                                            <option value="Production">Production</option>
+                                            <option value="Staging">Staging</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Debug Mode</label>
+                                        <select class="form-select" id="debugSelect">
+                                            <option value="Disabled">Disabled</option>
+                                            <option value="Enabled">Enabled</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Security Settings -->
+                            <h5 class="border-bottom pb-2 mb-3 mt-4">Security Settings</h5>
+                            
+                            <div class="form-check form-switch mb-3">
+                                <input class="form-check-input" type="checkbox" id="sslEnabled">
+                                <label class="form-check-label" for="sslEnabled">
+                                    <strong>SSL/TLS Encryption</strong>
+                                </label>
+                            </div>
+                            
+                            <div class="form-check form-switch mb-3">
+                                <input class="form-check-input" type="checkbox" id="cspEnabled">
+                                <label class="form-check-label" for="cspEnabled">
+                                    <strong>Content Security Policy</strong>
+                                </label>
+                            </div>
+                            
+                            <div class="form-check form-switch mb-3">
+                                <input class="form-check-input" type="checkbox" id="corsEnabled">
+                                <label class="form-check-label" for="corsEnabled">
+                                    <strong>CORS Protection</strong>
+                                </label>
+                            </div>
+
+                            <button class="btn btn-success" id="saveSystemSettings">
+                                <i class="fas fa-save me-1"></i>Save System Settings
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Health Monitoring Section (Hidden by default) -->
+                <div id="health-monitoring" class="config-section">
+                    <h2><i class="fas fa-heartbeat me-2"></i>System Health Monitoring</h2>
+                    <p class="text-muted">Monitor system performance and health status</p>
+                    
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <div class="display-4 text-success">
+                                        <i class="fas fa-check-circle"></i>
+                                    </div>
+                                    <h5 class="card-title mt-2">System Status</h5>
+                                    <p class="card-text" id="healthSystemStatus">Healthy</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <div class="display-4 text-success">
+                                        <i class="fas fa-database"></i>
+                                    </div>
+                                    <h5 class="card-title mt-2">Database</h5>
+                                    <p class="card-text" id="healthDatabaseStatus">Connected</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <div class="display-4 text-success">
+                                        <i class="fab fa-microsoft"></i>
+                                    </div>
+                                    <h5 class="card-title mt-2">Teams Integration</h5>
+                                    <p class="card-text" id="healthTeamsStatus">Active</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                <!-- Notifications Section (Hidden by default) -->
+                <div id="notifications" class="config-section">
+                    <h2><i class="fas fa-bell me-2"></i>Notifications</h2>
+                    <p class="text-muted">Configure which job statuses and system alerts trigger notifications</p>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">Job Status Filters</label>
+                                <select multiple class="form-select" id="notifStatusFilters" size="6">
+                                    <option value="ABEND">ABEND (Abnormal End)</option>
+                                    <option value="ERROR">Error</option>
+                                    <option value="FAILED">Failed</option>
+                                    <option value="TIMEOUT">Timeout</option>
+                                    <option value="CANCELLED">Cancelled</option>
+                                    <option value="WARNING">Warning</option>
+                                </select>
+                                <div class="form-text">Select job statuses that trigger notifications</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Notification Types</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="notifyJobStatus">
+                                    <label class="form-check-label" for="notifyJobStatus">Job Status Changes</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="notifyAlerts">
+                                    <label class="form-check-label" for="notifyAlerts">System Alerts</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="notifyPerformance">
+                                    <label class="form-check-label" for="notifyPerformance">Performance Issues</label>
+                                </div>
+                            </div>
+
+                            <button class="btn btn-success" id="saveNotificationsBtn">
+                                <i class="fas fa-save me-1"></i>Save Notifications
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Logs Section (Hidden by default) -->
+                <div id="logs" class="config-section">
+                    <h2><i class="fas fa-file-alt me-2"></i>System Logs</h2>
+                    <p class="text-muted">View recent entries from application logs</p>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <label class="form-label">Log File</label>
+                                    <input type="text" class="form-control" id="logFileName" value="app.log">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Lines</label>
+                                    <input type="number" class="form-control" id="logLines" value="100" min="10" max="1000">
+                                </div>
+                                <div class="col-md-3 d-flex align-items-end">
+                                    <button class="btn btn-outline-primary w-100" id="loadLogsBtn">
+                                        <i class="fas fa-eye me-1"></i>Load Logs
+                                    </button>
+                                </div>
+                            </div>
+                            <pre id="logContent" class="p-3 bg-light" style="height: 300px; overflow-y: scroll; white-space: pre-wrap;"></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Backup & Restore Section (Hidden by default) -->
+                <div id="backup-restore" class="config-section">
+                    <h2><i class="fas fa-database me-2"></i>Backup & Restore</h2>
+                    <p class="text-muted">Manage backups of audit data</p>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-grid gap-2 d-md-flex mb-3">
+                                <button class="btn btn-outline-primary" id="createBackupBtn">
+                                    <i class="fas fa-save me-1"></i>Create Backup
+                                </button>
+                                <button class="btn btn-outline-warning" id="restoreBackupBtn">
+                                    <i class="fas fa-upload me-1"></i>Restore Latest
+                                </button>
+                            </div>
+                            <pre id="backupStatus" class="p-3 bg-light" style="height: 200px; overflow-y: scroll;"></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Audit Section (Hidden by default) -->
+                <div id="audit" class="config-section">
+                    <h2><i class="fas fa-scroll me-2"></i>Audit Log</h2>
+                    <p class="text-muted">Inspect recent audit trail entries</p>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-end mb-2">
+                                <button class="btn btn-outline-primary" id="loadAuditBtn">
+                                    <i class="fas fa-eye me-1"></i>Load Audit Logs
+                                </button>
+                            </div>
+                            <div style="height: 300px; overflow-y: scroll;">
+                                <table class="table table-sm table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Timestamp</th>
+                                            <th scope="col">Message</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="auditTableBody"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    
+    <script>
+        // Navigation handling
+        document.addEventListener('DOMContentLoaded', function() {
+            // Navigation tab switching
+            const navLinks = document.querySelectorAll('.nav-link');
+            const configSections = document.querySelectorAll('.config-section');
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Remove active class from all links and sections
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    configSections.forEach(s => s.classList.remove('active'));
+                    
+                    // Add active class to clicked link
+                    this.classList.add('active');
+                    
+                    // Show corresponding section
+                    const target = this.getAttribute('data-target');
+                    document.getElementById(target).classList.add('active');
+                });
+            });
+            
+            // Add instance functionality
+            document.getElementById('addInstanceBtn').addEventListener('click', function() {
+                const input = document.getElementById('newInstanceInput');
+                const value = input.value.trim();
+                
+                if (value) {
+                    const instancesList = document.getElementById('instancesList');
+                    const instanceDiv = document.createElement('div');
+                    instanceDiv.className = 'alert alert-secondary alert-sm d-flex justify-content-between align-items-center mb-2';
+                    instanceDiv.innerHTML = `
+                        <span>${value}</span>
+                        <button class="btn-close" type="button"></button>
+                    `;
+                    
+                    instancesList.appendChild(instanceDiv);
+                    input.value = '';
+                    
+                    // Add remove functionality
+                    instanceDiv.querySelector('.btn-close').addEventListener('click', function() {
+                        instanceDiv.remove();
+                    });
+                }
+            });
+            
+            // Test notification button
+            document.getElementById('testNotificationBtn').addEventListener('click', function() {
+                showToast('Test notification sent successfully!', 'success');
+            });
+            
+            // Save configuration button – call API to persist Teams settings
+            document.getElementById('saveTeamsConfig').addEventListener('click', async function() {
+                try {
+                    await saveTeamsConfig();
+                    showToast('Teams configuration saved successfully!', 'success');
+                } catch (err) {
+                    console.error('Failed to save Teams configuration:', err);
+                    showToast('Erro ao salvar a configuração do Teams.', 'error');
+                }
+            });
+            
+            // Refresh button
+            document.getElementById('refreshBtn').addEventListener('click', function() {
+                showToast('Configuration refreshed', 'info');
+            });
+            
+            // Initialize with some sample instances for Teams integration
+            const sampleInstances = ['TWS_NAZ', 'TWS_SAZ'];
+            const instancesList = document.getElementById('instancesList');
+            
+            sampleInstances.forEach(instance => {
+                const instanceDiv = document.createElement('div');
+                instanceDiv.className = 'alert alert-secondary alert-sm d-flex justify-content-between align-items-center mb-2';
+                instanceDiv.innerHTML = `
+                    <span>${instance}</span>
+                    <button class="btn-close" type="button"></button>
+                `;
+                
+                instancesList.appendChild(instanceDiv);
+                
+                // Add remove functionality
+                instanceDiv.querySelector('.btn-close').addEventListener('click', function() {
+                    instanceDiv.remove();
+                });
+            });
+
+            // Event listener for adding TWS instances
+            document.getElementById('addTwsInstanceBtn').addEventListener('click', function() {
+                const input = document.getElementById('newTwsInstanceInput');
+                const value = input.value.trim();
+                if (value) {
+                    const list = document.getElementById('twsInstancesList');
+                    const div = document.createElement('div');
+                    div.className = 'alert alert-secondary alert-sm d-flex justify-content-between align-items-center mb-2';
+                    div.innerHTML = `<span>${value}</span><button class="btn-close" type="button"></button>`;
+                    list.appendChild(div);
+                    input.value = '';
+                    div.querySelector('.btn-close').addEventListener('click', function() { div.remove(); });
+                }
+            });
+
+            // Save TWS configuration
+            document.getElementById('saveTwsConfig').addEventListener('click', async function() {
+                try {
+                    await saveTwsConfig();
+                    showToast('TWS configuration saved successfully!', 'success');
+                } catch (err) {
+                    console.error('Failed to save TWS configuration:', err);
+                    showToast('Erro ao salvar a configuração TWS.', 'error');
+                }
+            });
+
+            // Save system settings
+            document.getElementById('saveSystemSettings').addEventListener('click', async function() {
+                try {
+                    await saveSystemSettings();
+                    showToast('System settings saved successfully!', 'success');
+                } catch (err) {
+                    console.error('Failed to save system settings:', err);
+                    showToast('Erro ao salvar configurações de sistema.', 'error');
+                }
+            });
+
+            // Save notifications
+            document.getElementById('saveNotificationsBtn').addEventListener('click', async function() {
+                try {
+                    await saveNotifications();
+                    showToast('Notification settings saved successfully!', 'success');
+                } catch (err) {
+                    console.error('Failed to save notifications:', err);
+                    showToast('Erro ao salvar configurações de notificações.', 'error');
+                }
+            });
+
+            // Load logs
+            document.getElementById('loadLogsBtn').addEventListener('click', function() {
+                loadLogs();
+            });
+
+            // Create backup
+            document.getElementById('createBackupBtn').addEventListener('click', function() {
+                createBackup();
+            });
+
+            // Restore backup
+            document.getElementById('restoreBackupBtn').addEventListener('click', function() {
+                restoreBackup();
+            });
+
+            // Load audit logs
+            document.getElementById('loadAuditBtn').addEventListener('click', function() {
+                loadAudit();
+            });
+
+            // Refresh health status
+            document.getElementById('refreshHealthBtn').addEventListener('click', function() {
+                loadHealthStatus();
+            });
+
+            // Load persisted configuration when the page loads
+            loadTeamsConfig();
+            loadTwsConfig();
+            loadSystemSettings();
+            loadNotifications();
+            loadHealthStatus();
+        });
+        
+        // Fetch current Teams configuration from the backend and populate form fields
+        async function loadTeamsConfig() {
+            try {
+                const resp = await fetch('/api/v1/admin/teams-config');
+                if (!resp.ok) {
+                    throw new Error(`Erro HTTP ${resp.status}`);
+                }
+                const data = await resp.json();
+                // Populate the form fields with the returned values
+                document.getElementById('teamsEnabled').checked = Boolean(data.enabled);
+                document.getElementById('webhookUrl').value = data.webhook_url || '';
+                document.getElementById('channelName').value = data.channel_name || '';
+                document.getElementById('botName').value = data.bot_name || '';
+                document.getElementById('avatarUrl').value = data.avatar_url || '';
+            } catch (error) {
+                console.error('Failed to load Teams configuration:', error);
+                showToast('Erro ao carregar a configuração do Teams.', 'error');
+            }
+        }
+
+        // Save Teams configuration to the backend
+        async function saveTeamsConfig() {
+            const payload = {
+                enabled: document.getElementById('teamsEnabled').checked,
+                webhook_url: document.getElementById('webhookUrl').value.trim(),
+                channel_name: document.getElementById('channelName').value.trim(),
+                bot_name: document.getElementById('botName').value.trim(),
+                avatar_url: document.getElementById('avatarUrl').value.trim(),
+            };
+            const resp = await fetch('/api/v1/admin/teams-config', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+            if (!resp.ok) {
+                const detail = await resp.text();
+                throw new Error(`Erro ${resp.status}: ${detail}`);
+            }
+            // HTTP 204 No Content indicates success
+        }
+
+        // Load TWS configuration from backend and populate the form
+        async function loadTwsConfig() {
+            try {
+                const resp = await fetch('/api/v1/admin/tws-config');
+                if (!resp.ok) {
+                    throw new Error(`Erro HTTP ${resp.status}`);
+                }
+                const data = await resp.json();
+                // Set primary instance
+                document.getElementById('primaryTwsInstance').value = data.primary_instance || '';
+                // Clear existing list
+                const list = document.getElementById('twsInstancesList');
+                list.innerHTML = '';
+                (data.monitored_instances || []).forEach(instance => {
+                    const div = document.createElement('div');
+                    div.className = 'alert alert-secondary alert-sm d-flex justify-content-between align-items-center mb-2';
+                    div.innerHTML = `<span>${instance}</span><button class="btn-close" type="button"></button>`;
+                    list.appendChild(div);
+                    div.querySelector('.btn-close').addEventListener('click', function() {
+                        div.remove();
+                    });
+                });
+            } catch (error) {
+                console.error('Failed to load TWS configuration:', error);
+                showToast('Erro ao carregar a configuração TWS.', 'error');
+            }
+        }
+
+        // Save TWS configuration to backend
+        async function saveTwsConfig() {
+            const primary = document.getElementById('primaryTwsInstance').value.trim();
+            const list = document.getElementById('twsInstancesList');
+            const instances = [];
+            list.querySelectorAll('span').forEach(el => {
+                const name = el.textContent.trim();
+                if (name) instances.push(name);
+            });
+            const payload = {
+                primary_instance: primary,
+                monitored_instances: instances
+            };
+            const resp = await fetch('/api/v1/admin/tws-config', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            if (!resp.ok) {
+                const detail = await resp.text();
+                throw new Error(`Erro ${resp.status}: ${detail}`);
+            }
+        }
+
+        // Load system settings from backend and populate the form
+        async function loadSystemSettings() {
+            try {
+                const resp = await fetch('/api/v1/admin/system-settings');
+                if (!resp.ok) throw new Error(`Erro HTTP ${resp.status}`);
+                const data = await resp.json();
+                // Environment select
+                const envSelect = document.getElementById('envSelect');
+                envSelect.value = data.environment || 'Production';
+                // Debug select
+                const debugSelect = document.getElementById('debugSelect');
+                debugSelect.value = data.debug_mode ? 'Enabled' : 'Disabled';
+                // Toggles
+                document.getElementById('sslEnabled').checked = Boolean(data.ssl_enabled);
+                document.getElementById('cspEnabled').checked = Boolean(data.csp_enabled);
+                document.getElementById('corsEnabled').checked = Boolean(data.cors_enabled);
+            } catch (error) {
+                console.error('Failed to load system settings:', error);
+                showToast('Erro ao carregar configurações de sistema.', 'error');
+            }
+        }
+
+        // Save system settings to backend
+        async function saveSystemSettings() {
+            const env = document.getElementById('envSelect').value;
+            const debugMode = document.getElementById('debugSelect').value === 'Enabled';
+            const payload = {
+                environment: env,
+                debug_mode: debugMode,
+                ssl_enabled: document.getElementById('sslEnabled').checked,
+                csp_enabled: document.getElementById('cspEnabled').checked,
+                cors_enabled: document.getElementById('corsEnabled').checked,
+            };
+            const resp = await fetch('/api/v1/admin/system-settings', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            if (!resp.ok) {
+                const detail = await resp.text();
+                throw new Error(`Erro ${resp.status}: ${detail}`);
+            }
+        }
+
+        // Load notifications settings
+        async function loadNotifications() {
+            try {
+                const resp = await fetch('/api/v1/admin/notifications');
+                if (!resp.ok) throw new Error(`Erro HTTP ${resp.status}`);
+                const data = await resp.json();
+                // Set selected options for job status filters
+                const select = document.getElementById('notifStatusFilters');
+                const filters = data.job_status_filters || [];
+                Array.from(select.options).forEach(opt => {
+                    opt.selected = filters.includes(opt.value);
+                });
+                // Set toggles
+                document.getElementById('notifyJobStatus').checked = Boolean(data.notify_job_status);
+                document.getElementById('notifyAlerts').checked = Boolean(data.notify_alerts);
+                document.getElementById('notifyPerformance').checked = Boolean(data.notify_performance);
+            } catch (error) {
+                console.error('Failed to load notifications:', error);
+                showToast('Erro ao carregar notificações.', 'error');
+            }
+        }
+
+        // Save notifications settings
+        async function saveNotifications() {
+            const select = document.getElementById('notifStatusFilters');
+            const filters = Array.from(select.options)
+                .filter(opt => opt.selected)
+                .map(opt => opt.value);
+            const payload = {
+                job_status_filters: filters,
+                notify_job_status: document.getElementById('notifyJobStatus').checked,
+                notify_alerts: document.getElementById('notifyAlerts').checked,
+                notify_performance: document.getElementById('notifyPerformance').checked,
+            };
+            const resp = await fetch('/api/v1/admin/notifications', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            if (!resp.ok) {
+                const detail = await resp.text();
+                throw new Error(`Erro ${resp.status}: ${detail}`);
+            }
+        }
+
+        // Load logs from backend and display in textarea
+        async function loadLogs() {
+            const file = document.getElementById('logFileName').value.trim() || 'app.log';
+            const lines = parseInt(document.getElementById('logLines').value, 10) || 100;
+            try {
+                const params = new URLSearchParams({ file, lines: lines.toString() });
+                const resp = await fetch(`/api/v1/admin/logs?${params.toString()}`);
+                if (!resp.ok) throw new Error(`Erro HTTP ${resp.status}`);
+                const data = await resp.json();
+                document.getElementById('logContent').textContent = data.content || '';
+            } catch (error) {
+                console.error('Failed to load logs:', error);
+                showToast('Erro ao carregar logs.', 'error');
+            }
+        }
+
+        // Create a backup via backend
+        async function createBackup() {
+            try {
+                const resp = await fetch('/api/v1/admin/backup', { method: 'POST' });
+                if (!resp.ok) throw new Error(`Erro HTTP ${resp.status}`);
+                const data = await resp.json();
+                document.getElementById('backupStatus').textContent = JSON.stringify(data, null, 2);
+                showToast('Backup criado com sucesso!', 'success');
+            } catch (error) {
+                console.error('Failed to create backup:', error);
+                showToast('Erro ao criar backup.', 'error');
+            }
+        }
+
+        // Restore from latest backup via backend
+        async function restoreBackup() {
+            try {
+                const resp = await fetch('/api/v1/admin/restore', { method: 'POST' });
+                if (!resp.ok) throw new Error(`Erro HTTP ${resp.status}`);
+                const data = await resp.json();
+                document.getElementById('backupStatus').textContent = JSON.stringify(data, null, 2);
+                showToast('Restauração concluída!', 'success');
+            } catch (error) {
+                console.error('Failed to restore backup:', error);
+                showToast('Erro ao restaurar backup.', 'error');
+            }
+        }
+
+        // Load audit records from backend
+        async function loadAudit() {
+            try {
+                const resp = await fetch('/api/v1/admin/audit');
+                if (!resp.ok) throw new Error(`Erro HTTP ${resp.status}`);
+                const data = await resp.json();
+                const tbody = document.getElementById('auditTableBody');
+                tbody.innerHTML = '';
+                (data.records || []).forEach((rec, idx) => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `<th scope="row">${idx + 1}</th><td>${rec.timestamp || rec.time || ''}</td><td>${rec.message || rec.action || JSON.stringify(rec)}</td>`;
+                    tbody.appendChild(tr);
+                });
+            } catch (error) {
+                console.error('Failed to load audit logs:', error);
+                showToast('Erro ao carregar logs de auditoria.', 'error');
+            }
+        }
+
+        // Load health status from backend and update cards
+        async function loadHealthStatus() {
+            try {
+                const resp = await fetch('/api/v1/admin/health');
+                if (!resp.ok) throw new Error(`Erro HTTP ${resp.status}`);
+                const data = await resp.json();
+                document.getElementById('healthSystemStatus').textContent = data.database && data.cache && data.llm ? 'Healthy' : 'Degraded';
+                document.getElementById('healthDatabaseStatus').textContent = data.database ? 'Connected' : 'Disconnected';
+                document.getElementById('healthTeamsStatus').textContent = data.teams ? 'Active' : 'Inactive';
+            } catch (error) {
+                console.error('Failed to load health status:', error);
+                showToast('Erro ao carregar status de saúde.', 'error');
+            }
+        }
+
+        // Toast notification function
+        function showToast(message, type = 'info') {
+            const toastContainer = document.querySelector('.toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type} show`;
+            toast.setAttribute('role', 'alert');
+            toast.setAttribute('aria-live', 'assertive');
+            toast.setAttribute('aria-atomic', 'true');
+            
+            toast.innerHTML = `
+                <div class="toast-header">
+                    <strong class="me-auto">
+                        ${type === 'success' ? '<i class="fas fa-check-circle me-1"></i>' : ''}
+                        ${type === 'error' ? '<i class="fas fa-exclamation-circle me-1"></i>' : ''}
+                        ${type === 'warning' ? '<i class="fas fa-exclamation-triangle me-1"></i>' : ''}
+                        ${type === 'info' ? '<i class="fas fa-info-circle me-1"></i>' : ''}
+                        Notification
+                    </strong>
+                    <small>Just now</small>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    ${message}
+                </div>
+            `;
+            
+            toastContainer.appendChild(toast);
+            
+            // Auto hide after 3 seconds
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 3000);
+        }
+    </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

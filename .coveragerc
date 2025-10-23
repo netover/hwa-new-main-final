@@ -1,0 +1,53 @@
+# Coverage configuration for the hwa-new project
+
+[run]
+branch = True
+source =
+    resync
+    routes
+    config
+    app
+
+omit =
+    */tests/*
+    */test_*
+    */__pycache__/*
+    */migrations/*
+    */venv/*
+    */.venv/*
+    */node_modules/*
+    */.git/*
+    */docs/*
+    */scripts/*
+    */temp_test/*
+    */backup_docs/*
+    */benchmarks/*
+    */mutants/*
+    */chroma/*
+    */chroma_db/*
+    */logs/*
+    */uploads/*
+    */test_docx/*
+
+[report]
+exclude_lines =
+    pragma: no cover
+    def __repr__
+    if self.debug:
+    if settings.DEBUG
+    raise AssertionError
+    raise NotImplementedError
+    if 0:
+    if __name__ == .__main__.:
+    class .*\bProtocol\):
+    @(abc\.)?abstractmethod
+
+[html]
+directory = htmlcov
+title = HWA-New Test Coverage Report
+
+[xml]
+output = coverage.xml
+
+[json]
+output = coverage.json

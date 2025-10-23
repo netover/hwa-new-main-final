@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 1s
+      timeout: 1s
+      retries: 5
+
+  pytest:
+    build: .
+    command: pytest --asyncio-mode=auto -v --cov=resync --cov-report=term-missing --cov-report=html:htmlcov --cov-report=xml --cov-fail-under=80
+    volumes:
+      - .:/app
+    environment:
+      APP_ENV: test
+      TEST_EVIDENCE_FAILURE_OPTIONS: -vv --ignore=./docs/,./scripts/
+      PYTHONPATH: /app
+    depends_on:
+      redis:
+        condition: service_healthy
+
+  # Redis Commander for visual inspection, if needed
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    environment:
+      REDIS_HOST: redis:6379
+    ports:
+      - "8081:8081"
+    depends_on:
+      - redis
+
+volumes:
+  redis_data:

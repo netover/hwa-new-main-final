@@ -1,0 +1,77 @@
+# Production-specific overrides for Dynaconf
+# These values override the defaults in settings.toml for production environment
+
+[default]
+APP_ENV = "production"
+# TWS Configuration for Production
+TWS_VERIFY_SSL = false  # As per project decision
+
+# Cache Hierarchy Settings for Production Scale
+CACHE_HIERARCHY_L1_MAX_SIZE = 10000  # Larger for high volume
+CACHE_HIERARCHY_L2_TTL = 900  # Longer for efficiency
+CACHE_HIERARCHY_L2_CLEANUP_INTERVAL = 120
+CACHE_HIERARCHY_NUM_SHARDS = 12  # More for 15 users
+CACHE_HIERARCHY_MAX_WORKERS = 6
+
+# TWS Cache for Production
+TWS_CACHE_TTL = 120
+
+# IA Auditor Scheduler for Production
+IA_AUDITOR_FREQUENCY_HOURS = 6  # Less frequent to avoid overload
+IA_AUDITOR_STARTUP_ENABLED = false
+
+# Production LLM Endpoint (uncomment if needed)
+# LLM_ENDPOINT = "https://api.openai.com/v1"
+# LLM_API_KEY = ""  # Must be set via environment variable
+
+# Mem0 Settings for Production
+# MEM0_STORAGE_HOST = "your_prod_qdrant_host"
+# MEM0_STORAGE_PORT = 6333
+
+# CORS Configuration for Production (strict security)
+CORS_ALLOWED_ORIGINS = []  # Must be explicitly set for production deployment
+CORS_ALLOW_CREDENTIALS = false  # More secure default for production
+
+# CSP Configuration for Production (strict enforcement)
+CSP_REPORT_ONLY = false
+CSP_REPORT_URI = "https://your-csp-reporting-endpoint.com/csp-reports"
+
+# Error Response Configuration for Production
+ERROR_DETAIL_LEVEL = "basic"  # detailed, basic, minimal
+ERROR_INCLUDE_STACK_TRACE = false
+ERROR_INCLUDE_ERROR_DETAILS = false
+ERROR_CORRELATION_ID_HEADER = "X-Correlation-ID"
+
+# Connection Pool Configuration for Production Scale
+# Database Connection Pool Settings (optimized for 4M jobs/month)
+DB_POOL_MIN_SIZE = 10
+DB_POOL_MAX_SIZE = 50
+DB_POOL_TIMEOUT = 60
+DB_POOL_RETRY_ATTEMPTS = 5
+DB_POOL_RETRY_DELAY = 2
+DB_POOL_HEALTH_CHECK_INTERVAL = 30
+DB_POOL_IDLE_TIMEOUT = 600
+
+# Redis Connection Pool Settings (optimized for high throughput)
+REDIS_POOL_MIN_SIZE = 10
+REDIS_POOL_MAX_SIZE = 50
+REDIS_POOL_TIMEOUT = 60
+REDIS_POOL_RETRY_ATTEMPTS = 5
+REDIS_POOL_RETRY_DELAY = 2
+REDIS_POOL_HEALTH_CHECK_INTERVAL = 30
+REDIS_POOL_IDLE_TIMEOUT = 600
+
+# HTTP/TWS Connection Pool Settings (optimized for external API calls)
+TWS_CONNECT_TIMEOUT = 15
+TWS_READ_TIMEOUT = 60
+TWS_WRITE_TIMEOUT = 60
+TWS_POOL_TIMEOUT = 60
+TWS_MAX_CONNECTIONS = 200
+TWS_MAX_KEEPALIVE = 50
+TWS_POOL_RETRY_ATTEMPTS = 5
+TWS_POOL_RETRY_DELAY = 2
+
+# WebSocket Connection Pool Settings (optimized for real-time updates)
+WS_POOL_MAX_SIZE = 5000
+WS_POOL_CLEANUP_INTERVAL = 30
+WS_CONNECTION_TIMEOUT = 60

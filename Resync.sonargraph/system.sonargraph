@@ -1,0 +1,8 @@
+<?xml version="1.0" ?>
+<ns2:softwareSystem xmlns:ns2="http://www.hello2morrow.com/sonargraph/core" id="9b2e0bb0d24ad0c7f76bf3bbb207235e" version="15.4.3.155">
+	<description></description>
+	<module name="Resync" id="593c94928480a8c846d898aefed32d2d" language="Python">
+		<description></description>
+		<rootPath name="."></rootPath>
+	</module>
+</ns2:softwareSystem>

@@ -1,0 +1,265 @@
+# Resync Application Settings
+# This file contains the base configuration for the Resync application.
+
+[default]
+# --- Project Metadata ---
+PROJECT_NAME = "Resync"
+PROJECT_VERSION = "1.0.0"
+DESCRIPTION = "Real-time monitoring dashboard for HCL Workload Automation"
+
+# --- Base Directory ---
+# Automatically determined based on current working directory
+# This allows the application to work in different environments (local, CI/CD, container)
+BASE_DIR = "."  # Will be resolved to absolute path at runtime
+
+# --- LLM Model Configuration ---
+AUDITOR_MODEL_NAME = "gpt-3.5-turbo"
+AGENT_MODEL_NAME = "gpt-4o"
+
+# --- Neo4j Configuration ---
+NEO4J_URI = ""
+NEO4J_USER = ""
+NEO4J_PASSWORD = ""
+
+# --- Redis Configuration ---
+REDIS_URL = "redis://localhost:6379"
+
+# --- Language Model Configuration ---
+LLM_ENDPOINT = "http://localhost:11434/v1"
+LLM_API_KEY = ""  # Must be set via environment variable
+LLM_MODEL_NAME = "llama3"
+LLM_TEMPERATURE = 0.1
+
+# --- Admin Credentials ---
+# SECURITY CRITICAL: These must be set via environment variables in production!
+# Never commit real credentials to version control.
+# Use strong, unique passwords in production.
+ADMIN_USERNAME = "admin"  # Default for development only
+ADMIN_PASSWORD = "change_me_immediately"  # CRITICAL: Must be changed for any deployment!
+
+# --- Rate Limiting Configuration ---
+RATE_LIMIT_PUBLIC_PER_MINUTE = 100
+RATE_LIMIT_AUTHENTICATED_PER_MINUTE = 1000
+RATE_LIMIT_CRITICAL_PER_MINUTE = 50
+RATE_LIMIT_ERROR_HANDLER_PER_MINUTE = 15
+RATE_LIMIT_WEBSOCKET_PER_MINUTE = 30
+RATE_LIMIT_DASHBOARD_PER_MINUTE = 10
+RATE_LIMIT_STORAGE_URI = "redis://localhost:6379"
+RATE_LIMIT_KEY_PREFIX = "resync:ratelimit:"
+RATE_LIMIT_SLIDING_WINDOW = true
+
+# --- TWS Environment Configuration ---
+# TWS credentials are only required if not in mock mode
+TWS_MOCK_MODE = false
+TWS_HOST = ""
+TWS_PORT = 31111
+TWS_USER = ""
+TWS_PASSWORD = ""
+TWS_ENGINE_NAME = "tws-engine"
+TWS_ENGINE_OWNER = "tws-owner"
+
+# --- Microsoft Teams Integration ---
+[default.TEAMS_INTEGRATION]
+enabled = false
+webhook_url = ""  # Teams incoming webhook URL
+channel_name = "Resync Notifications"
+bot_name = "Resync Bot"
+avatar_url = ""  # Optional avatar image URL
+enable_conversation_learning = false
+enable_job_notifications = false
+monitored_tws_instances = []  # List of TWS instance names to monitor
+job_status_filters = ["ABEND", "ERROR", "FAILED"]  # Job statuses that trigger notifications
+notification_types = ["job_status", "alerts", "performance"]
+
+# --- Cache Hierarchy Configuration ---
+[default.CACHE_HIERARCHY]
+L1_MAX_SIZE = 2000  # Reduzido para evitar consumo excessivo
+L2_TTL_SECONDS = 600
+L2_CLEANUP_INTERVAL = 60
+USE_NEW_CACHING_LAYER = true
+CACHE_ENCRYPTION_ENABLED = true
+CACHE_KEY_PREFIX = "resync:${APP_ENV}:"
+
+# --- Async Cache Configuration ---
+[default.ASYNC_CACHE]
+TTL_SECONDS = 60
+CLEANUP_INTERVAL = 30
+NUM_SHARDS = 8
+MAX_WORKERS = 4
+MAX_ENTRIES = 100000
+MAX_MEMORY_MB = 100
+PARANOIA_MODE = false
+
+# --- KeyLock Configuration ---
+[default.KEYLOCK]
+MAX_LOCKS = 2048
+
+# --- Connection Pool Configuration ---
+# --- Rate Limiting Configuration ---
+[default.RATE_LIMITING]
+PUBLIC_REQUESTS_PER_MINUTE = 100
+AUTHENTICATED_REQUESTS_PER_MINUTE = 1000
+CRITICAL_REQUESTS_PER_MINUTE = 50
+ERROR_HANDLER_REQUESTS_PER_MINUTE = 15
+WEBSOCKET_REQUESTS_PER_MINUTE = 30
+DASHBOARD_REQUESTS_PER_MINUTE = 10
+STORAGE_URI = "redis://localhost:6379"
+KEY_PREFIX = "resync:ratelimit:"
+SLIDING_WINDOW = true
+
+# --- Health Check Configuration ---
+[default.HEALTH_CHECK]
+ENABLED = true
+INTERVAL_SECONDS = 60
+TIMEOUT_SECONDS = 30
+ALERTS_ENABLED = true
+DB_TIMEOUT_SECONDS = 10
+REDIS_TIMEOUT_SECONDS = 5
+EXTERNAL_API_TIMEOUT_SECONDS = 15
+FILE_SYSTEM_THRESHOLD_PERCENT = 90.0
+MEMORY_THRESHOLD_PERCENT = 85.0
+CPU_THRESHOLD_PERCENT = 80.0
+ALERT_THRESHOLD_DEGRADED = 1
+ALERT_THRESHOLD_UNHEALTHY = 1
+ALERT_COOLDOWN_SECONDS = 300
+HISTORY_RETENTION_HOURS = 24
+MAX_HISTORY_ENTRIES = 1000
+HISTORY_CLEANUP_THRESHOLD = 0.8
+HISTORY_CLEANUP_BATCH_SIZE = 100
+HISTORY_COMPRESSION_ENABLED = false
+HISTORY_RETENTION_DAYS = 7
+ENABLE_MEMORY_MONITORING = true
+MEMORY_USAGE_THRESHOLD_MB = 50
+MEMORY_HISTORY_RETENTION_HOURS = 24
+HISTORY_CLEANUP_THRESHOLD_PERCENT = 0.8
+
+# --- Logging Configuration ---
+[default.LOGGING]
+LEVEL = "INFO"
+FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+FILE_PATH = "logs/resync.log"
+
+# --- RAG (Retrieval-Augmented Generation) Configuration ---
+[default.RAG]
+DIRECTORY = "rag"
+CHUNK_SIZE = 1000
+CHUNK_OVERLAP = 200
+
+# --- LLM Model Configuration ---
+AUDITOR_MODEL_NAME = "gpt-3.5-turbo"
+AGENT_MODEL_NAME = "gpt-4o"
+
+# --- File Processing Configuration ---
+[default.FILE_PROCESSING]
+PROTECTED_DIRECTORIES = ["resync", "config", "templates", "static"]
+KNOWLEDGE_BASE_DIRECTORIES = ["resync/RAG"]
+
+# --- Application Environment ---
+[default.APPLICATION]
+ENV = "development"
+DEBUG = false
+
+# --- Template Caching Configuration ---
+[default.TEMPLATES]
+JINJA2_TEMPLATE_CACHE_SIZE = 400
+
+# --- Static File Caching Configuration ---
+[default.STATIC_FILES]
+STATIC_CACHE_MAX_AGE = 3600  # 1 hour in seconds
+
+# --- Content Security Policy (CSP) Configuration ---
+[default.CSP]
+ENABLED = true
+REPORT_ONLY = false
+REPORT_URI = "/csp-violation-report"
+CSP_CONNECT_SRC_URLS = []
+CSP_REPORT_TO = ""
+
+# --- CORS Configuration ---
+[default.CORS]
+ENABLED = true
+ALLOWED_ORIGINS = ["http://localhost:3000", "http://localhost:8080"]  # Secure defaults for development
+ALLOW_CREDENTIALS = false
+LOG_VIOLATIONS = true
+
+# --- Development Environment Overrides ---
+[development]
+DEBUG = true
+TWS_MOCK_MODE = true
+LOGGING.LEVEL = "DEBUG"
+
+# --- Production Environment Overrides ---
+[production]
+DEBUG = false
+TWS_MOCK_MODE = false
+LOGGING.LEVEL = "WARNING"  # Less verbose logging in production
+
+# Production security settings
+ADMIN_USERNAME = "admin"  # Set via environment variable
+ADMIN_PASSWORD = "PRODUCTION_PASSWORD_REQUIRED"  # MUST be set via environment variable
+
+# Production CORS - restrict to specific domains only
+CORS.ALLOWED_ORIGINS = []  # Must be explicitly set for production domains
+CORS.ALLOW_CREDENTIALS = false
+
+# Production CSP - more restrictive
+CSP.REPORT_ONLY = false  # Enforce CSP in production
+
+# --- Test Environment Overrides ---
+[test]
+DEBUG = true
+TWS_MOCK_MODE = true
+LOGGING.LEVEL = "DEBUG"
+# --- Connection Pool Configuration ---
+[default.CONNECTION_POOL]
+# Database Connection Pool Settings - Optimized for high volume
+DB_POOL_MIN_SIZE = 20
+DB_POOL_MAX_SIZE = 100
+DB_POOL_CONNECT_TIMEOUT = 60
+DB_POOL_TIMEOUT = 60
+DB_POOL_RETRY_ATTEMPTS = 3
+DB_POOL_RETRY_DELAY = 1
+DB_POOL_HEALTH_CHECK_INTERVAL = 60
+DB_POOL_IDLE_TIMEOUT = 1200
+DB_POOL_MAX_LIFETIME = 1800  # 30 minutes
+
+# Redis Connection Pool Settings
+REDIS_POOL_MIN_SIZE = 5
+REDIS_POOL_MAX_SIZE = 20
+REDIS_POOL_CONNECT_TIMEOUT = 30
+REDIS_POOL_TIMEOUT = 30
+REDIS_POOL_RETRY_ATTEMPTS = 3
+REDIS_POOL_RETRY_DELAY = 1
+REDIS_POOL_HEALTH_CHECK_INTERVAL = 60
+REDIS_POOL_IDLE_TIMEOUT = 300
+REDIS_POOL_MAX_LIFETIME = 1800  # 30 minutes
+
+# HTTP/TWS Connection Pool Settings
+HTTP_POOL_MIN_SIZE = 10
+HTTP_POOL_MAX_SIZE = 100
+HTTP_POOL_CONNECT_TIMEOUT = 10
+HTTP_POOL_IDLE_TIMEOUT = 300
+HTTP_POOL_HEALTH_CHECK_INTERVAL = 60
+HTTP_POOL_MAX_LIFETIME = 1800  # 30 minutes
+TWS_CONNECT_TIMEOUT = 10
+TWS_READ_TIMEOUT = 30
+TWS_WRITE_TIMEOUT = 30
+TWS_POOL_TIMEOUT = 30
+TWS_MAX_CONNECTIONS = 100
+TWS_MAX_KEEPALIVE = 20
+TWS_POOL_RETRY_ATTEMPTS = 3
+TWS_POOL_RETRY_DELAY = 1
+TWS_MAX_CONCURRENT_REQUESTS = 20
+TWS_BASE_URL = "http://localhost:31111"  # Default TWS base URL
+
+# Agent Management Settings
+MAX_CONCURRENT_AGENT_CREATIONS = 5
+
+# WebSocket Connection Pool Settings
+WS_POOL_MAX_SIZE = 1000
+WS_POOL_CLEANUP_INTERVAL = 60
+WS_CONNECTION_TIMEOUT = 30
+WS_MAX_CONNECTION_DURATION = 3600  # 1 hour max connection duration
+
+# Database URL (constructed from Neo4j settings or can be overridden)
+DATABASE_URL = ""  # Will be constructed from NEO4J settings if empty

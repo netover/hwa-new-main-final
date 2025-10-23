@@ -1,0 +1,55 @@
+name: Mutation Testing
+
+on:
+  push:
+    branches: [ feature/code-audit-and-refactor ]
+  pull_request:
+    branches: [ feature/code-audit-and-refactor ]
+
+jobs:
+  mutation-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.13'   # compatível com o projeto
+
+    - name: Install Poetry
+      uses: snok/install-poetry@v1
+      with:
+        virtualenvs-create: true
+        virtualenvs-in-project: true
+        installer-parallel: true
+
+    - name: Load cached venv
+      id: cached-poetry-dependencies
+      uses: actions/cache@v3
+      with:
+        path: .venv
+        key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
+
+    - name: Install dependencies
+      run: poetry install --no-interaction --no-root
+
+    - name: Run test suite baseline
+      run: poetry run pytest
+
+    - name: Run mutation testing (mutmut)
+      run: poetry run mutmut run --paths-to-mutate resync/ --tests-dir tests/ --no-progress --CI
+
+    - name: Show mutation score/results
+      run: poetry run mutmut results
+
+    - name: Generate HTML mutation report
+      run: poetry run mutmut html
+
+    - name: Upload HTML mutation report
+      uses: actions/upload-artifact@v3
+      with:
+        name: mutmut-html-report
+        path: html/

@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "resync"
+version = "0.1.0"
+description = "Qdrant-only RAG microservice for AI document retrieval"
+authors = [{ name = "HWA Team", email = "dev-team@hwa.ai" }]
+dependencies = [
+    "qdrant-client>=1.11.3",
+    "tiktoken>=0.7.0",
+    "prometheus-client>=0.20.0",
+    "redis[hiredis]>=5.0.1",
+]
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.24",
+    "black>=24.0",
+    "isort>=5.13",
+    "pylint>=3.0",
+]
+
+[tool.importlinter]
+root_package = "resync"
+
+[[tool.importlinter.contracts]]
+name = "No circular imports"
+type = "layers"
+layers = ["resync"]
+forbidden_layers = ["resync"]

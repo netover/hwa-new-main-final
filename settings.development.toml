@@ -1,0 +1,69 @@
+# Development-specific overrides for Dynaconf
+# These values override the defaults in settings.toml for development environment
+
+[default]
+APP_ENV = "development"
+# TWS Configuration for Development
+TWS_MOCK_MODE = true
+TWS_VERIFY_SSL = false  # SSL verification disabled for development
+
+# Cache Hierarchy Settings for Development
+CACHE_HIERARCHY_L1_MAX_SIZE = 1000  # Smaller for quick testing
+CACHE_HIERARCHY_L2_TTL = 300  # Shorter TTL for dev
+CACHE_HIERARCHY_L2_CLEANUP_INTERVAL = 30
+CACHE_HIERARCHY_NUM_SHARDS = 8
+CACHE_HIERARCHY_MAX_WORKERS = 4
+
+# OpenRouter LLM Configuration for Development
+LLM_API_KEY = "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"
+LLM_ENDPOINT = "https://openrouter.ai/api/v1"
+
+# LiteLLM Configuration
+LITELLM_MASTER_KEY = "your-litellm-master-key-here"
+
+# CORS Configuration for Development
+CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://localhost:8000", "http://127.0.0.1:3000", "http://127.0.0.1:8000"]
+CORS_ALLOW_CREDENTIALS = true
+
+# CSP Configuration for Development (report-only mode for easier debugging)
+CSP_REPORT_ONLY = true
+
+# Error Response Configuration for Development
+ERROR_DETAIL_LEVEL = "detailed"  # detailed, basic, minimal
+ERROR_INCLUDE_STACK_TRACE = true
+ERROR_INCLUDE_ERROR_DETAILS = true
+ERROR_CORRELATION_ID_HEADER = "X-Correlation-ID"
+
+# Connection Pool Configuration for Development (minimal resources)
+# Database Connection Pool Settings
+DB_POOL_MIN_SIZE = 2
+DB_POOL_MAX_SIZE = 10
+DB_POOL_TIMEOUT = 30
+DB_POOL_RETRY_ATTEMPTS = 3
+DB_POOL_RETRY_DELAY = 1
+DB_POOL_HEALTH_CHECK_INTERVAL = 60
+DB_POOL_IDLE_TIMEOUT = 300
+
+# Redis Connection Pool Settings
+REDIS_POOL_MIN_SIZE = 2
+REDIS_POOL_MAX_SIZE = 10
+REDIS_POOL_TIMEOUT = 30
+REDIS_POOL_RETRY_ATTEMPTS = 3
+REDIS_POOL_RETRY_DELAY = 1
+REDIS_POOL_HEALTH_CHECK_INTERVAL = 60
+REDIS_POOL_IDLE_TIMEOUT = 300
+
+# HTTP/TWS Connection Pool Settings (development scale)
+TWS_CONNECT_TIMEOUT = 10
+TWS_READ_TIMEOUT = 30
+TWS_WRITE_TIMEOUT = 30
+TWS_POOL_TIMEOUT = 30
+TWS_MAX_CONNECTIONS = 50
+TWS_MAX_KEEPALIVE = 10
+TWS_POOL_RETRY_ATTEMPTS = 3
+TWS_POOL_RETRY_DELAY = 1
+
+# WebSocket Connection Pool Settings (development scale)
+WS_POOL_MAX_SIZE = 100
+WS_POOL_CLEANUP_INTERVAL = 60
+WS_CONNECTION_TIMEOUT = 30

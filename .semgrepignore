@@ -1,0 +1,25 @@
+# Ignore virtual environments and caches
+venv/
+.mypy_cache/
+.ruff_cache/
+.blackbox/
+.mem0/
+logs/
+
+# Ignore tests
+tests/
+
+# Ignore generated files
+*.pyc
+__pycache__/
+
+# Ignore docs and static
+docs/
+static/
+templates/
+
+# Ignore scripts
+scripts/
+
+# Ignore reports
+reports/
