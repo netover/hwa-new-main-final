@@ -1,10 +1,9 @@
 from __future__ import annotations
 
-import asyncio
 import time
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import List, Optional
 
 from resync.core.health_models import ComponentHealth, ComponentType, HealthStatus
 from resync.core.structured_logger import get_logger

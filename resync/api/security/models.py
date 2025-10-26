@@ -3,7 +3,7 @@ from __future__ import annotations
 from datetime import datetime
 
 from passlib.context import CryptContext
-from pydantic import BaseModel, EmailStr, Field, validator
+from pydantic import field_validator, BaseModel, EmailStr, Field
 
 # --- Password Validation Context ---
 password_hasher = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -13,7 +13,8 @@ class LoginRequest(BaseModel):
     username: str = Field(..., min_length=3, max_length=32)
     password: str = Field(..., min_length=8)
 
-    @validator("password")
+    @field_validator("password")
+    @classmethod
     def validate_password(cls, v) -> str:
         if len(v) < 8:
             raise ValueError("Password must be at least 8 characters long")

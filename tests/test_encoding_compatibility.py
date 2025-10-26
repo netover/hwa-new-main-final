@@ -1,6 +1,5 @@
 import io
 import logging
-import sys
 from unittest.mock import patch
 import pytest
 from resync.core.encoding_utils import can_encode, symbol

@@ -13,7 +13,6 @@ PEP 563 and PEP 649 for details.
 
 from __future__ import annotations
 
-from typing import Any, Dict
 # resync/api/rag_upload.py
 
 import logging

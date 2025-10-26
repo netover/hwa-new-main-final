@@ -4,9 +4,7 @@ Authentication routes for FastAPI
 """
 from fastapi import APIRouter, HTTPException, status, Depends
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from typing import Optional
 from ..dependencies import get_current_user
-from ..models.response_models import HealthResponse
 
 router = APIRouter()
 

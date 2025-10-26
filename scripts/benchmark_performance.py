@@ -15,11 +15,9 @@ import psutil
 import os
 import json
 import sys
-import zipfile
 from pathlib import Path
-from typing import List, Dict, Any, Optional
+from typing import Dict, Any
 import orjson
-import aiosqlite
 # Import modules directly to avoid circular import issues
 import sys
 import os
@@ -61,7 +59,6 @@ exec(file_ingestor_code)
 import codecs
 import locale
 # from resync.core.structured_logger import get_logger
-import logging
 
 # Force UTF-8 encoding on Windows
 if sys.platform == "win32":

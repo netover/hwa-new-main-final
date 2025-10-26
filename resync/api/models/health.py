@@ -1,8 +1,6 @@
 """Health-related API models."""
 
-from typing import Optional
 
-from pydantic import BaseModel, Field
 
 from .base import BaseModelWithTime
 from resync.core.health_models import SystemHealthStatus

@@ -2,8 +2,8 @@
 """
 Audit routes for FastAPI
 """
-from fastapi import APIRouter, HTTPException, status, Depends, Query
-from typing import List, Optional
+from fastapi import APIRouter, HTTPException, status, Depends
+from typing import List
 from ..dependencies import get_current_user, get_logger, check_rate_limit
 from ..models.request_models import AuditReviewRequest, AuditFlagsQuery
 from ..models.response_models import (

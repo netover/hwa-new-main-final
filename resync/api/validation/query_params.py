@@ -5,7 +5,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional
 
-from pydantic import Field, validator, ConfigDict
+from pydantic import field_validator, StringConstraints, Field, validator, ConfigDict
 from pydantic.types import constr
 
 from .common import (
@@ -14,6 +14,7 @@ from .common import (
     StringConstraints,
     ValidationPatterns,
 )
+from typing_extensions import Annotated
 
 
 class SortOrder(str, Enum):
@@ -61,7 +62,8 @@ class PaginationParams(BaseValidatedModel):
         extra="forbid",
     )
 
-    @validator("page_size")
+    @field_validator("page_size")
+    @classmethod
     def validate_page_size(cls, v):
         """Validate page size is reasonable."""
         if v > 100 and v <= NumericConstraints.MAX_PAGE_SIZE:
@@ -83,7 +85,7 @@ class PaginationParams(BaseValidatedModel):
 class SearchParams(BaseValidatedModel):
     """Search query parameters."""
 
-    query: constr(min_length=1, max_length=200, strip_whitespace=True) = Field(
+    query: Annotated[str, StringConstraints(min_length=1, max_length=200, strip_whitespace=True)] = Field(
         ..., description="Search query string"
     )
 
@@ -101,7 +103,8 @@ class SearchParams(BaseValidatedModel):
         extra="forbid",
     )
 
-    @validator("query")
+    @field_validator("query")
+    @classmethod
     def validate_search_query(cls, v):
         """Validate search query for malicious content."""
         if not v or not v.strip():
@@ -121,7 +124,8 @@ class SearchParams(BaseValidatedModel):
                 raise ValueError("Search query contains invalid patterns")
         return v
 
-    @validator("search_fields")
+    @field_validator("search_fields")
+    @classmethod
     def validate_search_fields(cls, v):
         """Validate search fields."""
         if not v:
@@ -151,7 +155,8 @@ class FilterParams(BaseValidatedModel):
         extra="forbid",
     )
 
-    @validator("filters")
+    @field_validator("filters")
+    @classmethod
     def validate_filters(cls, v):
         """Validate filter conditions."""
         if not v:
@@ -211,7 +216,8 @@ class SortParams(BaseValidatedModel):
         extra="forbid",
     )
 
-    @validator("sort_by")
+    @field_validator("sort_by")
+    @classmethod
     def validate_sort_fields(cls, v):
         """Validate sort fields."""
         if not v:
@@ -225,6 +231,8 @@ class SortParams(BaseValidatedModel):
             raise ValueError("Duplicate sort fields found")
         return v
 
+    # TODO[pydantic]: We couldn't refactor the `validator`, please replace it by `field_validator` manually.
+    # Check https://docs.pydantic.dev/dev-v2/migration/#changes-to-validators for more information.
     @validator("sort_order")
     def validate_sort_order(cls, v, values):
         """Validate sort order matches sort fields."""
@@ -253,6 +261,8 @@ class DateRangeParams(BaseValidatedModel):
         extra="forbid",
     )
 
+    # TODO[pydantic]: We couldn't refactor the `validator`, please replace it by `field_validator` manually.
+    # Check https://docs.pydantic.dev/dev-v2/migration/#changes-to-validators for more information.
     @validator("end_date")
     def validate_date_range(cls, v, values):
         """Validate date range."""
@@ -269,7 +279,7 @@ class AgentQueryParams(BaseValidatedModel):
         None, description="Filter by agent ID"
     )
 
-    name: Optional[constr(min_length=1, max_length=100)] = Field(
+    name: Optional[Annotated[str, StringConstraints(min_length=1, max_length=100)]] = Field(
         None, description="Filter by agent name (partial match)"
     )
 
@@ -289,7 +299,7 @@ class AgentQueryParams(BaseValidatedModel):
 
     include_inactive: bool = Field(default=False, description="Include inactive agents")
 
-    tags: Optional[List[constr(min_length=1, max_length=50)]] = Field(
+    tags: Optional[List[Annotated[str, StringConstraints(min_length=1, max_length=50)]]] = Field(
         None, description="Filter by tags", max_length=5
     )
 
@@ -297,14 +307,16 @@ class AgentQueryParams(BaseValidatedModel):
         extra="forbid",
     )
 
-    @validator("name", "type", "status", "model_name")
+    @field_validator("name", "type", "status", "model_name")
+    @classmethod
     def validate_text_fields(cls, v):
         """Validate text fields for malicious content."""
         if v and ValidationPatterns.SCRIPT_PATTERN.search(v):
             raise ValueError("Field contains potentially malicious content")
         return v
 
-    @validator("tools", "tags")
+    @field_validator("tools", "tags")
+    @classmethod
     def validate_list_fields(cls, v):
         """Validate list fields."""
         if not v:
@@ -346,7 +358,8 @@ class SystemQueryParams(BaseValidatedModel):
         extra="forbid",
     )
 
-    @validator("metric_types", "severity_filter")
+    @field_validator("metric_types", "severity_filter")
+    @classmethod
     def validate_list_fields(cls, v):
         """Validate list fields."""
         if not v:
@@ -366,7 +379,7 @@ class AuditQueryParams(BaseValidatedModel):
         description="Audit status filter",
     )
 
-    query: Optional[constr(min_length=1, max_length=200, strip_whitespace=True)] = (
+    query: Optional[Annotated[str, StringConstraints(min_length=1, max_length=200, strip_whitespace=True)]] = (
         Field(None, description="Search query")
     )
 
@@ -379,14 +392,15 @@ class AuditQueryParams(BaseValidatedModel):
     )
 
     severity: Optional[List[str]] = Field(
-        None, description="Filter by severity levels", max_items=3
+        None, description="Filter by severity levels", max_length=3
     )
 
     model_config = ConfigDict(
         extra="forbid",
     )
 
-    @validator("query")
+    @field_validator("query")
+    @classmethod
     def validate_search_query(cls, v):
         """Validate search query."""
         if v and ValidationPatterns.SCRIPT_PATTERN.search(v):
@@ -419,6 +433,8 @@ class FileQueryParams(BaseValidatedModel):
         extra="forbid",
     )
 
+    # TODO[pydantic]: We couldn't refactor the `validator`, please replace it by `field_validator` manually.
+    # Check https://docs.pydantic.dev/dev-v2/migration/#changes-to-validators for more information.
     @validator("size_max")
     def validate_size_range(cls, v, values):
         """Validate file size range."""
@@ -427,7 +443,8 @@ class FileQueryParams(BaseValidatedModel):
             raise ValueError("Maximum size must be greater than minimum size")
         return v
 
-    @validator("file_types", "status")
+    @field_validator("file_types", "status")
+    @classmethod
     def validate_text_fields(cls, v):
         """Validate text fields."""
         if v:

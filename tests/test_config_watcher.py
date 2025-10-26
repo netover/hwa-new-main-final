@@ -9,8 +9,7 @@ broadcasting functionality.
 import asyncio
 import json
 import pytest
-from unittest.mock import AsyncMock, MagicMock, patch, call
-from typing import List
+from unittest.mock import AsyncMock, MagicMock, patch
 
 from resync.core.config_watcher import handle_config_change
 

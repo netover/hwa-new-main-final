@@ -15,7 +15,7 @@ from typing import Any, Dict, List, Optional
 
 import structlog
 
-from resync.core.health_models import ComponentType, HealthStatus, RecoveryResult
+from resync.core.health_models import RecoveryResult
 from resync.core.connection_pool_manager import get_advanced_connection_pool_manager
 
 logger = structlog.get_logger(__name__)

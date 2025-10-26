@@ -7,7 +7,7 @@ from enum import Enum
 from typing import List, Union
 from urllib.parse import urlparse
 
-from pydantic import BaseModel, ConfigDict, Field, validator
+from pydantic import field_validator, BaseModel, ConfigDict, Field, validator
 
 logger = logging.getLogger(__name__)
 
@@ -87,7 +87,8 @@ class CORSPolicy(BaseModel):
         default=[], description="Regex patterns for dynamic origin validation."
     )
 
-    @validator("environment", pre=True)
+    @field_validator("environment", mode="before")
+    @classmethod
     def validate_environment(cls, v):
         """Validate environment value."""
         if isinstance(v, str):
@@ -100,6 +101,8 @@ class CORSPolicy(BaseModel):
                 return Environment.TEST
         return v
 
+    # TODO[pydantic]: We couldn't refactor the `validator`, please replace it by `field_validator` manually.
+    # Check https://docs.pydantic.dev/dev-v2/migration/#changes-to-validators for more information.
     @validator("allowed_origins", each_item=True)
     def validate_origin(cls, v, values):
         """Validate each origin in the allowed_origins list."""
@@ -124,6 +127,8 @@ class CORSPolicy(BaseModel):
 
         return v
 
+    # TODO[pydantic]: We couldn't refactor the `validator`, please replace it by `field_validator` manually.
+    # Check https://docs.pydantic.dev/dev-v2/migration/#changes-to-validators for more information.
     @validator("allowed_methods", each_item=True)
     def validate_method(cls, v):
         """Validate HTTP methods."""
@@ -135,7 +140,8 @@ class CORSPolicy(BaseModel):
             )
         return v
 
-    @validator("max_age")
+    @field_validator("max_age")
+    @classmethod
     def validate_max_age(cls, v):
         """Validate max age is reasonable."""
         if v < 0:
@@ -144,6 +150,8 @@ class CORSPolicy(BaseModel):
             raise ValueError("max_age should not exceed 7 days (604800 seconds)")
         return v
 
+    # TODO[pydantic]: We couldn't refactor the `validator`, please replace it by `field_validator` manually.
+    # Check https://docs.pydantic.dev/dev-v2/migration/#changes-to-validators for more information.
     @validator("origin_regex_patterns", each_item=True)
     def validate_regex_pattern(cls, v, values):
         """Validate regex patterns are compilable and not allowed in production."""

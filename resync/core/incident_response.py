@@ -14,13 +14,12 @@ This module provides intelligent incident response capabilities including:
 from __future__ import annotations
 
 import asyncio
-import json
 import time
 from collections import deque
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-from typing import Any, Dict, List, Optional, Set, Tuple, Union
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 from resync.core.structured_logger import get_logger
 

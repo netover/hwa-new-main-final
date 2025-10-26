@@ -6,7 +6,6 @@ This module provides predictive analysis for potential issues in the health moni
 
 from __future__ import annotations
 
-import time
 from typing import Any, Dict, List
 import structlog
 

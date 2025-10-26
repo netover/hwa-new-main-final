@@ -15,11 +15,10 @@ import asyncio
 import hashlib
 import re
 import time
-from collections import defaultdict, deque
+from collections import defaultdict
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Set, Tuple, Union
+from typing import Any, Dict, List, Optional, Set, Tuple
 
-from resync.core.query_cache import QueryFingerprint
 from resync.core.structured_logger import get_logger
 
 logger = get_logger(__name__)

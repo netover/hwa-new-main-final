@@ -12,7 +12,6 @@ try:
     import aiofiles  # type: ignore
 except ImportError:
     aiofiles = None  # type: ignore
-from dataclasses import dataclass
 import psutil
 import structlog
 

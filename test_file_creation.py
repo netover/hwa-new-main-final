@@ -1,11 +1,15 @@
 print('=== TESTING FILE CREATION ONLY ===')
-import sys, os, tempfile, zipfile
+import sys
+import os
+import tempfile
+import zipfile
+import json as orjson
+
 sys.path.insert(0, os.path.join('.', 'resync', 'core'))
 
 # Test file creation functions
 def create_test_json():
     temp_file = tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False)
-    import orjson
     test_data = {'test': 'data', 'number': 123}
     temp_file.write(orjson.dumps(test_data).decode('utf-8'))
     temp_file.close()

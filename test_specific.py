@@ -13,13 +13,11 @@ async def run_specific_test():
     """Executar o teste específico sem pytest."""
     try:
         # Importar as dependências necessárias
-        from unittest.mock import Mock, AsyncMock, patch
+        from unittest.mock import AsyncMock, patch
         from resync.core.connection_pool_manager import (
-            ConnectionPoolManager,
             DatabaseConnectionPool,
             ConnectionPoolConfig,
         )
-        from resync.core.exceptions import PoolExhaustedError, TimeoutError
 
         # Definir a classe de teste
         class TestConnectionPoolMetrics:

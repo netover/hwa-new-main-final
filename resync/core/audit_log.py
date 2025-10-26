@@ -58,9 +58,9 @@ class AuditLogResponse(BaseModel):
     user_id: str
     timestamp: datetime
     details: str
-    correlation_id: Optional[str]
-    source_component: Optional[str]
-    severity: Optional[str]
+    correlation_id: Optional[str] = None
+    source_component: Optional[str] = None
+    severity: Optional[str] = None
 
     model_config = ConfigDict(from_attributes=True)
 

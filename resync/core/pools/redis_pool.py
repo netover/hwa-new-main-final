@@ -6,9 +6,6 @@ Separated to follow Single Responsibility Principle.
 from __future__ import annotations
 
 import logging
-import time
-from contextlib import asynccontextmanager
-from typing import AsyncIterator, Optional
 
 # Soft import for redis (optional dependency)
 try:
@@ -50,3 +47,6 @@ class RedisPool:
                 # usa factory centralizada
                 self._client = get_redis_client()
         return self._client
+
+# Adicionar alias para compatibilidade
+RedisConnectionPool = RedisPool

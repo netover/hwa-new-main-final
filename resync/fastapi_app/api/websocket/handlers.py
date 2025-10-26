@@ -5,7 +5,6 @@ WebSocket handlers for FastAPI
 from fastapi import WebSocket, WebSocketDisconnect
 from typing import Dict, Set
 import json
-import asyncio
 import sys
 from pathlib import Path
 from ..v1.dependencies import get_logger

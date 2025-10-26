@@ -6,7 +6,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional
 
-from pydantic import Field, model_validator, validator, ConfigDict
+from pydantic import field_validator, StringConstraints, Field, model_validator, validator, ConfigDict
 from pydantic.types import constr
 
 from .common import (
@@ -15,6 +15,7 @@ from .common import (
     StringConstraints,
     ValidationPatterns,
 )
+from typing_extensions import Annotated
 
 
 class FileType(str, Enum):
@@ -53,7 +54,7 @@ class FileUploadRequest(BaseValidatedModel):
 
     file_type: Optional[FileType] = Field(None, description="Categorized file type")
 
-    purpose: constr(min_length=1, max_length=100, strip_whitespace=True) = Field(
+    purpose: Annotated[str, StringConstraints(min_length=1, max_length=100, strip_whitespace=True)] = Field(
         ..., description="Purpose of file upload"
     )
 
@@ -77,7 +78,8 @@ class FileUploadRequest(BaseValidatedModel):
         extra="forbid",
     )
 
-    @validator("filename")
+    @field_validator("filename")
+    @classmethod
     def validate_filename(cls, v):
         """Validate filename for security and format."""
         if not v or not v.strip():
@@ -99,7 +101,8 @@ class FileUploadRequest(BaseValidatedModel):
                 raise ValueError("Invalid file extension")
         return v
 
-    @validator("content_type")
+    @field_validator("content_type")
+    @classmethod
     def validate_content_type(cls, v):
         """Validate MIME content type."""
         if not v or not v.strip():
@@ -131,7 +134,8 @@ class FileUploadRequest(BaseValidatedModel):
             raise ValueError(f"Dangerous content type not allowed: {base_type}")
         return v
 
-    @validator("file_size")
+    @field_validator("file_size")
+    @classmethod
     def validate_file_size(cls, v):
         """Validate file size limits."""
         if v > NumericConstraints.MAX_FILE_SIZE:
@@ -144,7 +148,8 @@ class FileUploadRequest(BaseValidatedModel):
             logging.warning(f"Large file upload detected: {v} bytes")
         return v
 
-    @validator("purpose")
+    @field_validator("purpose")
+    @classmethod
     def validate_purpose(cls, v):
         """Validate file upload purpose."""
         if not v or not v.strip():
@@ -154,7 +159,8 @@ class FileUploadRequest(BaseValidatedModel):
             raise ValueError("Purpose contains potentially malicious content")
         return v
 
-    @validator("metadata")
+    @field_validator("metadata")
+    @classmethod
     def validate_metadata(cls, v):
         """Validate metadata dictionary."""
         if not v:
@@ -250,6 +256,8 @@ class FileChunkUploadRequest(BaseValidatedModel):
         extra="forbid",
     )
 
+    # TODO[pydantic]: We couldn't refactor the `validator`, please replace it by `field_validator` manually.
+    # Check https://docs.pydantic.dev/dev-v2/migration/#changes-to-validators for more information.
     @validator("chunk_index", "total_chunks")
     def validate_chunk_numbers(cls, v, values):
         """Validate chunk numbers."""
@@ -260,6 +268,8 @@ class FileChunkUploadRequest(BaseValidatedModel):
                 raise ValueError("Chunk index must be less than total chunks")
         return v
 
+    # TODO[pydantic]: We couldn't refactor the `validator`, please replace it by `field_validator` manually.
+    # Check https://docs.pydantic.dev/dev-v2/migration/#changes-to-validators for more information.
     @validator("file_size")
     def validate_total_size(cls, v, values):
         """Validate total file size."""
@@ -280,7 +290,7 @@ class FileUpdateRequest(BaseValidatedModel):
         None, description="New filename"
     )
 
-    purpose: Optional[constr(min_length=1, max_length=100, strip_whitespace=True)] = (
+    purpose: Optional[Annotated[str, StringConstraints(min_length=1, max_length=100, strip_whitespace=True)]] = (
         Field(None, description="New purpose")
     )
 
@@ -288,7 +298,7 @@ class FileUpdateRequest(BaseValidatedModel):
         None, description="Updated metadata", max_length=50
     )
 
-    tags: Optional[List[constr(min_length=1, max_length=50)]] = Field(
+    tags: Optional[List[Annotated[str, StringConstraints(min_length=1, max_length=50)]]] = Field(
         None, description="File tags", max_length=10
     )
 
@@ -296,7 +306,8 @@ class FileUpdateRequest(BaseValidatedModel):
         extra="forbid",
     )
 
-    @validator("filename")
+    @field_validator("filename")
+    @classmethod
     def validate_filename(cls, v):
         """Validate filename if provided."""
         if v is None:
@@ -311,7 +322,8 @@ class FileUpdateRequest(BaseValidatedModel):
             raise ValueError("Filename contains potentially malicious content")
         return v
 
-    @validator("purpose")
+    @field_validator("purpose")
+    @classmethod
     def validate_purpose(cls, v):
         """Validate purpose if provided."""
         if v is None:
@@ -322,7 +334,8 @@ class FileUpdateRequest(BaseValidatedModel):
             raise ValueError("Purpose contains potentially malicious content")
         return v
 
-    @validator("metadata")
+    @field_validator("metadata")
+    @classmethod
     def validate_metadata(cls, v):
         """Validate metadata if provided."""
         if v is None:
@@ -340,7 +353,8 @@ class FileUpdateRequest(BaseValidatedModel):
                     )
         return v
 
-    @validator("tags")
+    @field_validator("tags")
+    @classmethod
     def validate_tags(cls, v):
         """Validate file tags."""
         if v is None:
@@ -380,7 +394,8 @@ class FileProcessingRequest(BaseValidatedModel):
         extra="forbid",
     )
 
-    @validator("operations")
+    @field_validator("operations")
+    @classmethod
     def validate_operations(cls, v):
         """Validate processing operations."""
         valid_operations = {
@@ -409,7 +424,8 @@ class FileProcessingRequest(BaseValidatedModel):
             raise ValueError("Duplicate operations found")
         return v
 
-    @validator("callback_url")
+    @field_validator("callback_url")
+    @classmethod
     def validate_callback_url(cls, v):
         """Validate callback URL."""
         if v is None:
@@ -420,7 +436,8 @@ class FileProcessingRequest(BaseValidatedModel):
             raise ValueError("Callback URL contains potentially malicious content")
         return v
 
-    @validator("configuration")
+    @field_validator("configuration")
+    @classmethod
     def validate_configuration(cls, v):
         """Validate processing configuration."""
         if not v:
@@ -446,7 +463,7 @@ class RAGUploadRequest(BaseValidatedModel):
         ..., description="Files to process for RAG", min_length=1, max_length=10
     )
 
-    collection_name: constr(min_length=1, max_length=100, strip_whitespace=True) = (
+    collection_name: Annotated[str, StringConstraints(min_length=1, max_length=100, strip_whitespace=True)] = (
         Field(..., description="RAG collection name")
     )
 
@@ -472,7 +489,8 @@ class RAGUploadRequest(BaseValidatedModel):
         extra="forbid",
     )
 
-    @validator("files")
+    @field_validator("files")
+    @classmethod
     def validate_files_list(cls, v):
         """Validate files list."""
         if len(v) > 10:
@@ -483,7 +501,8 @@ class RAGUploadRequest(BaseValidatedModel):
             raise ValueError("Duplicate filenames found")
         return v
 
-    @validator("collection_name")
+    @field_validator("collection_name")
+    @classmethod
     def validate_collection_name(cls, v):
         """Validate collection name."""
         if not v or not v.strip():
@@ -492,7 +511,8 @@ class RAGUploadRequest(BaseValidatedModel):
             raise ValueError("Collection name contains potentially malicious content")
         return v
 
-    @validator("chunk_size", "chunk_overlap")
+    @field_validator("chunk_size", "chunk_overlap")
+    @classmethod
     def validate_chunk_values(cls, v):
         """Validate chunk configuration."""
         if v <= 0:
@@ -509,7 +529,8 @@ class RAGUploadRequest(BaseValidatedModel):
                 raise ValueError("Chunk overlap must be less than chunk size")
         return values
 
-    @validator("metadata_template")
+    @field_validator("metadata_template")
+    @classmethod
     def validate_metadata_template(cls, v):
         """Validate metadata template."""
         if not v:

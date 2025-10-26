@@ -6,8 +6,6 @@ Simple test for the refactored cache implementation.
 import asyncio
 import sys
 import os
-from abc import ABC, abstractmethod
-from typing import Any, Optional
 
 # Add the project root to Python path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -61,7 +59,6 @@ sys.modules['resync.core.metrics'] = MockRuntimeMetrics()
 sys.modules['resync.core.exceptions'] = MockExceptions()
 
 # Now import the cache components
-from resync.core.cache.base_cache import BaseCache
 from resync.core.cache.memory_manager import CacheMemoryManager, CacheEntry
 from resync.core.cache.persistence_manager import CachePersistenceManager
 from resync.core.cache.transaction_manager import CacheTransactionManager

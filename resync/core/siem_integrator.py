@@ -18,15 +18,13 @@ import json
 import secrets
 import time
 from abc import ABC, abstractmethod
-from collections import defaultdict, deque
+from collections import deque
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime
 from enum import Enum
-from typing import Any, Awaitable, Callable, Dict, List, Optional, Set, Tuple, Union
-from urllib.parse import urlparse
+from typing import Any, Awaitable, Callable, Dict, List, Optional, Set
 
 import aiohttp
-from cryptography.fernet import Fernet
 
 from resync.core.structured_logger import get_logger
 

@@ -5,10 +5,11 @@ from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional
 
-from pydantic import Field, validator, ConfigDict
+from pydantic import field_validator, StringConstraints, Field, ConfigDict
 from pydantic.types import constr
 
 from .common import BaseValidatedModel, ValidationPatterns
+from typing_extensions import Annotated
 
 
 class MetricType(str, Enum):
@@ -90,7 +91,8 @@ class SystemMetricRequest(BaseValidatedModel):
         extra="forbid",
     )
 
-    @validator("metric_types")
+    @field_validator("metric_types")
+    @classmethod
     def validate_metric_types(cls, v):
         """Validate metric types."""
         if not v:
@@ -104,7 +106,7 @@ class SystemMetricRequest(BaseValidatedModel):
 class CustomMetricRequest(BaseValidatedModel):
     """Custom metric submission request validation."""
 
-    metric_name: constr(min_length=1, max_length=100, strip_whitespace=True) = Field(
+    metric_name: Annotated[str, StringConstraints(min_length=1, max_length=100, strip_whitespace=True)] = Field(
         ..., description="Custom metric name"
     )
 
@@ -127,14 +129,15 @@ class CustomMetricRequest(BaseValidatedModel):
     )
 
     description: Optional[
-        constr(min_length=1, max_length=500, strip_whitespace=True)
+        Annotated[str, StringConstraints(min_length=1, max_length=500, strip_whitespace=True)]
     ] = Field(None, description="Metric description")
 
     model_config = ConfigDict(
         extra="forbid",
     )
 
-    @validator("metric_name")
+    @field_validator("metric_name")
+    @classmethod
     def validate_metric_name(cls, v):
         """Validate metric name."""
         if not v or not v.strip():
@@ -151,7 +154,8 @@ class CustomMetricRequest(BaseValidatedModel):
                 )
         return v
 
-    @validator("metric_value")
+    @field_validator("metric_value")
+    @classmethod
     def validate_metric_value(cls, v):
         """Validate metric value."""
         if not isinstance(v, (int, float)):
@@ -164,7 +168,8 @@ class CustomMetricRequest(BaseValidatedModel):
             raise ValueError("Metric value cannot be infinite")
         return v
 
-    @validator("labels")
+    @field_validator("labels")
+    @classmethod
     def validate_labels(cls, v):
         """Validate metric labels."""
         if not v:
@@ -182,7 +187,8 @@ class CustomMetricRequest(BaseValidatedModel):
                 )
         return v
 
-    @validator("description")
+    @field_validator("description")
+    @classmethod
     def validate_description(cls, v):
         """Validate metric description."""
         if v and ValidationPatterns.SCRIPT_PATTERN.search(v):
@@ -195,18 +201,18 @@ class CustomMetricRequest(BaseValidatedModel):
 class AlertRequest(BaseValidatedModel):
     """Alert creation/update request validation."""
 
-    alert_name: constr(min_length=1, max_length=100, strip_whitespace=True) = Field(
+    alert_name: Annotated[str, StringConstraints(min_length=1, max_length=100, strip_whitespace=True)] = Field(
         ..., description="Alert name"
     )
 
     severity: AlertSeverity = Field(..., description="Alert severity level")
 
-    description: constr(min_length=1, max_length=1000, strip_whitespace=True) = Field(
+    description: Annotated[str, StringConstraints(min_length=1, max_length=1000, strip_whitespace=True)] = Field(
         ..., description="Detailed alert description"
     )
 
     metric_name: Optional[
-        constr(min_length=1, max_length=100, strip_whitespace=True)
+        Annotated[str, StringConstraints(min_length=1, max_length=100, strip_whitespace=True)]
     ] = Field(None, description="Related metric name")
 
     threshold_value: Optional[float] = Field(
@@ -231,7 +237,8 @@ class AlertRequest(BaseValidatedModel):
         extra="forbid",
     )
 
-    @validator("alert_name")
+    @field_validator("alert_name")
+    @classmethod
     def validate_alert_name(cls, v):
         """Validate alert name."""
         if not v or not v.strip():
@@ -240,7 +247,8 @@ class AlertRequest(BaseValidatedModel):
             raise ValueError("Alert name contains potentially malicious content")
         return v
 
-    @validator("description")
+    @field_validator("description")
+    @classmethod
     def validate_description(cls, v):
         """Validate alert description."""
         if not v or not v.strip():
@@ -249,7 +257,8 @@ class AlertRequest(BaseValidatedModel):
             raise ValueError("Alert description contains malicious content")
         return v
 
-    @validator("metric_name")
+    @field_validator("metric_name")
+    @classmethod
     def validate_metric_name(cls, v):
         """Validate metric name if provided."""
         if v is None:
@@ -260,7 +269,8 @@ class AlertRequest(BaseValidatedModel):
             raise ValueError("Invalid metric name format")
         return v
 
-    @validator("labels")
+    @field_validator("labels")
+    @classmethod
     def validate_labels(cls, v):
         """Validate alert labels."""
         if not v:
@@ -276,7 +286,8 @@ class AlertRequest(BaseValidatedModel):
                 )
         return v
 
-    @validator("notification_channels")
+    @field_validator("notification_channels")
+    @classmethod
     def validate_notification_channels(cls, v):
         """Validate notification channels."""
         if v is None:
@@ -301,11 +312,11 @@ class AlertQueryParams(BaseValidatedModel):
     )
 
     alert_name: Optional[
-        constr(min_length=1, max_length=100, strip_whitespace=True)
+        Annotated[str, StringConstraints(min_length=1, max_length=100, strip_whitespace=True)]
     ] = Field(None, description="Filter by alert name (partial match)")
 
     metric_name: Optional[
-        constr(min_length=1, max_length=100, strip_whitespace=True)
+        Annotated[str, StringConstraints(min_length=1, max_length=100, strip_whitespace=True)]
     ] = Field(None, description="Filter by metric name")
 
     time_range: str = Field(
@@ -320,7 +331,8 @@ class AlertQueryParams(BaseValidatedModel):
         extra="forbid",
     )
 
-    @validator("severity")
+    @field_validator("severity")
+    @classmethod
     def validate_severity_list(cls, v):
         """Validate severity list."""
         if v is None:
@@ -330,7 +342,8 @@ class AlertQueryParams(BaseValidatedModel):
             raise ValueError("Duplicate severity levels found")
         return v
 
-    @validator("alert_name", "metric_name")
+    @field_validator("alert_name", "metric_name")
+    @classmethod
     def validate_text_fields(cls, v):
         """Validate text fields."""
         if v is None:
@@ -343,7 +356,7 @@ class AlertQueryParams(BaseValidatedModel):
 class HealthCheckRequest(BaseValidatedModel):
     """Health check request validation."""
 
-    component: Optional[constr(min_length=1, max_length=100, strip_whitespace=True)] = (
+    component: Optional[Annotated[str, StringConstraints(min_length=1, max_length=100, strip_whitespace=True)]] = (
         Field(None, description="Specific component to check")
     )
 
@@ -365,7 +378,8 @@ class HealthCheckRequest(BaseValidatedModel):
         extra="forbid",
     )
 
-    @validator("component")
+    @field_validator("component")
+    @classmethod
     def validate_component(cls, v):
         """Validate component name."""
         if v is None:
@@ -384,11 +398,11 @@ class LogQueryParams(BaseValidatedModel):
         None, description="Filter by log levels", max_length=5
     )
 
-    component: Optional[constr(min_length=1, max_length=100, strip_whitespace=True)] = (
+    component: Optional[Annotated[str, StringConstraints(min_length=1, max_length=100, strip_whitespace=True)]] = (
         Field(None, description="Filter by component")
     )
 
-    search: Optional[constr(min_length=1, max_length=200, strip_whitespace=True)] = (
+    search: Optional[Annotated[str, StringConstraints(min_length=1, max_length=200, strip_whitespace=True)]] = (
         Field(None, description="Search in log messages")
     )
 
@@ -404,7 +418,8 @@ class LogQueryParams(BaseValidatedModel):
         extra="forbid",
     )
 
-    @validator("level")
+    @field_validator("level")
+    @classmethod
     def validate_log_levels(cls, v):
         """Validate log levels."""
         if v is None:
@@ -418,7 +433,8 @@ class LogQueryParams(BaseValidatedModel):
             raise ValueError("Duplicate log levels found")
         return v
 
-    @validator("component", "search")
+    @field_validator("component", "search")
+    @classmethod
     def validate_text_fields(cls, v):
         """Validate text fields."""
         if v is None:
@@ -437,7 +453,7 @@ class PerformanceTestRequest(BaseValidatedModel):
         description="Type of performance test",
     )
 
-    target_endpoint: constr(min_length=1, max_length=200, strip_whitespace=True) = (
+    target_endpoint: Annotated[str, StringConstraints(min_length=1, max_length=200, strip_whitespace=True)] = (
         Field(..., description="Target endpoint to test")
     )
 
@@ -461,7 +477,8 @@ class PerformanceTestRequest(BaseValidatedModel):
         extra="forbid",
     )
 
-    @validator("target_endpoint")
+    @field_validator("target_endpoint")
+    @classmethod
     def validate_endpoint(cls, v):
         """Validate target endpoint."""
         if not v or not v.strip():
@@ -472,7 +489,8 @@ class PerformanceTestRequest(BaseValidatedModel):
             raise ValueError("Target endpoint contains potentially malicious content")
         return v
 
-    @validator("success_criteria")
+    @field_validator("success_criteria")
+    @classmethod
     def validate_success_criteria(cls, v):
         """Validate success criteria."""
         if not v:

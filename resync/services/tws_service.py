@@ -19,7 +19,7 @@ from dateutil import parser
 from resync.core.cache_hierarchy import get_cache_hierarchy
 from resync.core.connection_pool_manager import get_connection_pool_manager
 from resync.core.exceptions import TWSConnectionError
-from resync.core.resilience import CircuitBreakerManager, CircuitBreakerError, retry_with_backoff_async, with_timeout
+from resync.core.resilience import CircuitBreakerManager, CircuitBreakerError, retry_with_backoff_async
 from resync.models.tws import (
     CriticalJob,
     DependencyTree,

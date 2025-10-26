@@ -6,15 +6,14 @@ to ensure they work correctly and don't break existing functionality.
 """
 
 import asyncio
-import json
 import time
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import AsyncMock, patch
 
 import aiohttp
 import pytest
 
-from resync.core.resilience import CircuitBreakerManager, CircuitBreakerError, retry_with_backoff
-from resync.core.siem_integrator import SIEMConfiguration, SIEMEvent, SIEMType, SplunkConnector, ELKConnector
+from resync.core.resilience import CircuitBreakerManager, CircuitBreakerError
+from resync.core.siem_integrator import SIEMConfiguration, SIEMEvent, SIEMType, SplunkConnector
 from resync.core.teams_integration import TeamsConfig, TeamsIntegration, TeamsNotification
 
 

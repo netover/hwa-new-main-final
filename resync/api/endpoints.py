@@ -109,7 +109,7 @@ class LLMQueryRequest(BaseModel):
 class LLMQueryResponse(BaseModel):
     optimized: bool
     query: str
-    response: Any
+    response: Any = None
     cache_used: bool
 
 
@@ -117,7 +117,7 @@ class TWSMetricsResponse(BaseModel):
     status: str
     critical_alerts: int
     warning_alerts: int
-    last_updated: str | None
+    last_updated: str | None = None
 
 
 # Error handling is now centralized in resync.api.utils.error_handlers

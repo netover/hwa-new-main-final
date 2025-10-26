@@ -3,7 +3,7 @@ from __future__ import annotations
 from re import match
 
 from passlib.context import CryptContext
-from pydantic import BaseModel, EmailStr, Field, validator
+from pydantic import field_validator, BaseModel, EmailStr, Field
 
 # --- Enhanced Validation Rules ---
 password_hasher = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -44,7 +44,8 @@ class EnhancedLoginRequest(BaseModel):
         ..., min_length=8, json_schema_extra={"example": "SecureP@ss123!"}
     )
 
-    @validator("password")
+    @field_validator("password")
+    @classmethod
     def validate_password(cls, v):
         return SensitiveFieldValidator.validate_password(v)
 
@@ -58,7 +59,8 @@ class UserCreateWithValidation(BaseModel):
         ..., min_length=8, json_schema_extra={"example": "SecureP@ss123!"}
     )
 
-    @validator("email")
+    @field_validator("email")
+    @classmethod
     def validate_email(cls, v):
         return SensitiveFieldValidator.validate_email(v)
 
@@ -67,10 +69,11 @@ class TokenRequestWithValidation(BaseModel):
     refresh_token: str = Field(
         min_length=512,
         max_length=2048,
-        example="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+        examples=["eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."],
     )
 
-    @validator("refresh_token")
+    @field_validator("refresh_token")
+    @classmethod
     def validate_refresh_token(cls, v):
         if len(v) < 512:
             raise ValueError("Refresh token must be at least 512 characters")

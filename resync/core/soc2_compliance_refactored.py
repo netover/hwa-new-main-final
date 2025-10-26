@@ -9,13 +9,11 @@ from __future__ import annotations
 
 import asyncio
 import hashlib
-import json
 import time
 from collections import defaultdict, deque
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
 from enum import Enum
-from typing import Any, Dict, List, Optional, Set, Tuple, Union
+from typing import Any, Dict, List, Optional, Union
 
 from resync.core.structured_logger import get_logger
 

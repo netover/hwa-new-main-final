@@ -8,7 +8,6 @@ the health module's dependency chain.
 
 import asyncio
 import sys
-import time
 from datetime import datetime
 
 # Add the project root to Python path

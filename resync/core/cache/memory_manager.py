@@ -9,10 +9,8 @@ from __future__ import annotations
 
 import logging
 import sys
-from time import time
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 
-from resync.core.exceptions import CacheError
 from resync.core.metrics import runtime_metrics
 
 logger = logging.getLogger(__name__)

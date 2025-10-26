@@ -10,7 +10,7 @@ from __future__ import annotations
 import asyncio
 import time
 from datetime import datetime
-from typing import Any, Dict, Optional
+from typing import Dict, Optional
 
 import psutil
 import structlog

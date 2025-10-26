@@ -20,7 +20,6 @@ from resync.core.health_models import (
     HealthCheckConfig,
     HealthCheckResult,
     HealthStatus,
-    HealthStatusHistory,
 )
 from .health_checkers.health_checker_factory import HealthCheckerFactory
 from .enhanced_health_config_manager import EnhancedHealthConfigurationManager

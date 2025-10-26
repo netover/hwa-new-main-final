@@ -5,13 +5,11 @@ This module contains unit tests for the BaseHealthChecker class.
 """
 
 import asyncio
-import time
-from datetime import datetime
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-from resync.core.health_models import ComponentType, HealthCheckConfig, HealthStatus
+from resync.core.health_models import ComponentType, HealthCheckConfig
 from resync.core.health.health_checkers.base_health_checker import BaseHealthChecker
 
 

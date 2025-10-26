@@ -6,11 +6,9 @@ This module provides a basic structured logging implementation that works reliab
 
 import logging
 import logging.config
-import sys
-import time
 import uuid
 import json
-from typing import Dict, Any, Optional
+from typing import Optional
 
 # Configure standard library logging with JSON format
 class JSONFormatter(logging.Formatter):
@@ -105,14 +103,16 @@ def set_request_id(request_id: str):
 
 def get_correlation_id() -> str:
     """Get or generate a correlation ID."""
+    global _current_correlation_id
     if _current_correlation_id is None:
-        return str(uuid.uuid4())
+        _current_correlation_id = str(uuid.uuid4())
     return _current_correlation_id
 
 def get_request_id() -> str:
     """Get or generate a request ID."""
+    global _current_request_id
     if _current_request_id is None:
-        return str(uuid.uuid4())
+        _current_request_id = str(uuid.uuid4())
     return _current_request_id
 
 class StructuredLogger:
@@ -192,7 +192,7 @@ def log_request_start(method: str, endpoint: str, request_id: Optional[str] = No
     structured_logger.info("Request started", method=method, endpoint=endpoint, request_type="start")
 
 def log_request_end(method: str, endpoint: str, status_code: int, duration: float, request_id: Optional[str] = None) -> None:
-    """Log the end of a request."""
+    """Log's end of a request."""
     structured_logger.info(
         "Request completed",
         method=method,

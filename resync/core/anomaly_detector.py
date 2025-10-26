@@ -14,12 +14,10 @@ from __future__ import annotations
 
 import asyncio
 import hashlib
-import json
-import threading
 import time
 from collections import defaultdict, deque
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Set, Tuple, Union
+from typing import Any, Dict, Optional
 
 import numpy as np
 from sklearn.ensemble import IsolationForest

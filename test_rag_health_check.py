@@ -4,7 +4,6 @@ Test script for RAG Health Check implementation.
 This script tests the comprehensive health check for RAG system components.
 """
 
-import os
 import sys
 import asyncio
 from pathlib import Path

@@ -5,7 +5,6 @@ This module tests the core Flask application routes, middleware functions,
 and integration points to ensure proper functionality and improve test coverage.
 """
 
-import pytest
 from unittest.mock import patch, MagicMock
 from flask import g
 import time

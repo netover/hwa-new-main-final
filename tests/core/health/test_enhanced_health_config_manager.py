@@ -7,7 +7,6 @@ This module contains unit tests for the EnhancedHealthConfigurationManager class
 import os
 from unittest.mock import MagicMock
 
-import pytest
 
 from resync.core.health_models import HealthCheckConfig
 from resync.core.health.enhanced_health_config_manager import EnhancedHealthConfigurationManager

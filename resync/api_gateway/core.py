@@ -13,10 +13,6 @@ from fastapi.responses import JSONResponse
 from resync.core.audit_log import get_audit_log_manager
 from resync.core.logger import log_with_correlation
 from resync.core.metrics import runtime_metrics
-from resync.core.rate_limiter import (
-    authenticated_rate_limit,
-    public_rate_limit,
-)
 
 # from resync.core.security import validate_api_key  [attr-defined]
 

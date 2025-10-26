@@ -14,7 +14,7 @@ from typing import Any, Dict, List, Optional
 
 import structlog
 
-from resync.core.health_models import ComponentHealth, HealthCheckResult, HealthStatus
+from resync.core.health_models import ComponentHealth, HealthStatus
 
 logger = structlog.get_logger(__name__)
 

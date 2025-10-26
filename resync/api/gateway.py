@@ -22,15 +22,14 @@ import time
 import re
 from collections import defaultdict, deque
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Set, Tuple, Union, Callable
+from typing import Any, Dict, List, Optional, Set, Callable
 from urllib.parse import urlparse, urljoin
 
 import aiohttp
-from aiohttp import web, hdrs
+from aiohttp import web
 import jwt
-from cryptography.fernet import Fernet
 
 from resync.core.structured_logger import get_logger
 from resync.core.circuit_breaker import (

@@ -1,5 +1,3 @@
-import pytest
-from unittest.mock import patch
 
 def test_tws_client_verify_disabled(mocker):
     ac = mocker.patch("resync.services.http_client_factory.AsyncClient")

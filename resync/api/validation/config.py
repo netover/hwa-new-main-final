@@ -5,7 +5,7 @@ from enum import Enum
 from pathlib import Path
 from typing import Any, List, Optional, Union
 
-from pydantic import BaseModel, ConfigDict, Field, validator
+from pydantic import field_validator, BaseModel, ConfigDict, Field
 
 
 class ValidationMode(str, Enum):
@@ -85,7 +85,7 @@ class ValidationConfigModel(BaseModel):
     custom_validators: dict[str, dict[str, Any]] = Field(
         default_factory=dict,
         description="Custom validator configurations",
-        max_items=50,
+        max_length=50,
     )
 
     error_response_format: str = Field(
@@ -149,7 +149,8 @@ class ValidationConfigModel(BaseModel):
         extra="forbid",
     )
 
-    @validator("skip_paths")
+    @field_validator("skip_paths")
+    @classmethod
     def validate_skip_paths(cls, v):
         """Validate skip paths."""
         if not v:
@@ -169,7 +170,8 @@ class ValidationConfigModel(BaseModel):
                 unique_paths.append(path)
         return unique_paths
 
-    @validator("custom_validators")
+    @field_validator("custom_validators")
+    @classmethod
     def validate_custom_validators(cls, v):
         """Validate custom validator configurations."""
         if not v:
@@ -189,7 +191,8 @@ class ValidationConfigModel(BaseModel):
                 raise ValueError(f"Custom validator '{name}' enabled must be boolean")
         return v
 
-    @validator("allowed_file_types")
+    @field_validator("allowed_file_types")
+    @classmethod
     def validate_allowed_file_types(cls, v):
         """Validate allowed file types."""
         if not v:
@@ -261,7 +264,7 @@ class ChatValidationConfig(BaseModel):
     )
 
     blocked_keywords: List[str] = Field(
-        default_factory=list, description="Keywords to block in messages", max_items=100
+        default_factory=list, description="Keywords to block in messages", max_length=100
     )
 
     model_config = ConfigDict(

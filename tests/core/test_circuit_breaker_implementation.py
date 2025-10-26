@@ -7,18 +7,15 @@ This file tests the circuit breaker implementation we added to:
 - resync/core/async_cache.py (get_redis_client)
 """
 
-import asyncio
 import pytest
 from unittest.mock import patch, AsyncMock, MagicMock
 from datetime import timedelta
 
 from resync.core.circuit_breakers import redis_breaker, tws_breaker, llm_breaker
 from resync.core.exceptions import AuthenticationError
-from resync.core.structured_logger import get_logger
-from resync.core.metrics import runtime_metrics
 from resync.core.async_cache import get_redis_client
 from resync.lifespan import initialize_redis_with_retry
-from resync.core.exceptions import RedisAuthError, RedisConnectionError, RedisTimeoutError
+from resync.core.exceptions import RedisAuthError, RedisConnectionError
 
 # Mock the logger and metrics to capture calls
 @pytest.fixture
@@ -244,7 +241,6 @@ async def test_circuit_breaker_recovers_after_timeout(mock_redis_connection_mana
 async def test_circuit_breaker_listener_integration(mock_logger, mock_runtime_metrics):
     """Test the circuit breaker listener with actual logger and metrics integration."""
     # Create a real circuit breaker instance
-    from resync.core.circuit_breakers import redis_breaker
     
     # Create a mock breaker state
     mock_breaker = MagicMock()
@@ -287,7 +283,6 @@ async def test_circuit_breaker_decorator_applied_to_initialize_redis_with_retry(
     # This is a more direct way to verify the decorator was applied
     # The aiobreaker decorator wraps the function in a CircuitBreaker object
     # We can check if the function has been wrapped by checking its type
-    import inspect
     
     # Get the original function
     original_func = initialize_redis_with_retry

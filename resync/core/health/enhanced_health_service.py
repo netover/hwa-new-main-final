@@ -23,7 +23,6 @@ from resync.core.health_models import (
     HealthStatus,
     HealthStatusHistory,
 )
-from resync.settings import settings
 
 # Import extracted components
 from .circuit_breaker import CircuitBreaker

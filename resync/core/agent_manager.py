@@ -15,6 +15,12 @@ import threading
 from typing import Any, Callable, Optional, List
 
 import structlog
+from resync.core.fastapi_di import get_service
+from resync.core.interfaces import ITWSClient
+from resync.tool_definitions.tws_tools import (
+    tws_status_tool,
+    tws_troubleshooting_tool,
+)
 
 # Configure agent manager logger
 agent_logger = structlog.get_logger("resync.agent_manager")
@@ -150,13 +156,6 @@ from pydantic import BaseModel
 from resync.core.exceptions import (
     AgentError,
 )  # Renamed from AgentExecutionError for broader scope
-from resync.core.exceptions import (
-    ConfigurationError,
-    InvalidConfigError,
-    MissingConfigError,
-    NetworkError,
-    ParsingError,
-)
 from resync.core.metrics import runtime_metrics
 from resync.services.mock_tws_service import MockTWSClient
 from resync.services.tws_service import OptimizedTWSClient
@@ -284,9 +283,6 @@ class AgentManager:
 
     def _create_tws_client(self) -> Any:
         """Creates a TWS client instance."""
-        from resync.core.fastapi_di import get_service
-        from resync.core.interfaces import ITWSClient
-
         try:
             return get_service(ITWSClient)()
         except Exception as e:
@@ -304,11 +300,6 @@ class AgentManager:
     def _discover_tools(self) -> dict[str, Any]:
         """Discover available tools for agents."""
         try:
-            from resync.tool_definitions.tws_tools import (
-                tws_status_tool,
-                tws_troubleshooting_tool,
-            )
-
             return {
                 "get_tws_status": tws_status_tool.get_tws_status,
                 "analyze_tws_failures": tws_troubleshooting_tool.analyze_failures,

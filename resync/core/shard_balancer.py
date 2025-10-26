@@ -4,7 +4,7 @@ Shard Balancer for distributed cache operations.
 This module provides basic shard balancing functionality for distributed cache systems.
 """
 
-from typing import Any, Dict, List, Optional
+from typing import Dict, List
 
 
 class ShardBalancer:

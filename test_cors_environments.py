@@ -8,18 +8,16 @@ import sys
 
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
-
-# Set up minimal environment variables for testing
-os.environ["ADMIN_USERNAME"] = "admin"
-os.environ["ADMIN_PASSWORD"] = "test123"
-os.environ["APP_ENV"] = "development"
-
-# Now import after setting environment variables
 from resync.api.middleware.cors_config import CORSPolicy, Environment
 from resync.api.middleware.cors_middleware import (
     add_cors_middleware,
     get_production_cors_config,
 )
+
+# Set up minimal environment variables for testing
+os.environ["ADMIN_USERNAME"] = "admin"
+os.environ["ADMIN_PASSWORD"] = "test123"
+os.environ["APP_ENV"] = "development"
 
 
 def test_development_environment():

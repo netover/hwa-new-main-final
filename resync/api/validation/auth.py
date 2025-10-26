@@ -3,10 +3,11 @@
 from enum import Enum
 from typing import List, Optional
 
-from pydantic import EmailStr, Field, validator, ConfigDict
+from pydantic import field_validator, StringConstraints, EmailStr, Field, validator, ConfigDict
 from pydantic.types import constr
 
 from .common import BaseValidatedModel
+from typing_extensions import Annotated
 
 
 class AuthProvider(str, Enum):
@@ -43,11 +44,11 @@ class LoginRequest(BaseValidatedModel):
         min_length=3,
         max_length=50,
         description="Username for authentication",
-        example="john.doe",
+        examples=["john.doe"],
     )
 
-    password: constr(min_length=8, max_length=128, strip_whitespace=True) = Field(
-        ..., description="Password for authentication", example="SecureP@ssw0rd123"
+    password: Annotated[str, StringConstraints(min_length=8, max_length=128, strip_whitespace=True)] = Field(
+        ..., description="Password for authentication", examples=["SecureP@ssw0rd123"]
     )
 
     remember_me: bool = Field(
@@ -62,14 +63,16 @@ class LoginRequest(BaseValidatedModel):
         extra="forbid",
     )
 
-    @validator("username")
+    @field_validator("username")
+    @classmethod
     def validate_username(cls, v):
         """Validate username format."""
         if not v.replace("_", "").replace(".", "").replace("-", "").isalnum():
             raise ValueError("Username contains invalid characters")
         return v.lower()
 
-    @validator("password")
+    @field_validator("password")
+    @classmethod
     def validate_password_strength(cls, v):
         """Validate password strength."""
         if len(v) < 8:
@@ -125,7 +128,7 @@ class TokenRequest(BaseValidatedModel):
         description="Username (required for password grant)",
     )
 
-    password: Optional[constr(min_length=8, max_length=128, strip_whitespace=True)] = (
+    password: Optional[Annotated[str, StringConstraints(min_length=8, max_length=128, strip_whitespace=True)]] = (
         Field(None, description="Password (required for password grant)")
     )
 
@@ -149,6 +152,8 @@ class TokenRequest(BaseValidatedModel):
         extra="forbid",
     )
 
+    # TODO[pydantic]: We couldn't refactor the `validator`, please replace it by `field_validator` manually.
+    # Check https://docs.pydantic.dev/dev-v2/migration/#changes-to-validators for more information.
     @validator("username", "password")
     def validate_credentials_fields(cls, v, values):
         """Validate credential fields based on grant type."""
@@ -158,6 +163,8 @@ class TokenRequest(BaseValidatedModel):
             raise ValueError(f"{field_name} is required for password grant type")
         return v
 
+    # TODO[pydantic]: We couldn't refactor the `validator`, please replace it by `field_validator` manually.
+    # Check https://docs.pydantic.dev/dev-v2/migration/#changes-to-validators for more information.
     @validator("refresh_token")
     def validate_refresh_token(cls, v, values):
         """Validate refresh token field."""
@@ -166,6 +173,8 @@ class TokenRequest(BaseValidatedModel):
             raise ValueError("refresh_token is required for refresh_token grant type")
         return v
 
+    # TODO[pydantic]: We couldn't refactor the `validator`, please replace it by `field_validator` manually.
+    # Check https://docs.pydantic.dev/dev-v2/migration/#changes-to-validators for more information.
     @validator("client_id", "client_secret")
     def validate_client_credentials(cls, v, values):
         """Validate client credential fields."""
@@ -181,15 +190,15 @@ class TokenRequest(BaseValidatedModel):
 class PasswordChangeRequest(BaseValidatedModel):
     """Password change request validation model."""
 
-    current_password: constr(min_length=8, max_length=128, strip_whitespace=True) = (
+    current_password: Annotated[str, StringConstraints(min_length=8, max_length=128, strip_whitespace=True)] = (
         Field(..., description="Current password")
     )
 
-    new_password: constr(min_length=8, max_length=128, strip_whitespace=True) = Field(
+    new_password: Annotated[str, StringConstraints(min_length=8, max_length=128, strip_whitespace=True)] = Field(
         ..., description="New password"
     )
 
-    confirm_password: constr(min_length=8, max_length=128, strip_whitespace=True) = (
+    confirm_password: Annotated[str, StringConstraints(min_length=8, max_length=128, strip_whitespace=True)] = (
         Field(..., description="Confirm new password")
     )
 
@@ -197,7 +206,8 @@ class PasswordChangeRequest(BaseValidatedModel):
         extra="forbid",
     )
 
-    @validator("new_password")
+    @field_validator("new_password")
+    @classmethod
     def validate_new_password(cls, v):
         """Validate new password strength."""
         if len(v) < 8:
@@ -215,6 +225,8 @@ class PasswordChangeRequest(BaseValidatedModel):
             )
         return v
 
+    # TODO[pydantic]: We couldn't refactor the `validator`, please replace it by `field_validator` manually.
+    # Check https://docs.pydantic.dev/dev-v2/migration/#changes-to-validators for more information.
     @validator("confirm_password")
     def validate_password_match(cls, v, values):
         """Validate password confirmation matches."""
@@ -233,15 +245,15 @@ class UserRegistrationRequest(BaseValidatedModel):
 
     email: EmailStr = Field(..., description="Email address")
 
-    password: constr(min_length=8, max_length=128, strip_whitespace=True) = Field(
+    password: Annotated[str, StringConstraints(min_length=8, max_length=128, strip_whitespace=True)] = Field(
         ..., description="Password"
     )
 
-    first_name: Optional[constr(min_length=1, max_length=50, strip_whitespace=True)] = (
+    first_name: Optional[Annotated[str, StringConstraints(min_length=1, max_length=50, strip_whitespace=True)]] = (
         Field(None, description="First name")
     )
 
-    last_name: Optional[constr(min_length=1, max_length=50, strip_whitespace=True)] = (
+    last_name: Optional[Annotated[str, StringConstraints(min_length=1, max_length=50, strip_whitespace=True)]] = (
         Field(None, description="Last name")
     )
 
@@ -251,7 +263,8 @@ class UserRegistrationRequest(BaseValidatedModel):
         extra="forbid",
     )
 
-    @validator("username")
+    @field_validator("username")
+    @classmethod
     def validate_username(cls, v):
         """Validate username."""
         if not v.replace("_", "").replace(".", "").replace("-", "").isalnum():
@@ -273,7 +286,8 @@ class UserRegistrationRequest(BaseValidatedModel):
             raise ValueError("Username is reserved")
         return v.lower()
 
-    @validator("email")
+    @field_validator("email")
+    @classmethod
     def validate_email_domain(cls, v):
         """Validate email domain."""
         # Check for common temporary email domains
@@ -289,7 +303,8 @@ class UserRegistrationRequest(BaseValidatedModel):
             raise ValueError("Temporary email addresses are not allowed")
         return v.lower()
 
-    @validator("password")
+    @field_validator("password")
+    @classmethod
     def validate_password(cls, v):
         """Validate password strength."""
         # Call the same validation logic as LoginRequest
@@ -335,7 +350,7 @@ class UserRegistrationRequest(BaseValidatedModel):
 class TokenRefreshRequest(BaseValidatedModel):
     """Token refresh request validation model."""
 
-    refresh_token: constr(min_length=10, max_length=500) = Field(
+    refresh_token: Annotated[str, StringConstraints(min_length=10, max_length=500)] = Field(
         ..., description="Refresh token"
     )
 
@@ -367,12 +382,12 @@ class LogoutRequest(BaseValidatedModel):
 class APIKeyRequest(BaseValidatedModel):
     """API key request validation model."""
 
-    name: constr(min_length=3, max_length=50, strip_whitespace=True) = Field(
+    name: Annotated[str, StringConstraints(min_length=3, max_length=50, strip_whitespace=True)] = Field(
         ..., description="API key name"
     )
 
     description: Optional[
-        constr(min_length=5, max_length=200, strip_whitespace=True)
+        Annotated[str, StringConstraints(min_length=5, max_length=200, strip_whitespace=True)]
     ] = Field(None, description="API key description")
 
     scopes: List[str] = Field(
@@ -387,14 +402,16 @@ class APIKeyRequest(BaseValidatedModel):
         extra="forbid",
     )
 
-    @validator("name")
+    @field_validator("name")
+    @classmethod
     def validate_name(cls, v):
         """Validate API key name."""
         if not v.replace("-", "").replace("_", "").replace(" ", "").isalnum():
             raise ValueError("API key name contains invalid characters")
         return v
 
-    @validator("scopes")
+    @field_validator("scopes")
+    @classmethod
     def validate_scopes(cls, v):
         """Validate scopes."""
         if not v:

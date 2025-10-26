@@ -4,10 +4,7 @@ Simple test for circuit breaker implementation.
 This test validates that the circuit breaker decorator works properly.
 """
 
-import asyncio
 import pytest
-from datetime import timedelta
-from unittest.mock import Mock, patch
 
 from resync.core.circuit_breakers import redis_breaker
 from resync.core.exceptions import RedisConnectionError

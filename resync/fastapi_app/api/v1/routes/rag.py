@@ -3,12 +3,10 @@
 RAG (Retrieval-Augmented Generation) routes for FastAPI
 """
 from fastapi import APIRouter, UploadFile, File, HTTPException, status, Depends, BackgroundTasks
-from typing import Optional
-import os
 from pathlib import Path
 from ..dependencies import get_current_user, get_logger
 from ..models.response_models import FileUploadResponse
-from ..models.request_models import RAGFileQuery, FileUploadValidation
+from ..models.request_models import FileUploadValidation
 
 router = APIRouter()
 

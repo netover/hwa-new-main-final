@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import asyncio
 import time
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 import structlog
@@ -20,9 +20,7 @@ from resync.core.health_models import (
     HealthCheckConfig,
     HealthCheckResult,
     HealthStatus,
-    HealthStatusHistory,
 )
-from resync.core.connection_pool_manager import get_advanced_connection_pool_manager
 
 logger = structlog.get_logger(__name__)
 

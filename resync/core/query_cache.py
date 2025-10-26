@@ -14,9 +14,9 @@ from __future__ import annotations
 import asyncio
 import hashlib
 import time
-from collections import defaultdict, deque
+from collections import defaultdict
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Set, Tuple, Union
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 from resync.core.advanced_cache import get_advanced_cache_manager
 from resync.core.structured_logger import get_logger

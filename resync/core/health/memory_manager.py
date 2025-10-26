@@ -10,7 +10,6 @@ from __future__ import annotations
 
 import asyncio
 import gc
-import os
 import psutil
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional

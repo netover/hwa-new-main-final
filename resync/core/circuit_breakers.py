@@ -2,13 +2,12 @@
 
 from datetime import timedelta
 from functools import wraps
-from typing import Any, Callable, TypeVar, Union
-import asyncio
+from typing import Any, Callable, TypeVar
 
 from aiobreaker import CircuitBreaker, CircuitBreakerListener
 
 from resync.core.structured_logger import get_logger
-from resync.core.exceptions import AuthenticationError, LLMError, RedisConnectionError
+from resync.core.exceptions import AuthenticationError, LLMError
 
 logger = get_logger(__name__)
 

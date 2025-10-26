@@ -4,7 +4,6 @@ Tests for Health Checker Factory
 This module contains unit tests for the HealthCheckerFactory class.
 """
 
-import pytest
 from unittest.mock import MagicMock, patch
 
 from resync.core.health_models import ComponentType, HealthCheckConfig

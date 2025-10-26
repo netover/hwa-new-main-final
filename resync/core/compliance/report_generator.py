@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import time
 from datetime import datetime
-from typing import Dict, List, Any, Optional
+from typing import Dict, List, Any
 
 from resync.core.structured_logger import get_logger
 

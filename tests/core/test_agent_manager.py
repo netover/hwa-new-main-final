@@ -109,7 +109,6 @@ async def test_load_agents_from_invalid_json(
     Tests that the agent manager handles a malformed JSON file gracefully
     by raising a DataParsingError.
     """
-    from resync.core.exceptions import DataParsingError
 
     # Arrange
     invalid_json_file = tmp_path / "invalid.json"

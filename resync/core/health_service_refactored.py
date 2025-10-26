@@ -10,7 +10,6 @@ from __future__ import annotations
 
 import asyncio
 import time
-from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional
 
 import structlog
@@ -19,13 +18,11 @@ from resync.core.health_models import (
     ComponentHealth,
     HealthCheckConfig,
     HealthCheckResult,
-    HealthStatus,
     HealthStatusHistory,
 )
 
 # Import the facade and extracted components
 from .health.health_service_facade import HealthServiceFacade
-from .health.health_service_manager import HealthServiceManager
 from .health.recovery_manager import HealthRecoveryManager
 
 logger = structlog.get_logger(__name__)

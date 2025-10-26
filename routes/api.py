@@ -5,14 +5,10 @@ This module defines all API endpoints for the HWA application.
 """
 
 from flask import Blueprint, jsonify, request
-from flask_socketio import SocketIO, emit
-import asyncio
-from typing import Dict, Any, Optional
+from flask_socketio import SocketIO
 
 from resync.services.rag_client import rag_client
-from resync.settings import settings
 from resync.core.exceptions import (
-    BaseAppException,
     ValidationError,
     ResourceNotFoundError,
     IntegrationError,

@@ -5,10 +5,7 @@ This module contains comprehensive unit tests for the refactored components
 that were previously complex functions with high cyclomatic complexity.
 """
 
-import asyncio
-import json
 import unittest
-from typing import Any, Dict, List
 
 from resync.core.compliance.report_strategies import (
     ControlComplianceStrategy,
@@ -47,14 +44,8 @@ from resync.core.utils.llm_factories import (
     DefaultLLMProvider
 )
 from resync.models.error_models import (
-    AuthenticationErrorResponse,
-    AuthorizationErrorResponse,
-    BaseErrorResponse,
     BusinessLogicErrorResponse,
-    ErrorCategory,
-    ErrorSeverity,
     ExternalServiceErrorResponse,
-    RateLimitErrorResponse,
     SystemErrorResponse,
     ValidationErrorResponse,
 )
@@ -66,11 +57,7 @@ from resync.core.exceptions import (
     TWSConnectionError,
 )
 from resync.core.exceptions_enhanced import (
-    DatabaseError as EnhancedDatabaseError,
-    LLMError as EnhancedLLMError,
-    NotFoundError as EnhancedNotFoundError,
     ResyncException as EnhancedResyncException,
-    TWSConnectionError as EnhancedTWSConnectionError,
 )
 from resync.core.soc2_compliance_refactored import (
     SOC2ComplianceManager,
@@ -79,13 +66,11 @@ from resync.core.soc2_compliance_refactored import (
     AvailabilityMetric,
     ProcessingIntegrityCheck,
     ConfidentialityIncident,
-    SOC2ComplianceConfig,
     SOC2TrustServiceCriteria,
     ControlCategory,
     ControlStatus
 )
 from resync.core.utils.error_utils import ErrorResponseBuilder
-from resync.settings import settings
 
 
 class TestReportStrategies(unittest.TestCase):

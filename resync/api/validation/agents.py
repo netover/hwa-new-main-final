@@ -5,10 +5,11 @@ from __future__ import annotations
 from enum import Enum
 from typing import Any, Optional
 
-from pydantic import BaseModel, ConfigDict, Field, model_validator, validator
+from pydantic import field_validator, StringConstraints, BaseModel, ConfigDict, Field, model_validator
 from pydantic.types import constr
 
 from .common import NumericConstraints, StringConstraints, ValidationPatterns
+from typing_extensions import Annotated
 
 
 class AgentType(str, Enum):
@@ -44,46 +45,46 @@ class AgentConfig(BaseModel):
     """Agent configuration validation model."""
 
     id: StringConstraints.AGENT_ID = Field(
-        ..., description="Unique agent identifier", example="tws-troubleshooter-01"
+        ..., description="Unique agent identifier", examples=["tws-troubleshooter-01"]
     )
 
-    name: constr(
+    name: Annotated[str, StringConstraints(
         min_length=NumericConstraints.MIN_AGENT_NAME_LENGTH,
         max_length=NumericConstraints.MAX_AGENT_NAME_LENGTH,
         strip_whitespace=True,
-    ) = Field(
+    )] = Field(
         ...,
         description="Human-readable agent name",
-        example="TWS Troubleshooting Agent",
+        examples=["TWS Troubleshooting Agent"],
     )
 
     role: StringConstraints.ROLE_TEXT = Field(
         ...,
         description="Agent's role description",
-        example="Specialized in TWS system troubleshooting and diagnostics",
+        examples=["Specialized in TWS system troubleshooting and diagnostics"],
     )
 
     goal: StringConstraints.ROLE_TEXT = Field(
         ...,
         description="Primary goal of the agent",
-        example="Resolve TWS system issues and provide diagnostic assistance",
+        examples=["Resolve TWS system issues and provide diagnostic assistance"],
     )
 
     backstory: StringConstraints.ROLE_TEXT = Field(
         ...,
         description="Agent's background story",
-        example="An experienced TWS administrator with deep system knowledge",
+        examples=["An experienced TWS administrator with deep system knowledge"],
     )
 
     tools: list[StringConstraints.TOOL_NAME] = Field(
         default_factory=list,
         description="List of tools the agent can use",
         max_length=20,
-        example=["tws_status_tool", "tws_troubleshooting_tool"],
+        examples=[["tws_status_tool", "tws_troubleshooting_tool"]],
     )
 
     model_name: StringConstraints.MODEL_NAME = Field(
-        default="llama3:latest", description="LLM model name", example="llama3:latest"
+        default="llama3:latest", description="LLM model name", examples=["llama3:latest"]
     )
 
     memory: bool = Field(
@@ -103,11 +104,11 @@ class AgentConfig(BaseModel):
     )
 
     description: Optional[
-        constr(
+        Annotated[str, StringConstraints(
             min_length=NumericConstraints.MIN_AGENT_DESCRIPTION_LENGTH,
             max_length=NumericConstraints.MAX_AGENT_DESCRIPTION_LENGTH,
             strip_whitespace=True,
-        )
+        )]
     ] = Field(None, description="Detailed agent description")
 
     configuration: dict[str, Any] = Field(
@@ -116,7 +117,7 @@ class AgentConfig(BaseModel):
         max_length=50,
     )
 
-    tags: list[constr(min_length=1, max_length=50)] = Field(
+    tags: list[Annotated[str, StringConstraints(min_length=1, max_length=50)]] = Field(
         default_factory=list, description="Agent tags for categorization", max_length=10
     )
 
@@ -134,7 +135,8 @@ class AgentConfig(BaseModel):
         extra="forbid",
     )
 
-    @validator("name")
+    @field_validator("name")
+    @classmethod
     def validate_agent_name(cls, v: str) -> str:
         """Validate agent name doesn't contain malicious content."""
         if ValidationPatterns.SCRIPT_PATTERN.search(v):
@@ -143,14 +145,16 @@ class AgentConfig(BaseModel):
             raise ValueError("Agent name contains invalid characters")
         return v
 
-    @validator("role", "goal", "backstory", "description")
+    @field_validator("role", "goal", "backstory", "description")
+    @classmethod
     def validate_text_content(cls, v: str | None) -> str | None:
         """Validate text fields for malicious content."""
         if v and ValidationPatterns.SCRIPT_PATTERN.search(v):
             raise ValueError("Text contains potentially malicious content")
         return v
 
-    @validator("tools")
+    @field_validator("tools")
+    @classmethod
     def validate_tools_list(cls, v: list[str] | None) -> list[str] | None:
         """Validate tools list."""
         if not v:
@@ -164,7 +168,8 @@ class AgentConfig(BaseModel):
                 raise ValueError(f"Invalid tool name: {tool}")
         return v
 
-    @validator("tags")
+    @field_validator("tags")
+    @classmethod
     def validate_tags(cls, v: list[str] | None) -> list[str] | None:
         """Validate tags list."""
         if not v:
@@ -222,11 +227,11 @@ class AgentUpdateRequest(BaseModel):
     """Request model for updating an existing agent."""
 
     name: Optional[
-        constr(
+        Annotated[str, StringConstraints(
             min_length=NumericConstraints.MIN_AGENT_NAME_LENGTH,
             max_length=NumericConstraints.MAX_AGENT_NAME_LENGTH,
             strip_whitespace=True,
-        )
+        )]
     ] = Field(None, description="Updated agent name")
 
     role: Optional[StringConstraints.ROLE_TEXT] = Field(
@@ -258,18 +263,18 @@ class AgentUpdateRequest(BaseModel):
     status: Optional[AgentStatus] = Field(None, description="Updated agent status")
 
     description: Optional[
-        constr(
+        Annotated[str, StringConstraints(
             min_length=NumericConstraints.MIN_AGENT_DESCRIPTION_LENGTH,
             max_length=NumericConstraints.MAX_AGENT_DESCRIPTION_LENGTH,
             strip_whitespace=True,
-        )
+        )]
     ] = Field(None, description="Updated agent description")
 
     configuration: Optional[dict[str, Any]] = Field(
         None, description="Updated configuration", max_length=50
     )
 
-    tags: Optional[list[constr(min_length=1, max_length=50)]] = Field(
+    tags: Optional[list[Annotated[str, StringConstraints(min_length=1, max_length=50)]]] = Field(
         None, description="Updated tags", max_length=10
     )
 
@@ -286,14 +291,16 @@ class AgentUpdateRequest(BaseModel):
         validate_assignment=True,
     )
 
-    @validator("name", "role", "goal", "backstory", "description")
+    @field_validator("name", "role", "goal", "backstory", "description")
+    @classmethod
     def validate_text_content(cls, v):
         """Validate text fields for malicious content."""
         if v and ValidationPatterns.SCRIPT_PATTERN.search(v):
             raise ValueError("Text contains potentially malicious content")
         return v
 
-    @validator("tools")
+    @field_validator("tools")
+    @classmethod
     def validate_tools_list(cls, v):
         """Validate tools list if provided."""
         if v is None:
@@ -309,7 +316,8 @@ class AgentUpdateRequest(BaseModel):
                 raise ValueError(f"Invalid tool name: {tool}")
         return v
 
-    @validator("tags")
+    @field_validator("tags")
+    @classmethod
     def validate_tags(cls, v):
         """Validate tags list if provided."""
         if v is None:
@@ -333,7 +341,7 @@ class AgentQueryParams(BaseModel):
         None, description="Filter by specific agent ID"
     )
 
-    name: Optional[constr(min_length=1, max_length=100)] = Field(
+    name: Optional[Annotated[str, StringConstraints(min_length=1, max_length=100)]] = Field(
         None, description="Filter by agent name (partial match)"
     )
 
@@ -341,7 +349,7 @@ class AgentQueryParams(BaseModel):
 
     status: Optional[AgentStatus] = Field(None, description="Filter by agent status")
 
-    tags: Optional[list[constr(min_length=1, max_length=50)]] = Field(
+    tags: Optional[list[Annotated[str, StringConstraints(min_length=1, max_length=50)]]] = Field(
         None, description="Filter by tags", max_length=5
     )
 
@@ -365,7 +373,8 @@ class AgentQueryParams(BaseModel):
         extra="forbid",
     )
 
-    @validator("tags")
+    @field_validator("tags")
+    @classmethod
     def validate_tags(cls, v):
         """Validate tags list."""
         if not v:
@@ -400,7 +409,8 @@ class AgentBulkActionRequest(BaseModel):
         extra="forbid",
     )
 
-    @validator("agent_ids")
+    @field_validator("agent_ids")
+    @classmethod
     def validate_agent_ids(cls, v):
         """Validate agent IDs list."""
         if not v:

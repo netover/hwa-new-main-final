@@ -2,15 +2,12 @@ from __future__ import annotations
 
 import os
 import stat
-import hashlib
-import asyncio
 import time
 from dataclasses import dataclass
-from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Set
+from typing import Any, Dict, List, Optional
 
-from resync.core.health_models import ComponentHealth, ComponentType, HealthStatus
+from resync.core.health_models import HealthStatus
 from resync.core.structured_logger import get_logger
 
 logger = get_logger(__name__)

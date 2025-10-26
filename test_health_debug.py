@@ -4,7 +4,6 @@ Debug script to test health check functionality directly.
 """
 
 import sys
-import os
 from pathlib import Path
 
 # Add the current directory to Python path

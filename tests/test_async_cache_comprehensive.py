@@ -7,16 +7,12 @@ health checks, and edge cases.
 """
 
 import asyncio
-import json
 import pytest
 import tempfile
 import time
-from pathlib import Path
-from unittest.mock import AsyncMock, MagicMock, patch
-from typing import Any, Dict, List
+from unittest.mock import patch
 
 from resync.core.async_cache import AsyncTTLCache, CacheEntry, get_redis_client
-from resync.core.exceptions import CacheError
 
 
 class TestAsyncTTLCacheInitialization:

@@ -3,11 +3,6 @@ from unittest.mock import AsyncMock, MagicMock
 import pytest
 
 from resync.api.chat import _handle_agent_interaction
-from resync.core.fastapi_di import (
-    get_agent_manager,
-    get_connection_manager,
-    get_knowledge_graph,
-)
 pytestmark = pytest.mark.asyncio
 
 

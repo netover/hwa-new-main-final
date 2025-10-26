@@ -1,9 +1,7 @@
 # resync/core/utils/json_parser.py
-import json
 import logging
 from typing import Any, Dict, List
 
-from ..exceptions import ParsingError
 from .common_error_handlers import handle_parsing_errors
 from .json_commands import JSONParseCommandExecutor
 

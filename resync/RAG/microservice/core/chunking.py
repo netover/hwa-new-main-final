@@ -8,7 +8,6 @@ Uses tiktoken if available; falls back to heuristic-based splitting.
 from __future__ import annotations
 
 import re
-from typing import Iterable
 from typing import Iterator
 
 # Optional import

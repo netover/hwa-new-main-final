@@ -7,10 +7,8 @@ This module provides a simpler structured logging implementation that works with
 import logging
 import logging.config
 import sys
-import time
 import uuid
-import json
-from typing import Dict, Any, Optional
+from typing import Optional
 
 try:
     import structlog

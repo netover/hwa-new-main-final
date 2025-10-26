@@ -4,6 +4,7 @@ Teste simples para validar as melhorias no cache assíncrono.
 import asyncio
 import os
 import sys
+import traceback
 from pathlib import Path
 
 # Set environment variable to avoid settings validation error
@@ -13,18 +14,13 @@ os.environ["ADMIN_PASSWORD"] = "test_password_123"
 project_root = Path(__file__).parent
 sys.path.insert(0, str(project_root))
 
+# Import at module level
+
+
 async def test_cache_improvements():
     """Test basic cache functionality with improvements."""
     try:
-        # Set environment variable to avoid settings validation error
-        import os
-        os.environ["ADMIN_PASSWORD"] = "test_password_123"
-        from resync.core.cache.async_cache_refactored import AsyncTTLCache
-        
         print("Creating cache...")
-        # Set environment variable to avoid settings validation error
-        import os
-        os.environ["ADMIN_PASSWORD"] = "test_password_123"
         cache = AsyncTTLCache(ttl_seconds=60, num_shards=4)
         
         print("Testing set operation...")
@@ -52,7 +48,6 @@ async def test_cache_improvements():
         
     except Exception as e:
         print(f"Test failed: {e}")
-        import traceback
         traceback.print_exc()
         return False
 

@@ -9,16 +9,15 @@ and validates that the functionality works as expected.
 import asyncio
 import sys
 import time
-from datetime import datetime
 
-# Add the project root to Python path
-sys.path.insert(0, '/d/Python/GITHUB/hwa-new')
-
-from resync.core.health_models import HealthCheckConfig, HealthStatus
+from resync.core.health_models import HealthCheckConfig
 from resync.core.health_service_refactored import (
     get_refactored_health_check_service,
     shutdown_refactored_health_check_service,
 )
+
+# Add the project root to Python path
+sys.path.insert(0, '/d/Python/GITHUB/hwa-new')
 
 
 async def test_health_service_integration():

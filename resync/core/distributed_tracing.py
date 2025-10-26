@@ -20,10 +20,9 @@ import asyncio
 import contextlib
 import functools
 import time
-import uuid
 from contextvars import ContextVar
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Set, Tuple, Union, Callable
+from typing import Any, Dict, List, Optional, Callable
 from urllib.parse import urlparse
 
 from opentelemetry import trace

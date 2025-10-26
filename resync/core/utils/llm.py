@@ -1,18 +1,12 @@
 # resync/core/utils/llm.py
-import asyncio
-import time
 
 from litellm.exceptions import (
     APIError,
     AuthenticationError,
-    ContentPolicyViolationError,
-    ContextWindowExceededError,
-    InvalidRequestError,
     RateLimitError,
 )
 
 from ...settings import settings
-from ..exceptions import LLMError
 from ..resilience import circuit_breaker, retry_with_backoff, with_timeout
 from ..structured_logger import get_logger
 from .common_error_handlers import retry_on_exception

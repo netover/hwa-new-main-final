@@ -11,7 +11,6 @@ import hashlib
 import logging
 import time
 from typing import Any
-from typing import Iterable
 
 from .chunking import chunk_text
 from .config import CFG

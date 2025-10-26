@@ -5,7 +5,7 @@ This module implements the Factory pattern for creating standardized error respo
 based on different exception types, making the code more modular, testable, and maintainable.
 """
 
-from typing import Any, Dict, Optional
+from typing import Optional
 from fastapi import Request
 
 from resync.core.exceptions import (
@@ -24,12 +24,6 @@ from resync.core.exceptions_enhanced import (
 )
 from resync.models.error_models import (
     BaseErrorResponse,
-    AuthenticationErrorResponse,
-    AuthorizationErrorResponse,
-    BusinessLogicErrorResponse,
-    ExternalServiceErrorResponse,
-    SystemErrorResponse,
-    ValidationErrorResponse,
 )
 # Lazy imports to avoid circular dependency
 def _get_error_response_builder():

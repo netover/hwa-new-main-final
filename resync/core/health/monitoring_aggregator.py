@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-import time
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import Any, Dict, List, Optional
 from collections import defaultdict, Counter
 
@@ -11,7 +10,6 @@ from resync.core.health_models import (
     ComponentType,
     HealthCheckResult,
     HealthStatus,
-    HealthCheckConfig,
 )
 from resync.core.health_service import HealthCheckService
 

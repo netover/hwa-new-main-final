@@ -145,7 +145,7 @@ class PerformanceBenchmarkSuite:
             return str(config.get("id", "mock_agent"))
 
         tasks = [create_mock_agent(config) for config in agent_configs]
-        results = await asyncio.gather(*tasks)
+        await asyncio.gather(*tasks)
 
         end_time = time.time()
         parallel_time = end_time - start_time
@@ -189,7 +189,7 @@ class PerformanceBenchmarkSuite:
         start_time = time.time()
 
         tasks = [simulate_websocket_interaction(i) for i in range(num_connections)]
-        results = await asyncio.gather(*tasks)
+        await asyncio.gather(*tasks)
 
         end_time = time.time()
         total_time = end_time - start_time

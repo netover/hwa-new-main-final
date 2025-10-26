@@ -1,0 +1,985 @@
+************* Module init_neo4j_vector_index
+init_neo4j_vector_index.py:41:11: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module test_cache_components
+test_cache_components.py:77:11: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module test_cache_simple
+test_cache_simple.py:53:11: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module test_cache_thread_safety
+test_cache_thread_safety.py:103:11: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module test_cache_thread_safety_simple
+test_cache_thread_safety_simple.py:76:11: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module test_correlation_id_simple
+test_correlation_id_simple.py:24:11: W0718: Catching too general exception Exception (broad-exception-caught)
+test_correlation_id_simple.py:68:11: W0718: Catching too general exception Exception (broad-exception-caught)
+test_correlation_id_simple.py:89:11: W0718: Catching too general exception Exception (broad-exception-caught)
+test_correlation_id_simple.py:117:11: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module test_correlation_id_standalone
+test_correlation_id_standalone.py:66:11: W0718: Catching too general exception Exception (broad-exception-caught)
+test_correlation_id_standalone.py:87:11: W0718: Catching too general exception Exception (broad-exception-caught)
+test_correlation_id_standalone.py:114:11: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module test_cors_environments
+test_cors_environments.py:18:0: C0413: Import "from resync.api.middleware.cors_config import CORSPolicy, Environment" should be placed at the top of the module (wrong-import-position)
+test_cors_environments.py:19:0: C0413: Import "from resync.api.middleware.cors_middleware import add_cors_middleware, get_production_cors_config" should be placed at the top of the module (wrong-import-position)
+test_cors_environments.py:269:11: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module test_cors_final
+test_cors_final.py:376:11: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module test_cors_simple
+test_cors_simple.py:535:11: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module test_cors_simple_final
+test_cors_simple_final.py:315:11: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module test_db_pool_health
+test_db_pool_health.py:46:11: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module test_env
+test_env.py:69:11: W0718: Catching too general exception Exception (broad-exception-caught)
+test_env.py:105:11: W0718: Catching too general exception Exception (broad-exception-caught)
+test_env.py:172:11: W0718: Catching too general exception Exception (broad-exception-caught)
+test_env.py:157:19: W0718: Catching too general exception Exception (broad-exception-caught)
+test_env.py:245:11: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module test_fallbacks
+test_fallbacks.py:115:15: W0718: Catching too general exception Exception (broad-exception-caught)
+test_fallbacks.py:127:15: W0718: Catching too general exception Exception (broad-exception-caught)
+test_fallbacks.py:136:8: W0702: No exception type(s) specified (bare-except)
+************* Module test_file_creation
+test_file_creation.py:2:0: C0413: Import "import sys, os, tempfile, zipfile" should be placed at the top of the module (wrong-import-position)
+test_file_creation.py:2:0: C0413: Import "import sys, os, tempfile, zipfile" should be placed at the top of the module (wrong-import-position)
+test_file_creation.py:2:0: C0413: Import "import sys, os, tempfile, zipfile" should be placed at the top of the module (wrong-import-position)
+test_file_creation.py:2:0: C0413: Import "import sys, os, tempfile, zipfile" should be placed at the top of the module (wrong-import-position)
+************* Module test_health_debug
+test_health_debug.py:68:11: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module test_health_refactoring_simple
+test_health_refactoring_simple.py:71:11: W0718: Catching too general exception Exception (broad-exception-caught)
+test_health_refactoring_simple.py:134:11: W0718: Catching too general exception Exception (broad-exception-caught)
+test_health_refactoring_simple.py:193:11: W0718: Catching too general exception Exception (broad-exception-caught)
+test_health_refactoring_simple.py:229:11: W0718: Catching too general exception Exception (broad-exception-caught)
+test_health_refactoring_simple.py:281:11: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module test_health_service_refactoring
+test_health_service_refactoring.py:16:0: C0413: Import "from resync.core.health_models import HealthCheckConfig" should be placed at the top of the module (wrong-import-position)
+test_health_service_refactoring.py:17:0: C0413: Import "from resync.core.health_service_refactored import get_refactored_health_check_service, shutdown_refactored_health_check_service" should be placed at the top of the module (wrong-import-position)
+test_health_service_refactoring.py:122:11: W0718: Catching too general exception Exception (broad-exception-caught)
+test_health_service_refactoring.py:185:11: W0718: Catching too general exception Exception (broad-exception-caught)
+test_health_service_refactoring.py:248:11: W0718: Catching too general exception Exception (broad-exception-caught)
+test_health_service_refactoring.py:297:11: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module test_imports
+test_imports.py:14:7: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module test_litellm_nvidia
+test_litellm_nvidia.py:45:11: W0718: Catching too general exception Exception (broad-exception-caught)
+test_litellm_nvidia.py:89:11: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module test_llm_service
+test_llm_service.py:58:11: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module test_manager
+test_manager.py:19:11: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module test_memory_bounds_integration
+test_memory_bounds_integration.py:11:0: C0413: Import "from resync.core.health_models import HealthCheckConfig, HealthCheckResult, HealthStatus" should be placed at the top of the module (wrong-import-position)
+test_memory_bounds_integration.py:12:0: C0413: Import "from resync.core.health_service import HealthCheckService" should be placed at the top of the module (wrong-import-position)
+test_memory_bounds_integration.py:93:11: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module test_neo4j_circuit_breaker
+test_neo4j_circuit_breaker.py:15:0: C0413: Import "from resync.core.knowledge_graph_circuit_breaker import CircuitBreakerAsyncKnowledgeGraph, get_neo4j_circuit_breaker_stats, neo4j_circuit_breaker" should be placed at the top of the module (wrong-import-position)
+test_neo4j_circuit_breaker.py:73:11: W0718: Catching too general exception Exception (broad-exception-caught)
+test_neo4j_circuit_breaker.py:45:15: W0718: Catching too general exception Exception (broad-exception-caught)
+test_neo4j_circuit_breaker.py:59:15: W0718: Catching too general exception Exception (broad-exception-caught)
+test_neo4j_circuit_breaker.py:82:8: W0702: No exception type(s) specified (bare-except)
+************* Module test_nvidia_llm
+test_nvidia_llm.py:45:11: W0718: Catching too general exception Exception (broad-exception-caught)
+test_nvidia_llm.py:89:11: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module test_phase2
+test_phase2.py:22:11: W0718: Catching too general exception Exception (broad-exception-caught)
+test_phase2.py:28:11: W0718: Catching too general exception Exception (broad-exception-caught)
+test_phase2.py:34:11: W0718: Catching too general exception Exception (broad-exception-caught)
+test_phase2.py:69:11: W0718: Catching too general exception Exception (broad-exception-caught)
+test_phase2.py:98:11: W0718: Catching too general exception Exception (broad-exception-caught)
+test_phase2.py:121:11: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module test_phase2_simple
+test_phase2_simple.py:40:15: W0718: Catching too general exception Exception (broad-exception-caught)
+test_phase2_simple.py:80:11: W0718: Catching too general exception Exception (broad-exception-caught)
+test_phase2_simple.py:110:15: W0718: Catching too general exception Exception (broad-exception-caught)
+test_phase2_simple.py:144:11: W0718: Catching too general exception Exception (broad-exception-caught)
+test_phase2_simple.py:179:11: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module test_rag_health_check
+test_rag_health_check.py:15:0: C0413: Import "from resync.core.rag_health_check import RAGHealthCheck, run_rag_health_check, get_rag_health_summary" should be placed at the top of the module (wrong-import-position)
+test_rag_health_check.py:87:11: W0718: Catching too general exception Exception (broad-exception-caught)
+test_rag_health_check.py:59:15: W0718: Catching too general exception Exception (broad-exception-caught)
+test_rag_health_check.py:67:15: W0718: Catching too general exception Exception (broad-exception-caught)
+test_rag_health_check.py:80:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module test_real_chat
+test_real_chat.py:76:11: W0718: Catching too general exception Exception (broad-exception-caught)
+test_real_chat.py:108:11: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module test_redis_audit_migration
+test_redis_audit_migration.py:18:0: C0413: Import "from resync.core.audit_db import add_audit_record, get_pending_audits, update_audit_status, is_memory_approved, USE_REDIS_STREAMS" should be placed at the top of the module (wrong-import-position)
+************* Module test_refactored_cache
+test_refactored_cache.py:295:11: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module test_simple_cache
+test_simple_cache.py:62:0: C0413: Import "from resync.core.cache.memory_manager import CacheMemoryManager, CacheEntry" should be placed at the top of the module (wrong-import-position)
+test_simple_cache.py:63:0: C0413: Import "from resync.core.cache.persistence_manager import CachePersistenceManager" should be placed at the top of the module (wrong-import-position)
+test_simple_cache.py:64:0: C0413: Import "from resync.core.cache.transaction_manager import CacheTransactionManager" should be placed at the top of the module (wrong-import-position)
+test_simple_cache.py:156:11: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module test_specific
+test_specific.py:88:11: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module test_standalone_cache
+test_standalone_cache.py:151:11: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module test_standalone_components
+test_standalone_components.py:72:11: W0718: Catching too general exception Exception (broad-exception-caught)
+test_standalone_components.py:167:11: W0718: Catching too general exception Exception (broad-exception-caught)
+test_standalone_components.py:227:11: W0718: Catching too general exception Exception (broad-exception-caught)
+test_standalone_components.py:293:11: W0718: Catching too general exception Exception (broad-exception-caught)
+test_standalone_components.py:352:11: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module test_structured_logging
+test_structured_logging.py:96:11: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module test_teams_simple
+test_teams_simple.py:8:0: C0413: Import "from resync.core.teams_integration import TeamsConfig, TeamsIntegration, TeamsNotification" should be placed at the top of the module (wrong-import-position)
+test_teams_simple.py:43:11: W0718: Catching too general exception Exception (broad-exception-caught)
+test_teams_simple.py:51:11: W0718: Catching too general exception Exception (broad-exception-caught)
+test_teams_simple.py:67:11: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module test_websocket
+test_websocket.py:31:11: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module config.structured_logging_basic
+config\structured_logging_basic.py:96:4: W0603: Using the global statement (global-statement)
+config\structured_logging_basic.py:101:4: W0603: Using the global statement (global-statement)
+************* Module docs.populate_knowledge_base
+docs\populate_knowledge_base.py:30:0: C0413: Import "from resync.core.file_ingestor import FileIngestor, load_existing_rag_documents" should be placed at the top of the module (wrong-import-position)
+docs\populate_knowledge_base.py:31:0: C0413: Import "from resync.core.interfaces import IKnowledgeGraph" should be placed at the top of the module (wrong-import-position)
+docs\populate_knowledge_base.py:32:0: C0413: Import "from resync.core.knowledge_graph import AsyncKnowledgeGraph" should be placed at the top of the module (wrong-import-position)
+************* Module resync.app_factory
+resync\app_factory.py:56:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\app_factory.py:216:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\app_factory.py:547:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.lifespan
+resync\lifespan.py:51:4: W0603: Using the global statement (global-statement)
+resync\lifespan.py:138:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\lifespan.py:330:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.main
+resync\main.py:65:0: C0413: Import "from typing import TYPE_CHECKING, Optional, Any, Dict" should be placed at the top of the module (wrong-import-position)
+resync\main.py:66:0: C0413: Import "import signal" should be placed at the top of the module (wrong-import-position)
+resync\main.py:67:0: C0413: Import "import asyncio" should be placed at the top of the module (wrong-import-position)
+resync\main.py:68:0: C0413: Import "import sys" should be placed at the top of the module (wrong-import-position)
+resync\main.py:69:0: C0413: Import "import threading" should be placed at the top of the module (wrong-import-position)
+resync\main.py:70:0: C0413: Import "import platform" should be placed at the top of the module (wrong-import-position)
+resync\main.py:71:0: C0413: Import "import socket" should be placed at the top of the module (wrong-import-position)
+resync\main.py:81:0: C0413: Import "import structlog" should be placed at the top of the module (wrong-import-position)
+resync\main.py:83:0: C0413: Import "from resync.core.encoding_utils import symbol" should be placed at the top of the module (wrong-import-position)
+resync\main.py:86:0: C0413: Import "from resync.core.startup_validation import ConfigurationValidationError, DependencyUnavailableError, StartupError" should be placed at the top of the module (wrong-import-position)
+resync\main.py:112:4: W0603: Using the global statement (global-statement)
+resync\main.py:210:11: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\main.py:187:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\main.py:270:11: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\main.py:265:8: W0603: Using the global statement (global-statement)
+resync\main.py:323:11: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\main.py:380:0: C0413: Import "from resync.fastapi_app.main import app" should be placed at the top of the module (wrong-import-position)
+resync\main.py:468:11: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.api.admin
+resync\api\admin.py:350:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.api.agents
+resync\api\agents.py:37:11: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.api.cache
+resync\api\cache.py:122:11: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\api\cache.py:152:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\api\cache.py:172:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\api\cache.py:190:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\api\cache.py:211:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\api\cache.py:335:8: W0603: Using the global statement (global-statement)
+resync\api\cache.py:404:4: W0603: Using the global statement (global-statement)
+************* Module resync.api.chat
+resync\api\chat.py:27:0: C0413: Import "from resync.api.utils.stream_handler import AgentResponseStreamer" should be placed at the top of the module (wrong-import-position)
+resync\api\chat.py:28:0: C0413: Import "from resync.core.exceptions import AgentExecutionError, AuditError, DatabaseError, KnowledgeGraphError, LLMError, ToolExecutionError" should be placed at the top of the module (wrong-import-position)
+resync\api\chat.py:36:0: C0413: Import "from resync.core.fastapi_di import get_agent_manager, get_knowledge_graph" should be placed at the top of the module (wrong-import-position)
+resync\api\chat.py:37:0: C0413: Import "from resync.core.ia_auditor import analyze_and_flag_memories" should be placed at the top of the module (wrong-import-position)
+resync\api\chat.py:38:0: C0413: Import "from resync.core.interfaces import IAgentManager, IKnowledgeGraph" should be placed at the top of the module (wrong-import-position)
+resync\api\chat.py:39:0: C0413: Import "from resync.core.llm_wrapper import optimized_llm" should be placed at the top of the module (wrong-import-position)
+resync\api\chat.py:40:0: C0413: Import "from resync.core.security import SafeAgentID, sanitize_input" should be placed at the top of the module (wrong-import-position)
+resync\api\chat.py:73:11: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\api\chat.py:95:11: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\api\chat.py:136:11: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\api\chat.py:351:11: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.api.dependencies
+resync\api\dependencies.py:118:4: W0603: Using the global statement (global-statement)
+resync\api\dependencies.py:127:11: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.api.endpoints
+resync\api\endpoints.py:35:0: C0413: Import "from resync.core.interfaces import IAgentManager, ITWSClient" should be placed at the top of the module (wrong-import-position)
+resync\api\endpoints.py:36:0: C0413: Import "from resync.core.llm_wrapper import optimized_llm" should be placed at the top of the module (wrong-import-position)
+resync\api\endpoints.py:37:0: C0413: Import "from resync.core.metrics import runtime_metrics" should be placed at the top of the module (wrong-import-position)
+resync\api\endpoints.py:38:0: C0413: Import "from resync.core.rate_limiter import authenticated_rate_limit, public_rate_limit" should be placed at the top of the module (wrong-import-position)
+resync\api\endpoints.py:44:0: C0413: Import "from resync.core.runbooks import runbook_registry" should be placed at the top of the module (wrong-import-position)
+resync\api\endpoints.py:45:0: C0413: Import "from resync.core.tws_monitor import tws_monitor" should be placed at the top of the module (wrong-import-position)
+resync\api\endpoints.py:48:0: C0413: Import "from resync.cqrs.dispatcher import dispatcher" should be placed at the top of the module (wrong-import-position)
+resync\api\endpoints.py:49:0: C0413: Import "from resync.cqrs.queries import CheckTWSConnectionQuery, GetEventLogQuery, GetJobDependenciesQuery, GetJobDetailsQuery, GetJobHistoryQuery, GetJobLogQuery, GetJobsStatusQuery, GetPerformanceMetricsQuery, GetPlanDetailsQuery, GetResourceUsageQuery, GetWorkstationsStatusQuery" should be placed at the top of the module (wrong-import-position)
+resync\api\endpoints.py:62:0: C0413: Import "from resync.settings import settings" should be placed at the top of the module (wrong-import-position)
+resync\api\endpoints.py:65:0: C0413: Import "from resync.api.circuit_breaker_metrics import router as circuit_breaker_router" should be placed at the top of the module (wrong-import-position)
+resync\api\endpoints.py:601:11: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\api\endpoints.py:1116:0: C0413: Import "from pydantic import BaseModel" should be placed at the top of the module (wrong-import-position)
+resync\api\endpoints.py:1119:0: C0413: Import "from resync.core.benchmarking import create_benchmark_runner" should be placed at the top of the module (wrong-import-position)
+resync\api\endpoints.py:1120:0: C0413: Import "from resync.core.container import app_container" should be placed at the top of the module (wrong-import-position)
+************* Module resync.api.gateway
+resync\api\gateway.py:406:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\api\gateway.py:782:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\api\gateway.py:801:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\api\gateway.py:823:19: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.api.health
+resync\api\health.py:147:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\api\health.py:546:11: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\api\health.py:622:11: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.api.middleware.cors_config
+resync\api\middleware\cors_config.py:175:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.api.middleware.cors_monitoring
+resync\api\middleware\cors_monitoring.py:272:19: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.api.middleware.csp_middleware
+resync\api\middleware\csp_middleware.py:202:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\api\middleware\csp_middleware.py:197:19: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.api.middleware.endpoint_utils
+resync\api\middleware\endpoint_utils.py:102:19: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.api.middleware.error_handler
+resync\api\middleware\error_handler.py:24:0: C0413: Import "import time" should be placed at the top of the module (wrong-import-position)
+resync\api\middleware\error_handler.py:71:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.api.middleware.idempotency
+resync\api\middleware\idempotency.py:270:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\api\middleware\idempotency.py:334:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\api\middleware\idempotency.py:371:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.api.validation.config
+resync\api\validation\config.py:530:4: W0603: Using the global statement (global-statement)
+resync\api\validation\config.py:545:4: W0603: Using the global statement (global-statement)
+************* Module resync.api.validation.enhanced_security
+resync\api\validation\enhanced_security.py:393:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\api\validation\enhanced_security.py:469:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\api\validation\enhanced_security.py:527:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\api\validation\enhanced_security.py:798:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\api\validation\enhanced_security.py:837:19: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.api.validation.enhanced_security_fixed
+resync\api\validation\enhanced_security_fixed.py:379:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\api\validation\enhanced_security_fixed.py:480:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\api\validation\enhanced_security_fixed.py:533:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\api\validation\enhanced_security_fixed.py:866:19: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.api.validation.middleware
+resync\api\validation\middleware.py:88:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\api\validation\middleware.py:311:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\api\validation\middleware.py:385:19: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.api_gateway.container
+resync\api_gateway\container.py:128:23: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.advanced_cache
+resync\core\advanced_cache.py:255:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\advanced_cache.py:499:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\advanced_cache.py:584:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\advanced_cache.py:597:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\advanced_cache.py:706:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\advanced_cache.py:734:19: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.agent_manager
+resync\core\agent_manager.py:104:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\agent_manager.py:129:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\agent_manager.py:148:0: C0413: Import "from pydantic import BaseModel" should be placed at the top of the module (wrong-import-position)
+resync\core\agent_manager.py:150:0: C0413: Import "from resync.core.exceptions import AgentError" should be placed at the top of the module (wrong-import-position)
+resync\core\agent_manager.py:153:0: C0413: Import "from resync.core.metrics import runtime_metrics" should be placed at the top of the module (wrong-import-position)
+resync\core\agent_manager.py:154:0: C0413: Import "from resync.services.mock_tws_service import MockTWSClient" should be placed at the top of the module (wrong-import-position)
+resync\core\agent_manager.py:155:0: C0413: Import "from resync.services.tws_service import OptimizedTWSClient" should be placed at the top of the module (wrong-import-position)
+resync\core\agent_manager.py:156:0: C0413: Import "from resync.settings import settings" should be placed at the top of the module (wrong-import-position)
+resync\core\agent_manager.py:158:0: C0413: Import "from .global_utils import get_environment_tags, get_global_correlation_id" should be placed at the top of the module (wrong-import-position)
+resync\core\agent_manager.py:165:0: C0413: Import "from resync.models.agents import AgentConfig, AgentType" should be placed at the top of the module (wrong-import-position)
+resync\core\agent_manager.py:166:0: C0413: Import "from pydantic import BaseModel" should be placed at the top of the module (wrong-import-position)
+resync\core\agent_manager.py:167:0: C0413: Import "from typing import List" should be placed at the top of the module (wrong-import-position)
+resync\core\agent_manager.py:263:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\agent_manager.py:234:31: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\agent_manager.py:285:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.alerting
+resync\core\alerting.py:18:0: C0413: Import "from resync.config.slo import KPI_DEFINITIONS, validate_slo_compliance" should be placed at the top of the module (wrong-import-position)
+resync\core\alerting.py:19:0: C0413: Import "from resync.core.metrics import runtime_metrics" should be placed at the top of the module (wrong-import-position)
+resync\core\alerting.py:20:0: C0413: Import "from resync.core.teams_integration import TeamsNotification, get_teams_integration" should be placed at the top of the module (wrong-import-position)
+resync\core\alerting.py:401:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\alerting.py:416:23: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.anomaly_detector
+resync\core\anomaly_detector.py:185:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\anomaly_detector.py:229:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\anomaly_detector.py:322:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\anomaly_detector.py:360:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\anomaly_detector.py:632:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\anomaly_detector.py:647:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\anomaly_detector.py:678:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.async_cache
+resync\core\async_cache.py:1027:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\async_cache.py:1012:27: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\async_cache.py:1181:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\async_cache.py:1370:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\async_cache.py:1414:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\async_cache.py:1436:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\async_cache.py:1456:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\async_cache.py:1740:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\async_cache.py:1820:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\async_cache.py:1835:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.async_cache_refactored
+resync\core\async_cache_refactored.py:521:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\async_cache_refactored.py:694:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\async_cache_refactored.py:762:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\async_cache_refactored.py:794:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\async_cache_refactored.py:806:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.audit_db
+resync\core\audit_db.py:42:11: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\audit_db.py:77:11: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\audit_db.py:118:11: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\audit_db.py:150:11: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\audit_db.py:195:11: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\audit_db.py:336:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\audit_db.py:387:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\audit_db.py:482:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\audit_db.py:500:11: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\audit_db.py:516:11: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\audit_db.py:533:11: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\audit_db.py:550:11: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\audit_db.py:604:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.audit_log
+resync\core\audit_log.py:175:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\audit_log.py:233:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\audit_log.py:274:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\audit_log.py:290:4: W0603: Using the global statement (global-statement)
+************* Module resync.core.audit_queue
+resync\core\audit_queue.py:660:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\audit_queue.py:702:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.auto_recovery
+resync\core\auto_recovery.py:84:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\auto_recovery.py:124:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\auto_recovery.py:166:23: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\auto_recovery.py:205:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\auto_recovery.py:230:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\auto_recovery.py:269:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\auto_recovery.py:281:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\auto_recovery.py:292:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\auto_recovery.py:303:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\auto_recovery.py:339:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\auto_recovery.py:326:31: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\auto_recovery.py:354:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\auto_recovery.py:369:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\auto_recovery.py:380:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.benchmarking
+resync\core\benchmarking.py:71:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\benchmarking.py:86:19: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.cache
+resync\core\cache.py:297:19: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.cache_hierarchy
+resync\core\cache_hierarchy.py:328:4: W0603: Using the global statement (global-statement)
+************* Module resync.core.chaos_engineering
+resync\core\chaos_engineering.py:188:27: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\chaos_engineering.py:256:23: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\chaos_engineering.py:337:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\chaos_engineering.py:348:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\chaos_engineering.py:361:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\chaos_engineering.py:421:23: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\chaos_engineering.py:490:27: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\chaos_engineering.py:590:23: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\chaos_engineering.py:543:35: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\chaos_engineering.py:562:35: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\chaos_engineering.py:583:35: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\chaos_engineering.py:725:23: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\chaos_engineering.py:804:23: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\chaos_engineering.py:871:23: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\chaos_engineering.py:863:27: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\chaos_engineering.py:923:23: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\chaos_engineering.py:1001:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\chaos_engineering.py:1055:19: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.config_watcher
+resync\core\config_watcher.py:35:11: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\config_watcher.py:61:11: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.connection_manager
+resync\core\connection_manager.py:115:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\connection_manager.py:165:19: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.connection_pool_manager
+resync\core\connection_pool_manager.py:213:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\connection_pool_manager.py:500:23: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\connection_pool_manager.py:515:4: W0603: Using the global statement (global-statement)
+resync\core\connection_pool_manager.py:530:4: W0603: Using the global statement (global-statement)
+************* Module resync.core.database_optimizer
+resync\core\database_optimizer.py:396:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\database_optimizer.py:417:23: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.distributed_tracing
+resync\core\distributed_tracing.py:373:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.encoding_utils
+resync\core\encoding_utils.py:15:11: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.encrypted_audit
+resync\core\encrypted_audit.py:328:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\encrypted_audit.py:337:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\encrypted_audit.py:531:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\encrypted_audit.py:777:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\encrypted_audit.py:790:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\encrypted_audit.py:804:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\encrypted_audit.py:832:19: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.enhanced_async_cache
+resync\core\enhanced_async_cache.py:369:19: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.enhanced_cache
+resync\core\enhanced_cache.py:243:8: W0702: No exception type(s) specified (bare-except)
+************* Module resync.core.enhanced_cache_improved
+resync\core\enhanced_cache_improved.py:243:8: W0702: No exception type(s) specified (bare-except)
+************* Module resync.core.file_ingestor
+resync\core\file_ingestor.py:223:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\file_ingestor.py:274:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\file_ingestor.py:307:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\file_ingestor.py:588:19: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.gdpr_compliance
+resync\core\gdpr_compliance.py:738:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\gdpr_compliance.py:755:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\gdpr_compliance.py:776:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\gdpr_compliance.py:816:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\gdpr_compliance.py:843:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.global_utils
+resync\core\global_utils.py:49:4: W0603: Using the global statement (global-statement)
+************* Module resync.core.health_service
+resync\core\health_service.py:135:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health_service.py:157:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health_service.py:166:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health_service.py:371:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health_service.py:412:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health_service.py:454:23: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health_service.py:513:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health_service.py:557:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health_service.py:707:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health_service.py:728:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health_service.py:823:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health_service.py:817:27: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health_service.py:892:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health_service.py:974:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health_service.py:942:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health_service.py:952:16: W0702: No exception type(s) specified (bare-except)
+resync\core\health_service.py:1032:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health_service.py:1100:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health_service.py:1145:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health_service.py:1242:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health_service.py:1287:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health_service.py:1467:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health_service.py:1507:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health_service.py:1521:8: W0702: No exception type(s) specified (bare-except)
+resync\core\health_service.py:1618:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health_service.py:1636:4: W0603: Using the global statement (global-statement)
+resync\core\health_service.py:1668:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health_service.py:1679:4: W0603: Using the global statement (global-statement)
+************* Module resync.core.health_service_complete
+resync\core\health_service_complete.py:77:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health_service_complete.py:198:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health_service_complete.py:262:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health_service_complete.py:322:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health_service_complete.py:400:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health_service_complete.py:367:27: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health_service_complete.py:455:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health_service_complete.py:510:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health_service_complete.py:558:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health_service_complete.py:615:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health_service_complete.py:666:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.health_service_refactored
+resync\core\health_service_refactored.py:147:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health_service_refactored.py:278:4: W0603: Using the global statement (global-statement)
+resync\core\health_service_refactored.py:301:4: W0603: Using the global statement (global-statement)
+************* Module resync.core.ia_auditor
+resync\core\ia_auditor.py:33:4: W0603: Using the global statement (global-statement)
+resync\core\ia_auditor.py:268:11: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.improved_cache
+resync\core\improved_cache.py:167:19: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.incident_response
+resync\core\incident_response.py:522:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\incident_response.py:1061:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\incident_response.py:1093:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\incident_response.py:1120:19: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.knowledge_graph
+resync\core\knowledge_graph.py:385:0: C0413: Import "import asyncio" should be placed at the top of the module (wrong-import-position)
+resync\core\knowledge_graph.py:386:0: C0413: Import "from typing import Any" should be placed at the top of the module (wrong-import-position)
+resync\core\knowledge_graph.py:388:0: C0413: Import "from neo4j import AsyncGraphDatabase" should be placed at the top of the module (wrong-import-position)
+resync\core\knowledge_graph.py:389:0: C0413: Import "from neo4j import exceptions as neo4j_exceptions" should be placed at the top of the module (wrong-import-position)
+resync\core\knowledge_graph.py:391:0: C0413: Import "from resync.core.exceptions import KnowledgeGraphError" should be placed at the top of the module (wrong-import-position)
+resync\core\knowledge_graph.py:392:0: C0413: Import "from resync.core.structured_logger import get_logger" should be placed at the top of the module (wrong-import-position)
+resync\core\knowledge_graph.py:393:0: C0413: Import "from resync.settings import settings" should be placed at the top of the module (wrong-import-position)
+************* Module resync.core.lifecycle
+resync\core\lifecycle.py:75:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\lifecycle.py:138:11: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\lifecycle.py:104:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\lifecycle.py:114:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\lifecycle.py:124:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\lifecycle.py:162:11: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\lifecycle.py:176:11: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.litellm_init
+resync\core\litellm_init.py:71:11: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\litellm_init.py:80:4: W0603: Using the global statement (global-statement)
+resync\core\litellm_init.py:100:11: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.llm_monitor
+resync\core\llm_monitor.py:141:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\llm_monitor.py:243:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.llm_optimizer
+resync\core\llm_optimizer.py:132:23: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\llm_optimizer.py:151:23: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\llm_optimizer.py:325:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.llm_wrapper
+resync\core\llm_wrapper.py:52:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.logger
+resync\core\logger.py:162:11: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.log_aggregator
+resync\core\log_aggregator.py:529:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\log_aggregator.py:557:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\log_aggregator.py:584:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\log_aggregator.py:707:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\log_aggregator.py:751:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\log_aggregator.py:832:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\log_aggregator.py:882:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\log_aggregator.py:903:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\log_aggregator.py:941:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.memory_manager
+resync\core\memory_manager.py:88:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\memory_manager.py:143:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\memory_manager.py:222:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\memory_manager.py:253:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\memory_manager.py:281:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\memory_manager.py:301:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\memory_manager.py:310:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\memory_manager.py:323:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\memory_manager.py:348:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\memory_manager.py:362:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\memory_manager.py:402:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\memory_manager.py:387:31: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\memory_manager.py:481:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.metrics
+resync\core\metrics.py:552:4: W0603: Using the global statement (global-statement)
+************* Module resync.core.metrics_collector
+resync\core\metrics_collector.py:431:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\metrics_collector.py:547:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\metrics_collector.py:628:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\metrics_collector.py:649:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\metrics_collector.py:676:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\metrics_collector.py:825:19: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.migration_managers
+resync\core\migration_managers.py:124:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\migration_managers.py:140:27: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\migration_managers.py:157:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\migration_managers.py:236:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\migration_managers.py:242:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\migration_managers.py:292:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\migration_managers.py:308:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\migration_managers.py:328:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\migration_managers.py:341:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\migration_managers.py:357:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\migration_managers.py:370:19: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.performance_optimizer
+resync\core\performance_optimizer.py:398:23: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\performance_optimizer.py:439:4: W0603: Using the global statement (global-statement)
+resync\core\performance_optimizer.py:526:4: W0603: Using the global statement (global-statement)
+************* Module resync.core.performance_tracker
+resync\core\performance_tracker.py:245:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\performance_tracker.py:372:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.predictive_analysis
+resync\core\predictive_analysis.py:91:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\predictive_analysis.py:138:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\predictive_analysis.py:181:27: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.predictive_analyzer
+resync\core\predictive_analyzer.py:96:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\predictive_analyzer.py:136:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\predictive_analyzer.py:178:23: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\predictive_analyzer.py:220:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\predictive_analyzer.py:266:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\predictive_analyzer.py:285:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.proactive_monitor
+resync\core\proactive_monitor.py:121:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\proactive_monitor.py:162:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\proactive_monitor.py:204:23: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\proactive_monitor.py:263:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\proactive_monitor.py:307:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.proactive_monitoring
+resync\core\proactive_monitoring.py:118:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\proactive_monitoring.py:166:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\proactive_monitoring.py:209:27: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.query_cache
+resync\core\query_cache.py:383:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.rag_health_check
+resync\core\rag_health_check.py:94:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\rag_health_check.py:144:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\rag_health_check.py:201:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\rag_health_check.py:252:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\rag_health_check.py:299:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\rag_health_check.py:278:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\rag_health_check.py:286:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\rag_health_check.py:359:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\rag_health_check.py:325:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\rag_health_check.py:341:23: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\rag_health_check.py:414:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\rag_health_check.py:388:23: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\rag_health_check.py:402:23: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.rag_watcher
+resync\core\rag_watcher.py:34:11: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.rate_limiter
+resync\core\rate_limiter.py:24:0: C0413: Import "from dataclasses import dataclass" should be placed at the top of the module (wrong-import-position)
+************* Module resync.core.redis_init
+resync\core\redis_init.py:11:7: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\redis_init.py:34:4: W0603: Using the global statement (global-statement)
+resync\core\redis_init.py:41:0: C0413: Import "from resync.settings import settings" should be placed at the top of the module (wrong-import-position)
+resync\core\redis_init.py:165:23: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\redis_init.py:228:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\redis_init.py:244:4: W0603: Using the global statement (global-statement)
+************* Module resync.core.resource_manager
+resync\core\resource_manager.py:306:23: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\resource_manager.py:423:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\resource_manager.py:444:4: W0603: Using the global statement (global-statement)
+************* Module resync.core.security_dashboard
+resync\core\security_dashboard.py:1025:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\security_dashboard.py:1063:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\security_dashboard.py:1121:19: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.service_discovery
+resync\core\service_discovery.py:235:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\service_discovery.py:248:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\service_discovery.py:290:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\service_discovery.py:309:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\service_discovery.py:382:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\service_discovery.py:400:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\service_discovery.py:674:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\service_discovery.py:689:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\service_discovery.py:710:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\service_discovery.py:742:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\service_discovery.py:772:19: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.siem_integrator
+resync\core\siem_integrator.py:293:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\siem_integrator.py:344:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\siem_integrator.py:365:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\siem_integrator.py:398:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\siem_integrator.py:450:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\siem_integrator.py:475:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\siem_integrator.py:571:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\siem_integrator.py:697:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\siem_integrator.py:715:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\siem_integrator.py:739:23: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\siem_integrator.py:780:19: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.smart_pooling
+resync\core\smart_pooling.py:402:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\smart_pooling.py:419:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\smart_pooling.py:439:19: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.soc2_compliance_refactored
+resync\core\soc2_compliance_refactored.py:24:0: C0413: Import "from resync.core.compliance.types import SOC2TrustServiceCriteria, SOC2ComplianceManager as BaseSOC2ComplianceManager" should be placed at the top of the module (wrong-import-position)
+resync\core\soc2_compliance_refactored.py:552:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\soc2_compliance_refactored.py:822:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\soc2_compliance_refactored.py:851:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\soc2_compliance_refactored.py:875:19: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.stress_testing
+resync\core\stress_testing.py:225:27: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\stress_testing.py:334:27: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\stress_testing.py:449:27: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.structured_logger
+resync\core\structured_logger.py:726:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\structured_logger.py:742:23: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.task_manager
+resync\core\task_manager.py:200:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\task_manager.py:221:19: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.teams_integration
+resync\core\teams_integration.py:305:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\teams_integration.py:350:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\teams_integration.py:373:4: W0603: Using the global statement (global-statement)
+resync\core\teams_integration.py:381:4: W0603: Using the global statement (global-statement)
+************* Module resync.core.tws_monitor
+resync\core\tws_monitor.py:128:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\tws_monitor.py:172:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\tws_monitor.py:181:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\tws_monitor.py:312:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\tws_monitor.py:362:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\tws_monitor.py:496:4: W0603: Using the global statement (global-statement)
+resync\core\tws_monitor.py:505:4: W0603: Using the global statement (global-statement)
+************* Module resync.core.user_behavior
+resync\core\user_behavior.py:729:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\user_behavior.py:784:19: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.websocket_pool_manager
+resync\core\websocket_pool_manager.py:136:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\websocket_pool_manager.py:176:27: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\websocket_pool_manager.py:204:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\websocket_pool_manager.py:280:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\websocket_pool_manager.py:348:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\websocket_pool_manager.py:388:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\websocket_pool_manager.py:425:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\websocket_pool_manager.py:464:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\websocket_pool_manager.py:513:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\websocket_pool_manager.py:565:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\websocket_pool_manager.py:576:4: W0603: Using the global statement (global-statement)
+resync\core\websocket_pool_manager.py:587:4: W0603: Using the global statement (global-statement)
+************* Module resync.core.write_ahead_log
+resync\core\write_ahead_log.py:140:23: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\write_ahead_log.py:164:27: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\write_ahead_log.py:216:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\write_ahead_log.py:266:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\write_ahead_log.py:259:27: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\write_ahead_log.py:316:23: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\write_ahead_log.py:339:23: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\write_ahead_log.py:347:19: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.cache.async_cache_refactored
+resync\core\cache\async_cache_refactored.py:30:7: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\cache\async_cache_refactored.py:33:11: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\cache\async_cache_refactored.py:214:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\cache\async_cache_refactored.py:245:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\cache\async_cache_refactored.py:498:23: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.cache.async_cache_refactored_new
+resync\core\cache\async_cache_refactored_new.py:751:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\cache\async_cache_refactored_new.py:901:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\cache\async_cache_refactored_new.py:960:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\cache\async_cache_refactored_new.py:979:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.cache.memory_manager
+resync\core\cache\memory_manager.py:195:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\cache\memory_manager.py:321:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\cache\memory_manager.py:390:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.cache.strategies
+resync\core\cache\strategies.py:297:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\cache\strategies.py:336:23: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\cache\strategies.py:397:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\cache\strategies.py:519:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.cache.transaction_manager
+resync\core\cache\transaction_manager.py:191:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\cache\transaction_manager.py:249:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.health.circuit_breaker_manager
+resync\core\health\circuit_breaker_manager.py:150:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\circuit_breaker_manager.py:211:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\circuit_breaker_manager.py:246:19: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.health.enhanced_health_service
+resync\core\health\enhanced_health_service.py:112:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\enhanced_health_service.py:301:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\enhanced_health_service.py:316:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\enhanced_health_service.py:331:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\enhanced_health_service.py:368:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\enhanced_health_service.py:383:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\enhanced_health_service.py:398:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\enhanced_health_service.py:413:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\enhanced_health_service.py:428:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\enhanced_health_service.py:503:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\enhanced_health_service.py:524:4: W0603: Using the global statement (global-statement)
+resync\core\health\enhanced_health_service.py:543:4: W0603: Using the global statement (global-statement)
+************* Module resync.core.health.health_check_retry
+resync\core\health\health_check_retry.py:55:19: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.health.health_check_service
+resync\core\health\health_check_service.py:80:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\health_check_service.py:192:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\health_check_service.py:237:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.health.health_check_utils
+resync\core\health\health_check_utils.py:59:19: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.health.health_config_manager
+resync\core\health\health_config_manager.py:336:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.health.health_history_manager
+resync\core\health\health_history_manager.py:162:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\health_history_manager.py:185:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.health.health_monitoring_coordinator
+resync\core\health\health_monitoring_coordinator.py:78:19: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.health.health_monitoring_observer
+resync\core\health\health_monitoring_observer.py:176:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\health_monitoring_observer.py:187:19: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.health.health_service_facade
+resync\core\health\health_service_facade.py:233:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\health_service_facade.py:289:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\health_service_facade.py:333:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\health_service_facade.py:407:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.health.health_service_manager
+resync\core\health\health_service_manager.py:209:4: W0603: Using the global statement (global-statement)
+resync\core\health\health_service_manager.py:285:4: W0603: Using the global statement (global-statement)
+************* Module resync.core.health.health_service_orchestrator
+resync\core\health\health_service_orchestrator.py:92:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\health_service_orchestrator.py:305:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\health_service_orchestrator.py:393:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\health_service_orchestrator.py:390:23: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\health_service_orchestrator.py:455:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\health_service_orchestrator.py:505:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\health_service_orchestrator.py:556:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\health_service_orchestrator.py:613:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\health_service_orchestrator.py:656:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\health_service_orchestrator.py:750:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\health_service_orchestrator.py:778:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.health.memory_manager
+resync\core\health\memory_manager.py:120:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\memory_manager.py:173:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\memory_manager.py:182:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\memory_manager.py:407:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\memory_manager.py:491:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\memory_manager.py:514:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\memory_manager.py:536:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.health.memory_usage_tracker
+resync\core\health\memory_usage_tracker.py:88:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\memory_usage_tracker.py:139:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\memory_usage_tracker.py:173:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\memory_usage_tracker.py:379:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\memory_usage_tracker.py:438:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.health.performance_metrics_collector
+resync\core\health\performance_metrics_collector.py:65:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\performance_metrics_collector.py:87:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\performance_metrics_collector.py:122:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\performance_metrics_collector.py:231:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.health.proactive_monitor
+resync\core\health\proactive_monitor.py:133:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\proactive_monitor.py:176:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\proactive_monitor.py:218:23: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\proactive_monitor.py:277:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\proactive_monitor.py:321:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.health.recovery_manager
+resync\core\health\recovery_manager.py:123:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\recovery_manager.py:219:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\recovery_manager.py:313:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\recovery_manager.py:359:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\recovery_manager.py:401:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\recovery_manager.py:424:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\recovery_manager.py:432:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\recovery_manager.py:440:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\recovery_manager.py:448:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\recovery_manager.py:456:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\recovery_manager.py:468:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.health.refactored_enhanced_health_service
+resync\core\health\refactored_enhanced_health_service.py:94:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\refactored_enhanced_health_service.py:319:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\refactored_enhanced_health_service.py:358:4: W0603: Using the global statement (global-statement)
+resync\core\health\refactored_enhanced_health_service.py:377:4: W0603: Using the global statement (global-statement)
+************* Module resync.core.health.refactored_health_check_service
+resync\core\health\refactored_health_check_service.py:93:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\refactored_health_check_service.py:211:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.health.refactored_health_service_orchestrator
+resync\core\health\refactored_health_service_orchestrator.py:111:19: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.health.health_checkers.base_health_checker
+resync\core\health\health_checkers\base_health_checker.py:86:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.health.health_checkers.cache_health_checker
+resync\core\health\health_checkers\cache_health_checker.py:92:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.health.health_checkers.connection_pools_health_checker
+resync\core\health\health_checkers\connection_pools_health_checker.py:124:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.health.health_checkers.cpu_health_checker
+resync\core\health\health_checkers\cpu_health_checker.py:89:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.health.health_checkers.database_health_checker
+resync\core\health\health_checkers\database_health_checker.py:153:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.health.health_checkers.filesystem_health_checker
+resync\core\health\health_checkers\filesystem_health_checker.py:82:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.health.health_checkers.memory_health_checker
+resync\core\health\health_checkers\memory_health_checker.py:82:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.health.health_checkers.redis_health_checker
+resync\core\health\health_checkers\redis_health_checker.py:117:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\health\health_checkers\redis_health_checker.py:114:23: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.health.health_checkers.tws_monitor_health_checker
+resync\core\health\health_checkers\tws_monitor_health_checker.py:77:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.health.health_checkers.websocket_pool_health_checker
+resync\core\health\health_checkers\websocket_pool_health_checker.py:62:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.idempotency.manager
+resync\core\idempotency\manager.py:121:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\idempotency\manager.py:218:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\idempotency\manager.py:256:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\idempotency\manager.py:323:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\idempotency\manager.py:371:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\idempotency\manager.py:422:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.core.utils.resource_managers
+resync\core\utils\resource_managers.py:59:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\utils\resource_managers.py:67:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\utils\resource_managers.py:125:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\utils\resource_managers.py:150:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\utils\resource_managers.py:194:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\utils\resource_managers.py:261:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\utils\resource_managers.py:280:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\core\utils\resource_managers.py:318:19: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.cqrs.command_handlers
+resync\cqrs\command_handlers.py:35:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\cqrs\command_handlers.py:57:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\cqrs\command_handlers.py:79:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\cqrs\command_handlers.py:101:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\cqrs\command_handlers.py:125:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\cqrs\command_handlers.py:151:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\cqrs\command_handlers.py:174:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\cqrs\command_handlers.py:199:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.cqrs.query_handlers
+resync\cqrs\query_handlers.py:52:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\cqrs\query_handlers.py:81:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\cqrs\query_handlers.py:108:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\cqrs\query_handlers.py:137:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\cqrs\query_handlers.py:166:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\cqrs\query_handlers.py:209:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\cqrs\query_handlers.py:223:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\cqrs\query_handlers.py:253:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\cqrs\query_handlers.py:269:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\cqrs\query_handlers.py:285:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\cqrs\query_handlers.py:312:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\cqrs\query_handlers.py:339:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\cqrs\query_handlers.py:365:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\cqrs\query_handlers.py:392:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\cqrs\query_handlers.py:421:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\cqrs\query_handlers.py:448:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\cqrs\query_handlers.py:475:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\cqrs\query_handlers.py:504:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.fastapi_app.main
+resync\fastapi_app\main.py:27:0: C0413: Import "import pathlib" should be placed at the top of the module (wrong-import-position)
+************* Module resync.fastapi_app.api.v1.routes.admin_config
+resync\fastapi_app\api\v1\routes\admin_config.py:120:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\fastapi_app\api\v1\routes\admin_config.py:414:11: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.fastapi_app.api.v1.routes.chat
+resync\fastapi_app\api\v1\routes\chat.py:30:4: W0603: Using the global statement (global-statement)
+resync\fastapi_app\api\v1\routes\chat.py:40:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\fastapi_app\api\v1\routes\chat.py:58:4: W0603: Using the global statement (global-statement)
+************* Module resync.fastapi_app.api.v1.routes.status
+resync\fastapi_app\api\v1\routes\status.py:38:11: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.fastapi_app.api.websocket.handlers
+resync\fastapi_app\api\websocket\handlers.py:54:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\fastapi_app\api\websocket\handlers.py:65:23: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\fastapi_app\api\websocket\handlers.py:80:23: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\fastapi_app\api\websocket\handlers.py:93:4: W0603: Using the global statement (global-statement)
+resync\fastapi_app\api\websocket\handlers.py:250:11: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\fastapi_app\api\websocket\handlers.py:237:19: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\fastapi_app\api\websocket\handlers.py:157:27: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\fastapi_app\api\websocket\handlers.py:217:31: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.fastapi_app.utils.helpers
+resync\fastapi_app\utils\helpers.py:87:11: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.services.http_client_factory
+resync\services\http_client_factory.py:89:0: C0413: Import "import logging" should be placed at the top of the module (wrong-import-position)
+************* Module resync.services.llm_service
+resync\services\llm_service.py:326:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\services\llm_service.py:367:4: W0603: Using the global statement (global-statement)
+************* Module resync.services.mock_tws_service
+resync\services\mock_tws_service.py:100:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\services\mock_tws_service.py:169:23: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\services\mock_tws_service.py:190:23: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\services\mock_tws_service.py:210:23: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module resync.services.tws_service
+resync\services\tws_service.py:382:27: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\services\tws_service.py:389:27: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\services\tws_service.py:466:35: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\services\tws_service.py:448:36: W0702: No exception type(s) specified (bare-except)
+resync\services\tws_service.py:454:36: W0702: No exception type(s) specified (bare-except)
+resync\services\tws_service.py:531:24: W0702: No exception type(s) specified (bare-except)
+resync\services\tws_service.py:537:24: W0702: No exception type(s) specified (bare-except)
+resync\services\tws_service.py:631:35: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\services\tws_service.py:682:35: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\services\tws_service.py:668:36: W0702: No exception type(s) specified (bare-except)
+resync\services\tws_service.py:715:24: W0702: No exception type(s) specified (bare-except)
+resync\services\tws_service.py:790:27: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\services\tws_service.py:886:15: W0718: Catching too general exception Exception (broad-exception-caught)
+resync\services\tws_service.py:891:23: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module benchmark_performance
+scripts\benchmark_performance.py:59:0: C0413: Import "import codecs" should be placed at the top of the module (wrong-import-position)
+scripts\benchmark_performance.py:60:0: C0413: Import "import locale" should be placed at the top of the module (wrong-import-position)
+************* Module code_quality_utils
+scripts\code_quality_utils.py:108:11: W0718: Catching too general exception Exception (broad-exception-caught)
+scripts\code_quality_utils.py:139:15: W0718: Catching too general exception Exception (broad-exception-caught)
+scripts\code_quality_utils.py:161:11: W0718: Catching too general exception Exception (broad-exception-caught)
+scripts\code_quality_utils.py:166:19: W0718: Catching too general exception Exception (broad-exception-caught)
+scripts\code_quality_utils.py:427:11: W0718: Catching too general exception Exception (broad-exception-caught)
+scripts\code_quality_utils.py:479:11: W0718: Catching too general exception Exception (broad-exception-caught)
+scripts\code_quality_utils.py:527:11: W0718: Catching too general exception Exception (broad-exception-caught)
+scripts\code_quality_utils.py:607:15: W0718: Catching too general exception Exception (broad-exception-caught)
+scripts\code_quality_utils.py:635:11: W0718: Catching too general exception Exception (broad-exception-caught)
+scripts\code_quality_utils.py:679:11: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module fix_pyflakes_issues
+scripts\fix_pyflakes_issues.py:155:19: W0718: Catching too general exception Exception (broad-exception-caught)
+scripts\fix_pyflakes_issues.py:173:19: W0718: Catching too general exception Exception (broad-exception-caught)
+scripts\fix_pyflakes_issues.py:215:19: W0718: Catching too general exception Exception (broad-exception-caught)
+scripts\fix_pyflakes_issues.py:295:19: W0718: Catching too general exception Exception (broad-exception-caught)
+scripts\fix_pyflakes_issues.py:344:19: W0718: Catching too general exception Exception (broad-exception-caught)
+scripts\fix_pyflakes_issues.py:407:19: W0718: Catching too general exception Exception (broad-exception-caught)
+scripts\fix_pyflakes_issues.py:456:19: W0718: Catching too general exception Exception (broad-exception-caught)
+scripts\fix_pyflakes_issues.py:617:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module validate_config
+scripts\validate_config.py:11:0: C0413: Import "from resync.settings import get_settings" should be placed at the top of the module (wrong-import-position)
+scripts\validate_config.py:12:0: C0413: Import "from resync.core.exceptions import ConfigurationError" should be placed at the top of the module (wrong-import-position)
+************* Module tests.test_cache_improvements
+tests\test_cache_improvements.py:125:15: W0718: Catching too general exception Exception (broad-exception-caught)
+tests\test_cache_improvements.py:327:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module tests.test_chaos_engineering
+tests\test_chaos_engineering.py:315:19: W0718: Catching too general exception Exception (broad-exception-caught)
+tests\test_chaos_engineering.py:369:27: W0718: Catching too general exception Exception (broad-exception-caught)
+tests\test_chaos_engineering.py:411:23: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module tests.test_csp_middleware
+tests\test_csp_middleware.py:65:15: W0718: Catching too general exception Exception (broad-exception-caught)
+tests\test_csp_middleware.py:108:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module tests.test_enhanced_security
+tests\test_enhanced_security.py:301:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module tests.test_main_routes
+tests\test_main_routes.py:298:28: W0702: No exception type(s) specified (bare-except)
+************* Module tests.test_new_features_standalone
+tests\test_new_features_standalone.py:15:0: C0413: Import "from resync.api.cache import ConnectionPoolValidator, get_redis_connection, RedisCacheManager" should be placed at the top of the module (wrong-import-position)
+tests\test_new_features_standalone.py:20:0: C0413: Import "from resync.api.middleware.cors_monitoring import CORSMonitor, CORSOperation" should be placed at the top of the module (wrong-import-position)
+tests\test_new_features_standalone.py:21:0: C0413: Import "from resync.api.audit import AuditAction, AuditLogger, generate_audit_log, AuditRecordResponse" should be placed at the top of the module (wrong-import-position)
+tests\test_new_features_standalone.py:27:0: C0413: Import "from resync.settings import Settings as ApplicationSettings, BaseSettings, Environment" should be placed at the top of the module (wrong-import-position)
+************* Module tests.test_rate_limiting
+tests\test_rate_limiting.py:30:0: C0413: Import "from resync.core.rate_limiter import RateLimitConfig, authenticated_rate_limit, create_rate_limit_exceeded_response, critical_rate_limit, get_authenticated_user_identifier, get_user_identifier, init_rate_limiter, public_rate_limit" should be placed at the top of the module (wrong-import-position)
+tests\test_rate_limiting.py:288:15: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module tests.test_rate_limiting_simple
+tests\test_rate_limiting_simple.py:22:0: C0413: Import "from resync.core.rate_limiter import authenticated_rate_limit, create_rate_limit_exceeded_response, critical_rate_limit, get_authenticated_user_identifier, get_user_identifier, public_rate_limit" should be placed at the top of the module (wrong-import-position)
+************* Module tests.test_validation_models
+tests\test_validation_models.py:818:19: W0718: Catching too general exception Exception (broad-exception-caught)
+
+-----------------------------------
+Your code has been rated at 9.83/10
+

@@ -8,13 +8,11 @@ from the RAG microservice to clients.
 from flask_socketio import SocketIO, emit, join_room, leave_room
 from flask import request
 import asyncio
-from typing import Dict, Any
+from typing import Dict
 import logging
 
 from resync.services.rag_client import rag_client
-from resync.settings import settings
 from resync.core.exceptions import (
-    BaseAppException,
     ValidationError,
     ResourceNotFoundError,
     IntegrationError,

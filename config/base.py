@@ -4,7 +4,7 @@ import os
 from pathlib import Path
 
 from dotenv import load_dotenv
-from pydantic import BaseModel as AgnoSettings
+from pydantic import ConfigDict, BaseModel as AgnoSettings
 from pydantic import Field
 
 # --- Environment Setup ---
@@ -328,13 +328,4 @@ class Settings(AgnoSettings):
         default=bool(os.environ.get("CORS_LOG_VIOLATIONS", True)),
         description="Log CORS violations for security monitoring.",
     )
-
-    class Config:
-        """
-        Pydantic model configuration.
-        Specifies the path to the .env file for loading environment variables.
-        """
-
-        env_file: str = ".env"
-        env_file_encoding: str = "utf-8"
-        extra: str = "ignore"  # Allow extra fields without raising an error
+    model_config = ConfigDict()

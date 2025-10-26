@@ -8,7 +8,7 @@ from typing import Any, Dict, Optional
 from redis.asyncio import Redis
 
 from resync.core.idempotency.config import config
-from resync.core.idempotency.exceptions import IdempotencyError, IdempotencyStorageError
+from resync.core.idempotency.exceptions import IdempotencyStorageError
 from resync.core.idempotency.models import IdempotencyRecord
 from resync.core.idempotency.storage import IdempotencyStorage
 from resync.core.idempotency.validation import IdempotencyKeyValidator

@@ -10,10 +10,8 @@ and search functionality.
 import asyncio
 import time
 from pathlib import Path
-from typing import Dict, List, Any, Optional
+from typing import Dict, Any
 
-from resync.core.exceptions import FileProcessingError, KnowledgeGraphError
-from resync.core.file_ingestor import FileIngestor, is_path_in_knowledge_base
 from resync.core.interfaces import IFileIngestor, IKnowledgeGraph
 from resync.core.structured_logger import get_logger
 from resync.settings import settings
@@ -234,7 +232,6 @@ class RAGHealthCheck:
             file_readers_unavailable = []
 
             # Check if file readers are available (don't actually call them)
-            from resync.core.file_ingestor import FileIngestor
             if hasattr(self.file_ingestor, 'file_readers'):
                 for ext, reader_func in self.file_ingestor.file_readers.items():
                     if reader_func is not None:

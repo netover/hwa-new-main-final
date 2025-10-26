@@ -9,8 +9,6 @@ check patterns.
 from __future__ import annotations
 
 import asyncio
-import time
-from datetime import datetime
 from typing import Any, Callable, Dict, List, Optional, TypeVar
 
 import structlog

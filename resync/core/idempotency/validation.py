@@ -4,7 +4,6 @@ Validação de chaves de idempotency.
 
 import re
 import uuid
-from typing import Optional
 
 
 class IdempotencyKeyValidator:

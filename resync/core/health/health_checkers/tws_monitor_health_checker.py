@@ -8,14 +8,13 @@ from __future__ import annotations
 
 import time
 from datetime import datetime
-from typing import Any, Dict, Optional
+from typing import Any, Dict
 
 import structlog
 
 from resync.core.health_models import (
     ComponentHealth,
     ComponentType,
-    HealthCheckConfig,
     HealthStatus,
 )
 from .base_health_checker import BaseHealthChecker

@@ -13,13 +13,11 @@ This module provides an intelligent caching system with:
 from __future__ import annotations
 
 import asyncio
-import hashlib
 import json
-import threading
 import time
-from collections import defaultdict, deque
+from collections import defaultdict
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Set, Tuple, Union
+from typing import Any, Dict, List, Optional, Set
 
 from resync.core.redis_init import get_redis_initializer
 from resync.core.structured_logger import get_logger

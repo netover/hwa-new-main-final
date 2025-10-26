@@ -4,15 +4,12 @@ RAG Service Client for API Gateway
 This module provides a client to communicate with the standalone RAG microservice.
 """
 
-import asyncio
-import logging
-from typing import Dict, Any, Optional
-from pathlib import Path
+from typing import Any, Optional
 
 import httpx
 from pydantic import BaseModel
 
-from resync.core.resilience import CircuitBreakerManager, CircuitBreakerError, retry_with_backoff_async
+from resync.core.resilience import CircuitBreakerManager, retry_with_backoff_async
 from resync.core.structured_logger import get_logger
 from resync.settings import settings
 

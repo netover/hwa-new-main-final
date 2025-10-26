@@ -10,7 +10,6 @@ import asyncio
 import logging
 import sys
 import time
-from typing import Dict, Any
 import pytest
 
 # Configure logging

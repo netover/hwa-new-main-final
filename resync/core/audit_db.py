@@ -3,7 +3,6 @@ import os
 import sqlite3
 from contextlib import asynccontextmanager
 from typing import Any, Dict, List, Optional
-import json
 
 from resync.core.connection_pool_manager import get_connection_pool_manager
 from resync.settings import settings
@@ -496,7 +495,6 @@ def is_memory_approved(memory_id: str) -> bool:
 async def initialize_redis_streams():
     """Initialize Redis Streams for audit processing."""
     try:
-        import asyncio
         await ensure_consumer_group()
         logger.info("redis_streams_initialized_for_audit")
     except Exception as e:

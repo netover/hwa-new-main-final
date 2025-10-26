@@ -1,4 +1,3 @@
-
 """
 Resync Application Main Entry Point - Production-Ready Implementation
 
@@ -57,83 +56,92 @@ Environment Variables Required:
 Optional but Recommended:
     LOG_LEVEL, SERVER_HOST, SERVER_PORT
 """
-from dotenv import load_dotenv
 
-# Load environment variables from .env file before any other imports
-load_dotenv()
-
-from typing import TYPE_CHECKING, Optional, Any, Dict
+# Standard library imports
 import signal
 import asyncio
 import sys
-import os
 import threading
 import platform
-import socket
+from typing import TYPE_CHECKING, Optional, Any, Dict
 
-if TYPE_CHECKING:
-    from resync.settings import Settings
-    from resync.core.startup_validation import (
-        ConfigurationValidationError,
-        DependencyUnavailableError,
-        StartupError,
-    )
-
+# Third-party imports
+from dotenv import load_dotenv
 import structlog
+import uvicorn
+import aiohttp
 
-from resync.api.routes import api
+# Local imports
 from resync.core.encoding_utils import symbol
-from resync.core.exceptions import ConfigurationError
-
-# Runtime imports
 from resync.core.startup_validation import (
     ConfigurationValidationError,
     DependencyUnavailableError,
     StartupError,
+    validate_redis_connection,
+    validate_all_settings,
 )
+from resync.fastapi_app.main import app
+
+if TYPE_CHECKING:
+    from resync.settings import Settings
+
+# Load environment variables from .env file before any other imports
+load_dotenv()
 # Configure startup logger
 startup_logger = structlog.get_logger("resync.startup")
 
 # Global state for validated settings cache
-_validated_settings_cache: Optional["Settings"] = None
-_settings_validation_lock = asyncio.Lock()
+# NOTE: Settings cache is managed by the SettingsCache class below
+
+
+class SettingsCache:
+    """Thread-safe cache for validated settings."""
+
+    def __init__(self) -> None:
+        self._cache: Optional["Settings"] = None
+        self._lock = asyncio.Lock()
+
+    async def get_validated_settings(self, fail_fast: bool = True) -> "Settings":
+        """Get validated settings with caching."""
+        async with self._lock:
+            if self._cache is None:
+                startup_logger.info("performing_initial_settings_validation")
+                self._cache = await validate_configuration_on_startup(fail_fast=fail_fast)
+                startup_logger.info("settings_validation_cached_successfully")
+            return self._cache
+
+    def clear_cache(self) -> None:
+        """Clear the cached settings."""
+        self._cache = None
+
+
+# Global settings cache instance
+_settings_cache = SettingsCache()
 
 
 async def get_validated_settings(fail_fast: bool = True) -> "Settings":
-    """
-    Cached settings validation to avoid repeated checks.
-
-    This function caches the validated settings to prevent redundant
-    validation operations during application lifecycle.
-
-    Returns:
-        Validated Settings object
-
-    Raises:
-        Reraises exceptions from validate_configuration_on_startup if fail_fast is False.
-    """
-    global _validated_settings_cache
-
-    async with _settings_validation_lock:
-        if _validated_settings_cache is None:
-            startup_logger.info("performing_initial_settings_validation")
-            _validated_settings_cache = await validate_configuration_on_startup()
-            startup_logger.info("settings_validation_cached_successfully")
-
-        return _validated_settings_cache
+    """Valida e cacheia Settings (fail-fast configurável)."""
+    return await _settings_cache.get_validated_settings(fail_fast)
 
 
 async def _check_tcp(host: str, port: int, timeout: float = 3.0) -> bool:
-    """Asynchronously check if a TCP port is open."""
-    def _connect() -> bool:
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        sock.settimeout(timeout)
+    """
+    Verifica reachability TCP de forma 100% assíncrona.
+    Usa asyncio.open_connection com timeout explícito e fechamento adequado de recursos.
+    """
+    try:
+        _, writer = await asyncio.wait_for(
+            asyncio.open_connection(host, port), timeout=timeout
+        )
+        writer.close()
         try:
-            return sock.connect_ex((host, port)) == 0
-        finally:
-            sock.close()
-    loop = asyncio.get_running_loop()
-    return await loop.run_in_executor(None, _connect)
+            await writer.wait_closed()
+        except (OSError, ConnectionError, RuntimeError):
+            # alguns transports podem não suportar wait_closed; ignore
+            pass
+        return True
+    except (asyncio.TimeoutError, ConnectionError, OSError):
+        return False
 
 
 async def run_startup_health_checks(settings: "Settings") -> Dict[str, Any]:
@@ -159,8 +167,7 @@ async def run_startup_health_checks(settings: "Settings") -> Dict[str, Any]:
     try:
         startup_logger.info("running_startup_health_checks")
 
-        # Redis connectivity check (already done in validation, but double-check)
-        from resync.core.startup_validation import validate_redis_connection
+        # Redis connectivity double-check
         await validate_redis_connection(max_retries=1, timeout=3.0)
         health_results["redis_connection"] = True
 
@@ -178,17 +185,32 @@ async def run_startup_health_checks(settings: "Settings") -> Dict[str, Any]:
             )
             health_results["tws_reachability"] = False
 
-        # LLM service basic check (if endpoint is configured)
-        if hasattr(settings, 'llm_endpoint') and settings.llm_endpoint:
+        # LLM service basic check (GET curto; HEAD pode retornar 405 em alguns provedores)
+        if getattr(settings, 'llm_endpoint', None):
             try:
-                import aiohttp
                 timeout = aiohttp.ClientTimeout(total=5.0)
                 async with aiohttp.ClientSession(timeout=timeout) as session:
-                    # Simple HEAD request to check if service is responsive
-                    async with session.head(settings.llm_endpoint.rstrip('/')) as response:
-                        health_results["llm_service"] = response.status < 500
-            except Exception as e:
+                    endpoint = settings.llm_endpoint.rstrip('/')
+                    async with session.get(
+                        endpoint, allow_redirects=True
+                    ) as resp:
+                        # Considera apenas status 200-399 como saudável (mais rigoroso)
+                        health_results["llm_service"] = 200 <= resp.status < 400
+                        if not health_results["llm_service"]:
+                            startup_logger.warning(
+                                "llm_service_unhealthy_status",
+                                status=resp.status,
+                                reason="Status code not in 200-399 range"
+                            )
+            except (aiohttp.ClientPayloadError, aiohttp.ServerDisconnectedError,
+                    aiohttp.ClientConnectionError) as e:
+                startup_logger.warning("llm_service_check_unexpected_error", error=str(e))
+                health_results["llm_service"] = False
+            except aiohttp.ClientError as e:
                 startup_logger.warning("llm_service_check_failed", error=str(e))
+                health_results["llm_service"] = False
+            except RuntimeError as e:
+                startup_logger.warning("llm_service_check_unexpected_error", error=str(e))
                 health_results["llm_service"] = False
 
         # Overall health assessment
@@ -210,43 +232,32 @@ async def run_startup_health_checks(settings: "Settings") -> Dict[str, Any]:
 
         return health_results
 
-    except Exception as e:
+    except (RuntimeError, ConnectionError, OSError) as e:
         startup_logger.error("startup_health_checks_failed", error=str(e))
         return health_results
 
 
-def setup_signal_handlers() -> None:
-    """
-    Setup signal handlers for graceful shutdown.
-
-    Configures handlers for SIGTERM and SIGINT to ensure
-    proper cleanup on application termination.
-    """
-    # Signal handlers should only be set in the main thread and not on Windows
+def setup_signal_handlers(server: Optional["uvicorn.Server"] = None) -> None:
+    """Configura handlers para SIGTERM/SIGINT (apenas main thread; skip no Windows)."""
     if platform.system() == "Windows":
         startup_logger.debug("signal_handlers_skipped_on_windows")
         return
-
     if threading.current_thread() is not threading.main_thread():
         startup_logger.debug("signal_handlers_skipped_on_non_main_thread")
         return
 
-    def signal_handler(signum: int, frame: Any) -> None:
-        """Handle shutdown signals gracefully."""
+    def signal_handler(signum: int, _frame: Any) -> None:
         signal_name = signal.Signals(signum).name
-        startup_logger.info(
-            "shutdown_signal_received",
-            signal=signal_name,
-            signal_number=signum
-        )
-
-        # Perform cleanup
+        startup_logger.info("shutdown_signal_received", signal=signal_name, signal_number=signum)
         cleanup_resources()
-
         startup_logger.info("application_shutdown_complete")
-        sys.exit(0)
 
-    # Register signal handlers
+        # Prefer server.should_exit = True over sys.exit() when server is available
+        if server is not None:
+            server.should_exit = True
+        else:
+            sys.exit(0)
+
     try:
         signal.signal(signal.SIGTERM, signal_handler)
         signal.signal(signal.SIGINT, signal_handler)
@@ -256,21 +267,12 @@ def setup_signal_handlers() -> None:
 
 
 def cleanup_resources() -> None:
-    """
-    Perform cleanup of application resources.
-
-    Called during graceful shutdown to ensure proper resource cleanup.
-    """
+    """Limpa recursos de aplicação (cache de settings, etc.)."""
     try:
         startup_logger.info("performing_resource_cleanup")
-
-        # Clear validated settings cache
-        global _validated_settings_cache
-        _validated_settings_cache = None
-
+        _settings_cache.clear_cache()
         startup_logger.info("resource_cleanup_completed")
-
-    except Exception as e:
+    except (RuntimeError, OSError) as e:
         startup_logger.error("resource_cleanup_failed", error=str(e))
 
 
@@ -303,8 +305,6 @@ async def validate_configuration_on_startup(fail_fast: bool = True) -> "Settings
 
     try:
         # Use the new comprehensive validation module
-        from resync.core.startup_validation import validate_all_settings
-
         settings = await validate_all_settings()
 
         # Additional logging for successful validation (backward compatibility)
@@ -323,41 +323,24 @@ async def validate_configuration_on_startup(fail_fast: bool = True) -> "Settings
 
         return settings
 
-    except Exception as e:
-        # Handle different types of validation errors with appropriate logging
+    except (ConfigurationValidationError, DependencyUnavailableError, StartupError) as e:
+        # ✅ StartupError agora tratado aqui
         if isinstance(e, ConfigurationValidationError):
-            startup_logger.error(
-                "configuration_validation_failed",
-                error_type="ConfigurationValidationError",
-                error_message=e.message,
-                error_details=e.details,
-                status_symbol=symbol(False, sys.stdout),
-            )
+            startup_logger.error("configuration_validation_failed",
+                                 error_type="ConfigurationValidationError",
+                                 error_message=e.message, error_details=e.details,
+                                 status_symbol=symbol(False, sys.stdout))
         elif isinstance(e, DependencyUnavailableError):
-            startup_logger.error(
-                "dependency_unavailable",
-                error_type="DependencyUnavailableError",
-                dependency=e.dependency,
-                error_message=e.message,
-                error_details=e.details,
-                status_symbol=symbol(False, sys.stdout),
-            )
-        elif isinstance(e, StartupError):
-            startup_logger.error(
-                "startup_error",
-                error_type="StartupError",
-                error_message=e.message,
-                error_details=e.details,
-                status_symbol=symbol(False, sys.stdout),
-            )
+            startup_logger.error("dependency_unavailable",
+                                 error_type="DependencyUnavailableError",
+                                 dependency=e.dependency, error_message=e.message,
+                                 error_details=e.details, status_symbol=symbol(False, sys.stdout))
         else:
-            # Fallback for unexpected errors
-            startup_logger.error(
-                "unexpected_validation_error",
-                error_type=type(e).__name__,
-                error_message=str(e),
-                status_symbol=symbol(False, sys.stdout),
-            )
+            startup_logger.error("startup_error",
+                                 error_type="StartupError",
+                                 error_message=getattr(e, "message", str(e)),
+                                 error_details=getattr(e, "details", None),
+                                 status_symbol=symbol(False, sys.stdout))
 
         # Log configuration guidance for developers (only for configuration errors)
         if isinstance(e, ConfigurationValidationError):
@@ -365,7 +348,9 @@ async def validate_configuration_on_startup(fail_fast: bool = True) -> "Settings
                 "configuration_setup_required",
                 admin_username="admin",
                 admin_password="suasenha123",
-                secret_key_generation="python -c 'import secrets; print(secrets.token_urlsafe(32))'",
+                secret_key_generation=(
+                    "python -c 'import secrets; print(secrets.token_urlsafe(32))'"
+                ),
                 redis_url="redis://localhost:6379",
                 tws_host="localhost",
                 tws_port=31111,
@@ -380,7 +365,7 @@ async def validate_configuration_on_startup(fail_fast: bool = True) -> "Settings
 
 
 # Create the FastAPI application
-from resync.fastapi_app.main import app
+# app is already imported at the top of the file
 
 async def main() -> None:
     """
@@ -399,12 +384,8 @@ async def main() -> None:
     Raises:
         SystemExit: If startup validation or health checks fail
     """
-    import uvicorn
 
     try:
-        # Setup signal handlers for graceful shutdown when running directly
-        setup_signal_handlers()
-
         # Get validated settings (cached)
         settings = await get_validated_settings(fail_fast=True)
 
@@ -432,13 +413,17 @@ async def main() -> None:
             app,
             host=getattr(settings, "server_host", "127.0.0.1"),
             port=getattr(settings, "server_port", 8000),
-            log_config=None,  # Use our structured logging
-            access_log=False,  # Disable default access log, use middleware if needed
+            log_config=None,   # usar nosso logging estruturado
+            access_log=False,  # logs de acesso via middleware, se necessário
         )
         server = uvicorn.Server(config)
+
+        # Setup signal handlers with server reference
+        setup_signal_handlers(server)
+
         await server.serve()
 
-    except Exception as e:
+    except (RuntimeError, OSError, ConnectionError) as e:
         startup_logger.critical(
             "main_startup_failed",
             error_type=type(e).__name__,
@@ -448,17 +433,6 @@ async def main() -> None:
         raise
 
 if __name__ == "__main__":
-    """
-    Direct execution entry point with enhanced error handling and resource management.
-
-    This section provides:
-    - Async context management via asyncio.run()
-    - Graceful handling of KeyboardInterrupt
-    - Comprehensive error logging for startup failures
-    - Proper exit codes for different failure scenarios
-    """
-    import asyncio
-
     try:
         asyncio.run(main())
     except KeyboardInterrupt:
@@ -467,8 +441,8 @@ if __name__ == "__main__":
         sys.exit(0)
     except SystemExit as e:
         # Respect explicit exit codes from validation/health checks
-        sys.exit(e.code)
-    except Exception as e:
+        sys.exit(e.code if e.code is not None else 1)
+    except (RuntimeError, OSError, ConnectionError) as e:
         startup_logger.critical(
             "application_startup_failed_unexpected_error",
             error_type=type(e).__name__,

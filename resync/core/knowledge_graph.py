@@ -382,19 +382,6 @@ class AsyncKnowledgeGraph:
         return asyncio.run(self.search_similar_issues(query, limit))
 
 
-import asyncio
-from typing import Any, Dict, List, Optional
-
-from neo4j import AsyncGraphDatabase
-from neo4j import exceptions as neo4j_exceptions
-
-from resync.core.exceptions import KnowledgeGraphError
-from resync.core.structured_logger import get_logger
-from resync.settings import settings
-
-logger = get_logger(__name__)
-
-
 class AsyncKnowledgeGraph:
     """
     Interface assíncrona para interagir com o Knowledge Graph (Neo4j).

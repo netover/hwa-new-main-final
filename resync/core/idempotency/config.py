@@ -3,7 +3,6 @@ Configuração do sistema de idempotency.
 """
 
 from dataclasses import dataclass
-from typing import Optional
 
 
 @dataclass

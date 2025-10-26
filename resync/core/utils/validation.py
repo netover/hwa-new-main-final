@@ -8,7 +8,7 @@ common input validation scenarios in the application.
 from enum import Enum
 from typing import Any, Dict, List, Optional, Type
 
-from pydantic import BaseModel, ConfigDict, Field, ValidationError, validator
+from pydantic import field_validator, BaseModel, ConfigDict, Field, ValidationError
 
 
 class LLMProvider(str, Enum):
@@ -43,14 +43,16 @@ class LLMRequest(BaseModel):
 
     model_config = ConfigDict(validate_assignment=True, extra="forbid")
 
-    @validator("prompt")
+    @field_validator("prompt")
+    @classmethod
     def validate_prompt(cls, v: str):
         """Validate and clean prompt input."""
         if not v or not v.strip():
             raise ValueError("Prompt cannot be empty")
         return v.strip()
 
-    @validator("model")
+    @field_validator("model")
+    @classmethod
     def validate_model(cls, v: str):
         """Validate model identifier."""
         if not v or not v.strip():
@@ -85,7 +87,8 @@ class SearchRequest(BaseModel):
     )
     limit: int = Field(default=100, ge=1, le=1000, description="Maximum results")
 
-    @validator("query")
+    @field_validator("query")
+    @classmethod
     def validate_query(cls, v: str):
         """Validate and clean search query."""
         if not v or not v.strip():
@@ -106,7 +109,8 @@ class FileUploadRequest(BaseModel):
         ..., ge=1, le=50 * 1024 * 1024, description="File size in bytes"
     )  # 50MB max
 
-    @validator("filename")
+    @field_validator("filename")
+    @classmethod
     def validate_filename(cls, v: str):
         """Validate filename for security."""
         import os
@@ -128,7 +132,8 @@ class APIKeyRequest(BaseModel):
     scopes: List[str] = Field(default_factory=list, description="API key permissions")
     expires_at: Optional[str] = Field(default=None, description="Expiration timestamp")
 
-    @validator("name")
+    @field_validator("name")
+    @classmethod
     def validate_name(cls, v: str):
         """Validate API key name."""
         if not v or not v.strip():
@@ -149,7 +154,8 @@ class ConfigurationUpdate(BaseModel):
         ..., description="Value type", pattern=r"^(str|int|float|bool|list|dict)$"
     )
 
-    @validator("key")
+    @field_validator("key")
+    @classmethod
     def validate_key(cls, v: str):
         """Validate configuration key."""
         if not v or not v.strip():

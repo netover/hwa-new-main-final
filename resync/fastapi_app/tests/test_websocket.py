@@ -1,7 +1,4 @@
 
-import pytest
-from fastapi.testclient import TestClient
-from resync.fastapi_app.main import app
 
 # Note: WebSocket testing requires special handling
 # This is a placeholder for WebSocket tests

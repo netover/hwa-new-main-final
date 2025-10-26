@@ -2,7 +2,7 @@
 Abstração de armazenamento para o sistema de idempotency.
 """
 
-from typing import Any, Dict, Optional
+from typing import Optional
 
 from redis.asyncio import Redis
 

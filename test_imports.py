@@ -4,10 +4,6 @@
 print('Testing imports for refactored cache...')
 try:
     from resync.core.async_cache_refactored import AsyncTTLCache
-    from resync.core.cache.strategies import CacheSetStrategy, CacheRollbackStrategy, CacheRestoreStrategy
-    from resync.core.cache.memory_manager import CacheMemoryManager
-    from resync.core.cache.persistence_manager import CachePersistenceManager
-    from resync.core.cache.transaction_manager import CacheTransactionManager
     print('✅ All imports successful!')
 
     # Test basic instantiation

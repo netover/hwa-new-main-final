@@ -1,9 +1,13 @@
+"""
+Create vector index for Neo4j RAG system
+"""
 import asyncio
+import traceback
 from neo4j import AsyncGraphDatabase
 from resync.settings import settings
 
 async def create_vector_index():
-    """Create the vector index for Neo4j RAG system"""
+    """Create vector index for Neo4j RAG system"""
     driver = AsyncGraphDatabase.driver(
         settings.NEO4J_URI,
         auth=(settings.NEO4J_USER, settings.NEO4J_PASSWORD),
@@ -40,6 +44,7 @@ async def create_vector_index():
                 
     except Exception as e:
         print(f"Error creating vector index: {str(e)}")
+        traceback.print_exc()
     finally:
         await driver.close()
 

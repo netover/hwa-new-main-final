@@ -7,8 +7,6 @@ integrating with the new health checker architecture.
 
 from __future__ import annotations
 
-import os
-from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional
 
 import structlog

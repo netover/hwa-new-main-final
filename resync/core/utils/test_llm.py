@@ -1,7 +1,6 @@
 from unittest.mock import AsyncMock, MagicMock
 
 import pytest
-from litellm.exceptions import APIError, APIConnectionError
 
 from ..exceptions import LLMError
 from .llm import call_llm

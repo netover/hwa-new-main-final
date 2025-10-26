@@ -22,16 +22,13 @@ import os
 import re
 import time
 import uuid
-from collections import defaultdict, deque
+from collections import deque
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
-from pathlib import Path
-from typing import Any, Dict, List, Optional, Set, Tuple, Union, Callable, TextIO
-import logging
+from typing import Any, Dict, List, Optional, TextIO
 
 import aiohttp
-from aiohttp import web
 
 from resync.core.structured_logger import get_logger
 

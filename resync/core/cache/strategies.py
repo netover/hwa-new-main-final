@@ -15,9 +15,6 @@ from time import time
 from typing import Any, Dict, List, Optional, Tuple
 
 from resync.core.cache.memory_manager import CacheMemoryManager
-from resync.core.cache.persistence_manager import CachePersistenceManager
-from resync.core.cache.transaction_manager import CacheTransactionManager
-from resync.core.exceptions import CacheError
 from resync.core.metrics import log_with_correlation, runtime_metrics
 from resync.core.write_ahead_log import WalEntry, WalOperationType
 

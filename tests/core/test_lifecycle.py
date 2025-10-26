@@ -1,15 +1,11 @@
-from unittest.mock import AsyncMock
 
 import pytest
 from fastapi.testclient import TestClient
 
-from resync.core.container import app_container
-from resync.core.interfaces import IAgentManager, IKnowledgeGraph, ITWSClient
 @pytest.fixture
 def client():
     """Create a TestClient for the FastAPI app."""
     from resync.main import app
-    from fastapi import FastAPI
 
     return TestClient(app)
 

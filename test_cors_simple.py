@@ -534,8 +534,6 @@ def main() -> None:
 
     except Exception as e:
         print(f"[FAIL] Test failed: {e}")
-        import traceback
-
         traceback.print_exc()
         sys.exit(1)
 

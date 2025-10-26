@@ -7,10 +7,9 @@ different modules, reducing direct dependencies and enabling better decoupling.
 
 from __future__ import annotations  
 
-import asyncio  
 import logging  
 from abc import abstractmethod  
-from typing import Any, Optional, Protocol, Union  
+from typing import Any, Optional, Protocol  
 
 from resync.core.cache_hierarchy import (
     get_cache_hierarchy,

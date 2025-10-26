@@ -1,4 +1,3 @@
-import asyncio
 import pytest
 import httpx
 from resync.services.rag_client import RAGServiceClient

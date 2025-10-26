@@ -3,15 +3,14 @@
 Chat routes for FastAPI with RAG integration
 """
 from fastapi import APIRouter, HTTPException, status, Depends, BackgroundTasks
-from typing import Optional
 
 # Import RAG components
 from resync.RAG.microservice.core.embedding_service import EmbeddingService
-from resync.RAG.microservice.core.vector_store import QdrantVectorStore, get_default_store
+from resync.RAG.microservice.core.vector_store import get_default_store
 from resync.RAG.microservice.core.retriever import RagRetriever
 from resync.RAG.microservice.core.ingest import IngestService
 
-from ..dependencies import get_current_user, get_logger
+from ..dependencies import get_logger
 from ..models.request_models import ChatMessageRequest, ChatHistoryQuery
 from ..models.response_models import ChatMessageResponse
 

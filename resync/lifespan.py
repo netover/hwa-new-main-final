@@ -19,11 +19,10 @@ from typing import AsyncIterator
 
 from fastapi import FastAPI
 from redis.exceptions import (
-    AuthenticationError,
-    BusyLoadingError,
-    ConnectionError,
-    ResponseError,
-    TimeoutError,
+    AuthenticationError as RedisAuthError,
+    BusyLoadingError as RedisBusyLoadingError,
+    ConnectionError as RedisConnectionError,
+    TimeoutError as RedisTimeoutError,
 )
 
 from resync.api_gateway.container import setup_dependencies
@@ -48,6 +47,7 @@ _EAGER = os.getenv("RESYNC_EAGER_BOOT") == "1"
 _BOOTED = False
 
 def boot_if_needed():
+    """Boot lifespan components if needed, preventing multiple initializations."""
     global _BOOTED
     if _BOOTED:
         return
@@ -66,7 +66,7 @@ def get_redis_initializer() -> RedisInitializer:
     """Get the global Redis initializer instance with lazy initialization."""
     global _redis_initializer
     if _redis_initializer is None:
-        _
+        _redis_initializer = RedisInitializer()
     return _redis_initializer
 
 # Create a global RedisInitializer instance
@@ -97,7 +97,7 @@ async def redis_connection_manager() -> AsyncIterator:
 
         yield client
 
-    except ConnectionError as e:
+    except RedisConnectionError as e:
         logger.error(
             "redis_connection_failed",
             error=str(e),
@@ -112,14 +112,14 @@ async def redis_connection_manager() -> AsyncIterator:
             },
         ) from e
 
-    except AuthenticationError as e:
+    except RedisAuthError as e:
         logger.error("redis_auth_failed", error=str(e))
         raise RedisAuthError(
             "Falha de autenticação no Redis",
             details={"error": str(e), "hint": "Verifique REDIS_URL no .env"},
         ) from e
 
-    except TimeoutError as e:
+    except RedisTimeoutError as e:
         logger.error("redis_timeout", error=str(e))
         raise RedisTimeoutError(
             "Timeout ao conectar ao Redis",

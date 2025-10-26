@@ -3,9 +3,7 @@ Optimized thread executors for different workload types.
 """
 
 import os
-import asyncio
 from concurrent.futures import ThreadPoolExecutor
-from typing import Optional
 
 class OptimizedExecutors:
     """Optimized thread executors for different workload types"""

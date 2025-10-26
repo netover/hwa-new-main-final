@@ -2,10 +2,8 @@
 Unit tests for IngestService.
 """
 
-import asyncio
 import hashlib
-from typing import List
-from unittest.mock import AsyncMock, MagicMock
+from unittest.mock import AsyncMock
 
 import pytest
 

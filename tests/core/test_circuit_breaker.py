@@ -3,10 +3,8 @@ Tests for Adaptive Circuit Breaker functionality - Optimized for speed.
 """
 
 import pytest
-import asyncio
-from unittest.mock import patch
 
-from resync.core.resilience import CircuitBreakerManager, CircuitBreakerConfig
+from resync.core.resilience import CircuitBreakerManager
 
 
 class TestAdaptiveCircuitBreaker:

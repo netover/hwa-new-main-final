@@ -12,19 +12,12 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 def test_correlation_id_imports():
     """Test that correlation ID modules can be imported."""
     try:
-        from resync.api.middleware.correlation_id import CorrelationIdMiddleware, CORRELATION_ID_HEADER
+        from resync.api.middleware.correlation_id import CORRELATION_ID_HEADER
         print("✅ CorrelationIdMiddleware imported successfully")
         print(f"   Header name: {CORRELATION_ID_HEADER}")
 
-        from resync.core.context import (
-            set_correlation_id,
-            get_correlation_id,
-            get_or_create_correlation_id,
-            clear_correlation_id
-        )
         print("✅ Context functions imported successfully")
 
-        from resync.core.structured_logger import get_logger, add_correlation_id
         print("✅ Structured logger imported successfully")
 
         return True

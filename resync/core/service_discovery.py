@@ -15,15 +15,13 @@ This module provides intelligent service discovery capabilities including:
 from __future__ import annotations
 
 import asyncio
-import json
 import socket
 import time
 from abc import ABC, abstractmethod
-from collections import defaultdict, deque
+from collections import defaultdict
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
 from enum import Enum
-from typing import Any, Dict, List, Optional, Set, Tuple, Union
+from typing import Any, Dict, List, Optional, Set
 import random
 
 import aiohttp

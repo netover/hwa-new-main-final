@@ -3,7 +3,7 @@ import os
 import time
 import tempfile
 import shutil
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 import pytest
 from resync.core.async_cache import AsyncTTLCache
 from resync.core.shard_balancer import ShardBalancer
@@ -11,8 +11,6 @@ from resync.core.adaptive_eviction import AdaptiveEviction
 from resync.core.incident_response import IncidentResponse
 from resync.core.snapshot_cleaner import SnapshotCleaner
 from resync.core.metrics import runtime_metrics
-from resync.settings import settings
-from resync.core.exceptions import CacheError
 
 # Set test configuration
 os.environ["CACHE_VALIDATION_MODE"] = "strict"

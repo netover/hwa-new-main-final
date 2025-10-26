@@ -15,7 +15,6 @@ import asyncio
 import pytest
 import time
 from unittest.mock import AsyncMock, Mock, patch
-from datetime import datetime, timedelta
 
 from resync.core.chaos_engineering import (
     ChaosEngineer,

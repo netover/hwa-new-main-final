@@ -12,10 +12,8 @@ This module tests:
 """
 
 import asyncio
-import threading
 import time
 from asyncio import Lock
-from dataclasses import asdict
 from unittest.mock import AsyncMock, Mock, patch
 
 import pytest

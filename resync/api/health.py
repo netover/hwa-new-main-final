@@ -60,10 +60,10 @@ class ComponentHealthResponse(BaseModel):
     status: str
     status_color: str
     message: str
-    response_time_ms: float | None
+    response_time_ms: float | None = None
     last_check: str
     error_count: int
-    metadata: dict[str, Any] | None
+    metadata: dict[str, Any] | None = None
 
 
 class DetailedHealthResponse(BaseModel):

@@ -1,67 +1,98 @@
 """
 Hardened Core Package Initialization for Resync
 
-This module provides hardened initialization and lifecycle management for core components
-with comprehensive error handling, health validation, and security measures.
+This module provides hardened initialization and lifecycle management for core
+components with comprehensive error handling, health validation, and
+security measures.
 """
 
-import asyncio
+import collections
+import importlib
 import logging
 import os
-import re
+import tempfile
 import threading
 import time
 from typing import Any, Dict, Optional, Set
 
+# Feature flags
+USE_CORE_BOOT_V2 = os.getenv("USE_CORE_BOOT_V2", "true").lower() in ("true", "1", "yes")
+
+# Constants
+MAX_GLOBAL_EVENTS = 100
+VALIDATION_CACHE_TTL = 60  # seconds
+
+# Import from local modules
+# Direct imports of exceptions for stability and simplicity
+from resync.core.exceptions import (
+    AuditError, DatabaseError, PoolExhaustedError, ToolProcessingError,
+    BaseAppException, InvalidConfigError, AgentExecutionError,
+    AuthenticationError, LLMError, RedisConnectionError
+)
+
 # Initialize logger early
 logger = logging.getLogger(__name__)
 
-# Import from local modules
-from .config_watcher import handle_config_change
-from .metrics import runtime_metrics
+
+class CorrelationIdFilter(logging.Filter):
+    """Logging filter to inject correlation_id into all log records."""
+    
+    def __init__(self, correlation_id_getter=None):
+        super().__init__()
+        self.correlation_id_getter = correlation_id_getter
+
+    def filter(self, record):
+        if self.correlation_id_getter:
+            try:
+                correlation_id = self.correlation_id_getter()
+                if correlation_id:
+                    record.correlation_id = correlation_id
+            except:
+                # If getting correlation_id fails, don't crash
+                pass
+        return True
 
 # Lazy loading for heavy imports to avoid collection issues
 _LAZY_EXPORTS = {
     "AsyncTTLCache": ("resync.core.async_cache", "AsyncTTLCache"),
 }
 _LOADED_EXPORTS = {}
+_LAZY_LOAD_LOCK = threading.Lock()
+
 
 def __getattr__(name: str):
-    """PEP 562 lazy loading for heavy imports."""
+    """PEP 562 lazy loading for heavy imports with thread safety."""
     if name in _LAZY_EXPORTS:
         mod, attr = _LAZY_EXPORTS[name]
+        # Use double-checked locking pattern for thread safety
         if name not in _LOADED_EXPORTS:
-            module = __import__(mod, fromlist=[attr])
-            _LOADED_EXPORTS[name] = getattr(module, attr)
+            with _LAZY_LOAD_LOCK:
+                if name not in _LOADED_EXPORTS:
+                    try:
+                        module = importlib.import_module(mod)
+                        _LOADED_EXPORTS[name] = getattr(module, attr)
+                    except ImportError as e:
+                        raise ImportError(f"Cannot import {attr} from {mod}: {e}") from e
+                    except AttributeError as e:
+                        raise AttributeError(f"Module {mod} does not have attribute {attr}: {e}") from e
         return _LOADED_EXPORTS[name]
     raise AttributeError(f"module '{__name__}' has no attribute '{name}'")
 
-def get_async_ttl_cache_class():
-    """Explicit accessor to avoid import-time side effects."""
-    from .async_cache import AsyncTTLCache
-    return AsyncTTLCache
 
-# Direct imports of exceptions for stability and simplicity
-from .exceptions import (
-    AuditError,
-    DatabaseError,
-    PoolExhaustedError,
-    ToolProcessingError,
-    BaseAppException,
-    InvalidConfigError,
-    AgentExecutionError,
-    AuthenticationError,
-    LLMError,
-    RedisConnectionError,
-)
 # SOC2 Compliance - import available but commented to avoid circular imports
-# Use direct import when needed: from resync.core.soc2_compliance_refactored import SOC2ComplianceManager
-# from .soc2_compliance_refactored import SOC2ComplianceManager, soc2_compliance_manager, get_soc2_compliance_manager
+# SOC2 Compliance - import available but commented to avoid circular imports
+# Use direct import when needed: from resync.core.soc2_compliance_refactored
+# import (
+#     SOC2ComplianceManager)
+# from .soc2_compliance_refactored import (
+#     SOC2ComplianceManager, soc2_compliance_manager,
+#     get_soc2_compliance_manager)
 
 
 # --- Core Component Boot Manager ---
 class CoreBootManager:
-    """Hardened boot manager for core components with lifecycle tracking and health validation."""
+    """Hardened boot manager for core components with lifecycle tracking and
+    health validation."""
 
     def __init__(self):
         self._components: Dict[str, Any] = {}
@@ -69,25 +100,27 @@ class CoreBootManager:
         self._health_status: Dict[str, Dict[str, Any]] = {}
         self._boot_lock = threading.RLock()
         # Global correlation ID for distributed tracing
-        self._correlation_id = f"core_boot_{int(time.time())}_{os.urandom(4).hex()}"
+        self._correlation_id = (
+            f"core_boot_{int(time.time())}_{os.urandom(4).hex()}"
+        )
         self._failed_imports: Set[str] = set()
         self._global_correlation_context = {
             "boot_id": self._correlation_id,
             "environment": "unknown",  # Will be set by env_detector
             "security_level": "unknown",
             "start_time": time.time(),
-            "events": [],
+            "events": collections.deque(maxlen=100),
         }
 
     def register_component(self, name: str, component: Any) -> None:
         """Register a component. Health checks are deferred."""
         with self._boot_lock:
-            start_time = time.time()
+            start_time = time.perf_counter()
             try:
                 self._components[name] = component
-                self._boot_times[name] = time.time() - start_time
-            except Exception as e:
-                logger.error(f"Failed to register component {name}: {e}")
+                self._boot_times[name] = time.perf_counter() - start_time
+            except (OSError, RuntimeError, ValueError) as e:
+                logger.error("Failed to register component %s: %s", name, e)
                 raise
 
     def get_component(self, name: str) -> Any:
@@ -109,15 +142,33 @@ class CoreBootManager:
     ) -> None:
         """Add a trace event to the global correlation context."""
         with self._boot_lock:
+            # Sanitize inputs to prevent injection or malformed data
+            sanitized_event = self._sanitize_log_data(event)
+            sanitized_data = self._sanitize_log_data(data or {})
+            
             self._global_correlation_context["events"].append(
-                {"timestamp": time.time(), "event": event, "data": data or {}}
+                {"timestamp": time.time(), "event": sanitized_event, "data": sanitized_data}
             )
+            # Deque automatically handles size limitation (maxlen=100)
 
-            # Keep only last 100 events to prevent memory growth
-            if len(self._global_correlation_context["events"]) > 100:
-                self._global_correlation_context["events"] = (
-                    self._global_correlation_context["events"][-100:]
-                )
+    def _sanitize_log_data(self, obj: Any) -> Any:
+        """Recursively sanitize log data to prevent injection or malformed data."""
+        if isinstance(obj, str):
+            # Remove potential control characters that could mess up logs
+            return obj.replace("\x00", "").replace("\n", "\\n").replace("\r", "\\r")
+        elif isinstance(obj, dict):
+            sanitized = {}
+            for key, value in obj.items():
+                # Sanitize both keys and values
+                sanitized_key = self._sanitize_log_data(str(key)) if key is not None else "null_key"
+                sanitized_value = self._sanitize_log_data(value)
+                sanitized[sanitized_key] = sanitized_value
+            return sanitized
+        elif isinstance(obj, (list, tuple)):
+            return [self._sanitize_log_data(item) for item in obj]
+        else:
+            # For other types, return as-is or convert to string as appropriate
+            return obj
 
     def get_global_correlation_id(self) -> str:
         """Get the global correlation ID for distributed tracing."""
@@ -135,7 +186,8 @@ class CoreBootManager:
 
 # --- Environment Detection and Validation ---
 class EnvironmentDetector:
-    """Detect and validate execution environment for security and compatibility."""
+    """Detect and validate execution environment for security and
+    compatibility."""
 
     def __init__(self):
         self._validation_cache = {}
@@ -147,7 +199,9 @@ class EnvironmentDetector:
             "platform": os.name,
             "is_ci": bool(os.environ.get("CI")),
             "has_internet": self._check_internet_access(),
-            "temp_dir": os.environ.get("TEMP", "/tmp"),
+            "temp_dir": os.environ.get(
+                "TEMP", os.environ.get("TMP", tempfile.gettempdir())
+            ),
         }
 
     def _check_internet_access(self) -> bool:
@@ -158,8 +212,8 @@ class EnvironmentDetector:
     def validate_environment(self) -> bool:
         """Validate execution environment for security compliance."""
         try:
-            # Cache validation for 60 seconds
-            current_time = time.time()
+            # Cache validation for 60 seconds using monotonic time
+            current_time = time.monotonic()
             if current_time - self._last_validation < 60:
                 return self._validation_cache.get("result", True)
 
@@ -175,109 +229,103 @@ class EnvironmentDetector:
             self._last_validation = current_time
 
             return env_ok
-        except Exception as e:
-            logger.warning(f"Environment validation failed: {e}")
+        except (OSError, RuntimeError, ValueError) as e:
+            logger.warning("Environment validation failed: %s", e)
             return False
 
 
 # --- Lazy Import Functions ---
 # Use explicit lazy import functions instead of __getattr__ to avoid initialization issues
 
-def _get_env_detector():
-    """Lazy import of EnvironmentDetector."""
-    from resync.core.environment_detector import EnvironmentDetector
-    return EnvironmentDetector()
+# --- Module-level singleton instance ---
+_boot_manager_instance = None
+_boot_manager_lock = threading.Lock()
 
-def _get_boot_manager():
-    """Lazy import of CoreBootManager."""
-    from resync.core.lifecycle import CoreBootManager
-    return CoreBootManager()
+def get_boot_manager():
+    """Get the singleton instance of CoreBootManager."""
+    global _boot_manager_instance
+    if _boot_manager_instance is None:
+        with _boot_manager_lock:
+            if _boot_manager_instance is None:
+                _boot_manager_instance = CoreBootManager()
+    return _boot_manager_instance
 
-def _get_settings():
-    """Lazy import of settings."""
-    from resync.settings import settings
-    return settings
+# --- Remove duplicated lazy import functions ---
+
+
+# Import at module level to avoid import-outside-toplevel warning
+try:
+    from resync.core.structured_logger import get_logger as _get_logger_func
+except ImportError:
+    # Fallback if structured_logger is not available
+    def _get_logger_func(name):
+        return logging.getLogger(name)
+
 
 def _get_logger():
     """Lazy import of logger."""
-    from resync.core.structured_logger import get_logger
-    return get_logger
+    return _get_logger_func(__name__)
 
-def _get_metrics():
-    """Lazy import of runtime metrics."""
-    from resync.core.metrics import runtime_metrics
-    return runtime_metrics
+# --- Remove get_async_ttl_cache_class (duplicated with __getattr__) ---
 
-def _get_cache_hierarchy():
-    """Lazy import of cache hierarchy."""
-    from resync.core.cache_hierarchy import get_cache_hierarchy
-    return get_cache_hierarchy
-
-def _get_container():
-    """Lazy import of DI container."""
-    from resync.core.di_container import container
-    return container
-
-def _get_config_watcher():
-    """Lazy import of config watcher."""
-    from resync.core.config_watcher import handle_config_change
-    return handle_config_change
-
-
-# --- Backward Compatibility ---
-# Keep old lazy initialization for compatibility
-def _initialize_core_components():
-    """Legacy initialization - now using __getattr__."""
-    # Components are now loaded lazily via __getattr__
-    pass
-
-
-# --- Global Access Functions ---
-# Imported from global_utils.py to avoid circular imports
+# --- Update global access functions to use get_boot_manager ---
 
 
 def get_global_correlation_id() -> str:
     """Get the global correlation ID for distributed tracing."""
-    _initialize_core_components()
-    return boot_manager.get_global_correlation_id()
+    return get_boot_manager().get_global_correlation_id()
 
 
 def get_environment_tags() -> Dict[str, Any]:
     """Get environment tags for mock detection and debugging."""
-    _initialize_core_components()
-    return boot_manager.get_environment_tags()
+    return get_boot_manager().get_environment_tags()
 
+
+def add_global_trace_event(
+    event: str, data: Optional[Dict[str, Any]] = None
+) -> None:
+    """Add a trace event to the global correlation context."""
+    get_boot_manager().add_global_event(event, data)
 
 # Validate environment on import
-def add_global_trace_event(event: str, data: Optional[Dict[str, Any]] = None) -> None:
-    """Add a trace event to the global correlation context."""
-    _initialize_core_components()
-    boot_manager.add_global_event(event, data)
-
-
-# Validate environment on import (lazy)
 def _validate_environment():
     """Validate environment lazily."""
     try:
-        env_detector = _get_env_detector()
-        boot_manager = _get_boot_manager()
-        lazy_logger = _get_logger()
-        logger = lazy_logger(__name__)
+        env_detector = EnvironmentDetector()
+        bm = get_boot_manager()
+        log = _get_logger()
 
         if not env_detector.validate_environment():
-            logger.error(
+            log.warning(
                 "Environment validation failed - system may not be secure",
-                extra={"correlation_id": boot_manager._correlation_id},
+                extra={"correlation_id": bm.get_global_correlation_id()}
             )
-            # Don't raise exception here to avoid import failures, but log critically
-    except Exception as e:
+    except (ImportError, AttributeError, OSError, RuntimeError) as e:
         # If validation fails, log but don't crash
         try:
-            lazy_logger = _get_logger()
-            logger = lazy_logger(__name__)
-            logger.warning(f"Environment validation failed: {e}")
-        except:
+            log = _get_logger()
+            log.warning("Environment validation failed: %s", e)
+        except (ImportError, RuntimeError):
             pass  # Avoid circular import issues
 
-# Validation is now optional and lazy - call _validate_environment() explicitly when needed
+# Validation is now optional and lazy - call _validate_environment() explicitly
+# when needed
 # _validate_environment()  # Commented out to avoid import-time execution
+
+# --- Add explicit __all__ for public API ---
+
+
+__all__ = [
+    "CoreBootManager", "EnvironmentDetector",
+    "get_boot_manager", "get_global_correlation_id",
+    "get_environment_tags", "add_global_trace_event",
+    # AsyncTTLCache is available through lazy loading via __getattr__
+    # Exceções re-exportadas:
+    "AuditError", "DatabaseError", "PoolExhaustedError", "ToolProcessingError",
+    "BaseAppException", "InvalidConfigError", "AgentExecutionError",
+    "AuthenticationError", "LLMError", "RedisConnectionError",
+]
+
+# Add AsyncTTLCache to __all__ only if it's properly defined in lazy exports
+if "AsyncTTLCache" in _LAZY_EXPORTS:
+    __all__.append("AsyncTTLCache")

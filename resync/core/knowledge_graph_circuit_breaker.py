@@ -6,8 +6,7 @@ This module provides a circuit breaker-protected interface to Neo4j operations,
 preventing cascading failures when the Neo4j service becomes unavailable.
 """
 
-import asyncio
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from resync.core.exceptions import KnowledgeGraphError
 from resync.core.structured_logger import get_logger

@@ -4,11 +4,10 @@ Simple test to validate health check calculations.
 """
 
 import sys
-import os
 import enum
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 # Define the enums and classes directly to avoid import issues
 class HealthStatus(enum.Enum):

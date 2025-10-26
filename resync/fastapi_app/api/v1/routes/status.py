@@ -4,7 +4,7 @@ System status routes for FastAPI
 """
 from fastapi import APIRouter, Depends
 from ..models.response_models import SystemStatusResponse
-from ..dependencies import get_current_user, get_logger
+from ..dependencies import get_logger
 
 router = APIRouter()
 

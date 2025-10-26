@@ -12,18 +12,15 @@ This script measures the performance of key components after optimization:
 import asyncio
 import time
 import psutil
-import os
 import json
 import sys
 from pathlib import Path
-from typing import List, Dict, Any, Optional
+from typing import Dict, Any
 import orjson
-import aiosqlite
 from resync.core.utils.executors import OptimizedExecutors
 from resync.core.encryption_service import EncryptionService
 from resync.core.file_ingestor import FileIngestor
 from resync.core.audit_db import get_db_connection
-from resync.settings import settings
 
 # Configure logging with UTF-8 encoding for Windows
 import codecs

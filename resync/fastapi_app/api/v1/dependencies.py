@@ -4,7 +4,6 @@ Dependencies for FastAPI endpoints
 """
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from typing import Optional
 import redis
 import logging
 

@@ -1,5 +1,4 @@
 from resync.core.encoding_utils import symbol, can_encode
-import sys
 
 print('=== Validação da Solução de Encoding ===')
 print()

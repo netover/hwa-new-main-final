@@ -10,8 +10,7 @@ import logging.config
 import sys
 import time
 import uuid
-from typing import Dict, Any, Optional
-import json
+from typing import Optional
 
 try:
     import structlog

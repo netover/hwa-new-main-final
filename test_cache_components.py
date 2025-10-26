@@ -1,26 +1,26 @@
 #!/usr/bin/env python3
 """
-Simple test for the refactored cache components without full application dependencies.
+Simple test for refactored cache components without full application dependencies.
 """
 
 import asyncio
 import sys
 import os
+import traceback
 
-# Add the project root to Python path
+# Add project root to Python path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+# Import components at module level
+from resync.core.cache.memory_manager import CacheMemoryManager, CacheEntry
+from resync.core.cache.persistence_manager import CachePersistenceManager
+from resync.core.cache.transaction_manager import CacheTransactionManager
 
 async def test_cache_components():
     """Test the cache components directly."""
     print("Testing cache components...")
 
     try:
-        # Test importing individual components
-        from resync.core.cache.base_cache import BaseCache
-        from resync.core.cache.memory_manager import CacheMemoryManager, CacheEntry
-        from resync.core.cache.persistence_manager import CachePersistenceManager
-        from resync.core.cache.transaction_manager import CacheTransactionManager
-
         print("✓ All cache components imported successfully")
 
         # Test CacheMemoryManager
@@ -39,7 +39,7 @@ async def test_cache_components():
         entry = CacheEntry(data="test", timestamp=1234567890.0, ttl=60.0)
         print(f"✓ CacheEntry created: {entry}")
 
-        # Test the refactored cache
+        # Test refactored cache
         from resync.core.cache.async_cache_refactored import AsyncTTLCache
 
         cache = AsyncTTLCache(
@@ -77,7 +77,6 @@ async def test_cache_components():
 
     except Exception as e:
         print(f"✗ Cache component test failed: {e}")
-        import traceback
         traceback.print_exc()
         return False
 

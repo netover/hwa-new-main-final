@@ -48,7 +48,7 @@ class Link(BaseModel):
     )
 
     type: Optional[str] = Field(
-        None, description="Tipo de mídia", example="application/json"
+        None, description="Tipo de mídia", examples=["application/json"]
     )
 
 

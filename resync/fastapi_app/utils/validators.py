@@ -3,7 +3,7 @@
 Validation utilities for FastAPI application
 """
 import re
-from typing import Optional, List
+from typing import Optional
 from pathlib import Path
 from ..core.config import settings
 

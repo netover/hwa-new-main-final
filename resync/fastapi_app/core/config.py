@@ -2,9 +2,8 @@
 """
 Core configuration for FastAPI application
 """
-from pydantic import BaseSettings
-from typing import Optional, List
-import os
+from typing import List
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     """Application settings loaded from environment variables"""
@@ -52,10 +51,7 @@ class Settings(BaseSettings):
     cors_allow_credentials: bool = True
     cors_allow_methods: List[str] = ["*"]
     cors_allow_headers: List[str] = ["*"]
-
-    class Config:
-        env_file = ".env"
-        case_sensitive = False
+    model_config = SettingsConfigDict(env_file=".env", case_sensitive=False)
 
 # Global settings instance
 settings = Settings()

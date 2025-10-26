@@ -8,7 +8,7 @@ including thresholds, intervals, and component-specific settings.
 from __future__ import annotations
 
 import os
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 import structlog

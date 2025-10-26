@@ -37,6 +37,8 @@ class ConnectionPoolStats:
     pool_hits: int = 0
     pool_misses: int = 0
     pool_exhaustions: int = 0
+    acquisition_attempts: int = 0  # Nova métrica para contagem de tentativas de aquisição
+    session_acquisitions: int = 0   # Nova métrica para contagem de sessões adquiridas com sucesso
     last_health_check: Optional[datetime] = None
     average_wait_time: float = 0.0
     peak_connections: int = 0

@@ -91,14 +91,28 @@ import logging
 logger = logging.getLogger(__name__)
 
 def create_tws_http_client(*, base_url: str | None = None, auth=None, verify: bool | str | None = None, **kwargs) -> AsyncClient:
-    scheme = settings.TWS_SCHEME
+    # Use http by default for TWS
     host = settings.TWS_HOST
     port = settings.TWS_PORT
-    final_base = base_url or f"{scheme}://{host}:{port}"
+    final_base = base_url or f"http://{host}:{port}"
     # Enforce TWS-specific verification setting
     verify_param = settings.TWS_VERIFY if verify is None else verify
 
-    # ... timeout and limits config ...
+    # Define timeout values based on settings
+    timeout = httpx.Timeout(
+        connect=getattr(settings, "TWS_CONNECT_TIMEOUT", DEFAULT_CONNECT_TIMEOUT),
+        read=getattr(settings, "TWS_READ_TIMEOUT", DEFAULT_READ_TIMEOUT),
+        write=getattr(settings, "TWS_WRITE_TIMEOUT", DEFAULT_WRITE_TIMEOUT),
+        pool=getattr(settings, "TWS_POOL_TIMEOUT", DEFAULT_POOL_TIMEOUT),
+    )
+
+    limits = httpx.Limits(
+        max_connections=getattr(settings, "TWS_MAX_CONNECTIONS", DEFAULT_MAX_CONNECTIONS),
+        max_keepalive_connections=getattr(
+            settings, "TWS_MAX_KEEPALIVE", DEFAULT_MAX_KEEPALIVE_CONNECTIONS
+        ),
+    )
+
     return AsyncClient(
         base_url=final_base,
         auth=auth,

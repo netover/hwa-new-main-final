@@ -4,7 +4,6 @@ Test script for Neo4j Circuit Breaker implementation.
 This script tests the circuit breaker protection for Neo4j operations.
 """
 
-import os
 import sys
 import asyncio
 from pathlib import Path

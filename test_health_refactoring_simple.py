@@ -7,7 +7,6 @@ This script tests the core components without full dependency chain.
 
 import asyncio
 import sys
-import time
 from datetime import datetime
 
 # Add the project root to Python path

@@ -7,8 +7,9 @@ from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional, Pattern, Union
 
-from pydantic import BaseModel, ConfigDict, Field, validator
+from pydantic import field_validator, StringConstraints, BaseModel, ConfigDict, Field
 from pydantic.types import constr
+from typing_extensions import Annotated
 
 
 class ValidationErrorResponse(BaseModel):
@@ -72,7 +73,8 @@ class BaseValidatedModel(BaseModel):
                 sanitized_value = sanitize_input(field_value)
                 setattr(self, field_name, sanitized_value)
 
-    @validator("*", pre=True)
+    @field_validator("*", mode="before")
+    @classmethod
     def strip_strings(cls, v):
         """Strip whitespace from string fields."""
         if isinstance(v, str):
@@ -84,46 +86,46 @@ class StringConstraints:
     """Common string validation constraints."""
 
     # Agent IDs: alphanumeric, underscore, hyphen (3-50 chars)
-    AGENT_ID = constr(
+    AGENT_ID = Annotated[str, StringConstraints(
         pattern=r"^[a-zA-Z0-9_-]+$", min_length=3, max_length=50, strip_whitespace=True
-    )
+    )]
 
     # Safe text: alphanumeric, spaces, common punctuation
-    SAFE_TEXT = constr(
+    SAFE_TEXT = Annotated[str, StringConstraints(
         pattern=r"^[a-zA-Z0-9\s.,!?'\"()\-:;]*$",
         min_length=1,
         max_length=1000,
         strip_whitespace=True,
-    )
+    )]
 
     # Role/Goal text: more permissive but still safe
-    ROLE_TEXT = constr(
+    ROLE_TEXT = Annotated[str, StringConstraints(
         pattern=r"^[a-zA-Z0-9\s.,!?'\"()\-:;/]+$",
         min_length=5,
         max_length=500,
         strip_whitespace=True,
-    )
+    )]
 
     # Model names: alphanumeric and common separators
-    MODEL_NAME = constr(
+    MODEL_NAME = Annotated[str, StringConstraints(
         pattern=r"^[a-zA-Z0-9\-:_/]+$",
         min_length=3,
         max_length=100,
         strip_whitespace=True,
-    )
+    )]
 
     # Tool names: alphanumeric and underscore
-    TOOL_NAME = constr(
+    TOOL_NAME = Annotated[str, StringConstraints(
         pattern=r"^[a-zA-Z0-9_]+$", min_length=3, max_length=50, strip_whitespace=True
-    )
+    )]
 
     # File names: alphanumeric, underscore, hyphen, dot
-    FILENAME = constr(
+    FILENAME = Annotated[str, StringConstraints(
         pattern=r"^[a-zA-Z0-9_.\-]+$",
         min_length=1,
         max_length=255,
         strip_whitespace=True,
-    )
+    )]
 
 
 class UUIDValidator:

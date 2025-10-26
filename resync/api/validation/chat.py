@@ -4,7 +4,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional
 
-from pydantic import Field, validator, ConfigDict
+from pydantic import field_validator, StringConstraints, Field, validator, ConfigDict
 from pydantic.types import constr
 
 from .common import (
@@ -13,6 +13,7 @@ from .common import (
     StringConstraints,
     ValidationPatterns,
 )
+from typing_extensions import Annotated
 
 
 class MessageType(str, Enum):
@@ -40,12 +41,12 @@ class MessageStatus(str, Enum):
 class ChatMessage(BaseValidatedModel):
     """Chat message validation model."""
 
-    content: constr(
+    content: Annotated[str, StringConstraints(
         min_length=NumericConstraints.MIN_MESSAGE_LENGTH,
         max_length=NumericConstraints.MAX_MESSAGE_LENGTH,
         strip_whitespace=True,
-    ) = Field(
-        ..., description="Message content", example="Hello, how can I help you today?"
+    )] = Field(
+        ..., description="Message content", examples=["Hello, how can I help you today?"]
     )
 
     message_type: MessageType = Field(
@@ -53,11 +54,11 @@ class ChatMessage(BaseValidatedModel):
     )
 
     sender: StringConstraints.SAFE_TEXT = Field(
-        ..., description="Message sender identifier", example="user123"
+        ..., description="Message sender identifier", examples=["user123"]
     )
 
     recipient: Optional[StringConstraints.SAFE_TEXT] = Field(
-        None, description="Message recipient identifier", example="agent_tws_specialist"
+        None, description="Message recipient identifier", examples=["agent_tws_specialist"]
     )
 
     session_id: Optional[StringConstraints.AGENT_ID] = Field(
@@ -87,7 +88,8 @@ class ChatMessage(BaseValidatedModel):
         validate_assignment=True,
     )
 
-    @validator("content")
+    @field_validator("content")
+    @classmethod
     def validate_message_content(cls, v):
         """Validate message content for malicious patterns."""
         if not v or not v.strip():
@@ -106,14 +108,16 @@ class ChatMessage(BaseValidatedModel):
             )
         return v
 
-    @validator("sender", "recipient")
+    @field_validator("sender", "recipient")
+    @classmethod
     def validate_user_identifiers(cls, v):
         """Validate user identifiers."""
         if v and not v.replace("_", "").replace("-", "").isalnum():
             raise ValueError("User identifier contains invalid characters")
         return v
 
-    @validator("metadata")
+    @field_validator("metadata")
+    @classmethod
     def validate_metadata(cls, v):
         """Validate message metadata."""
         if not v:
@@ -149,11 +153,11 @@ class WebSocketMessage(BaseValidatedModel):
     sender: StringConstraints.SAFE_TEXT = Field(..., description="Message sender")
 
     message: Optional[
-        constr(
+        Annotated[str, StringConstraints(
             min_length=1,
             max_length=NumericConstraints.MAX_MESSAGE_LENGTH,
             strip_whitespace=True,
-        )
+        )]
     ] = Field(None, description="Message content")
 
     agent_id: StringConstraints.AGENT_ID = Field(..., description="Target agent ID")
@@ -183,6 +187,8 @@ class WebSocketMessage(BaseValidatedModel):
         validate_assignment=True,
     )
 
+    # TODO[pydantic]: We couldn't refactor the `validator`, please replace it by `field_validator` manually.
+    # Check https://docs.pydantic.dev/dev-v2/migration/#changes-to-validators for more information.
     @validator("message")
     def validate_message_content(cls, v, values):
         """Validate message content based on type."""
@@ -201,7 +207,8 @@ class WebSocketMessage(BaseValidatedModel):
             raise ValueError("Message contains invalid characters")
         return v
 
-    @validator("metadata")
+    @field_validator("metadata")
+    @classmethod
     def validate_websocket_metadata(cls, v):
         """Validate WebSocket message metadata."""
         if not v:
@@ -283,7 +290,7 @@ class ChatHistoryRequest(BaseValidatedModel):
     )
 
     search_query: Optional[
-        constr(min_length=1, max_length=100, strip_whitespace=True)
+        Annotated[str, StringConstraints(min_length=1, max_length=100, strip_whitespace=True)]
     ] = Field(None, description="Search query for message content")
 
     limit: int = Field(
@@ -306,6 +313,8 @@ class ChatHistoryRequest(BaseValidatedModel):
         extra="forbid",
     )
 
+    # TODO[pydantic]: We couldn't refactor the `validator`, please replace it by `field_validator` manually.
+    # Check https://docs.pydantic.dev/dev-v2/migration/#changes-to-validators for more information.
     @validator("end_date")
     def validate_date_range(cls, v, values):
         """Validate date range."""
@@ -314,7 +323,8 @@ class ChatHistoryRequest(BaseValidatedModel):
             raise ValueError("End date must be after start date")
         return v
 
-    @validator("search_query")
+    @field_validator("search_query")
+    @classmethod
     def validate_search_query(cls, v):
         """Validate search query."""
         if v and ValidationPatterns.SCRIPT_PATTERN.search(v):
@@ -327,7 +337,7 @@ class MessageReaction(BaseValidatedModel):
 
     message_id: str = Field(..., description="ID of the message being reacted to")
 
-    reaction: constr(min_length=1, max_length=10, strip_whitespace=True) = Field(
+    reaction: Annotated[str, StringConstraints(min_length=1, max_length=10, strip_whitespace=True)] = Field(
         ..., description="Reaction emoji or text"
     )
 
@@ -343,7 +353,8 @@ class MessageReaction(BaseValidatedModel):
         extra="forbid",
     )
 
-    @validator("reaction")
+    @field_validator("reaction")
+    @classmethod
     def validate_reaction(cls, v):
         """Validate reaction format."""
         # Allow common emojis and simple text reactions
@@ -379,7 +390,8 @@ class ChatExportRequest(BaseValidatedModel):
         extra="forbid",
     )
 
-    @validator("date_range")
+    @field_validator("date_range")
+    @classmethod
     def validate_date_range(cls, v):
         """Validate date range."""
         if not v:

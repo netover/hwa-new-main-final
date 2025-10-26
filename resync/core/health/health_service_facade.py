@@ -25,12 +25,10 @@ from resync.core.health_models import (
 )
 
 # Import extracted components
-from .health_check_service import HealthCheckService
 from .health_config_manager import HealthCheckConfigurationManager
 from .health_monitoring_coordinator import HealthMonitoringCoordinator
 from .health_monitoring_observer import (
     AlertingHealthObserver,
-    HealthMonitoringEvent,
     HealthMonitoringSubject,
     HealthMonitorObserver,
     LoggingHealthObserver,

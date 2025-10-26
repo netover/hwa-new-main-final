@@ -6,11 +6,9 @@ TWS, and LLM dependencies with proper configuration, state transitions,
 and integration with logging and metrics.
 """
 
-import asyncio
 import pytest
 from datetime import timedelta
-from unittest.mock import Mock, patch
-from typing import Any, Dict
+from unittest.mock import patch
 
 from resync.core.circuit_breakers import redis_breaker, tws_breaker, llm_breaker
 from resync.core.structured_logger import get_logger

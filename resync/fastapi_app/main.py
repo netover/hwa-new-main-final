@@ -5,8 +5,6 @@ from fastapi import FastAPI, WebSocket, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-import os
-import os
 from .api.v1.routes.auth import router as auth_router
 from .api.v1.routes.chat import router as chat_router
 from .api.v1.routes.audit import router as audit_router

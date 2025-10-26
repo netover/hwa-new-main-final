@@ -18,16 +18,13 @@ from __future__ import annotations
 
 import asyncio
 import json
-import os
 import psutil
-import socket
 import time
 from collections import defaultdict, deque
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Set, Tuple, Union, Callable
-from urllib.parse import urlparse
+from typing import Any, Dict, List, Optional, Union, Callable
 
 import aiohttp
 from aiohttp import web

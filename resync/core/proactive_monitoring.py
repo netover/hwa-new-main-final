@@ -8,7 +8,7 @@ connection issues, monitors pool utilization, and performs predictive analysis.
 from __future__ import annotations
 
 import time
-from typing import Any, Dict, List
+from typing import Any, Dict
 import structlog
 
 from resync.core.connection_pool_manager import get_advanced_connection_pool_manager

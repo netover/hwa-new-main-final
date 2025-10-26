@@ -12,10 +12,10 @@ from __future__ import annotations
 
 import asyncio
 import time
-from collections import defaultdict, deque
+from collections import deque
 from contextlib import asynccontextmanager
 from dataclasses import dataclass, field
-from typing import Any, AsyncGenerator, Dict, List, Optional, Set
+from typing import Any, AsyncGenerator, Dict, Optional, Set
 
 from resync.core.circuit_breaker import adaptive_tws_api_breaker
 from resync.core.structured_logger import get_logger

@@ -5,9 +5,7 @@ This module provides extensive test coverage for all exception classes,
 ensuring proper initialization, error codes, status codes, and serialization.
 """
 
-import pytest
 from datetime import datetime
-import json
 from resync.core.exceptions import *
 
 

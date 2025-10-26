@@ -12,8 +12,8 @@ from .websocket import socketio
 
 # Structured logging integration
 from config.structured_logging_basic import (
-    logger, LoggingContext, log_request_start, log_request_end,
-    log_error, log_debug, log_info, log_warning
+    LoggingContext, log_request_end,
+    log_error, log_info
 )
 
 app = Flask(__name__)
