@@ -5,7 +5,7 @@ import json
 import logging
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from resync.models.tws import (
     CriticalJob,
@@ -40,7 +40,7 @@ class MockTWSClient:
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize the MockTWSClient with default settings."""
-        self.mock_data: Dict[str, Any] = {}
+        self.mock_data: dict[str, Any] = {}
         self._load_mock_data()
         logger.info("MockTWSClient initialized. Using static mock data.")
 
@@ -57,7 +57,9 @@ class MockTWSClient:
         Returns:
             None
         """
-        mock_data_path = Path(__file__).parent.parent.parent / "mock_tws_data.json"
+        mock_data_path = (
+            Path(__file__).parent.parent.parent / "mock_tws_data.json"
+        )
         if not mock_data_path.exists():
             logger.warning(
                 f"Mock data file not found at {mock_data_path}. Returning empty data."
@@ -65,20 +67,26 @@ class MockTWSClient:
             return
 
         try:
-            with open(mock_data_path, "r", encoding="utf-8") as f:
+            with open(mock_data_path, encoding="utf-8") as f:
                 self.mock_data = json.load(f)
         except json.JSONDecodeError as e:
             logger.error(
-                "Failed to decode mock data JSON from %s: %s", mock_data_path, e
+                "Failed to decode mock data JSON from %s: %s",
+                mock_data_path,
+                e,
             )
             self.mock_data = {}
             # Don't raise here to allow the service to continue with empty data
-        except (IOError, IsADirectoryError) as e:
-            logger.error("Failed to access mock data file at %s: %s", mock_data_path, e)
+        except (OSError, IsADirectoryError) as e:
+            logger.error(
+                "Failed to access mock data file at %s: %s", mock_data_path, e
+            )
             self.mock_data = {}
             # Don't raise here to allow the service to continue with empty data
         except FileNotFoundError as e:
-            logger.error("Mock data file not found at %s: %s", mock_data_path, e)
+            logger.error(
+                "Mock data file not found at %s: %s", mock_data_path, e
+            )
             self.mock_data = {}
             # Don't raise here to allow the service to continue with empty data
         except PermissionError as e:
@@ -99,7 +107,9 @@ class MockTWSClient:
             # Don't raise here to allow the service to continue with empty data
         except Exception as e:
             logger.error(
-                "Unexpected error loading mock data from %s: %s", mock_data_path, e
+                "Unexpected error loading mock data from %s: %s",
+                mock_data_path,
+                e,
             )
             self.mock_data = {}
             # In a production environment, consider raising a FileProcessingError here
@@ -123,7 +133,9 @@ class MockTWSClient:
         """
         await asyncio.sleep(0.1)  # Simulate network delay
         connection_status = self.mock_data.get("connection_status")
-        return bool(connection_status) if connection_status is not None else False
+        return (
+            bool(connection_status) if connection_status is not None else False
+        )
 
     async def ping(self) -> None:
         """
@@ -147,9 +159,9 @@ class MockTWSClient:
             raise ConnectionError("Mock TWS server is unreachable")
 
         # Ping successful for mock
-        return None
+        return
 
-    async def get_workstations_status(self) -> List[WorkstationStatus]:
+    async def get_workstations_status(self) -> list[WorkstationStatus]:
         """
         Mocks retrieving workstation status.
 
@@ -167,10 +179,12 @@ class MockTWSClient:
                 try:
                     workstations.append(WorkstationStatus(**ws))
                 except Exception as e:
-                    logger.warning(f"Failed to create WorkstationStatus from data: {e}")
+                    logger.warning(
+                        f"Failed to create WorkstationStatus from data: {e}"
+                    )
         return workstations
 
-    async def get_jobs_status(self) -> List[JobStatus]:
+    async def get_jobs_status(self) -> list[JobStatus]:
         """
         Mocks retrieving job status.
 
@@ -188,10 +202,12 @@ class MockTWSClient:
                 try:
                     jobs.append(JobStatus(**job))
                 except Exception as e:
-                    logger.warning(f"Failed to create JobStatus from data: {e}")
+                    logger.warning(
+                        f"Failed to create JobStatus from data: {e}"
+                    )
         return jobs
 
-    async def get_critical_path_status(self) -> List[CriticalJob]:
+    async def get_critical_path_status(self) -> list[CriticalJob]:
         """
         Mocks retrieving critical path status.
 
@@ -208,7 +224,9 @@ class MockTWSClient:
                 try:
                     critical_jobs.append(CriticalJob(**job))
                 except Exception as e:
-                    logger.warning(f"Failed to create CriticalJob from data: {e}")
+                    logger.warning(
+                        f"Failed to create CriticalJob from data: {e}"
+                    )
         return critical_jobs
 
     async def get_system_status(self) -> SystemStatus:
@@ -228,7 +246,7 @@ class MockTWSClient:
             workstations=workstations, jobs=jobs, critical_jobs=critical_jobs
         )
 
-    async def restart_job(self, job_id: str) -> Dict[str, Any]:
+    async def restart_job(self, job_id: str) -> dict[str, Any]:
         """
         Mocks restarting a job.
 
@@ -249,7 +267,7 @@ class MockTWSClient:
             "timestamp": "2024-01-01T12:00:00Z",
         }
 
-    async def cancel_job(self, job_id: str) -> Dict[str, Any]:
+    async def cancel_job(self, job_id: str) -> dict[str, Any]:
         """
         Mocks canceling a job.
 
@@ -322,7 +340,7 @@ class MockTWSClient:
             execution_history=history[:10],  # Limit to last 10 executions
         )
 
-    async def get_job_history(self, job_name: str) -> List[JobExecution]:
+    async def get_job_history(self, job_name: str) -> list[JobExecution]:
         """
         Mocks getting the execution history for a specific job.
         """
@@ -387,7 +405,7 @@ class MockTWSClient:
             },
         )
 
-    async def get_resource_usage(self) -> List[ResourceStatus]:
+    async def get_resource_usage(self) -> list[ResourceStatus]:
         """
         Mocks getting resource usage information.
         """
@@ -412,7 +430,7 @@ class MockTWSClient:
             ),
         ]
 
-    async def get_event_log(self, last_hours: int = 24) -> List[Event]:
+    async def get_event_log(self, last_hours: int = 24) -> list[Event]:
         """
         Mocks getting TWS event log entries.
         """
@@ -451,7 +469,10 @@ class MockTWSClient:
 
         return PerformanceData(
             timestamp=datetime.now(),
-            api_response_times={"get_system_status": 0.5, "get_jobs_status": 0.3},
+            api_response_times={
+                "get_system_status": 0.5,
+                "get_jobs_status": 0.3,
+            },
             cache_hit_rate=85.5,
             memory_usage_mb=256.0,
             cpu_usage_percentage=45.0,
@@ -485,36 +506,10 @@ class MockTWSClient:
             job_stream="STREAM_A",
         )
 
-    async def get_job_history(self, job_id: str) -> List[Dict[str, Any]]:
-        """
-        Mocks getting the history of a specific job.
 
-        Args:
-            job_id: The ID of the job to get history for
-
-        Returns:
-            List of job history entries
-
-        Note:
-            Simulates an asynchronous delay and returns mock job history
-        """
-        await asyncio.sleep(0.1)  # Simulate network delay
-        return [
-            {
-                "job_id": str(job_id),
-                "status": "SUCC",
-                "timestamp": "2024-01-01T10:00:00Z",
-                "duration": "5m",
-            },
-            {
-                "job_id": str(job_id),
-                "status": "RUNNING",
-                "timestamp": "2024-01-01T11:00:00Z",
-                "duration": "2m",
-            },
-        ]
-
-    async def list_jobs(self, status_filter: Optional[str] = None) -> List[JobStatus]:
+    async def list_jobs(
+        self, status_filter: str | None = None
+    ) -> list[JobStatus]:
         """
         Mocks listing all jobs, optionally filtered by status.
 
@@ -528,7 +523,9 @@ class MockTWSClient:
             Simulates an asynchronous delay and returns filtered mock jobs
         """
         await asyncio.sleep(0.1)  # Simulate network delay
-        jobs = [JobStatus(**job) for job in self.mock_data.get("jobs_status", [])]
+        jobs = [
+            JobStatus(**job) for job in self.mock_data.get("jobs_status", [])
+        ]
 
         if status_filter:
             jobs = [job for job in jobs if job.status == status_filter]
@@ -536,7 +533,11 @@ class MockTWSClient:
         return jobs
 
     async def validate_connection(
-        self, host: str = None, port: int = None, user: str = None, password: str = None
+        self,
+        host: str = None,
+        port: int = None,
+        user: str = None,
+        password: str = None,
     ) -> dict[str, bool]:
         """
         Mocks validating TWS connection parameters.
@@ -551,7 +552,9 @@ class MockTWSClient:
             Dictionary with validation result
         """
         # Simulate validation process
-        await asyncio.sleep(0.05)  # Simulate short network delay for validation
+        await asyncio.sleep(
+            0.05
+        )  # Simulate short network delay for validation
 
         # Get validation config from mock data or default to success
         validation_config = self.mock_data.get("validation_config", {})
@@ -564,13 +567,12 @@ class MockTWSClient:
                 "host": host or "mock-tws-server",
                 "port": port or 31111,
             }
-        else:
-            return {
-                "valid": False,
-                "message": "Mock TWS connection validation failed as configured",
-                "host": host or "mock-tws-server",
-                "port": port or 31111,
-            }
+        return {
+            "valid": False,
+            "message": "Mock TWS connection validation failed as configured",
+            "host": host or "mock-tws-server",
+            "port": port or 31111,
+        }
 
     async def close(self) -> None:
         """

@@ -10,16 +10,22 @@ from __future__ import annotations
 import asyncio
 import logging
 import re
+from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
-from typing import Any, AsyncGenerator
+from typing import Any
 
 import httpx
 from dateutil import parser
-
 from resync.core.cache_hierarchy import get_cache_hierarchy
-from resync.core.connection_pool_manager import get_connection_pool_manager
-from resync.core.exceptions import TWSConnectionError
-from resync.core.resilience import CircuitBreakerManager, CircuitBreakerError, retry_with_backoff_async
+from resync.core.resilience import (
+    CircuitBreakerError,
+    CircuitBreakerManager,
+    retry_with_backoff_async,
+)
+from resync_new.config.settings import settings  # New import
+from resync_new.core.connection_pool_manager import get_connection_pool_manager
+from resync_new.utils.exceptions import TWSConnectionError
+
 from resync.models.tws import (
     CriticalJob,
     DependencyTree,
@@ -33,8 +39,10 @@ from resync.models.tws import (
     SystemStatus,
     WorkstationStatus,
 )
-from resync.services.http_client_factory import create_async_http_client, create_tws_http_client
-from resync.settings import settings  # New import
+from resync.services.http_client_factory import (
+    create_async_http_client,
+    create_tws_http_client,
+)
 
 # --- Logging Setup ---
 logger = logging.getLogger(__name__)
@@ -93,14 +101,16 @@ class OptimizedTWSClient:
         else:
             # Legacy direct httpx client for backward compatibility
             self.client = create_tws_http_client(
-    base_url=self.base_url,
-    auth=self.auth,
-    # verify herdado da factory (False por padrão via settings)
-)
+                base_url=self.base_url,
+                auth=self.auth,
+                # verify herdado da factory (False por padrão via settings)
+            )
 
         # Caching layer to reduce redundant API calls - using a direct Redis cache
         self.cache = get_cache_hierarchy()
-        logger.info("OptimizedTWSClient initialized for base URL: %s", self.base_url)
+        logger.info(
+            "OptimizedTWSClient initialized for base URL: %s", self.base_url
+        )
 
         # Initialize centralized resilience manager
         self.cbm = CircuitBreakerManager()
@@ -117,7 +127,9 @@ class OptimizedTWSClient:
         self.cbm.register("tws_job_dependencies", fail_max=3, reset_timeout=30)
         self.cbm.register("tws_resource_usage", fail_max=3, reset_timeout=30)
         self.cbm.register("tws_event_log", fail_max=3, reset_timeout=30)
-        self.cbm.register("tws_performance_metrics", fail_max=2, reset_timeout=60)
+        self.cbm.register(
+            "tws_performance_metrics", fail_max=2, reset_timeout=60
+        )
 
     async def _get_http_client(self) -> Any:
         """Get HTTP client from connection pool or use direct client."""
@@ -127,20 +139,18 @@ class OptimizedTWSClient:
             pool = self._pool_manager.get_pool("tws_http")
             if pool:
                 return await pool.get_connection()
-            else:
-                logger.warning(
-                    "TWS HTTP connection pool not available, falling back to direct client"
+            logger.warning(
+                "TWS HTTP connection pool not available, falling back to direct client"
+            )
+            # Fallback to direct client if pool not available
+            if not hasattr(self, "client"):
+                self.client = create_async_http_client(
+                    base_url=self.base_url,
+                    auth=self.auth,
+                    verify=True,
                 )
-                # Fallback to direct client if pool not available
-                if not hasattr(self, "client"):
-                    self.client = create_async_http_client(
-                        base_url=self.base_url,
-                        auth=self.auth,
-                        verify=True,
-                    )
-                return self.client
-        else:
-            return self.client if hasattr(self, "client") else None
+            return self.client
+        return self.client if hasattr(self, "client") else None
 
     async def _make_request(
         self, method: str, url: str, **kwargs: Any
@@ -159,11 +169,20 @@ class OptimizedTWSClient:
             return response
 
         async def _call():
-            resp = await self.cbm.call("tws_http_client", _once)
-            return resp
+            return await self.cbm.call("tws_http_client", _once)
 
-        resp = await retry_with_backoff_async_async(_call, retries=3, base_delay=1.0, cap=10.0, jitter=True, retry_on=(httpx.RequestError, httpx.TimeoutException, CircuitBreakerError))
-        return resp
+        return await retry_with_backoff_async(
+            _call,
+            retries=3,
+            base_delay=1.0,
+            cap=10.0,
+            jitter=True,
+            retry_on=(
+                httpx.RequestError,
+                httpx.TimeoutException,
+                CircuitBreakerError,
+            ),
+        )
 
     @asynccontextmanager
     async def _api_request(
@@ -193,7 +212,9 @@ class OptimizedTWSClient:
                 original_exception=e,
             )
         except Exception as e:
-            logger.error("An unexpected error occurred during API request: %s", e)
+            logger.error(
+                "An unexpected error occurred during API request: %s", e
+            )
             # Wrap unexpected errors for consistent error handling
             raise TWSConnectionError(
                 "An unexpected error occurred", original_exception=e
@@ -222,16 +243,30 @@ class OptimizedTWSClient:
                 return response
 
             async def _call():
-                resp = await self.cbm.call("tws_ping", _once)
-                return resp
+                return await self.cbm.call("tws_ping", _once)
 
-            resp = await retry_with_backoff_async_async(_call, retries=2, base_delay=0.5, cap=3.0, jitter=True, retry_on=(httpx.RequestError, httpx.TimeoutException, CircuitBreakerError))
+            await retry_with_backoff_async(
+                _call,
+                retries=2,
+                base_delay=0.5,
+                cap=3.0,
+                jitter=True,
+                retry_on=(
+                    httpx.RequestError,
+                    httpx.TimeoutException,
+                    CircuitBreakerError,
+                ),
+            )
         except httpx.TimeoutException as e:
             logger.warning("TWS server ping timed out")
-            raise TWSConnectionError("TWS server ping timed out", original_exception=e)
+            raise TWSConnectionError(
+                "TWS server ping timed out", original_exception=e
+            )
         except httpx.RequestError as e:
             logger.error(f"TWS server ping failed: {e}")
-            raise TWSConnectionError("TWS server unreachable", original_exception=e)
+            raise TWSConnectionError(
+                "TWS server unreachable", original_exception=e
+            )
         except Exception as e:
             logger.error(f"Unexpected error during TWS ping: {e}")
             raise TWSConnectionError(
@@ -241,16 +276,26 @@ class OptimizedTWSClient:
     async def check_connection(self) -> bool:
         """Verifies the connection to the TWS server is active."""
         try:
+
             async def _once():
                 async with self._api_request("GET", "/plan/current") as data:
                     return "planId" in data
 
             async def _call():
-                result = await self.cbm.call("tws_check_connection", _once)
-                return result
+                return await self.cbm.call("tws_check_connection", _once)
 
-            result = await retry_with_backoff_async_async(_call, retries=2, base_delay=1.0, cap=5.0, jitter=True, retry_on=(httpx.RequestError, httpx.TimeoutException, CircuitBreakerError))
-            return result
+            return await retry_with_backoff_async(
+                _call,
+                retries=2,
+                base_delay=1.0,
+                cap=5.0,
+                jitter=True,
+                retry_on=(
+                    httpx.RequestError,
+                    httpx.TimeoutException,
+                    CircuitBreakerError,
+                ),
+            )
         except TWSConnectionError:
             return False
 
@@ -262,17 +307,30 @@ class OptimizedTWSClient:
             return cached_data if isinstance(cached_data, list) else []
 
         url = f"/model/workstation?engineName={self.engine_name}&engineOwner={self.engine_owner}"
+
         async def _once():
             async with self._api_request("GET", url) as data:
-                return [
-                    WorkstationStatus(**ws) for ws in data
-                ] if isinstance(data, list) else []
+                return (
+                    [WorkstationStatus(**ws) for ws in data]
+                    if isinstance(data, list)
+                    else []
+                )
 
         async def _call():
-            result = await self.cbm.call("tws_workstations", _once)
-            return result
+            return await self.cbm.call("tws_workstations", _once)
 
-        workstations = await retry_with_backoff_async(_call, retries=2, base_delay=1.0, cap=5.0, jitter=True, retry_on=(httpx.RequestError, httpx.TimeoutException, CircuitBreakerError))
+        workstations = await retry_with_backoff_async(
+            _call,
+            retries=2,
+            base_delay=1.0,
+            cap=5.0,
+            jitter=True,
+            retry_on=(
+                httpx.RequestError,
+                httpx.TimeoutException,
+                CircuitBreakerError,
+            ),
+        )
         await self.cache.set(
             cache_key, workstations
         )  # ttl not supported in current cache implementation
@@ -286,15 +344,30 @@ class OptimizedTWSClient:
             return cached_data if isinstance(cached_data, list) else []
 
         url = f"/model/jobdefinition?engineName={self.engine_name}&engineOwner={self.engine_owner}"
+
         async def _once():
             async with self._api_request("GET", url) as data:
-                return [JobStatus(**job) for job in data] if isinstance(data, list) else []
+                return (
+                    [JobStatus(**job) for job in data]
+                    if isinstance(data, list)
+                    else []
+                )
 
         async def _call():
-            result = await self.cbm.call("tws_jobs_status", _once)
-            return result
+            return await self.cbm.call("tws_jobs_status", _once)
 
-        jobs = await retry_with_backoff_async(_call, retries=2, base_delay=1.0, cap=5.0, jitter=True, retry_on=(httpx.RequestError, httpx.TimeoutException, CircuitBreakerError))
+        jobs = await retry_with_backoff_async(
+            _call,
+            retries=2,
+            base_delay=1.0,
+            cap=5.0,
+            jitter=True,
+            retry_on=(
+                httpx.RequestError,
+                httpx.TimeoutException,
+                CircuitBreakerError,
+            ),
+        )
         await self.cache.set(
             cache_key, jobs
         )  # ttl not supported in current cache implementation
@@ -308,18 +381,33 @@ class OptimizedTWSClient:
             return cached_data if isinstance(cached_data, list) else []
 
         url = "/plan/current/criticalpath"
+
         async def _once():
             async with self._api_request("GET", url) as data:
-                jobs_data = data.get("jobs", []) if isinstance(data, dict) else []
-                return [
-                    CriticalJob(**job) for job in jobs_data
-                ] if isinstance(jobs_data, list) else []
+                jobs_data = (
+                    data.get("jobs", []) if isinstance(data, dict) else []
+                )
+                return (
+                    [CriticalJob(**job) for job in jobs_data]
+                    if isinstance(jobs_data, list)
+                    else []
+                )
 
         async def _call():
-            result = await self.cbm.call("tws_critical_path", _once)
-            return result
+            return await self.cbm.call("tws_critical_path", _once)
 
-        critical_jobs = await retry_with_backoff_async(_call, retries=2, base_delay=1.0, cap=5.0, jitter=True, retry_on=(httpx.RequestError, httpx.TimeoutException, CircuitBreakerError))
+        critical_jobs = await retry_with_backoff_async(
+            _call,
+            retries=2,
+            base_delay=1.0,
+            cap=5.0,
+            jitter=True,
+            retry_on=(
+                httpx.RequestError,
+                httpx.TimeoutException,
+                CircuitBreakerError,
+            ),
+        )
         await self.cache.set(
             cache_key, critical_jobs
         )  # ttl not supported in current cache implementation
@@ -330,13 +418,18 @@ class OptimizedTWSClient:
         # Execute all three calls concurrently
         workstations_task = asyncio.create_task(self.get_workstations_status())
         jobs_task = asyncio.create_task(self.get_jobs_status())
-        critical_jobs_task = asyncio.create_task(self.get_critical_path_status())
+        critical_jobs_task = asyncio.create_task(
+            self.get_critical_path_status()
+        )
 
         workstations: list[WorkstationStatus] | Exception
         jobs: list[JobStatus] | Exception
         critical_jobs: list[CriticalJob] | Exception
         workstations, jobs, critical_jobs = await asyncio.gather(
-            workstations_task, jobs_task, critical_jobs_task, return_exceptions=True
+            workstations_task,
+            jobs_task,
+            critical_jobs_task,
+            return_exceptions=True,
         )
 
         # Handle potential exceptions
@@ -349,7 +442,9 @@ class OptimizedTWSClient:
             jobs = []
 
         if isinstance(critical_jobs, Exception):
-            logger.error(f"Failed to get critical path status: {critical_jobs}")
+            logger.error(
+                f"Failed to get critical path status: {critical_jobs}"
+            )
             critical_jobs = []
 
         return SystemStatus(
@@ -373,6 +468,7 @@ class OptimizedTWSClient:
             raise ValueError(f"Invalid job_id format: {job_id}")
 
         url = f"/model/jobdefinition/{job_id}?engineName={self.engine_name}&engineOwner={self.engine_owner}"
+
         async def _once():
             async with self._api_request("GET", url) as data:
                 if isinstance(data, dict):
@@ -380,17 +476,21 @@ class OptimizedTWSClient:
                     try:
                         history = await self.get_job_history(job_id)
                     except Exception as e:
-                        logger.warning(f"Failed to get job history for {job_id}: {e}")
+                        logger.warning(
+                            f"Failed to get job history for {job_id}: {e}"
+                        )
                         history = []
 
                     # Get dependencies
                     try:
                         dependencies = await self.get_job_dependencies(job_id)
                     except Exception as e:
-                        logger.warning(f"Failed to get dependencies for {job_id}: {e}")
+                        logger.warning(
+                            f"Failed to get dependencies for {job_id}: {e}"
+                        )
                         dependencies = []
 
-                    job_details = JobDetails(
+                    return JobDetails(
                         job_id=job_id,
                         name=data.get("name", job_id),
                         workstation=data.get("workstation", ""),
@@ -398,18 +498,30 @@ class OptimizedTWSClient:
                         job_stream=data.get("job_stream", ""),
                         full_definition=data,
                         dependencies=dependencies.dependencies,
-                        resource_requirements=data.get("resource_requirements", {}),
-                        execution_history=history[:10],  # Limit to last 10 executions
+                        resource_requirements=data.get(
+                            "resource_requirements", {}
+                        ),
+                        execution_history=history[
+                            :10
+                        ],  # Limit to last 10 executions
                     )
-                    return job_details
-                else:
-                    raise ValueError(f"Unexpected data format for job {job_id}")
+                raise ValueError(f"Unexpected data format for job {job_id}")
 
         async def _call():
-            result = await self.cbm.call("tws_job_details", _once)
-            return result
+            return await self.cbm.call("tws_job_details", _once)
 
-        job_details = await retry_with_backoff_async(_call, retries=2, base_delay=1.0, cap=5.0, jitter=True, retry_on=(httpx.RequestError, httpx.TimeoutException, CircuitBreakerError))
+        job_details = await retry_with_backoff_async(
+            _call,
+            retries=2,
+            base_delay=1.0,
+            cap=5.0,
+            jitter=True,
+            retry_on=(
+                httpx.RequestError,
+                httpx.TimeoutException,
+                CircuitBreakerError,
+            ),
+        )
         await self.cache.set(cache_key, job_details.dict())
         return job_details
 
@@ -430,6 +542,7 @@ class OptimizedTWSClient:
             raise ValueError(f"Invalid job_name format: {job_name}")
 
         url = f"/model/jobdefinition/{job_name}/history?engineName={self.engine_name}&engineOwner={self.engine_owner}"
+
         async def _once():
             async with self._api_request("GET", url) as data:
                 executions = []
@@ -445,34 +558,52 @@ class OptimizedTWSClient:
                                     # Try to parse ISO format
                                     try:
                                         start_time = parser.parse(start_time)
-                                    except:
+                                    except Exception:
                                         start_time = None
 
                                 if end_time and isinstance(end_time, str):
                                     try:
                                         end_time = parser.parse(end_time)
-                                    except:
+                                    except Exception:
                                         end_time = None
 
                                 execution = JobExecution(
-                                    job_id=execution_data.get("job_id", job_name),
-                                    status=execution_data.get("status", "UNKNOWN"),
+                                    job_id=execution_data.get(
+                                        "job_id", job_name
+                                    ),
+                                    status=execution_data.get(
+                                        "status", "UNKNOWN"
+                                    ),
                                     start_time=start_time or None,
                                     end_time=end_time,
                                     duration=execution_data.get("duration"),
-                                    error_message=execution_data.get("error_message"),
+                                    error_message=execution_data.get(
+                                        "error_message"
+                                    ),
                                 )
                                 executions.append(execution)
                             except Exception as e:
-                                logger.warning(f"Failed to parse execution data: {e}")
+                                logger.warning(
+                                    f"Failed to parse execution data: {e}"
+                                )
 
                 return executions
 
         async def _call():
-            result = await self.cbm.call("tws_job_history", _once)
-            return result
+            return await self.cbm.call("tws_job_history", _once)
 
-        executions = await retry_with_backoff_async(_call, retries=2, base_delay=1.0, cap=5.0, jitter=True, retry_on=(httpx.RequestError, httpx.TimeoutException, CircuitBreakerError))
+        executions = await retry_with_backoff_async(
+            _call,
+            retries=2,
+            base_delay=1.0,
+            cap=5.0,
+            jitter=True,
+            retry_on=(
+                httpx.RequestError,
+                httpx.TimeoutException,
+                CircuitBreakerError,
+            ),
+        )
         await self.cache.set(cache_key, [e.dict() for e in executions])
         return executions
 
@@ -489,6 +620,7 @@ class OptimizedTWSClient:
             raise ValueError(f"Invalid job_id format: {job_id}")
 
         url = f"/model/jobdefinition/{job_id}/log?engineName={self.engine_name}&engineOwner={self.engine_owner}"
+
         async def _once():
             async with self._api_request("GET", url) as data:
                 log_content = ""
@@ -499,10 +631,20 @@ class OptimizedTWSClient:
                 return log_content
 
         async def _call():
-            result = await self.cbm.call("tws_job_log", _once)
-            return result
+            return await self.cbm.call("tws_job_log", _once)
 
-        log_content = await retry_with_backoff_async(_call, retries=2, base_delay=1.0, cap=5.0, jitter=True, retry_on=(httpx.RequestError, httpx.TimeoutException, CircuitBreakerError))
+        log_content = await retry_with_backoff_async(
+            _call,
+            retries=2,
+            base_delay=1.0,
+            cap=5.0,
+            jitter=True,
+            retry_on=(
+                httpx.RequestError,
+                httpx.TimeoutException,
+                CircuitBreakerError,
+            ),
+        )
         await self.cache.set(cache_key, log_content)
         return log_content
 
@@ -518,6 +660,7 @@ class OptimizedTWSClient:
             )
 
         url = "/plan/current"
+
         async def _once():
             async with self._api_request("GET", url) as data:
                 if isinstance(data, dict):
@@ -528,31 +671,43 @@ class OptimizedTWSClient:
                     if creation_date and isinstance(creation_date, str):
                         try:
                             creation_date = parser.parse(creation_date)
-                        except:
+                        except Exception:
                             creation_date = None
 
-                    if estimated_completion and isinstance(estimated_completion, str):
+                    if estimated_completion and isinstance(
+                        estimated_completion, str
+                    ):
                         try:
-                            estimated_completion = parser.parse(estimated_completion)
-                        except:
+                            estimated_completion = parser.parse(
+                                estimated_completion
+                            )
+                        except Exception:
                             estimated_completion = None
 
-                    plan_details = PlanDetails(
+                    return PlanDetails(
                         plan_id=data.get("plan_id", "current"),
                         creation_date=creation_date or None,
                         jobs_count=data.get("jobs_count", 0),
                         estimated_completion=estimated_completion,
                         status=data.get("status", "UNKNOWN"),
                     )
-                    return plan_details
-                else:
-                    raise ValueError("Unexpected data format for plan details")
+                raise ValueError("Unexpected data format for plan details")
 
         async def _call():
-            result = await self.cbm.call("tws_plan_details", _once)
-            return result
+            return await self.cbm.call("tws_plan_details", _once)
 
-        plan_details = await retry_with_backoff_async(_call, retries=2, base_delay=1.0, cap=5.0, jitter=True, retry_on=(httpx.RequestError, httpx.TimeoutException, CircuitBreakerError))
+        plan_details = await retry_with_backoff_async(
+            _call,
+            retries=2,
+            base_delay=1.0,
+            cap=5.0,
+            jitter=True,
+            retry_on=(
+                httpx.RequestError,
+                httpx.TimeoutException,
+                CircuitBreakerError,
+            ),
+        )
         await self.cache.set(cache_key, plan_details.dict())
         return plan_details
 
@@ -573,26 +728,35 @@ class OptimizedTWSClient:
             raise ValueError(f"Invalid job_id format: {job_id}")
 
         url = f"/model/jobdefinition/{job_id}/dependencies?engineName={self.engine_name}&engineOwner={self.engine_owner}"
+
         async def _once():
             async with self._api_request("GET", url) as data:
                 if isinstance(data, dict):
-                    dependency_tree = DependencyTree(
+                    return DependencyTree(
                         job_id=job_id,
                         dependencies=data.get("dependencies", []),
                         dependents=data.get("dependents", []),
                         dependency_graph=data.get("dependency_graph", {}),
                     )
-                    return dependency_tree
-                else:
-                    raise ValueError(
-                        f"Unexpected data format for job dependencies {job_id}"
-                    )
+                raise ValueError(
+                    f"Unexpected data format for job dependencies {job_id}"
+                )
 
         async def _call():
-            result = await self.cbm.call("tws_job_dependencies", _once)
-            return result
+            return await self.cbm.call("tws_job_dependencies", _once)
 
-        dependency_tree = await retry_with_backoff_async(_call, retries=2, base_delay=1.0, cap=5.0, jitter=True, retry_on=(httpx.RequestError, httpx.TimeoutException, CircuitBreakerError))
+        dependency_tree = await retry_with_backoff_async(
+            _call,
+            retries=2,
+            base_delay=1.0,
+            cap=5.0,
+            jitter=True,
+            retry_on=(
+                httpx.RequestError,
+                httpx.TimeoutException,
+                CircuitBreakerError,
+            ),
+        )
         await self.cache.set(cache_key, dependency_tree.dict())
         return dependency_tree
 
@@ -608,6 +772,7 @@ class OptimizedTWSClient:
             )
 
         url = f"/model/resource?engineName={self.engine_name}&engineOwner={self.engine_owner}"
+
         async def _once():
             async with self._api_request("GET", url) as data:
                 resources = []
@@ -616,10 +781,18 @@ class OptimizedTWSClient:
                         if isinstance(resource_data, dict):
                             try:
                                 resource = ResourceStatus(
-                                    resource_name=resource_data.get("resource_name", ""),
-                                    resource_type=resource_data.get("resource_type", ""),
-                                    total_capacity=resource_data.get("total_capacity"),
-                                    used_capacity=resource_data.get("used_capacity"),
+                                    resource_name=resource_data.get(
+                                        "resource_name", ""
+                                    ),
+                                    resource_type=resource_data.get(
+                                        "resource_type", ""
+                                    ),
+                                    total_capacity=resource_data.get(
+                                        "total_capacity"
+                                    ),
+                                    used_capacity=resource_data.get(
+                                        "used_capacity"
+                                    ),
                                     available_capacity=resource_data.get(
                                         "available_capacity"
                                     ),
@@ -629,15 +802,27 @@ class OptimizedTWSClient:
                                 )
                                 resources.append(resource)
                             except Exception as e:
-                                logger.warning(f"Failed to parse resource data: {e}")
+                                logger.warning(
+                                    f"Failed to parse resource data: {e}"
+                                )
 
                 return resources
 
         async def _call():
-            result = await self.cbm.call("tws_resource_usage", _once)
-            return result
+            return await self.cbm.call("tws_resource_usage", _once)
 
-        resources = await retry_with_backoff_async(_call, retries=2, base_delay=1.0, cap=5.0, jitter=True, retry_on=(httpx.RequestError, httpx.TimeoutException, CircuitBreakerError))
+        resources = await retry_with_backoff_async(
+            _call,
+            retries=2,
+            base_delay=1.0,
+            cap=5.0,
+            jitter=True,
+            retry_on=(
+                httpx.RequestError,
+                httpx.TimeoutException,
+                CircuitBreakerError,
+            ),
+        )
         await self.cache.set(cache_key, [r.dict() for r in resources])
         return resources
 
@@ -653,6 +838,7 @@ class OptimizedTWSClient:
             )
 
         url = f"/events?since={last_hours}h&engineName={self.engine_name}&engineOwner={self.engine_owner}"
+
         async def _once():
             async with self._api_request("GET", url) as data:
                 events = []
@@ -665,14 +851,18 @@ class OptimizedTWSClient:
                                 if timestamp and isinstance(timestamp, str):
                                     try:
                                         timestamp = parser.parse(timestamp)
-                                    except:
+                                    except Exception:
                                         timestamp = None
 
                                 event = Event(
                                     event_id=event_data.get("event_id", ""),
                                     timestamp=timestamp or None,
-                                    event_type=event_data.get("event_type", ""),
-                                    severity=event_data.get("severity", "INFO"),
+                                    event_type=event_data.get(
+                                        "event_type", ""
+                                    ),
+                                    severity=event_data.get(
+                                        "severity", "INFO"
+                                    ),
                                     source=event_data.get("source", ""),
                                     message=event_data.get("message", ""),
                                     job_id=event_data.get("job_id"),
@@ -680,15 +870,27 @@ class OptimizedTWSClient:
                                 )
                                 events.append(event)
                             except Exception as e:
-                                logger.warning(f"Failed to parse event data: {e}")
+                                logger.warning(
+                                    f"Failed to parse event data: {e}"
+                                )
 
                 return events
 
         async def _call():
-            result = await self.cbm.call("tws_event_log", _once)
-            return result
+            return await self.cbm.call("tws_event_log", _once)
 
-        events = await retry_with_backoff_async(_call, retries=2, base_delay=1.0, cap=5.0, jitter=True, retry_on=(httpx.RequestError, httpx.TimeoutException, CircuitBreakerError))
+        events = await retry_with_backoff_async(
+            _call,
+            retries=2,
+            base_delay=1.0,
+            cap=5.0,
+            jitter=True,
+            retry_on=(
+                httpx.RequestError,
+                httpx.TimeoutException,
+                CircuitBreakerError,
+            ),
+        )
         await self.cache.set(cache_key, [e.dict() for e in events])
         return events
 
@@ -704,6 +906,7 @@ class OptimizedTWSClient:
             )
 
         url = f"/metrics?engineName={self.engine_name}&engineOwner={self.engine_owner}"
+
         async def _once():
             async with self._api_request("GET", url) as data:
                 if isinstance(data, dict):
@@ -712,31 +915,45 @@ class OptimizedTWSClient:
                     if timestamp and isinstance(timestamp, str):
                         try:
                             timestamp = parser.parse(timestamp)
-                        except:
+                        except Exception:
                             timestamp = None
 
-                    performance_data = PerformanceData(
+                    return PerformanceData(
                         timestamp=timestamp or None,
                         api_response_times=data.get("api_response_times", {}),
                         cache_hit_rate=data.get("cache_hit_rate", 0.0),
                         memory_usage_mb=data.get("memory_usage_mb", 0.0),
-                        cpu_usage_percentage=data.get("cpu_usage_percentage", 0.0),
+                        cpu_usage_percentage=data.get(
+                            "cpu_usage_percentage", 0.0
+                        ),
                         active_connections=data.get("active_connections", 0),
                         jobs_per_minute=data.get("jobs_per_minute", 0.0),
                     )
-                    return performance_data
-                else:
-                    raise ValueError("Unexpected data format for performance metrics")
+                raise ValueError(
+                    "Unexpected data format for performance metrics"
+                )
 
         async def _call():
-            result = await self.cbm.call("tws_performance_metrics", _once)
-            return result
+            return await self.cbm.call("tws_performance_metrics", _once)
 
-        performance_data = await retry_with_backoff_async(_call, retries=3, base_delay=1.0, cap=8.0, jitter=True, retry_on=(httpx.RequestError, httpx.TimeoutException, CircuitBreakerError))
+        performance_data = await retry_with_backoff_async(
+            _call,
+            retries=3,
+            base_delay=1.0,
+            cap=8.0,
+            jitter=True,
+            retry_on=(
+                httpx.RequestError,
+                httpx.TimeoutException,
+                CircuitBreakerError,
+            ),
+        )
         await self.cache.set(cache_key, performance_data.dict())
         return performance_data
 
-    async def get_job_status_batch(self, job_ids: list[str]) -> dict[str, JobStatus]:
+    async def get_job_status_batch(
+        self, job_ids: list[str]
+    ) -> dict[str, JobStatus]:
         """
         Batch multiple job status queries using parallel execution.
 
@@ -770,7 +987,9 @@ class OptimizedTWSClient:
                 getattr(settings, "TWS_MAX_CONCURRENT_REQUESTS", 10)
             )
 
-            async def fetch_single_job(job_id: str) -> tuple[str, JobStatus | None]:
+            async def fetch_single_job(
+                job_id: str,
+            ) -> tuple[str, JobStatus | None]:
                 async with semaphore:
                     try:
                         url = f"/model/jobdefinition/{job_id}?engineName={self.engine_name}&engineOwner={self.engine_owner}"
@@ -782,29 +1001,92 @@ class OptimizedTWSClient:
                                     f"job_status:{job_id}", job_status
                                 )  # ttl not supported in current cache implementation
                                 return job_id, job_status
-                            else:
-                                logger.warning(
-                                    f"Unexpected data format for job {job_id}: expected dict, got {type(data)}"
-                                )
-                                return job_id, None
+                            logger.warning(
+                                f"Unexpected data format for job {job_id}: expected dict, got {type(data)}"
+                            )
+                            return job_id, None
                     except Exception as e:
-                        logger.warning(f"Failed to get status for job {job_id}: {e}")
+                        logger.warning(
+                            f"Failed to get status for job {job_id}: {e}"
+                        )
                         return job_id, None
 
             # Execute all requests concurrently
             tasks = [fetch_single_job(job_id) for job_id in uncached_jobs]
-            parallel_results = await asyncio.gather(*tasks, return_exceptions=True)
+            parallel_results = await asyncio.gather(
+                *tasks, return_exceptions=True
+            )
 
             # Process results
             for result in parallel_results:
                 if isinstance(result, Exception):
-                    logger.error(f"Error in parallel job status fetch: {result}")
+                    logger.error(
+                        f"Error in parallel job status fetch: {result}"
+                    )
                 elif isinstance(result, tuple) and len(result) == 2:
                     job_id, job_status = result
                     if job_status is not None:
                         results[job_id] = job_status
 
         return results
+
+    async def get_job_status(self, job_id: str) -> dict[str, Any]:
+        """
+        Retrieves the status of a specific job.
+
+        Args:
+            job_id: The ID of the job to check
+
+        Returns:
+            Dictionary containing job status information
+        """
+        # Validate job_id format
+        if not SAFE_JOB_ID_PATTERN.match(job_id):
+            logger.warning(f"Invalid job_id format: {job_id}")
+            raise ValueError(f"Invalid job_id format: {job_id}")
+
+        cache_key = f"job_status:{job_id}"
+        cached_data = await self.cache.get(cache_key)
+        if cached_data:
+            return cached_data if isinstance(cached_data, dict) else {}
+
+        url = f"/model/jobdefinition/{job_id}?engineName={self.engine_name}&engineOwner={self.engine_owner}"
+
+        try:
+            async with asyncio.timeout(5.0):  # 5s timeout
+
+                async def _once():
+                    async with self._api_request("GET", url) as data:
+                        return data if isinstance(data, dict) else {}
+
+                async def _call():
+                    return await self.cbm.call("tws_job_status", _once)
+
+                job_status = await retry_with_backoff_async(
+                    _call,
+                    retries=2,
+                    base_delay=1.0,
+                    cap=5.0,
+                    jitter=True,
+                    retry_on=(
+                        httpx.RequestError,
+                        httpx.TimeoutException,
+                        CircuitBreakerError,
+                    ),
+                )
+                await self.cache.set(cache_key, job_status)
+                return job_status
+
+        except asyncio.TimeoutError:
+            logger.error(f"Timeout getting job status for {job_id}")
+            raise TWSConnectionError(
+                f"Timeout getting job status for {job_id}"
+            )
+        except Exception as e:
+            logger.error(f"Error getting job status for {job_id}: {e}")
+            raise TWSConnectionError(
+                f"Error getting job status for {job_id}: {e}"
+            )
 
     async def validate_connection(
         self,
@@ -835,16 +1117,16 @@ class OptimizedTWSClient:
             # Create a temporary client with the test parameters
             test_base_url = f"http://{test_host}:{test_port}/twsd"
             test_client = httpx.AsyncClient(
-    base_url=test_base_url,
-    auth=(test_user, test_password),
-    verify=settings.TWS_VERIFY,
-    timeout=httpx.Timeout(
-        connect=getattr(settings, "TWS_CONNECT_TIMEOUT", 10),
-        read=getattr(settings, "TWS_READ_TIMEOUT", 30),
-        write=getattr(settings, "TWS_WRITE_TIMEOUT", 30),
-        pool=getattr(settings, "TWS_POOL_TIMEOUT", 30),
-    ),
-)
+                base_url=test_base_url,
+                auth=(test_user, test_password),
+                verify=settings.TWS_VERIFY,
+                timeout=httpx.Timeout(
+                    connect=getattr(settings, "TWS_CONNECT_TIMEOUT", 10),
+                    read=getattr(settings, "TWS_READ_TIMEOUT", 30),
+                    write=getattr(settings, "TWS_WRITE_TIMEOUT", 30),
+                    pool=getattr(settings, "TWS_POOL_TIMEOUT", 30),
+                ),
+            )
 
             # Try to establish a connection
             response = await test_client.head("", timeout=5.0)
@@ -884,7 +1166,9 @@ class OptimizedTWSClient:
                 "port": test_port,
             }
         except Exception as e:
-            logger.error(f"Unexpected error during TWS connection validation: {e}")
+            logger.error(
+                f"Unexpected error during TWS connection validation: {e}"
+            )
             if "test_client" in locals():
                 try:
                     await test_client.aclose()
@@ -922,8 +1206,7 @@ class OptimizedTWSClient:
         if self.use_connection_pool:
             pool_manager = asyncio.run(get_connection_pool_manager())
             return pool_manager.is_pool_healthy("tws_http")
-        else:
-            return hasattr(self, "client") and not self.client.is_closed
+        return hasattr(self, "client") and not self.client.is_closed
 
     async def close(self) -> None:
         """Closes the underlying HTTPX client and its connections."""

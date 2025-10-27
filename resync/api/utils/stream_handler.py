@@ -5,11 +5,11 @@ This module provides classes for handling real-time streaming of agent responses
 over WebSocket connections with proper error handling and message formatting.
 """
 
-from typing import Any, AsyncIterator
+from collections.abc import AsyncIterator
+from typing import Any
 
 from fastapi import WebSocket, WebSocketDisconnect
-
-from resync.core.structured_logger import get_logger
+from resync_new.utils.simple_logger import get_logger
 
 logger = get_logger(__name__)
 
@@ -45,7 +45,7 @@ class AgentResponseStreamer:
         """
         try:
             # Try streaming first
-            if callable(stream_method := getattr(agent, "stream", None)):
+            if callable(getattr(agent, "stream", None)):
                 await self._handle_streaming_response(agent, query)
             else:
                 await self._handle_non_streaming_response(agent, query)
@@ -57,12 +57,14 @@ class AgentResponseStreamer:
             raise
         except Exception as e:
             logger.error("streaming_error", error=str(e), exc_info=True)
-            await self._send_error("Ocorreu um erro ao processar sua solicitação.")
+            await self._send_error(
+                "Ocorreu um erro ao processar sua solicitação."
+            )
             return self.full_response or "Erro no processamento"
 
     async def _handle_streaming_response(self, agent: Any, query: str) -> None:
         """Handle streaming response from agent."""
-        stream_result = agent.stream(query)  [attr-defined]
+        stream_result = agent.stream(query)
 
         # Check if result is an async iterator
         if self._is_async_iterator(stream_result):
@@ -74,7 +76,9 @@ class AgentResponseStreamer:
             self.full_response = response
             await self._send_stream_message(response)
 
-    async def _handle_non_streaming_response(self, agent: Any, query: str) -> None:
+    async def _handle_non_streaming_response(
+        self, agent: Any, query: str
+    ) -> None:
         """Handle non-streaming response from agent."""
         response = await agent.arun(query)
         self.full_response = str(response)
@@ -87,7 +91,9 @@ class AgentResponseStreamer:
             self.full_response += chunk_str
             await self._send_stream_message(chunk_str, is_chunk=True)
 
-    async def _send_stream_message(self, message: str, is_chunk: bool = False) -> None:
+    async def _send_stream_message(
+        self, message: str, is_chunk: bool = False
+    ) -> None:
         """Send a stream message to the client."""
         message_type = "stream"
         await self.websocket.send_json(

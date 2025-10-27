@@ -5,11 +5,10 @@ This module provides a centralized way to create HTTP clients with
 consistent configuration, timeouts, and limits across the application.
 """
 
-from typing import Optional
+import logging
 
 import httpx
 from httpx import AsyncClient
-
 from resync.core.constants import (
     DEFAULT_CONNECT_TIMEOUT,
     DEFAULT_MAX_CONNECTIONS,
@@ -18,19 +17,19 @@ from resync.core.constants import (
     DEFAULT_READ_TIMEOUT,
     DEFAULT_WRITE_TIMEOUT,
 )
-from resync.settings import settings
+from resync_new.config.settings import settings
 
 
 def create_async_http_client(
     base_url: str,
-    auth: Optional[httpx.BasicAuth] = None,
+    auth: httpx.BasicAuth | None = None,
     verify: bool = True,
-    connect_timeout: Optional[float] = None,
-    read_timeout: Optional[float] = None,
-    write_timeout: Optional[float] = None,
-    pool_timeout: Optional[float] = None,
-    max_connections: Optional[int] = None,
-    max_keepalive: Optional[int] = None,
+    connect_timeout: float | None = None,
+    read_timeout: float | None = None,
+    write_timeout: float | None = None,
+    pool_timeout: float | None = None,
+    max_connections: int | None = None,
+    max_keepalive: int | None = None,
 ) -> httpx.AsyncClient:
     """
     Creates a configured httpx.AsyncClient with sensible defaults.
@@ -67,7 +66,9 @@ def create_async_http_client(
         verify=verify,
         timeout=httpx.Timeout(
             connect=connect_timeout
-            or getattr(settings, "TWS_CONNECT_TIMEOUT", DEFAULT_CONNECT_TIMEOUT),
+            or getattr(
+                settings, "TWS_CONNECT_TIMEOUT", DEFAULT_CONNECT_TIMEOUT
+            ),
             read=read_timeout
             or getattr(settings, "TWS_READ_TIMEOUT", DEFAULT_READ_TIMEOUT),
             write=write_timeout
@@ -77,20 +78,28 @@ def create_async_http_client(
         ),
         limits=httpx.Limits(
             max_connections=max_connections
-            or getattr(settings, "TWS_MAX_CONNECTIONS", DEFAULT_MAX_CONNECTIONS),
+            or getattr(
+                settings, "TWS_MAX_CONNECTIONS", DEFAULT_MAX_CONNECTIONS
+            ),
             max_keepalive_connections=max_keepalive
             or getattr(
-                settings, "TWS_MAX_KEEPALIVE", DEFAULT_MAX_KEEPALIVE_CONNECTIONS
+                settings,
+                "TWS_MAX_KEEPALIVE",
+                DEFAULT_MAX_KEEPALIVE_CONNECTIONS,
             ),
         ),
     )
 
-
-import logging
-
 logger = logging.getLogger(__name__)
 
-def create_tws_http_client(*, base_url: str | None = None, auth=None, verify: bool | str | None = None, **kwargs) -> AsyncClient:
+
+def create_tws_http_client(
+    *,
+    base_url: str | None = None,
+    auth=None,
+    verify: bool | str | None = None,
+    **kwargs,
+) -> AsyncClient:
     # Use http by default for TWS
     host = settings.TWS_HOST
     port = settings.TWS_PORT
@@ -100,14 +109,18 @@ def create_tws_http_client(*, base_url: str | None = None, auth=None, verify: bo
 
     # Define timeout values based on settings
     timeout = httpx.Timeout(
-        connect=getattr(settings, "TWS_CONNECT_TIMEOUT", DEFAULT_CONNECT_TIMEOUT),
+        connect=getattr(
+            settings, "TWS_CONNECT_TIMEOUT", DEFAULT_CONNECT_TIMEOUT
+        ),
         read=getattr(settings, "TWS_READ_TIMEOUT", DEFAULT_READ_TIMEOUT),
         write=getattr(settings, "TWS_WRITE_TIMEOUT", DEFAULT_WRITE_TIMEOUT),
         pool=getattr(settings, "TWS_POOL_TIMEOUT", DEFAULT_POOL_TIMEOUT),
     )
 
     limits = httpx.Limits(
-        max_connections=getattr(settings, "TWS_MAX_CONNECTIONS", DEFAULT_MAX_CONNECTIONS),
+        max_connections=getattr(
+            settings, "TWS_MAX_CONNECTIONS", DEFAULT_MAX_CONNECTIONS
+        ),
         max_keepalive_connections=getattr(
             settings, "TWS_MAX_KEEPALIVE", DEFAULT_MAX_KEEPALIVE_CONNECTIONS
         ),
@@ -119,5 +132,5 @@ def create_tws_http_client(*, base_url: str | None = None, auth=None, verify: bo
         timeout=timeout,
         limits=limits,
         verify=verify_param,  # Apply TWS verification setting
-        **kwargs
+        **kwargs,
     )

@@ -16,19 +16,20 @@ import asyncio
 import logging
 import random
 import re
-import time
-from contextlib import asynccontextmanager
-from typing import AsyncIterator, Optional, Any, Dict
-
 import sqlite3
+import time
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
+from typing import Any
+
 from sqlalchemy import event, select
 from sqlalchemy.engine import make_url
 from sqlalchemy.exc import (
-    SQLAlchemyError,
-    TimeoutError as SATimeoutError,
     DisconnectionError,
-    OperationalError
+    OperationalError,
+    SQLAlchemyError,
 )
+from sqlalchemy.exc import TimeoutError as SATimeoutError
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
     AsyncSession,
@@ -63,8 +64,7 @@ class SecretRedactor(logging.Filter):
                 }
             elif isinstance(record.args, tuple):
                 record.args = tuple(
-                    self.PAT.sub(r"\1=[REDACTED]", str(a))
-                    for a in record.args
+                    self.PAT.sub(r"\1=[REDACTED]", str(a)) for a in record.args
                 )
         return True
 
@@ -81,7 +81,7 @@ if not any(
 async def execute_with_retry(
     session: AsyncSession,
     stmt: Executable | str,
-    params: Optional[Dict[str, Any]] = None,
+    params: dict[str, Any] | None = None,
     *,
     max_retries: int = 5,
     base_delay: float = 0.1,
@@ -99,14 +99,15 @@ async def execute_with_retry(
         except (SQLAlchemyError, OperationalError) as e:
             # Verificar exceção SQLite específica
             orig = getattr(e, "orig", None)
-            is_busy = (
-                isinstance(orig, sqlite3.OperationalError) and
-                getattr(sqlite3, "SQLITE_BUSY", 5) in getattr(orig, "args", (None,))
-            )
+            is_busy = isinstance(orig, sqlite3.OperationalError) and getattr(
+                sqlite3, "SQLITE_BUSY", 5
+            ) in getattr(orig, "args", (None,))
             msg = str(e).lower()
 
             # Fallback defensivo por mensagem
-            if not (is_busy or "database is locked" in msg or "sqlite_busy" in msg):
+            if not (
+                is_busy or "database is locked" in msg or "sqlite_busy" in msg
+            ):
                 raise
 
             if tries >= max_retries:
@@ -114,8 +115,9 @@ async def execute_with_retry(
 
             tries += 1
             delay = (
-                base_delay * (2 ** (tries - 1)) *
-                (1 + random.uniform(-0.1, 0.1))
+                base_delay
+                * (2 ** (tries - 1))
+                * (1 + random.uniform(-0.1, 0.1))
             )
             await asyncio.sleep(delay)
 
@@ -126,8 +128,8 @@ class DatabaseConnectionPool(ConnectionPool[AsyncEngine]):
     def __init__(self, config: ConnectionPoolConfig, database_url: str):
         super().__init__(config)
         self.database_url = database_url
-        self._engine: Optional[AsyncEngine] = None
-        self._sessionmaker: Optional[async_sessionmaker[AsyncSession]] = None
+        self._engine: AsyncEngine | None = None
+        self._sessionmaker: async_sessionmaker[AsyncSession] | None = None
         self._sqlite_connect_handler = None  # Para tornar listener idempotente
 
     def _setup_sqlite_listeners(self) -> None:
@@ -137,7 +139,7 @@ class DatabaseConnectionPool(ConnectionPool[AsyncEngine]):
             event.remove(
                 self._engine.sync_engine,
                 "connect",
-                self._sqlite_connect_handler
+                self._sqlite_connect_handler,
             )
 
         @event.listens_for(self._engine.sync_engine, "connect")
@@ -150,11 +152,13 @@ class DatabaseConnectionPool(ConnectionPool[AsyncEngine]):
                 cur.execute("PRAGMA foreign_keys = ON;")
                 # 'journal_mode=WAL' é persistente no arquivo;
                 # manter se quiser reforçar
-                cur.execute("PRAGMA synchronous = NORMAL;")  # trade-off durabilidade
+                cur.execute(
+                    "PRAGMA synchronous = NORMAL;"
+                )  # trade-off durabilidade
                 cur.close()
                 logger.debug(
                     "PRAGMAs SQLite aplicados por conexão para pool '%s'",
-                    self.config.pool_name
+                    self.config.pool_name,
                 )
             except (SQLAlchemyError, OSError) as e:
                 # evitar travar boot por falha de PRAGMA
@@ -162,7 +166,7 @@ class DatabaseConnectionPool(ConnectionPool[AsyncEngine]):
                     "Falha ao aplicar PRAGMAs SQLite por conexão no pool '%s': %s",
                     self.config.pool_name,
                     e,
-                    exc_info=True
+                    exc_info=True,
                 )
 
         self._sqlite_connect_handler = _sqlite_on_connect
@@ -172,19 +176,17 @@ class DatabaseConnectionPool(ConnectionPool[AsyncEngine]):
         try:
             url = make_url(self.database_url)
             backend = url.get_backend_name()  # e.g., "sqlite", "postgresql"
-            # driver usado para logging - prefixado com _ para evitar warning
-            _driver = url.get_driver_name()  # e.g., "aiosqlite", "asyncpg"
 
-            engine_kwargs: Dict[str, Any] = {"echo": False}
+            engine_kwargs: dict[str, Any] = {"echo": False}
 
             if backend == "sqlite":
                 # Detectar se é in-memory SQLite
-                is_memory = (
-                    url.database in (None, "", ":memory:") or
-                    self.database_url.startswith((
-                        "sqlite:///:memory:",
-                        "sqlite:///file::memory:"
-                    ))
+                is_memory = url.database in (
+                    None,
+                    "",
+                    ":memory:",
+                ) or self.database_url.startswith(
+                    ("sqlite:///:memory:", "sqlite:///file::memory:")
                 )
 
                 # (A) timeout por conexão via DBAPI (aiosqlite suporta 'timeout')
@@ -198,11 +200,13 @@ class DatabaseConnectionPool(ConnectionPool[AsyncEngine]):
                     engine_kwargs["connect_args"]["check_same_thread"] = False
                     logger.info(
                         "Pool '%s' configurado com SQLite in-memory (StaticPool)",
-                        self.config.pool_name
+                        self.config.pool_name,
                     )
 
                 # Criar engine para SQLite
-                self._engine = create_async_engine(self.database_url, **engine_kwargs)
+                self._engine = create_async_engine(
+                    self.database_url, **engine_kwargs
+                )
 
                 # (B) listeners síncronos para aplicar PRAGMAs a cada conexão
                 self._setup_sqlite_listeners()  # também em in-memory para consistência
@@ -212,14 +216,16 @@ class DatabaseConnectionPool(ConnectionPool[AsyncEngine]):
 
                 logger.info(
                     "Pool '%s' configurado com SQLite file-based (WAL + busy_timeout)",
-                    self.config.pool_name
+                    self.config.pool_name,
                 )
             else:
                 # Outros bancos usam pool com configurações completas
                 self._engine = create_async_engine(
                     self.database_url,
                     pool_size=self.config.min_size,
-                    max_overflow=max(0, self.config.max_size - self.config.min_size),
+                    max_overflow=max(
+                        0, self.config.max_size - self.config.min_size
+                    ),
                     pool_pre_ping=True,  # detecta conexões 'stale' no checkout
                     pool_recycle=self.config.max_lifetime,  # recicla após N segundos
                     pool_timeout=self.config.connection_timeout,  # tempo máx. do pool
@@ -248,25 +254,29 @@ class DatabaseConnectionPool(ConnectionPool[AsyncEngine]):
                 "Falha ao iniciar pool '%s': %s",
                 self.config.pool_name,
                 e,
-                exc_info=True
+                exc_info=True,
             )
-            raise DatabaseError(f"Failed to setup database connection pool: {e}") from e
+            raise DatabaseError(
+                f"Failed to setup database connection pool: {e}"
+            ) from e
 
     async def _init_sqlite_pragmas(self) -> None:
         """Configura PRAGMAs persistentes para SQLite file-based."""
         try:
             async with self._engine.begin() as conn:
-                await conn.exec_driver_sql("PRAGMA journal_mode=WAL;")  # persistente
+                await conn.exec_driver_sql(
+                    "PRAGMA journal_mode=WAL;"
+                )  # persistente
                 logger.debug(
                     "PRAGMA journal_mode=WAL aplicado para pool '%s'",
-                    self.config.pool_name
+                    self.config.pool_name,
                 )
         except (SQLAlchemyError, OSError) as e:
             logger.warning(
                 "Falha ao aplicar PRAGMA journal_mode no pool '%s': %s",
                 self.config.pool_name,
                 e,
-                exc_info=True
+                exc_info=True,
             )
 
     @asynccontextmanager
@@ -285,7 +295,6 @@ class DatabaseConnectionPool(ConnectionPool[AsyncEngine]):
         # Separar métricas: tempo de espera vs tempo de uso
         acquire_start = time.monotonic()
         session_acquired = False
-        use_start = 0.0  # Inicializar para evitar UnboundLocalError
 
         # Incrementar tentativas de aquisição (métrica correta)
         await self.increment_stat("acquisition_attempts", 1)
@@ -298,11 +307,13 @@ class DatabaseConnectionPool(ConnectionPool[AsyncEngine]):
 
                 session_acquired = True
                 await self.increment_stat("active_connections", 1)
-                await self.increment_stat("pool_hits", 1)  # Hit só após conseguir sessão
+                await self.increment_stat(
+                    "pool_hits", 1
+                )  # Hit só após conseguir sessão
                 await self.increment_stat("session_acquisitions", 1)
 
                 # Início do uso da sessão
-                use_start = time.monotonic()
+                # use_start = time.monotonic()  # Commented out as not currently used
 
                 try:
                     # Entrega a sessão ao chamador
@@ -324,11 +335,15 @@ class DatabaseConnectionPool(ConnectionPool[AsyncEngine]):
                         "Timeout no pool '%s': %s",
                         self.config.pool_name,
                         e,
-                        exc_info=True
+                        exc_info=True,
                     )
                     raise DatabaseError("Pool exhausted or timed out") from e
 
-                except (SQLAlchemyError, DisconnectionError, OperationalError) as e:
+                except (
+                    SQLAlchemyError,
+                    DisconnectionError,
+                    OperationalError,
+                ) as e:
                     await self.increment_stat("connection_errors", 1)
                     # NOTA: não incrementar pool_misses aqui - erro durante uso da sessão
 
@@ -339,9 +354,11 @@ class DatabaseConnectionPool(ConnectionPool[AsyncEngine]):
                         "Erro SQLAlchemy no pool '%s': %s",
                         self.config.pool_name,
                         e,
-                        exc_info=True
+                        exc_info=True,
                     )
-                    raise DatabaseError(f"Database operation failed: {e}") from e
+                    raise DatabaseError(
+                        f"Database operation failed: {e}"
+                    ) from e
 
         except SATimeoutError as e:
             # Captura timeout no "enter" do sessionmaker (antes do async with)
@@ -352,7 +369,7 @@ class DatabaseConnectionPool(ConnectionPool[AsyncEngine]):
                 "Timeout no pool '%s': %s",
                 self.config.pool_name,
                 e,
-                exc_info=True
+                exc_info=True,
             )
             raise DatabaseError("Pool exhausted or timed out") from e
 
@@ -368,14 +385,16 @@ class DatabaseConnectionPool(ConnectionPool[AsyncEngine]):
                 "Falha ao adquirir sessão do pool '%s': %s",
                 self.config.pool_name,
                 e,
-                exc_info=True
+                exc_info=True,
             )
             raise DatabaseError(f"Failed to acquire DB connection: {e}") from e
 
         finally:
             if session_acquired:
                 # Calcular duração do uso e atualizar métrica separada
-                _use_duration = time.monotonic() - use_start  # Prefixado para evitar warning
+                # _use_duration = (
+                #     time.monotonic() - use_start
+                # )  # Prefixado para evitar warning
                 await self.increment_stat("active_connections", -1)
                 # NOTA: await self.update_session_duration(_use_duration)  # nova métrica
 
@@ -393,7 +412,7 @@ class DatabaseConnectionPool(ConnectionPool[AsyncEngine]):
                 "Health-check falhou no pool '%s': %s",
                 self.config.pool_name,
                 e,
-                exc_info=True
+                exc_info=True,
             )
             return False
 

@@ -9,9 +9,10 @@ from __future__ import annotations
 
 import logging
 import sys
-from typing import Any, Dict, List, Optional
+import time
+from typing import Any
 
-from resync.core.metrics import runtime_metrics
+from resync_new.core.monitoring.metrics import runtime_metrics
 
 logger = logging.getLogger(__name__)
 
@@ -23,6 +24,31 @@ class CacheEntry:
         self.data = data
         self.timestamp = timestamp
         self.ttl = ttl
+        self.value = data  # Add value attribute for direct access
+
+    def is_expired(self, current_time: float | None = None) -> bool:
+        """
+        Check if the cache entry has expired.
+
+        Args:
+            current_time: Current time to check against. If None, uses time.time()
+
+        Returns:
+            True if the entry has expired, False otherwise
+        """
+        if current_time is None:
+            current_time = time.time()
+
+        return current_time > (self.timestamp + self.ttl)
+
+    def refresh_access(self) -> None:
+        """
+        Refresh the access timestamp for the cache entry.
+
+        This method is called when the entry is accessed to update
+        the last access time for LRU eviction calculations.
+        """
+        self.timestamp = time.time()
 
 
 class CacheMemoryManager:
@@ -43,6 +69,7 @@ class CacheMemoryManager:
         max_entries: int = 100000,
         max_memory_mb: int = 100,
         paranoia_mode: bool = False,
+        enable_weak_refs: bool = False,
     ):
         """
         Initialize the cache memory manager.
@@ -62,7 +89,7 @@ class CacheMemoryManager:
             self.max_memory_mb = min(self.max_memory_mb, 10)  # Max 10MB
 
     def check_memory_bounds(
-        self, shards: List[Dict[str, CacheEntry]], current_size: int
+        self, shards: list[dict[str, CacheEntry]], current_size: int
     ) -> bool:
         """
         Check if cache size and memory usage are within safe bounds.
@@ -103,7 +130,7 @@ class CacheMemoryManager:
         return True
 
     def _check_memory_usage_bounds(
-        self, shards: List[Dict[str, CacheEntry]], current_size: int
+        self, shards: list[dict[str, CacheEntry]], current_size: int
     ) -> bool:
         """
         Check if memory usage is within safe bounds using sampling.
@@ -144,7 +171,9 @@ class CacheMemoryManager:
                 )
             else:
                 # Fallback to rough calculation if no items sampled
-                estimated_memory_mb = current_size * 0.5  # ~500KB per 1000 entries
+                estimated_memory_mb = (
+                    current_size * 0.5
+                )  # ~500KB per 1000 entries
 
             # Check if we're approaching the memory limit (80% threshold)
             memory_threshold = self.max_memory_mb * 0.8
@@ -161,7 +190,9 @@ class CacheMemoryManager:
                                 "current_size": current_size,
                                 "sample_count": sample_count,
                                 "avg_memory_per_item": (
-                                    avg_memory_per_item if sample_count > 0 else 0
+                                    avg_memory_per_item
+                                    if sample_count > 0
+                                    else 0
                                 ),
                                 "max_memory_mb": self.max_memory_mb,
                                 "threshold_reached": "80%",
@@ -183,7 +214,9 @@ class CacheMemoryManager:
                                     "current_size": current_size,
                                     "sample_count": sample_count,
                                     "avg_memory_per_item": (
-                                        avg_memory_per_item if sample_count > 0 else 0
+                                        avg_memory_per_item
+                                        if sample_count > 0
+                                        else 0
                                     ),
                                     "max_memory_mb": self.max_memory_mb,
                                 }
@@ -215,10 +248,10 @@ class CacheMemoryManager:
 
     def evict_to_fit(
         self,
-        shards: List[Dict[str, CacheEntry]],
-        shard_locks: List[Any],
+        shards: list[dict[str, CacheEntry]],
+        shard_locks: list[Any],
         required_bytes: int,
-        exclude_key: Optional[str] = None,
+        exclude_key: str | None = None,
     ) -> int:
         """
         Evict entries to make room for new data requiring specified bytes.
@@ -285,6 +318,7 @@ class CacheMemoryManager:
 
                     # Use asyncio since this is called from async context
                     async def do_eviction():
+                        nonlocal bytes_freed
                         async with lock:
                             if lru_key in shard:
                                 entry = shard[lru_key]
@@ -329,8 +363,8 @@ class CacheMemoryManager:
             runtime_metrics.close_correlation_id(correlation_id)
 
     def _get_lru_key(
-        self, shard: Dict[str, CacheEntry], exclude_key: Optional[str] = None
-    ) -> Optional[str]:
+        self, shard: dict[str, CacheEntry], exclude_key: str | None = None
+    ) -> str | None:
         """
         Get the least recently used key in a shard, excluding specified key.
 
@@ -358,7 +392,9 @@ class CacheMemoryManager:
 
         return lru_key
 
-    def estimate_cache_memory_usage(self, shards: List[Dict[str, CacheEntry]]) -> float:
+    def estimate_cache_memory_usage(
+        self, shards: list[dict[str, CacheEntry]]
+    ) -> float:
         """
         Estimate current memory usage of cache in MB.
 
@@ -384,14 +420,15 @@ class CacheMemoryManager:
                 return 0.0
 
             # Convert to MB
-            memory_mb = total_memory / (1024 * 1024)
-            return memory_mb
+            return total_memory / (1024 * 1024)
 
         except Exception as e:
             logger.warning(f"Failed to estimate cache memory usage: {e}")
             return 0.0
 
-    def get_memory_info(self, shards: List[Dict[str, CacheEntry]]) -> Dict[str, Any]:
+    def get_memory_info(
+        self, shards: list[dict[str, CacheEntry]]
+    ) -> dict[str, Any]:
         """
         Get comprehensive memory information for the cache.
 
@@ -421,7 +458,7 @@ class CacheMemoryManager:
 
 # Import here to avoid circular imports
 try:
-    from resync.core.metrics import log_with_correlation
+    from resync_new.core.monitoring.metrics import log_with_correlation
 except ImportError:
     # Fallback if metrics module not available
     def log_with_correlation(level, message, correlation_id):
