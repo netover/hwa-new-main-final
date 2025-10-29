@@ -22,7 +22,7 @@ source venv/bin/activate  # Linux/Mac
 venv\Scripts\activate  # Windows
 
 # Instale dependências
-pip install -r requirements.txt
+pip install -r requirements/dev.txt
 ```
 
 ### 2. Configure (Opcional)
@@ -338,7 +338,7 @@ docker run -d -p 6379:6379 redis:alpine
 
 **Solução**:
 ```bash
-pip install -r requirements.txt
+pip install -r requirements/dev.txt
 ```
 
 ### Erro: "Port already in use"

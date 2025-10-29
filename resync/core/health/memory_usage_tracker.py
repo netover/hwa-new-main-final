@@ -8,9 +8,10 @@ functionality for health checks and system monitoring.
 from __future__ import annotations
 
 import asyncio
+import contextlib
 import gc
 from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import psutil
 import structlog
@@ -51,9 +52,9 @@ class MemoryUsageTracker:
         self.warning_threshold_mb = warning_threshold_mb
         self.check_interval_seconds = check_interval_seconds
 
-        self.memory_history: List[Dict[str, Any]] = []
+        self.memory_history: list[dict[str, Any]] = []
         self._monitoring_active = False
-        self._monitoring_task: Optional[asyncio.Task] = None
+        self._monitoring_task: asyncio.Task | None = None
         self._last_gc_collection = 0
 
     async def start_monitoring(self) -> None:
@@ -70,10 +71,8 @@ class MemoryUsageTracker:
         self._monitoring_active = False
         if self._monitoring_task:
             self._monitoring_task.cancel()
-            try:
+            with contextlib.suppress(asyncio.CancelledError):
                 await self._monitoring_task
-            except asyncio.CancelledError:
-                pass
             self._monitoring_task = None
         logger.info("memory_usage_monitoring_stopped")
 
@@ -89,7 +88,7 @@ class MemoryUsageTracker:
                 logger.error("error_in_memory_monitoring_loop", error=str(e))
                 await asyncio.sleep(10)  # Brief pause on error
 
-    async def record_memory_usage(self) -> Dict[str, Any]:
+    async def record_memory_usage(self) -> dict[str, Any]:
         """
         Record current memory usage statistics.
 
@@ -140,7 +139,7 @@ class MemoryUsageTracker:
             logger.error("failed_to_record_memory_usage", error=str(e))
             return {"timestamp": datetime.now(), "error": str(e)}
 
-    async def _check_memory_alerts(self, memory_data: Dict[str, Any]) -> None:
+    async def _check_memory_alerts(self, memory_data: dict[str, Any]) -> None:
         """Check for memory usage alerts and warnings."""
         try:
             process_memory_mb = memory_data.get("process_memory_rss_mb", 0)
@@ -165,15 +164,18 @@ class MemoryUsageTracker:
             # Check system memory thresholds
             if system_memory_percent > 95:
                 logger.warning(
-                    "system_memory_critical", memory_percent=system_memory_percent
+                    "system_memory_critical",
+                    memory_percent=system_memory_percent,
                 )
             elif system_memory_percent > 85:
-                logger.info("system_memory_high", memory_percent=system_memory_percent)
+                logger.info(
+                    "system_memory_high", memory_percent=system_memory_percent
+                )
 
         except Exception as e:
             logger.error("failed_to_check_memory_alerts", error=str(e))
 
-    def get_current_memory_usage(self) -> Dict[str, Any]:
+    def get_current_memory_usage(self) -> dict[str, Any]:
         """
         Get current memory usage statistics.
 
@@ -187,8 +189,8 @@ class MemoryUsageTracker:
         return self.memory_history[-1].copy()
 
     def get_memory_history(
-        self, hours: int = 24, max_entries: Optional[int] = None
-    ) -> List[Dict[str, Any]]:
+        self, hours: int = 24, max_entries: int | None = None
+    ) -> list[dict[str, Any]]:
         """
         Get memory usage history for the specified time period.
 
@@ -203,7 +205,9 @@ class MemoryUsageTracker:
 
         # Filter by time
         filtered_history = [
-            entry for entry in self.memory_history if entry["timestamp"] >= cutoff_time
+            entry
+            for entry in self.memory_history
+            if entry["timestamp"] >= cutoff_time
         ]
 
         # Apply entry limit if specified
@@ -212,7 +216,7 @@ class MemoryUsageTracker:
 
         return filtered_history
 
-    def get_memory_trends(self) -> Dict[str, Any]:
+    def get_memory_trends(self) -> dict[str, Any]:
         """
         Analyze memory usage trends.
 
@@ -268,11 +272,13 @@ class MemoryUsageTracker:
             "system_memory_trend": system_trend,
             "current_process_mb": last_process,
             "current_system_percent": last_system,
-            "analysis_period_hours": recent_count * self.check_interval_seconds / 3600,
+            "analysis_period_hours": recent_count
+            * self.check_interval_seconds
+            / 3600,
             "data_points": len(recent_data),
         }
 
-    def detect_memory_leaks(self) -> Dict[str, Any]:
+    def detect_memory_leaks(self) -> dict[str, Any]:
         """
         Detect potential memory leaks.
 
@@ -309,8 +315,12 @@ class MemoryUsageTracker:
             current = recent_data[i]
             previous = recent_data[i - 1]
 
-            time_diff = (current["timestamp"] - previous["timestamp"]).total_seconds()
-            memory_diff = process_memory_values[i] - process_memory_values[i - 1]
+            time_diff = (
+                current["timestamp"] - previous["timestamp"]
+            ).total_seconds()
+            memory_diff = (
+                process_memory_values[i] - process_memory_values[i - 1]
+            )
 
             if time_diff > 0:
                 time_deltas.append(time_diff)
@@ -340,7 +350,7 @@ class MemoryUsageTracker:
             "data_points": len(memory_deltas),
         }
 
-    def force_garbage_collection(self) -> Dict[str, Any]:
+    def force_garbage_collection(self) -> dict[str, Any]:
         """
         Force garbage collection and return statistics.
 
@@ -364,14 +374,19 @@ class MemoryUsageTracker:
 
             result = {
                 "gc_performed": True,
-                "memory_before_mb": before_memory.get("process_memory_rss_mb", 0),
-                "memory_after_mb": after_memory.get("process_memory_rss_mb", 0),
+                "memory_before_mb": before_memory.get(
+                    "process_memory_rss_mb", 0
+                ),
+                "memory_after_mb": after_memory.get(
+                    "process_memory_rss_mb", 0
+                ),
                 "memory_freed_mb": memory_freed_mb,
                 "timestamp": datetime.now().isoformat(),
             }
 
             logger.info(
-                "forced_garbage_collection", memory_freed_mb=round(memory_freed_mb, 2)
+                "forced_garbage_collection",
+                memory_freed_mb=round(memory_freed_mb, 2),
             )
 
             return result
@@ -384,7 +399,7 @@ class MemoryUsageTracker:
                 "timestamp": datetime.now().isoformat(),
             }
 
-    def get_memory_summary(self) -> Dict[str, Any]:
+    def get_memory_summary(self) -> dict[str, Any]:
         """
         Get a comprehensive memory usage summary.
 

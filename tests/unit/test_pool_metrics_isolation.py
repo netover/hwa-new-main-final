@@ -6,11 +6,12 @@ usando mocks precisos para simular cenários de sucesso, falha e
 concorrência, seguindo melhores práticas de 2025 para testes assíncronos.
 """
 
-import pytest
 from unittest.mock import AsyncMock, Mock
 
+import pytest
+
+from resync.core.pools.base_pool import ConnectionPoolConfig, ConnectionPoolStats
 from resync.core.pools.db_pool import DatabaseConnectionPool
-from resync.core.pools.base_pool import ConnectionPoolStats, ConnectionPoolConfig
 
 
 class TestPoolMetricsIsolation:

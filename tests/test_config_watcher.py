@@ -8,8 +8,9 @@ broadcasting functionality.
 
 import asyncio
 import json
-import pytest
 from unittest.mock import AsyncMock, MagicMock, patch
+
+import pytest
 
 from resync.core.config_watcher import handle_config_change
 
@@ -29,7 +30,7 @@ def create_mock_container(mock_agent_manager, mock_connection_manager):
     def container_get_side_effect(interface):
         if 'IAgentManager' in str(interface):
             return mock_agent_manager
-        elif 'IConnectionManager' in str(interface):
+        if 'IConnectionManager' in str(interface):
             return mock_connection_manager
         return MagicMock()
 
@@ -42,7 +43,7 @@ def create_mock_cast(mock_agent_manager, mock_connection_manager):
     def cast_side_effect(type_to_cast, obj):
         if 'AgentManager' in str(type_to_cast):
             return mock_agent_manager
-        elif 'ConnectionManager' in str(type_to_cast):
+        if 'ConnectionManager' in str(type_to_cast):
             return mock_connection_manager
         return obj
 
@@ -81,7 +82,7 @@ class TestConfigWatcher:
             def cast_side_effect(type_to_cast, obj):
                 if type_to_cast.__name__ == 'AgentManager':
                     return mock_agent_manager
-                elif type_to_cast.__name__ == 'ConnectionManager':
+                if type_to_cast.__name__ == 'ConnectionManager':
                     return mock_connection_manager
                 return obj
 
@@ -91,7 +92,7 @@ class TestConfigWatcher:
             def container_get_side_effect(interface):
                 if 'IAgentManager' in interface.__name__:
                     return mock_agent_manager
-                elif 'IConnectionManager' in interface.__name__:
+                if 'IConnectionManager' in interface.__name__:
                     return mock_connection_manager
                 return MagicMock()
 
@@ -141,13 +142,13 @@ class TestConfigWatcher:
         # Patch the container and its dependencies
         with patch('resync.core.config_watcher.container', mock_container), \
              patch('resync.core.config_watcher.cast') as mock_cast, \
-             patch('resync.core.config_watcher.logger') as mock_logger:
+             patch('resync.core.config_watcher.logger'):
 
             # Setup cast to return the mocked objects
             def cast_side_effect(type_to_cast, obj):
                 if type_to_cast.__name__ == 'AgentManager':
                     return mock_agent_manager
-                elif type_to_cast.__name__ == 'ConnectionManager':
+                if type_to_cast.__name__ == 'ConnectionManager':
                     return mock_connection_manager
                 return obj
 
@@ -157,7 +158,7 @@ class TestConfigWatcher:
             def container_get_side_effect(interface):
                 if 'IAgentManager' in interface.__name__:
                     return mock_agent_manager
-                elif 'IConnectionManager' in interface.__name__:
+                if 'IConnectionManager' in interface.__name__:
                     return mock_connection_manager
                 return MagicMock()
 
@@ -204,7 +205,7 @@ class TestConfigWatcher:
             def cast_side_effect(type_to_cast, obj):
                 if type_to_cast.__name__ == 'AgentManager':
                     return mock_agent_manager
-                elif type_to_cast.__name__ == 'ConnectionManager':
+                if type_to_cast.__name__ == 'ConnectionManager':
                     return mock_connection_manager
                 return obj
 
@@ -214,7 +215,7 @@ class TestConfigWatcher:
             def container_get_side_effect(interface):
                 if 'IAgentManager' in interface.__name__:
                     return mock_agent_manager
-                elif 'IConnectionManager' in interface.__name__:
+                if 'IConnectionManager' in interface.__name__:
                     return mock_connection_manager
                 return MagicMock()
 
@@ -258,7 +259,7 @@ class TestConfigWatcher:
             def cast_side_effect(type_to_cast, obj):
                 if type_to_cast.__name__ == 'AgentManager':
                     return mock_agent_manager
-                elif type_to_cast.__name__ == 'ConnectionManager':
+                if type_to_cast.__name__ == 'ConnectionManager':
                     return mock_connection_manager
                 return obj
 
@@ -268,7 +269,7 @@ class TestConfigWatcher:
             def container_get_side_effect(interface):
                 if 'IAgentManager' in interface.__name__:
                     return mock_agent_manager
-                elif 'IConnectionManager' in interface.__name__:
+                if 'IConnectionManager' in interface.__name__:
                     return mock_connection_manager
                 return MagicMock()
 
@@ -308,7 +309,7 @@ class TestConfigWatcher:
             def cast_side_effect(type_to_cast, obj):
                 if type_to_cast.__name__ == 'AgentManager':
                     return mock_agent_manager
-                elif type_to_cast.__name__ == 'ConnectionManager':
+                if type_to_cast.__name__ == 'ConnectionManager':
                     return mock_connection_manager
                 return obj
 
@@ -318,7 +319,7 @@ class TestConfigWatcher:
             def container_get_side_effect(interface):
                 if 'IAgentManager' in interface.__name__:
                     return mock_agent_manager
-                elif 'IConnectionManager' in interface.__name__:
+                if 'IConnectionManager' in interface.__name__:
                     return mock_connection_manager
                 return MagicMock()
 
@@ -373,13 +374,13 @@ class TestConfigWatcher:
         # Patch the container and its dependencies
         with patch('resync.core.config_watcher.container', mock_container), \
              patch('resync.core.config_watcher.cast') as mock_cast, \
-             patch('resync.core.config_watcher.logger') as mock_logger:
+             patch('resync.core.config_watcher.logger'):
 
             # Setup cast to return the mocked objects
             def cast_side_effect(type_to_cast, obj):
                 if type_to_cast.__name__ == 'AgentManager':
                     return mock_agent_manager
-                elif type_to_cast.__name__ == 'ConnectionManager':
+                if type_to_cast.__name__ == 'ConnectionManager':
                     return mock_connection_manager
                 return obj
 
@@ -389,7 +390,7 @@ class TestConfigWatcher:
             def container_get_side_effect(interface):
                 if 'IAgentManager' in interface.__name__:
                     return mock_agent_manager
-                elif 'IConnectionManager' in interface.__name__:
+                if 'IConnectionManager' in interface.__name__:
                     return mock_connection_manager
                 return MagicMock()
 
@@ -429,13 +430,13 @@ class TestConfigWatcher:
         # Patch the container and its dependencies
         with patch('resync.core.config_watcher.container', mock_container), \
              patch('resync.core.config_watcher.cast') as mock_cast, \
-             patch('resync.core.config_watcher.logger') as mock_logger:
+             patch('resync.core.config_watcher.logger'):
 
             # Setup cast to return the mocked objects
             def cast_side_effect(type_to_cast, obj):
                 if type_to_cast.__name__ == 'AgentManager':
                     return mock_agent_manager
-                elif type_to_cast.__name__ == 'ConnectionManager':
+                if type_to_cast.__name__ == 'ConnectionManager':
                     return mock_connection_manager
                 return obj
 
@@ -445,7 +446,7 @@ class TestConfigWatcher:
             def container_get_side_effect(interface):
                 if 'IAgentManager' in interface.__name__:
                     return mock_agent_manager
-                elif 'IConnectionManager' in interface.__name__:
+                if 'IConnectionManager' in interface.__name__:
                     return mock_connection_manager
                 return MagicMock()
 
@@ -493,13 +494,13 @@ class TestConfigWatcher:
         # Patch the container and its dependencies
         with patch('resync.core.config_watcher.container', mock_container), \
              patch('resync.core.config_watcher.cast') as mock_cast, \
-             patch('resync.core.config_watcher.logger') as mock_logger:
+             patch('resync.core.config_watcher.logger'):
 
             # Setup cast to return the mocked objects
             def cast_side_effect(type_to_cast, obj):
                 if type_to_cast.__name__ == 'AgentManager':
                     return mock_agent_manager
-                elif type_to_cast.__name__ == 'ConnectionManager':
+                if type_to_cast.__name__ == 'ConnectionManager':
                     return mock_connection_manager
                 return obj
 
@@ -509,7 +510,7 @@ class TestConfigWatcher:
             def container_get_side_effect(interface):
                 if 'IAgentManager' in interface.__name__:
                     return mock_agent_manager
-                elif 'IConnectionManager' in interface.__name__:
+                if 'IConnectionManager' in interface.__name__:
                     return mock_connection_manager
                 return MagicMock()
 
@@ -549,7 +550,7 @@ class TestConfigWatcher:
             def cast_side_effect(type_to_cast, obj):
                 if type_to_cast.__name__ == 'AgentManager':
                     return mock_agent_manager
-                elif type_to_cast.__name__ == 'ConnectionManager':
+                if type_to_cast.__name__ == 'ConnectionManager':
                     return mock_connection_manager
                 return obj
 
@@ -559,7 +560,7 @@ class TestConfigWatcher:
             def container_get_side_effect(interface):
                 if 'IAgentManager' in interface.__name__:
                     return mock_agent_manager
-                elif 'IConnectionManager' in interface.__name__:
+                if 'IConnectionManager' in interface.__name__:
                     return mock_connection_manager
                 return MagicMock()
 
@@ -610,13 +611,13 @@ class TestConfigWatcher:
         # Patch the container and its dependencies
         with patch('resync.core.config_watcher.container', mock_container), \
              patch('resync.core.config_watcher.cast') as mock_cast, \
-             patch('resync.core.config_watcher.logger') as mock_logger:
+             patch('resync.core.config_watcher.logger'):
 
             # Setup cast to return the mocked objects
             def cast_side_effect(type_to_cast, obj):
                 if type_to_cast.__name__ == 'AgentManager':
                     return mock_agent_manager
-                elif type_to_cast.__name__ == 'ConnectionManager':
+                if type_to_cast.__name__ == 'ConnectionManager':
                     return mock_connection_manager
                 return obj
 
@@ -626,7 +627,7 @@ class TestConfigWatcher:
             def container_get_side_effect(interface):
                 if 'IAgentManager' in interface.__name__:
                     return mock_agent_manager
-                elif 'IConnectionManager' in interface.__name__:
+                if 'IConnectionManager' in interface.__name__:
                     return mock_connection_manager
                 return MagicMock()
 

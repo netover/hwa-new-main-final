@@ -4,18 +4,24 @@ import os
 import re
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Annotated, Any
 
-from pydantic import field_validator, StringConstraints, Field, model_validator, validator, ConfigDict
-from pydantic.types import constr
+from pydantic import (
+    ConfigDict,
+    Field,
+    StringConstraints,
+    field_validator,
+    model_validator,
+)
 
 from .common import (
     BaseValidatedModel,
     NumericConstraints,
-    StringConstraints,
     ValidationPatterns,
 )
-from typing_extensions import Annotated
+from .common import (
+    StringConstraints as CommonStringConstraints,
+)
 
 
 class FileType(str, Enum):
@@ -44,22 +50,32 @@ class ProcessingStatus(str, Enum):
 class FileUploadRequest(BaseValidatedModel):
     """File upload request validation."""
 
-    filename: StringConstraints.FILENAME = Field(..., description="Original filename")
+    filename: CommonStringConstraints.FILENAME = Field(
+        ..., description="Original filename"
+    )
 
     file_size: int = Field(
-        ..., ge=1, le=NumericConstraints.MAX_FILE_SIZE, description="File size in bytes"
+        ...,
+        ge=1,
+        le=NumericConstraints.MAX_FILE_SIZE,
+        description="File size in bytes",
     )
 
     content_type: str = Field(..., description="MIME content type")
 
-    file_type: Optional[FileType] = Field(None, description="Categorized file type")
-
-    purpose: Annotated[str, StringConstraints(min_length=1, max_length=100, strip_whitespace=True)] = Field(
-        ..., description="Purpose of file upload"
+    file_type: FileType | None = Field(
+        None, description="Categorized file type"
     )
 
-    metadata: Optional[Dict[str, Any]] = Field(
-        default_factory=dict, description="Additional file metadata", max_length=50
+    purpose: Annotated[
+        str,
+        StringConstraints(min_length=1, max_length=100, strip_whitespace=True),
+    ] = Field(..., description="Purpose of file upload")
+
+    metadata: dict[str, Any] | None = Field(
+        default_factory=dict,
+        description="Additional file metadata",
+        max_length=50,
     )
 
     sanitize_content: bool = Field(
@@ -96,9 +112,8 @@ class FileUploadRequest(BaseValidatedModel):
             raise ValueError("Filename has too many extensions")
         # Validate extension
         extension = os.path.splitext(v)[1].lower()
-        if extension:
-            if not re.match(r"^\.[a-zA-Z0-9]{1,10}$", extension):
-                raise ValueError("Invalid file extension")
+        if extension and not re.match(r"^\.[a-zA-Z0-9]{1,10}$", extension):
+            raise ValueError("Invalid file extension")
         return v
 
     @field_validator("content_type")
@@ -131,7 +146,9 @@ class FileUploadRequest(BaseValidatedModel):
         }
         base_type = v.split(";")[0].lower()
         if base_type in dangerous_types:
-            raise ValueError(f"Dangerous content type not allowed: {base_type}")
+            raise ValueError(
+                f"Dangerous content type not allowed: {base_type}"
+            )
         return v
 
     @field_validator("file_size")
@@ -173,7 +190,9 @@ class FileUploadRequest(BaseValidatedModel):
             # Validate string values
             if isinstance(value, str):
                 if len(value) > 1000:  # Max metadata value length
-                    raise ValueError(f"Metadata value too long for key '{key}'")
+                    raise ValueError(
+                        f"Metadata value too long for key '{key}'"
+                    )
                 if ValidationPatterns.SCRIPT_PATTERN.search(value):
                     raise ValueError(
                         f"Metadata value contains malicious content for key '{key}'"
@@ -181,20 +200,26 @@ class FileUploadRequest(BaseValidatedModel):
             # Validate nested dictionaries
             elif isinstance(value, dict):
                 if len(value) > 10:  # Max nested items
-                    raise ValueError(f"Too many nested items in metadata key '{key}'")
+                    raise ValueError(
+                        f"Too many nested items in metadata key '{key}'"
+                    )
                 for nested_key, nested_value in value.items():
                     if not nested_key.replace("_", "").isalnum():
-                        raise ValueError(f"Invalid nested metadata key: {nested_key}")
+                        raise ValueError(
+                            f"Invalid nested metadata key: {nested_key}"
+                        )
                     if isinstance(
                         nested_value, str
-                    ) and ValidationPatterns.SCRIPT_PATTERN.search(nested_value):
+                    ) and ValidationPatterns.SCRIPT_PATTERN.search(
+                        nested_value
+                    ):
                         raise ValueError(
                             "Nested metadata value contains malicious content"
                         )
         return v
 
     @model_validator(mode="before")
-    def validate_type_consistency(cls, values):
+    def validate_type_consistency(self, values):
         """Validate consistency between content type and file type."""
         if isinstance(values, dict):
             content_type = values.get("content_type")
@@ -222,13 +247,15 @@ class FileUploadRequest(BaseValidatedModel):
 class FileChunkUploadRequest(BaseValidatedModel):
     """Chunked file upload request validation."""
 
-    upload_id: StringConstraints.SAFE_TEXT = Field(
+    upload_id: CommonStringConstraints.SAFE_TEXT = Field(
         ..., description="Unique upload session ID"
     )
 
     chunk_index: int = Field(..., ge=0, description="Chunk index (0-based)")
 
-    total_chunks: int = Field(..., ge=1, le=1000, description="Total number of chunks")
+    total_chunks: int = Field(
+        ..., ge=1, le=1000, description="Total number of chunks"
+    )
 
     chunk_size: int = Field(
         ...,
@@ -244,63 +271,81 @@ class FileChunkUploadRequest(BaseValidatedModel):
         description="Total file size in bytes",
     )
 
-    filename: StringConstraints.FILENAME = Field(..., description="Original filename")
+    filename: CommonStringConstraints.FILENAME = Field(
+        ..., description="Original filename"
+    )
 
     content_type: str = Field(..., description="MIME content type")
 
-    checksum: Optional[str] = Field(
-        None, description="MD5 hash of chunk data", pattern=r"^[a-fA-F0-9]{32}$"
+    checksum: str | None = Field(
+        None,
+        description="MD5 hash of chunk data",
+        pattern=r"^[a-fA-F0-9]{32}$",
     )
 
     model_config = ConfigDict(
         extra="forbid",
     )
 
-    # TODO[pydantic]: We couldn't refactor the `validator`, please replace it by `field_validator` manually.
-    # Check https://docs.pydantic.dev/dev-v2/migration/#changes-to-validators for more information.
-    @validator("chunk_index", "total_chunks")
-    def validate_chunk_numbers(cls, v, values):
-        """Validate chunk numbers."""
-        if "chunk_index" in values and "total_chunks" in values:
-            chunk_index = values["chunk_index"]
-            total_chunks = values["total_chunks"]
-            if chunk_index >= total_chunks:
-                raise ValueError("Chunk index must be less than total chunks")
+    @field_validator("chunk_index")
+    @classmethod
+    def validate_chunk_index(cls, v, info):
+        """Validate chunk index."""
+        total_chunks = info.data.get("total_chunks")
+        if total_chunks is not None and v >= total_chunks:
+            raise ValueError("Chunk index must be less than total chunks")
         return v
 
-    # TODO[pydantic]: We couldn't refactor the `validator`, please replace it by `field_validator` manually.
-    # Check https://docs.pydantic.dev/dev-v2/migration/#changes-to-validators for more information.
-    @validator("file_size")
-    def validate_total_size(cls, v, values):
+    @field_validator("total_chunks")
+    @classmethod
+    def validate_total_chunks(cls, v, info):
+        """Validate total chunks."""
+        chunk_index = info.data.get("chunk_index")
+        if chunk_index is not None and chunk_index >= v:
+            raise ValueError("Chunk index must be less than total chunks")
+        return v
+
+    @field_validator("file_size")
+    @classmethod
+    def validate_total_size(cls, v, info):
         """Validate total file size."""
-        chunk_size = values.get("chunk_size")
-        total_chunks = values.get("total_chunks")
+        chunk_size = info.data.get("chunk_size")
+        total_chunks = info.data.get("total_chunks")
         if chunk_size and total_chunks:
             expected_size = chunk_size * total_chunks
             # Allow some variance for the last chunk
             if abs(v - expected_size) > NumericConstraints.MAX_CHUNK_SIZE:
-                raise ValueError("File size doesn't match expected size from chunks")
+                raise ValueError(
+                    "File size doesn't match expected size from chunks"
+                )
         return v
 
 
 class FileUpdateRequest(BaseValidatedModel):
     """File update request validation."""
 
-    filename: Optional[StringConstraints.FILENAME] = Field(
+    filename: CommonStringConstraints.FILENAME | None = Field(
         None, description="New filename"
     )
 
-    purpose: Optional[Annotated[str, StringConstraints(min_length=1, max_length=100, strip_whitespace=True)]] = (
-        Field(None, description="New purpose")
-    )
+    purpose: (
+        Annotated[
+            str,
+            StringConstraints(
+                min_length=1, max_length=100, strip_whitespace=True
+            ),
+        ]
+        | None
+    ) = Field(None, description="New purpose")
 
-    metadata: Optional[Dict[str, Any]] = Field(
+    metadata: dict[str, Any] | None = Field(
         None, description="Updated metadata", max_length=50
     )
 
-    tags: Optional[List[Annotated[str, StringConstraints(min_length=1, max_length=50)]]] = Field(
-        None, description="File tags", max_length=10
-    )
+    tags: (
+        list[Annotated[str, StringConstraints(min_length=1, max_length=50)]]
+        | None
+    ) = Field(None, description="File tags", max_length=10)
 
     model_config = ConfigDict(
         extra="forbid",
@@ -346,7 +391,9 @@ class FileUpdateRequest(BaseValidatedModel):
                 raise ValueError(f"Invalid metadata key: {key}")
             if isinstance(value, str):
                 if len(value) > 1000:
-                    raise ValueError(f"Metadata value too long for key '{key}'")
+                    raise ValueError(
+                        f"Metadata value too long for key '{key}'"
+                    )
                 if ValidationPatterns.SCRIPT_PATTERN.search(value):
                     raise ValueError(
                         f"Metadata value contains malicious content for key '{key}'"
@@ -372,12 +419,17 @@ class FileUpdateRequest(BaseValidatedModel):
 class FileProcessingRequest(BaseValidatedModel):
     """File processing request validation."""
 
-    operations: List[str] = Field(
-        ..., description="Processing operations to perform", min_length=1, max_length=10
+    operations: list[str] = Field(
+        ...,
+        description="Processing operations to perform",
+        min_length=1,
+        max_length=10,
     )
 
-    configuration: Optional[Dict[str, Any]] = Field(
-        default_factory=dict, description="Processing configuration", max_length=20
+    configuration: dict[str, Any] | None = Field(
+        default_factory=dict,
+        description="Processing configuration",
+        max_length=20,
     )
 
     priority: str = Field(
@@ -386,7 +438,7 @@ class FileProcessingRequest(BaseValidatedModel):
         description="Processing priority",
     )
 
-    callback_url: Optional[str] = Field(
+    callback_url: str | None = Field(
         None, description="Callback URL for processing completion"
     )
 
@@ -433,7 +485,9 @@ class FileProcessingRequest(BaseValidatedModel):
         if not v.startswith(("http://", "https://")):
             raise ValueError("Callback URL must use HTTP or HTTPS protocol")
         if ValidationPatterns.SCRIPT_PATTERN.search(v):
-            raise ValueError("Callback URL contains potentially malicious content")
+            raise ValueError(
+                "Callback URL contains potentially malicious content"
+            )
         return v
 
     @field_validator("configuration")
@@ -448,7 +502,9 @@ class FileProcessingRequest(BaseValidatedModel):
                 raise ValueError(f"Invalid configuration key: {key}")
             if isinstance(value, str):
                 if len(value) > 500:
-                    raise ValueError(f"Configuration value too long for key '{key}'")
+                    raise ValueError(
+                        f"Configuration value too long for key '{key}'"
+                    )
                 if ValidationPatterns.SCRIPT_PATTERN.search(value):
                     raise ValueError(
                         f"Configuration value contains malicious content for key '{key}'"
@@ -459,27 +515,34 @@ class FileProcessingRequest(BaseValidatedModel):
 class RAGUploadRequest(BaseValidatedModel):
     """RAG (Retrieval-Augmented Generation) file upload request."""
 
-    files: List[FileUploadRequest] = Field(
-        ..., description="Files to process for RAG", min_length=1, max_length=10
+    files: list[FileUploadRequest] = Field(
+        ...,
+        description="Files to process for RAG",
+        min_length=1,
+        max_length=10,
     )
 
-    collection_name: Annotated[str, StringConstraints(min_length=1, max_length=100, strip_whitespace=True)] = (
-        Field(..., description="RAG collection name")
-    )
+    collection_name: Annotated[
+        str,
+        StringConstraints(min_length=1, max_length=100, strip_whitespace=True),
+    ] = Field(..., description="RAG collection name")
 
     chunk_size: int = Field(
-        default=1000, ge=100, le=10000, description="Text chunk size for processing"
+        default=1000,
+        ge=100,
+        le=10000,
+        description="Text chunk size for processing",
     )
 
     chunk_overlap: int = Field(
         default=200, ge=0, le=1000, description="Overlap between chunks"
     )
 
-    embedding_model: Optional[StringConstraints.MODEL_NAME] = Field(
+    embedding_model: CommonStringConstraints.MODEL_NAME | None = Field(
         None, description="Embedding model to use"
     )
 
-    metadata_template: Optional[Dict[str, str]] = Field(
+    metadata_template: dict[str, str] | None = Field(
         default_factory=dict,
         description="Template for document metadata",
         max_length=20,
@@ -508,7 +571,9 @@ class RAGUploadRequest(BaseValidatedModel):
         if not v or not v.strip():
             raise ValueError("Collection name cannot be empty")
         if ValidationPatterns.SCRIPT_PATTERN.search(v):
-            raise ValueError("Collection name contains potentially malicious content")
+            raise ValueError(
+                "Collection name contains potentially malicious content"
+            )
         return v
 
     @field_validator("chunk_size", "chunk_overlap")
@@ -520,7 +585,7 @@ class RAGUploadRequest(BaseValidatedModel):
         return v
 
     @model_validator(mode="before")
-    def validate_chunk_configuration(cls, values):
+    def validate_chunk_configuration(self, values):
         """Validate chunk size and overlap relationship."""
         if isinstance(values, dict):
             chunk_size = values.get("chunk_size", 1000)
@@ -556,9 +621,11 @@ class FileInfo(BaseValidatedModel):
     file_type: FileType = Field(..., description="Categorized file type")
     status: ProcessingStatus = Field(..., description="Processing status")
     upload_date: datetime = Field(..., description="Upload timestamp")
-    checksum: Optional[str] = Field(None, description="File checksum")
-    metadata: Dict[str, Any] = Field(default_factory=dict, description="File metadata")
-    tags: List[str] = Field(default_factory=list, description="File tags")
+    checksum: str | None = Field(None, description="File checksum")
+    metadata: dict[str, Any] = Field(
+        default_factory=dict, description="File metadata"
+    )
+    tags: list[str] = Field(default_factory=list, description="File tags")
 
     model_config = ConfigDict(
         extra="forbid",

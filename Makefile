@@ -18,11 +18,9 @@ venv:
 
 .PHONY: install
 install: venv
-	@echo "--- Installing dependencies from requirements.txt ---"
+	@echo "--- Installing dependencies from requirements/dev.txt ---"
 	$(PIP) install --upgrade pip
-	$(PIP) install -r requirements.txt
-	@echo "--- Installing testing dependencies ---"
-	$(PIP) install pytest pytest-asyncio pytest-playwright
+	$(PIP) install -r requirements/dev.txt
 	@echo "--- Installing Playwright browsers ---"
 	.venv/bin/playwright install --with-deps
 	@echo "--- Installation complete ---"

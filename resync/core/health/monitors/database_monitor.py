@@ -3,10 +3,13 @@ from __future__ import annotations
 import time
 from dataclasses import dataclass
 from datetime import datetime
-from typing import List, Optional
 
-from resync.core.health_models import ComponentHealth, ComponentType, HealthStatus
-from resync.core.structured_logger import get_logger
+from resync_new.models.health_models import (
+    ComponentHealth,
+    ComponentType,
+    HealthStatus,
+)
+from resync_new.utils.simple_logger import get_logger
 
 logger = get_logger(__name__)
 
@@ -59,8 +62,8 @@ class ReplicationStatus:
     replication_lag_seconds: float = 0.0
 
     # Replication nodes
-    master_node: Optional[str] = None
-    replica_nodes: List[str] = None
+    master_node: str | None = None
+    replica_nodes: list[str] = None
 
     # Replication metrics
     replication_throughput_bytes_per_sec: float = 0.0
@@ -68,11 +71,11 @@ class ReplicationStatus:
 
     # Health indicators
     replication_health: HealthStatus = HealthStatus.UNKNOWN
-    last_sync_timestamp: Optional[datetime] = None
+    last_sync_timestamp: datetime | None = None
 
     # Error tracking
     replication_errors: int = 0
-    last_error_message: Optional[str] = None
+    last_error_message: str | None = None
 
     def __post_init__(self):
         """Initialize mutable defaults."""
@@ -100,7 +103,7 @@ class DatabaseHealthMonitor:
         """
         self.connection_pool_manager = connection_pool_manager
         self._monitoring_active = False
-        self._metrics_history: List[PerformanceMetrics] = []
+        self._metrics_history: list[PerformanceMetrics] = []
         self._max_history_size = 100
 
     async def check_connection_health(self) -> ComponentHealth:
@@ -115,11 +118,13 @@ class DatabaseHealthMonitor:
         try:
             # Get connection pool manager if not provided
             if self.connection_pool_manager is None:
-                from resync.core.connection_pool_manager import (
+                from resync_new.core.connection_pool_manager import (
                     get_connection_pool_manager,
                 )
 
-                self.connection_pool_manager = await get_connection_pool_manager()
+                self.connection_pool_manager = (
+                    await get_connection_pool_manager()
+                )
 
             if not self.connection_pool_manager:
                 return ComponentHealth(
@@ -157,7 +162,9 @@ class DatabaseHealthMonitor:
 
             # Calculate connection utilization
             total_connections = getattr(db_pool_stats, "total_connections", 0)
-            active_connections = getattr(db_pool_stats, "active_connections", 0)
+            active_connections = getattr(
+                db_pool_stats, "active_connections", 0
+            )
 
             if total_connections == 0:
                 return ComponentHealth(
@@ -169,7 +176,9 @@ class DatabaseHealthMonitor:
                     last_check=datetime.now(),
                 )
 
-            connection_utilization = (active_connections / total_connections) * 100
+            connection_utilization = (
+                active_connections / total_connections
+            ) * 100
 
             # Determine health status based on utilization
             if connection_utilization > 95:
@@ -188,12 +197,20 @@ class DatabaseHealthMonitor:
             metadata = {
                 "total_connections": total_connections,
                 "active_connections": active_connections,
-                "idle_connections": getattr(db_pool_stats, "idle_connections", 0),
-                "connection_utilization_percent": round(connection_utilization, 1),
-                "connection_errors": getattr(db_pool_stats, "connection_errors", 0),
+                "idle_connections": getattr(
+                    db_pool_stats, "idle_connections", 0
+                ),
+                "connection_utilization_percent": round(
+                    connection_utilization, 1
+                ),
+                "connection_errors": getattr(
+                    db_pool_stats, "connection_errors", 0
+                ),
                 "pool_hits": getattr(db_pool_stats, "pool_hits", 0),
                 "pool_misses": getattr(db_pool_stats, "pool_misses", 0),
-                "waiting_connections": getattr(db_pool_stats, "waiting_connections", 0),
+                "waiting_connections": getattr(
+                    db_pool_stats, "waiting_connections", 0
+                ),
             }
 
             return ComponentHealth(
@@ -208,7 +225,9 @@ class DatabaseHealthMonitor:
 
         except Exception as e:
             response_time_ms = (time.time() - start_time) * 1000
-            logger.error("database_connection_health_check_failed", error=str(e))
+            logger.error(
+                "database_connection_health_check_failed", error=str(e)
+            )
 
             return ComponentHealth(
                 name="database_connections",
@@ -230,11 +249,13 @@ class DatabaseHealthMonitor:
         try:
             # Get connection pool manager if not provided
             if self.connection_pool_manager is None:
-                from resync.core.connection_pool_manager import (
+                from resync_new.core.connection_pool_manager import (
                     get_connection_pool_manager,
                 )
 
-                self.connection_pool_manager = await get_connection_pool_manager()
+                self.connection_pool_manager = (
+                    await get_connection_pool_manager()
+                )
 
             metrics = PerformanceMetrics()
 
@@ -251,8 +272,12 @@ class DatabaseHealthMonitor:
                 db_pool_stats = pool_stats.get("database")
                 if db_pool_stats:
                     # Extract performance metrics from pool stats
-                    total_connections = getattr(db_pool_stats, "total_connections", 0)
-                    active_connections = getattr(db_pool_stats, "active_connections", 0)
+                    total_connections = getattr(
+                        db_pool_stats, "total_connections", 0
+                    )
+                    active_connections = getattr(
+                        db_pool_stats, "active_connections", 0
+                    )
 
                     metrics.total_connections = total_connections
                     metrics.active_connections = active_connections
@@ -264,10 +289,12 @@ class DatabaseHealthMonitor:
                     ) * 100
 
                     # Calculate error rate if we have error data
-                    total_errors = getattr(db_pool_stats, "connection_errors", 0)
-                    total_operations = getattr(db_pool_stats, "pool_hits", 0) + getattr(
-                        db_pool_stats, "pool_misses", 0
+                    total_errors = getattr(
+                        db_pool_stats, "connection_errors", 0
                     )
+                    total_operations = getattr(
+                        db_pool_stats, "pool_hits", 0
+                    ) + getattr(db_pool_stats, "pool_misses", 0)
 
                     if total_operations > 0:
                         metrics.error_rate = total_errors / total_operations
@@ -308,12 +335,14 @@ class DatabaseHealthMonitor:
                     if pool_stats:
                         # Check if we have multiple database nodes indicating replication
                         db_pools = [
-                            k for k in pool_stats.keys() if "database" in k.lower()
+                            k for k in pool_stats if "database" in k.lower()
                         ]
                         if len(db_pools) > 1:
                             replication_status.is_enabled = True
                             replication_status.replica_nodes = db_pools
-                            replication_status.replication_health = HealthStatus.HEALTHY
+                            replication_status.replication_health = (
+                                HealthStatus.HEALTHY
+                            )
 
             except Exception as e:
                 logger.warning("replication_status_check_error", error=str(e))
@@ -338,11 +367,13 @@ class DatabaseHealthMonitor:
 
         # Maintain history size limit
         if len(self._metrics_history) > self._max_history_size:
-            self._metrics_history = self._metrics_history[-self._max_history_size :]
+            self._metrics_history = self._metrics_history[
+                -self._max_history_size :
+            ]
 
     def get_metrics_history(
-        self, limit: Optional[int] = None
-    ) -> List[PerformanceMetrics]:
+        self, limit: int | None = None
+    ) -> list[PerformanceMetrics]:
         """
         Get historical performance metrics.
 

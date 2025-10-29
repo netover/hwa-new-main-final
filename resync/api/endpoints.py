@@ -15,7 +15,7 @@ The endpoints are organized into logical groups:
 from __future__ import annotations
 
 import logging
-from typing import Any
+from typing import Any, Optional, Dict
 from urllib.parse import unquote
 
 from fastapi import (
@@ -30,7 +30,7 @@ from fastapi import (
 from fastapi.responses import PlainTextResponse, RedirectResponse, Response
 from pydantic import BaseModel, Field
 from resync.core.agent_manager import AgentConfig
-from resync_new.core.fastapi_di import get_agent_manager, get_tws_client
+from resync.core.fastapi_di import get_agent_manager, get_tws_client
 from starlette.responses import HTMLResponse
 
 from resync.api.circuit_breaker_metrics import router as circuit_breaker_router
@@ -58,9 +58,9 @@ from resync.cqrs.queries import (
     GetResourceUsageQuery,
     GetWorkstationsStatusQuery,
 )
-from resync_new.config.settings import settings
-from resync_new.core.monitoring.metrics import runtime_metrics  # type: ignore[attr-defined]
-from resync_new.utils.interfaces import IAgentManager, ITWSClient
+from resync.config.settings import settings
+from resync.core.monitoring.metrics import runtime_metrics  # type: ignore[attr-defined]
+from resync.utils.interfaces import IAgentManager, ITWSClient
 
 
 # Lazy import of alerting_system to avoid circular dependencies
@@ -87,23 +87,69 @@ api_router = APIRouter()
 
 # --- Pydantic Models for Request/Response ---
 class ChatRequest(BaseModel):
+    """Request model for chat interactions.
+    
+    Contains the user message to be processed by the chat system.
+    """
     message: str = Field(..., min_length=1, max_length=1000)
 
 
 class ChatResponse(BaseModel):
+    """Response model for chat interactions.
+    
+    Contains the system's response to the user's message.
+    """
     response: str
 
 
 class ExecuteRequest(BaseModel):
+    """Request model for command execution.
+    
+    Contains the command to be executed by the system.
+    """
     command: str = Field(..., min_length=1, max_length=200)
 
 
 class ExecuteResponse(BaseModel):
+    """Response model for command execution.
+    
+    Contains the result of the executed command.
+    """
     result: str
 
 
 class FilesResponse(BaseModel):
+    """Response model for file listing operations.
+    
+    Contains file path information for directory listings.
+    """
     path: str
+
+
+class HealthResponse(BaseModel):
+    """Response model for health check operations.
+    
+    Contains system health status information.
+    """
+    status: str
+    details: Optional[Dict[str, Any]] = None
+
+
+class ErrorResponse(BaseModel):
+    """Standard error response model.
+    
+    Contains error information for API error responses.
+    """
+    error: str
+    detail: Optional[str] = None
+
+
+class MetricsResponse(BaseModel):
+    """Response model for metrics operations.
+    
+    Contains system performance and operational metrics.
+    """
+    metrics: Dict[str, Any]
 
 
 class LLMQueryRequest(BaseModel):
@@ -121,6 +167,10 @@ class LLMQueryResponse(BaseModel):
 
 
 class TWSMetricsResponse(BaseModel):
+    """Response model for TWS metrics operations.
+    
+    Contains TWS system metrics including alert counts and status information.
+    """
     status: str
     critical_alerts: int
     warning_alerts: int
@@ -167,6 +217,11 @@ async def get_all_agents(
 # --- Test endpoint ---
 @api_router.get("/test")
 async def test_endpoint(request: Request) -> dict[str, str]:
+    """Test endpoint to verify API connectivity.
+    
+    Returns a simple message to confirm the API is working.
+    Used for basic connectivity testing.
+    """
     return {"message": "Test endpoint working"}
 
 
@@ -1066,6 +1121,10 @@ async def list_runbooks(request: Request) -> list[str]:
 
 
 class ExecuteRunbookRequest(BaseModel):
+    """Request model for runbook execution.
+    
+    Contains the name of the runbook to be executed for incident response.
+    """
     runbook_name: str
     context: dict[str, Any] = Field(default_factory=dict)
 

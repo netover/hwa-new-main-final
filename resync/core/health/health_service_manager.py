@@ -8,15 +8,14 @@ including singleton pattern implementation and service lifecycle management.
 from __future__ import annotations
 
 import asyncio
-from typing import Optional
 
 import structlog
+from resync_new.models.health_models import HealthCheckConfig
 
-from resync.core.health_models import HealthCheckConfig
+from .enhanced_health_service import EnhancedHealthService
 
 # Import the health services
 from .health_check_service import HealthCheckService
-from .enhanced_health_service import EnhancedHealthService
 
 logger = structlog.get_logger(__name__)
 
@@ -34,13 +33,13 @@ class HealthServiceManager:
 
     def __init__(self):
         """Initialize the health service manager."""
-        self._health_check_service: Optional[HealthCheckService] = None
-        self._enhanced_health_service: Optional[EnhancedHealthService] = None
+        self._health_check_service: HealthCheckService | None = None
+        self._enhanced_health_service: EnhancedHealthService | None = None
         self._service_lock = asyncio.Lock()
         self._initialized = False
 
     async def initialize_basic_service(
-        self, config: Optional[HealthCheckConfig] = None
+        self, config: HealthCheckConfig | None = None
     ) -> HealthCheckService:
         """
         Initialize and get the basic health check service instance.
@@ -65,7 +64,7 @@ class HealthServiceManager:
         return self._health_check_service
 
     async def initialize_enhanced_service(
-        self, config: Optional[HealthCheckConfig] = None
+        self, config: HealthCheckConfig | None = None
     ) -> EnhancedHealthService:
         """
         Initialize and get the enhanced health service instance.
@@ -92,7 +91,7 @@ class HealthServiceManager:
 
         return self._enhanced_health_service
 
-    async def get_basic_service(self) -> Optional[HealthCheckService]:
+    async def get_basic_service(self) -> HealthCheckService | None:
         """
         Get the basic health check service instance.
 
@@ -101,7 +100,7 @@ class HealthServiceManager:
         """
         return self._health_check_service
 
-    async def get_enhanced_service(self) -> Optional[EnhancedHealthService]:
+    async def get_enhanced_service(self) -> EnhancedHealthService | None:
         """
         Get the enhanced health service instance.
 
@@ -120,10 +119,13 @@ class HealthServiceManager:
                 # Note: The basic HealthCheckService doesn't have stop_monitoring method
                 # This is a placeholder for future implementation
                 self._health_check_service = None
-                logger.info("Global basic health check service shutdown completed")
+                logger.info(
+                    "Global basic health check service shutdown completed"
+                )
             except Exception as e:
                 logger.error(
-                    "Error during basic health check service shutdown", error=str(e)
+                    "Error during basic health check service shutdown",
+                    error=str(e),
                 )
                 raise
         else:
@@ -140,10 +142,13 @@ class HealthServiceManager:
                 logger.info("Shutting down global enhanced health service")
                 await self._enhanced_health_service.stop_monitoring()
                 self._enhanced_health_service = None
-                logger.info("Global enhanced health service shutdown completed")
+                logger.info(
+                    "Global enhanced health service shutdown completed"
+                )
             except Exception as e:
                 logger.error(
-                    "Error during enhanced health service shutdown", error=str(e)
+                    "Error during enhanced health service shutdown",
+                    error=str(e),
                 )
                 raise
         else:
@@ -189,13 +194,14 @@ class HealthServiceManager:
         return {
             "initialized": self._initialized,
             "basic_service_active": self._health_check_service is not None,
-            "enhanced_service_active": self._enhanced_health_service is not None,
+            "enhanced_service_active": self._enhanced_health_service
+            is not None,
             "service_lock_held": self._service_lock.locked(),
         }
 
 
 # Global service manager instance
-_health_service_manager: Optional[HealthServiceManager] = None
+_health_service_manager: HealthServiceManager | None = None
 _manager_lock = asyncio.Lock()
 
 
@@ -222,7 +228,7 @@ async def get_health_service_manager() -> HealthServiceManager:
 
 
 async def initialize_basic_health_service(
-    config: Optional[HealthCheckConfig] = None,
+    config: HealthCheckConfig | None = None,
 ) -> HealthCheckService:
     """
     Initialize and get the basic health check service.
@@ -238,7 +244,7 @@ async def initialize_basic_health_service(
 
 
 async def initialize_enhanced_health_service(
-    config: Optional[HealthCheckConfig] = None,
+    config: HealthCheckConfig | None = None,
 ) -> EnhancedHealthService:
     """
     Initialize and get the enhanced health service.
@@ -253,7 +259,7 @@ async def initialize_enhanced_health_service(
     return await manager.initialize_enhanced_service(config)
 
 
-async def get_basic_health_service() -> Optional[HealthCheckService]:
+async def get_basic_health_service() -> HealthCheckService | None:
     """
     Get the basic health check service instance if initialized.
 
@@ -264,7 +270,7 @@ async def get_basic_health_service() -> Optional[HealthCheckService]:
     return await manager.get_basic_service()
 
 
-async def get_enhanced_health_service() -> Optional[EnhancedHealthService]:
+async def get_enhanced_health_service() -> EnhancedHealthService | None:
     """
     Get the enhanced health service instance if initialized.
 
@@ -291,11 +297,14 @@ async def shutdown_all_health_services() -> None:
             logger.info("Global health service manager shutdown completed")
         except Exception as e:
             logger.error(
-                "Error during global health service manager shutdown", error=str(e)
+                "Error during global health service manager shutdown",
+                error=str(e),
             )
             raise
     else:
-        logger.debug("Health service manager already shutdown or never initialized")
+        logger.debug(
+            "Health service manager already shutdown or never initialized"
+        )
 
 
 def get_service_manager_status() -> dict:
@@ -307,10 +316,9 @@ def get_service_manager_status() -> dict:
     """
     if _health_service_manager:
         return _health_service_manager.get_service_status()
-    else:
-        return {
-            "initialized": False,
-            "basic_service_active": False,
-            "enhanced_service_active": False,
-            "service_lock_held": False,
-        }
+    return {
+        "initialized": False,
+        "basic_service_active": False,
+        "enhanced_service_active": False,
+        "service_lock_held": False,
+    }

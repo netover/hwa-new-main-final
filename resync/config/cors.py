@@ -3,14 +3,13 @@ CORS configuration module for Resync application.
 """
 
 import logging
-from typing import List, Optional, Union
 from urllib.parse import urlparse
 
 from fastapi import FastAPI
+from resync_new.config.settings import settings
 
 from resync.api.middleware.cors_config import CORSPolicy, Environment
 from resync.api.middleware.cors_middleware import add_cors_middleware
-from resync.settings import settings
 
 logger = logging.getLogger(__name__)
 
@@ -30,19 +29,22 @@ def validate_origin(origin: str) -> bool:
 
     try:
         parsed = urlparse(origin.strip())
-        if parsed.scheme in ("http", "https") and parsed.netloc:
+        if (
+            parsed.scheme in ("http", "https")
+            and parsed.netloc
+            or origin.strip() == "*"
+        ):
             return True
-        elif origin.strip() == "*":
-            return True
-        else:
-            logger.warning(f"Invalid origin format: {origin}")
-            return False
+        logger.warning(f"Invalid origin format: {origin}")
+        return False
     except Exception as e:
         logger.warning(f"Error parsing origin '{origin}': {e}")
         return False
 
 
-def parse_cors_origins(cors_origins_setting: Union[str, List[str], None]) -> List[str]:
+def parse_cors_origins(
+    cors_origins_setting: str | list[str] | None,
+) -> list[str]:
     """
     Parse CORS origins from settings, handling both string and list formats.
 
@@ -80,7 +82,9 @@ def parse_cors_origins(cors_origins_setting: Union[str, List[str], None]) -> Lis
     return valid_origins
 
 
-def configure_cors(app: FastAPI, settings_module: Optional[object] = None) -> None:
+def configure_cors(
+    app: FastAPI, settings_module: object | None = None
+) -> None:
     """
     Configure CORS middleware for the FastAPI application.
 
@@ -113,15 +117,21 @@ def configure_cors(app: FastAPI, settings_module: Optional[object] = None) -> No
                 allow_credentials=getattr(
                     settings_obj, "CORS_ALLOW_CREDENTIALS", False
                 ),
-                log_violations=getattr(settings_obj, "CORS_LOG_VIOLATIONS", True),
+                log_violations=getattr(
+                    settings_obj, "CORS_LOG_VIOLATIONS", True
+                ),
             )
             add_cors_middleware(
-                app=app, environment=cors_environment, custom_policy=custom_policy
+                app=app,
+                environment=cors_environment,
+                custom_policy=custom_policy,
             )
         else:
             add_cors_middleware(app=app, environment=cors_environment)
 
-        logger.info(f"CORS middleware added for environment: {cors_environment}")
+        logger.info(
+            f"CORS middleware added for environment: {cors_environment}"
+        )
     except Exception as e:
         logger.error(f"Failed to add CORS middleware: {e}")
         logger.info("Continuing without CORS middleware")

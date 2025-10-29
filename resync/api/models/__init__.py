@@ -5,10 +5,10 @@ organized by functionality for better maintainability.
 """
 
 # Base models and common classes
-from .base import (
-    BaseModelWithTime,
-    PaginationRequest,
-    PaginationResponse,
+# Agent management
+from .agents import (
+    AgentConfig,
+    AgentType,
 )
 
 # Authentication and user management
@@ -19,23 +19,22 @@ from .auth import (
     TokenData,
     UserRegistrationRequest,
 )
+from .base import (
+    BaseModelWithTime,
+    PaginationRequest,
+    PaginationResponse,
+)
+
+# Health and system monitoring
+from .health import (
+    SystemMetric,
+)
 
 # RAG (Retrieval-Augmented Generation)
 from .rag import (
     RAGFileCreate,
     RAGFileDetail,
     RAGFileMetaData,
-)
-
-# Agent management
-from .agents import (
-    AgentConfig,
-    AgentType,
-)
-
-# Health and system monitoring
-from .health import (
-    SystemMetric,
 )
 
 # Response models (standardized API responses)

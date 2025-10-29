@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // --- Data Fetching ---
     const fetchSystemStatus = async function() {
         try {
-            const response = await fetch('/api/status');
+            const response = await fetch('/api/v1/status');
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', function() {
         uploadStatusEl.className = 'upload-status info';
 
         try {
-            const response = await fetch('/api/rag/upload', {
+            const response = await fetch('/api/v1/rag/upload', {
                 method: 'POST',
                 body: formData,
             });

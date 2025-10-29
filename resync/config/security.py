@@ -34,7 +34,8 @@ class AdditionalSecurityHeadersMiddleware(BaseHTTPMiddleware):
 
         # Feature-Policy header (deprecated but still supported by some browsers)
         response.headers.setdefault(
-            "Feature-Policy", "geolocation 'none'; microphone 'none'; camera 'none'"
+            "Feature-Policy",
+            "geolocation 'none'; microphone 'none'; camera 'none'",
         )
 
         return response

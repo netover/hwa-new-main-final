@@ -6,14 +6,13 @@ from business logic in endpoints.
 
 import logging
 import time
+from collections.abc import Callable
 from functools import wraps
-from typing import Callable
 
 from fastapi import Request
-
 from resync.core.logger import log_with_correlation
-from resync.core.metrics import runtime_metrics
 from resync.core.utils.error_utils import create_error_response_from_exception
+from resync_new.core.monitoring.metrics import runtime_metrics
 
 logger = logging.getLogger(__name__)
 
@@ -55,7 +54,9 @@ def with_monitoring(operation_name: str):
 
                 # Record successful metrics
                 runtime_metrics.tws_status_requests_success.increment(1)
-                runtime_metrics.api_response_time.observe(time.time() - start_time)
+                runtime_metrics.api_response_time.observe(
+                    time.time() - start_time
+                )
 
                 # Log successful completion
                 log_with_correlation(
@@ -104,7 +105,9 @@ def handle_endpoint_errors(operation: str):
                 error_response = create_error_response_from_exception(
                     e,
                     request=kwargs.get("request")
-                    or next((arg for arg in args if isinstance(arg, Request)), None),
+                    or next(
+                        (arg for arg in args if isinstance(arg, Request)), None
+                    ),
                 )
 
                 logger.error(f"Error in {operation}: {str(e)}", exc_info=True)
@@ -114,12 +117,11 @@ def handle_endpoint_errors(operation: str):
 
                 if isinstance(e, HTTPException):
                     raise e
-                else:
-                    # In the context of FastAPI endpoints, raise HTTPException for proper error response
-                    raise HTTPException(
-                        status_code=500,
-                        detail=error_response.message or str(e),
-                    )
+                # In the context of FastAPI endpoints, raise HTTPException for proper error response
+                raise HTTPException(
+                    status_code=500,
+                    detail=error_response.message or str(e),
+                )
 
         return wrapper
 

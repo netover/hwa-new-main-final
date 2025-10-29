@@ -10,11 +10,10 @@ from __future__ import annotations
 import asyncio
 from abc import ABC, abstractmethod
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import structlog
-
-from resync.core.health_models import ComponentHealth, HealthStatus
+from resync_new.models.health_models import ComponentHealth, HealthStatus
 
 logger = structlog.get_logger(__name__)
 
@@ -27,8 +26,8 @@ class HealthMonitoringEvent:
         event_type: str,
         component_name: str,
         health_status: HealthStatus,
-        timestamp: Optional[datetime] = None,
-        metadata: Optional[Dict[str, Any]] = None,
+        timestamp: datetime | None = None,
+        metadata: dict[str, Any] | None = None,
     ):
         self.event_type = event_type
         self.component_name = component_name
@@ -41,19 +40,22 @@ class HealthMonitorObserver(ABC):
     """Abstract base class for health monitor observers."""
 
     @abstractmethod
-    async def on_health_status_changed(self, event: HealthMonitoringEvent) -> None:
+    async def on_health_status_changed(
+        self, event: HealthMonitoringEvent
+    ) -> None:
         """Called when a component's health status changes."""
-        pass
 
     @abstractmethod
-    async def on_component_check_completed(self, event: HealthMonitoringEvent) -> None:
+    async def on_component_check_completed(
+        self, event: HealthMonitoringEvent
+    ) -> None:
         """Called when a component health check is completed."""
-        pass
 
     @abstractmethod
-    async def on_system_health_summary(self, event: HealthMonitoringEvent) -> None:
+    async def on_system_health_summary(
+        self, event: HealthMonitoringEvent
+    ) -> None:
         """Called when system health summary is generated."""
-        pass
 
 
 class HealthMonitoringSubject:
@@ -61,7 +63,7 @@ class HealthMonitoringSubject:
 
     def __init__(self):
         """Initialize the monitoring subject."""
-        self._observers: List[HealthMonitorObserver] = []
+        self._observers: list[HealthMonitorObserver] = []
         self._lock = asyncio.Lock()
 
     async def attach(self, observer: HealthMonitorObserver) -> None:
@@ -108,7 +110,9 @@ class HealthMonitoringSubject:
             },
         )
 
-        await self._notify_observers("on_health_status_changed", event, component_name)
+        await self._notify_observers(
+            "on_health_status_changed", event, component_name
+        )
 
     async def notify_check_completed(
         self,
@@ -135,8 +139,8 @@ class HealthMonitoringSubject:
     async def notify_system_summary(
         self,
         overall_status: HealthStatus,
-        components: Dict[str, ComponentHealth],
-        summary: Dict[str, Any],
+        components: dict[str, ComponentHealth],
+        summary: dict[str, Any],
     ) -> None:
         """Notify observers of system health summary."""
         event = HealthMonitoringEvent(
@@ -151,7 +155,9 @@ class HealthMonitoringSubject:
             },
         )
 
-        await self._notify_observers("on_system_health_summary", event, "system")
+        await self._notify_observers(
+            "on_system_health_summary", event, "system"
+        )
 
     async def _notify_observers(
         self,
@@ -200,7 +206,9 @@ class HealthMonitoringSubject:
 class LoggingHealthObserver(HealthMonitorObserver):
     """Observer that logs health monitoring events."""
 
-    async def on_health_status_changed(self, event: HealthMonitoringEvent) -> None:
+    async def on_health_status_changed(
+        self, event: HealthMonitoringEvent
+    ) -> None:
         """Log health status changes."""
         logger.info(
             "health_status_changed",
@@ -210,7 +218,9 @@ class LoggingHealthObserver(HealthMonitorObserver):
             timestamp=event.timestamp.isoformat(),
         )
 
-    async def on_component_check_completed(self, event: HealthMonitoringEvent) -> None:
+    async def on_component_check_completed(
+        self, event: HealthMonitoringEvent
+    ) -> None:
         """Log component check completion."""
         logger.debug(
             "component_health_check_completed",
@@ -220,7 +230,9 @@ class LoggingHealthObserver(HealthMonitorObserver):
             response_time_ms=event.metadata.get("response_time_ms"),
         )
 
-    async def on_system_health_summary(self, event: HealthMonitoringEvent) -> None:
+    async def on_system_health_summary(
+        self, event: HealthMonitoringEvent
+    ) -> None:
         """Log system health summary."""
         metadata = event.metadata
         logger.info(
@@ -236,10 +248,12 @@ class AlertingHealthObserver(HealthMonitorObserver):
 
     def __init__(self):
         """Initialize the alerting observer."""
-        self._last_alerts: Dict[str, datetime] = {}
+        self._last_alerts: dict[str, datetime] = {}
         self._alert_cooldown_minutes = 5
 
-    async def on_health_status_changed(self, event: HealthMonitoringEvent) -> None:
+    async def on_health_status_changed(
+        self, event: HealthMonitoringEvent
+    ) -> None:
         """Handle health status changes for alerting."""
         component_name = event.component_name
         new_status = event.health_status
@@ -258,16 +272,23 @@ class AlertingHealthObserver(HealthMonitorObserver):
             await self._send_alert(event)
             self._last_alerts[component_name] = datetime.now()
 
-    async def on_component_check_completed(self, event: HealthMonitoringEvent) -> None:
+    async def on_component_check_completed(
+        self, event: HealthMonitoringEvent
+    ) -> None:
         """Handle component check completion for alerting."""
         # Only alert on failures or slow responses
         if event.health_status == HealthStatus.UNHEALTHY:
             await self._send_alert(event)
 
-    async def on_system_health_summary(self, event: HealthMonitoringEvent) -> None:
+    async def on_system_health_summary(
+        self, event: HealthMonitoringEvent
+    ) -> None:
         """Handle system health summary for alerting."""
         # Alert if overall system health is poor
-        if event.health_status in [HealthStatus.UNHEALTHY, HealthStatus.DEGRADED]:
+        if event.health_status in [
+            HealthStatus.UNHEALTHY,
+            HealthStatus.DEGRADED,
+        ]:
             await self._send_system_alert(event)
 
     async def _send_alert(self, event: HealthMonitoringEvent) -> None:
@@ -298,12 +319,14 @@ class MetricsHealthObserver(HealthMonitorObserver):
 
     def __init__(self):
         """Initialize the metrics observer."""
-        self._status_changes: List[Dict[str, Any]] = []
-        self._check_durations: List[Dict[str, Any]] = []
-        self._system_summaries: List[Dict[str, Any]] = []
+        self._status_changes: list[dict[str, Any]] = []
+        self._check_durations: list[dict[str, Any]] = []
+        self._system_summaries: list[dict[str, Any]] = []
         self._max_metrics_history = 1000
 
-    async def on_health_status_changed(self, event: HealthMonitoringEvent) -> None:
+    async def on_health_status_changed(
+        self, event: HealthMonitoringEvent
+    ) -> None:
         """Record health status change metrics."""
         self._status_changes.append(
             {
@@ -316,9 +339,13 @@ class MetricsHealthObserver(HealthMonitorObserver):
 
         # Maintain history size limit
         if len(self._status_changes) > self._max_metrics_history:
-            self._status_changes = self._status_changes[-self._max_metrics_history :]
+            self._status_changes = self._status_changes[
+                -self._max_metrics_history :
+            ]
 
-    async def on_component_check_completed(self, event: HealthMonitoringEvent) -> None:
+    async def on_component_check_completed(
+        self, event: HealthMonitoringEvent
+    ) -> None:
         """Record component check metrics."""
         self._check_durations.append(
             {
@@ -332,9 +359,13 @@ class MetricsHealthObserver(HealthMonitorObserver):
 
         # Maintain history size limit
         if len(self._check_durations) > self._max_metrics_history:
-            self._check_durations = self._check_durations[-self._max_metrics_history :]
+            self._check_durations = self._check_durations[
+                -self._max_metrics_history :
+            ]
 
-    async def on_system_health_summary(self, event: HealthMonitoringEvent) -> None:
+    async def on_system_health_summary(
+        self, event: HealthMonitoringEvent
+    ) -> None:
         """Record system health summary metrics."""
         self._system_summaries.append(
             {
@@ -351,7 +382,7 @@ class MetricsHealthObserver(HealthMonitorObserver):
                 -self._max_metrics_history :
             ]
 
-    def get_metrics_summary(self) -> Dict[str, Any]:
+    def get_metrics_summary(self) -> dict[str, Any]:
         """Get summary of collected metrics."""
         return {
             "status_changes_count": len(self._status_changes),

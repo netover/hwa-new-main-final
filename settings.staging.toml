@@ -1,0 +1,85 @@
+# Staging Environment Configuration
+# Mirror of production but with relaxed security for testing
+# Connection pools optimized for 20 users, Xeon 4 cores, 16GB RAM
+
+[default]
+# ============================================================================
+# CONNECTION POOL OPTIMIZATIONS - STAGING
+# ============================================================================
+# Database Connection Pool (Neo4j) - Same as production
+db_pool_min_size = 2          # Optimized for 5-7 concurrent users
+db_pool_max_size = 8          # Handles peaks up to 15 users + batch processing
+db_pool_idle_timeout = 1200   # 20 minutes
+db_pool_connect_timeout = 60  # 60 seconds
+db_pool_health_check_interval = 60  # 1 minute
+
+# Redis Connection Pool - Same as production
+redis_pool_min_size = 2       # Baseline for caching operations
+redis_pool_max_size = 6       # Optimized for cache performance
+redis_pool_idle_timeout = 300 # 5 minutes
+redis_pool_connect_timeout = 30 # 30 seconds
+redis_pool_health_check_interval = 60 # 1 minute
+
+# HTTP Connection Pool (TWS) - Same as production
+http_pool_min_size = 3        # For TWS API calls
+http_pool_max_size = 12       # Batch processing capacity
+http_pool_idle_timeout = 300  # 5 minutes
+http_pool_connect_timeout = 10 # 10 seconds
+http_pool_health_check_interval = 60 # 1 minute
+
+# ============================================================================
+# STAGING ENVIRONMENT SETTINGS
+# ============================================================================
+environment = "staging"
+log_level = "DEBUG"           # More verbose logging for debugging
+server_host = "127.0.0.1"     # Localhost only for staging
+server_port = 8001            # Different port than production
+
+# Relaxed security for testing
+admin_username = "admin"
+cors_allowed_origins = ["http://localhost:3000", "http://localhost:3001"]
+tws_verify = false             # Disable SSL for easier testing
+tws_ca_bundle = null
+
+# Cache settings - same as production
+cache_hierarchy_l1_max_size = 5000
+cache_hierarchy_l2_ttl = 600
+enable_cache_swr = true
+enable_cache_mutex = true
+
+# Rate limiting - relaxed for testing
+rate_limit_public_per_minute = 100
+rate_limit_authenticated_per_minute = 1000
+rate_limit_critical_per_minute = 50
+
+# Enable all migrations for testing
+MIGRATION_ENABLE_METRICS = true
+MIGRATION_USE_NEW_CACHE = true
+MIGRATION_USE_NEW_TWS = true
+MIGRATION_USE_NEW_RATE_LIMIT = true
+
+# ============================================================================
+# TESTING AND MONITORING
+# ============================================================================
+# Memory bounds - same as production
+robust_cache_max_memory_mb = 256
+robust_cache_max_items = 50000
+
+# Connection monitoring - same thresholds
+pool_utilization_warning_threshold = 0.8
+pool_utilization_critical_threshold = 0.9
+connection_wait_time_warning_ms = 100
+connection_wait_time_critical_ms = 500
+
+# Test-specific settings
+enable_test_endpoints = true
+mock_external_services = false  # Use real services in staging
+enable_performance_logging = true
+
+# ============================================================================
+# BACKUP AND RECOVERY (DISABLED IN STAGING)
+# ============================================================================
+backup_enabled = false         # No backups in staging
+health_check_interval_seconds = 30
+health_check_timeout_seconds = 10
+health_check_failure_threshold = 3

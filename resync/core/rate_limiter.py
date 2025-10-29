@@ -1,252 +1,163 @@
 """
-Rate limiting utilities for the Resync application.
+Simple rate limiter implementation for Resync API.
 
-This module provides comprehensive rate limiting functionality using slowapi
-with Redis backend, including tiered rate limiting strategies and custom
-rate limit exceeded responses.
+Uses in-memory storage for simplicity. For production, consider Redis-backed rate limiting.
 """
 
-from __future__ import annotations
+import asyncio
+import time
+from collections import defaultdict
+from typing import Dict, Tuple
 
-from datetime import datetime, timedelta
-from typing import Callable, Optional
-
-import structlog
-from fastapi import Request, Response
-from slowapi import Limiter
-from slowapi.errors import RateLimitExceeded
-from slowapi.util import get_remote_address
-
-from resync.settings import settings
-
-logger = structlog.get_logger(__name__)
-
-from dataclasses import dataclass
+from fastapi import HTTPException, Request
+from resync.config.settings import settings
 
 
-@dataclass
-class RateLimitConfig:
-    """Configuration for rate limiting."""
+class SimpleRateLimiter:
+    """Simple in-memory rate limiter."""
 
-    requests_per_minute: int = 100
-    burst_limit: int = 10
-    window_size: int = 60  # seconds
-    strategy: str = "moving-window"  # "moving-window" or "fixed-window"
+    def __init__(self):
+        self._requests: Dict[str, list] = defaultdict(list)
+        self._lock = asyncio.Lock()
 
-    # Class attributes for endpoint configurations
-    PUBLIC_ENDPOINTS: str = "100/minute"
-    AUTHENTICATED_ENDPOINTS: str = "1000/minute"
-    CRITICAL_ENDPOINTS: str = "50/minute"
-    ERROR_HANDLER: str = "15/minute"
-    WEBSOCKET: str = "30/minute"
-    DASHBOARD: str = "10/minute"
+    async def check_rate_limit(
+        self,
+        key: str,
+        limit: int,
+        window_seconds: int = 60
+    ) -> Tuple[bool, int]:
+        """
+        Check if request is within rate limit.
+
+        Args:
+            key: Rate limit key (e.g., IP address, user ID)
+            limit: Maximum requests allowed
+            window_seconds: Time window in seconds
+
+        Returns:
+            Tuple of (allowed, remaining_requests)
+        """
+        async with self._lock:
+            now = time.time()
+            window_start = now - window_seconds
+
+            # Remove old requests outside the window
+            self._requests[key] = [
+                req_time for req_time in self._requests[key]
+                if req_time > window_start
+            ]
+
+            # Check if under limit
+            if len(self._requests[key]) < limit:
+                self._requests[key].append(now)
+                remaining = limit - len(self._requests[key])
+                return True, remaining
+
+            # Rate limit exceeded
+            return False, 0
+
+    async def get_remaining_time(self, key: str, window_seconds: int = 60) -> int:
+        """Get remaining time until rate limit resets."""
+        if key not in self._requests:
+            return 0
+
+        oldest_request = min(self._requests[key])
+        reset_time = oldest_request + window_seconds
+        remaining = max(0, int(reset_time - time.time()))
+        return remaining
 
 
-@dataclass
-class TieredRateLimitConfig:
-    """Configuration for tiered rate limiting."""
-
-    public: RateLimitConfig = None
-    authenticated: RateLimitConfig = None
-    critical: RateLimitConfig = None
-
-    def __post_init__(self):
-        if self.public is None:
-            self.public = RateLimitConfig(requests_per_minute=100)
-        if self.authenticated is None:
-            self.authenticated = RateLimitConfig(requests_per_minute=1000)
-        if self.critical is None:
-            self.critical = RateLimitConfig(requests_per_minute=50)
+# Global rate limiter instance
+rate_limiter = SimpleRateLimiter()
 
 
-def get_user_identifier(request: Request) -> str:
+async def check_rate_limit(
+    request: Request,
+    limit: int,
+    key_prefix: str = "ip"
+) -> None:
     """
-    Get user identifier for rate limiting.
-    Falls back to IP address if no user authentication is available.
-    """
-    # Try to get user from request state (if authentication is implemented)
-    if hasattr(request.state, "user") and request.state.user:
-        return f"user:{request.state.user}"
-
-    # Fall back to IP address
-    return get_remote_address(request)
-
-
-def get_authenticated_user_identifier(request: Request) -> str:
-    """
-    Get authenticated user identifier for rate limiting.
-    This should be used for endpoints that require authentication.
-    """
-    if hasattr(request.state, "user") and request.state.user:
-        return f"auth_user:{request.state.user}"
-
-    # For unauthenticated requests, still use IP but with different prefix
-    return f"ip:{get_remote_address(request)}"
-
-
-# Initialize the main rate limiter with memory storage for safety
-limiter = Limiter(
-    key_func=get_remote_address,
-    storage_uri="memory://",  # Use memory storage to avoid configuration issues
-    key_prefix="resync:ratelimit:",
-    headers_enabled=True,
-    strategy="moving-window",
-)
-
-
-def create_rate_limit_exceeded_response(
-    request: Request, exc: RateLimitExceeded, retry_after: Optional[int] = None
-) -> Response:
-    """
-    Create a custom response for rate limit exceeded errors.
+    Check rate limit for a request.
 
     Args:
-        request: The incoming request
-        exc: The rate limit exceeded exception
-        retry_after: Optional retry after time in seconds
+        request: FastAPI request
+        limit: Rate limit per minute
+        key_prefix: Type of key to use ("ip", "user", etc.)
 
-    Returns:
-        Custom JSON response with rate limit information
+    Raises:
+        HTTPException: If rate limit exceeded
     """
-    if retry_after is None:
-        retry_after = exc.retry_after or 60  # Default to 60 seconds
+    # Generate key based on type
+    if key_prefix == "ip":
+        # Get client IP (simplified - in production use proper IP extraction)
+        client_ip = getattr(request.client, 'host', 'unknown') if request.client else 'unknown'
+        key = f"ip:{client_ip}"
+    elif key_prefix == "user":
+        # For authenticated requests
+        user_id = getattr(request.state, 'user_id', None)
+        if user_id:
+            key = f"user:{user_id}"
+        else:
+            # Fallback to IP if no user
+            client_ip = getattr(request.client, 'host', 'unknown') if request.client else 'unknown'
+            key = f"ip:{client_ip}"
+    else:
+        key = f"{key_prefix}:default"
 
-    reset_time = datetime.utcnow() + timedelta(seconds=retry_after)
+    allowed, remaining = await rate_limiter.check_rate_limit(key, limit)
 
-    import json
+    if not allowed:
+        reset_time = await rate_limiter.get_remaining_time(key)
+        raise HTTPException(
+            status_code=429,
+            detail=f"Rate limit exceeded. Try again in {reset_time} seconds.",
+            headers={"Retry-After": str(reset_time)}
+        )
 
-    response = Response(
-        content=json.dumps(
-            {
-                "error": "Rate limit exceeded",
-                "message": f"Too many requests. Please try again in {retry_after} seconds.",
-                "retry_after": retry_after,
-                "retry_after_datetime": reset_time.isoformat() + "Z",
-                "limit": exc.limit,
-                "window": exc.window,
-            }
-        ),
-        status_code=429,
-        media_type="application/json",
-    )
-
-    # Add rate limit headers
-    response.headers["X-RateLimit-Limit"] = str(exc.limit)
-    response.headers["X-RateLimit-Remaining"] = "0"
-    response.headers["X-RateLimit-Reset"] = str(int(reset_time.timestamp()))
-    response.headers["X-RateLimit-Window"] = str(exc.window)
-    response.headers["Retry-After"] = str(retry_after)
-
-    logger.warning(
-        "rate_limit_exceeded",
-        client_host=request.client.host,
-        path=request.url.path,
-        limit=exc.limit,
-        window=exc.window,
-        retry_after=retry_after,
-    )
-
-    return response
+    # Store rate limit info in request state for logging
+    if not hasattr(request.state, 'rate_limit'):
+        request.state.rate_limit = {}
+    request.state.rate_limit.update({
+        'limit': limit,
+        'remaining': remaining,
+        'reset_time': await rate_limiter.get_remaining_time(key)
+    })
 
 
-# Decorator functions for different endpoint categories
-def public_rate_limit(func: Callable) -> Callable:
-    """Decorator for public endpoints with standard rate limiting."""
-    return limiter.limit(
-        f"{getattr(settings, 'RATE_LIMIT_PUBLIC_PER_MINUTE', 100)}/minute"
-    )(func)
+# Convenience decorators
+def public_rate_limit(func):
+    """Decorator for public endpoints rate limiting."""
+    async def wrapper(*args, **kwargs):
+        # Extract request from args (FastAPI dependency injection)
+        request = None
+        for arg in args:
+            if isinstance(arg, Request):
+                request = arg
+                break
+
+        if request:
+            limit = getattr(settings, 'rate_limit_public_per_minute', 100)
+            await check_rate_limit(request, limit, "ip")
+
+        return await func(*args, **kwargs)
+
+    return wrapper
 
 
-def authenticated_rate_limit(func: Callable) -> Callable:
-    """Decorator for authenticated endpoints with higher rate limiting."""
-    return limiter.limit(
-        f"{getattr(settings, 'RATE_LIMIT_AUTHENTICATED_PER_MINUTE', 1000)}/minute",
-        key_func=get_authenticated_user_identifier,
-    )(func)
+def authenticated_rate_limit(func):
+    """Decorator for authenticated endpoints rate limiting."""
+    async def wrapper(*args, **kwargs):
+        # Extract request from args (FastAPI dependency injection)
+        request = None
+        for arg in args:
+            if isinstance(arg, Request):
+                request = arg
+                break
 
+        if request:
+            limit = getattr(settings, 'rate_limit_authenticated_per_minute', 1000)
+            await check_rate_limit(request, limit, "user")
 
-def critical_rate_limit(func: Callable) -> Callable:
-    """Decorator for critical endpoints (agents, chat) with strict rate limiting."""
-    return limiter.limit(
-        f"{getattr(settings, 'RATE_LIMIT_CRITICAL_PER_MINUTE', 50)}/minute",
-        key_func=get_authenticated_user_identifier,
-    )(func)
+        return await func(*args, **kwargs)
 
-
-def error_handler_rate_limit(func: Callable) -> Callable:
-    """Decorator for error handler endpoints."""
-    return limiter.limit(
-        f"{getattr(settings, 'RATE_LIMIT_ERROR_HANDLER_PER_MINUTE', 15)}/minute"
-    )(func)
-
-
-def websocket_rate_limit(func: Callable) -> Callable:
-    """Decorator for WebSocket endpoints."""
-    return limiter.limit(
-        f"{getattr(settings, 'RATE_LIMIT_WEBSOCKET_PER_MINUTE', 30)}/minute"
-    )(func)
-
-
-def dashboard_rate_limit(func: Callable) -> Callable:
-    """Decorator for dashboard endpoints."""
-    return limiter.limit(
-        f"{getattr(settings, 'RATE_LIMIT_DASHBOARD_PER_MINUTE', 10)}/minute"
-    )(func)
-
-
-# Custom rate limit middleware for adding headers to all responses
-class CustomRateLimitMiddleware:
-    """Custom rate limit middleware that adds headers to all responses."""
-
-    def __init__(self, limiter):
-        self.limiter = limiter
-
-    async def __call__(self, request: Request, call_next):
-        """Process request and add rate limit headers to response."""
-        response = await call_next(request)
-
-        # Add rate limit headers if available
-        if hasattr(request.state, "rate_limit"):
-            rate_limit_info = request.state.rate_limit
-
-            response.headers["X-RateLimit-Limit"] = str(
-                rate_limit_info.get("limit", "")
-            )
-            response.headers["X-RateLimit-Remaining"] = str(
-                rate_limit_info.get("remaining", "")
-            )
-            response.headers["X-RateLimit-Reset"] = str(
-                rate_limit_info.get("reset", "")
-            )
-
-            # Add custom headers for better client visibility
-            response.headers["X-RateLimit-Policy"] = rate_limit_info.get(
-                "policy", "default"
-            )
-
-        return response
-
-
-def init_rate_limiter(app):
-    """
-    Initialize rate limiting for the FastAPI application.
-
-    Args:
-        app: FastAPI application instance
-    """
-    # Add the limiter to app state
-    app.state.limiter = limiter
-
-    # Add custom exception handler for rate limit exceeded
-    app.add_exception_handler(RateLimitExceeded, create_rate_limit_exceeded_response)
-
-    # Add custom middleware for rate limit headers
-    app.add_middleware(CustomRateLimitMiddleware, limiter=limiter)
-
-    logger.info("rate_limiting_initialized", backend="Redis")
-    logger.info(
-        "rate_limit_configurations",
-        public=f"{getattr(settings, 'RATE_LIMIT_PUBLIC_PER_MINUTE', 100)}/minute",
-        authenticated=f"{getattr(settings, 'RATE_LIMIT_AUTHENTICATED_PER_MINUTE', 1000)}/minute",
-        critical=f"{getattr(settings, 'RATE_LIMIT_CRITICAL_PER_MINUTE', 50)}/minute",
-    )
+    return wrapper

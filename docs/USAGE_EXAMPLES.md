@@ -18,7 +18,7 @@
 
 ```python
 # Install dependencies
-pip install -r requirements.txt
+pip install -r requirements/dev.txt
 
 # Set environment variables
 export TWS_HOST=your-tws-host

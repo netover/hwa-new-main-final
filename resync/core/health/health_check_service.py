@@ -2,15 +2,14 @@ from __future__ import annotations
 
 import time
 from datetime import datetime
-from typing import Dict, List, Optional
 
-from resync.core.health_models import (
+from resync_new.models.health_models import (
     ComponentHealth,
     ComponentType,
     HealthCheckResult,
     HealthStatus,
+    SystemHealthStatus,
 )
-from resync.core.health_models import SystemHealthStatus
 
 
 class HealthCheckService:
@@ -23,10 +22,10 @@ class HealthCheckService:
 
     def __init__(self):
         """Initialize the health check service."""
-        self._component_cache: Dict[str, ComponentHealth] = {}
-        self._last_system_check: Optional[datetime] = None
+        self._component_cache: dict[str, ComponentHealth] = {}
+        self._last_system_check: datetime | None = None
 
-    async def run_all_checks(self) -> List[HealthCheckResult]:
+    async def run_all_checks(self) -> list[HealthCheckResult]:
         """
         Run health checks on all system components.
 
@@ -63,12 +62,18 @@ class HealthCheckService:
                     components={component_name: health},
                     summary={
                         "total_components": 1,
-                        "healthy": 1 if health.status == HealthStatus.HEALTHY else 0,
-                        "degraded": 1 if health.status == HealthStatus.DEGRADED else 0,
+                        "healthy": (
+                            1 if health.status == HealthStatus.HEALTHY else 0
+                        ),
+                        "degraded": (
+                            1 if health.status == HealthStatus.DEGRADED else 0
+                        ),
                         "unhealthy": (
                             1 if health.status == HealthStatus.UNHEALTHY else 0
                         ),
-                        "unknown": 1 if health.status == HealthStatus.UNKNOWN else 0,
+                        "unknown": (
+                            1 if health.status == HealthStatus.UNKNOWN else 0
+                        ),
                     },
                 )
 
@@ -138,7 +143,9 @@ class HealthCheckService:
                 return cached_health
 
         # Perform fresh health check
-        health = await self._perform_basic_health_check(component_name, component_type)
+        health = await self._perform_basic_health_check(
+            component_name, component_type
+        )
 
         # Update cache
         self._component_cache[component_name] = health
@@ -179,15 +186,16 @@ class HealthCheckService:
             # Determine overall status
             total_components = len(results)
             critical_ratio = (
-                critical_count / total_components if total_components > 0 else 0
+                critical_count / total_components
+                if total_components > 0
+                else 0
             )
 
             if critical_ratio > 0.5:  # More than 50% critical
                 return SystemHealthStatus.CRITICAL
-            elif warning_count > 0 or critical_count > 0:
+            if warning_count > 0 or critical_count > 0:
                 return SystemHealthStatus.WARNING
-            else:
-                return SystemHealthStatus.OK
+            return SystemHealthStatus.OK
 
         except Exception:
             # Return critical status on any error
@@ -212,27 +220,28 @@ class HealthCheckService:
             # Basic health checks based on component type
             if component_type == ComponentType.DATABASE:
                 return await self._check_database_health_basic(component_name)
-            elif component_type == ComponentType.REDIS:
+            if component_type == ComponentType.REDIS:
                 return await self._check_redis_health_basic(component_name)
-            elif component_type == ComponentType.CACHE:
+            if component_type == ComponentType.CACHE:
                 return await self._check_cache_health_basic(component_name)
-            elif component_type == ComponentType.FILE_SYSTEM:
-                return await self._check_file_system_health_basic(component_name)
-            elif component_type == ComponentType.MEMORY:
-                return await self._check_memory_health_basic(component_name)
-            elif component_type == ComponentType.CPU:
-                return await self._check_cpu_health_basic(component_name)
-            else:
-                # Default basic check
-                response_time = (time.time() - start_time) * 1000
-                return ComponentHealth(
-                    name=component_name,
-                    component_type=component_type,
-                    status=HealthStatus.HEALTHY,
-                    message=f"{component_name} basic check passed",
-                    response_time_ms=response_time,
-                    last_check=datetime.now(),
+            if component_type == ComponentType.FILE_SYSTEM:
+                return await self._check_file_system_health_basic(
+                    component_name
                 )
+            if component_type == ComponentType.MEMORY:
+                return await self._check_memory_health_basic(component_name)
+            if component_type == ComponentType.CPU:
+                return await self._check_cpu_health_basic(component_name)
+            # Default basic check
+            response_time = (time.time() - start_time) * 1000
+            return ComponentHealth(
+                name=component_name,
+                component_type=component_type,
+                status=HealthStatus.HEALTHY,
+                message=f"{component_name} basic check passed",
+                response_time_ms=response_time,
+                last_check=datetime.now(),
+            )
 
         except Exception as e:
             response_time = (time.time() - start_time) * 1000
@@ -261,7 +270,9 @@ class HealthCheckService:
             last_check=datetime.now(),
         )
 
-    async def _check_redis_health_basic(self, component_name: str) -> ComponentHealth:
+    async def _check_redis_health_basic(
+        self, component_name: str
+    ) -> ComponentHealth:
         """Basic Redis health check."""
         # This would contain basic Redis connectivity checks
         # For now, return a placeholder healthy status
@@ -274,7 +285,9 @@ class HealthCheckService:
             last_check=datetime.now(),
         )
 
-    async def _check_cache_health_basic(self, component_name: str) -> ComponentHealth:
+    async def _check_cache_health_basic(
+        self, component_name: str
+    ) -> ComponentHealth:
         """Basic cache health check."""
         # This would contain basic cache functionality checks
         # For now, return a placeholder healthy status
@@ -302,7 +315,9 @@ class HealthCheckService:
             last_check=datetime.now(),
         )
 
-    async def _check_memory_health_basic(self, component_name: str) -> ComponentHealth:
+    async def _check_memory_health_basic(
+        self, component_name: str
+    ) -> ComponentHealth:
         """Basic memory health check."""
         # This would contain basic memory usage checks
         # For now, return a placeholder healthy status
@@ -315,7 +330,9 @@ class HealthCheckService:
             last_check=datetime.now(),
         )
 
-    async def _check_cpu_health_basic(self, component_name: str) -> ComponentHealth:
+    async def _check_cpu_health_basic(
+        self, component_name: str
+    ) -> ComponentHealth:
         """Basic CPU health check."""
         # This would contain basic CPU usage checks
         # For now, return a placeholder healthy status

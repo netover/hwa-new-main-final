@@ -8,15 +8,15 @@ from __future__ import annotations
 
 import time
 from datetime import datetime
-from typing import Any, Dict
+from typing import Any
 
 import structlog
-
-from resync.core.health_models import (
+from resync_new.models.health_models import (
     ComponentHealth,
     ComponentType,
     HealthStatus,
 )
+
 from .base_health_checker import BaseHealthChecker
 
 logger = structlog.get_logger(__name__)
@@ -45,7 +45,9 @@ class ConnectionPoolsHealthChecker(BaseHealthChecker):
         start_time = time.time()
 
         try:
-            from resync.core.connection_manager import get_connection_pool_manager
+            from resync.core.connection_manager import (
+                get_connection_pool_manager,
+            )
 
             pool_manager = get_connection_pool_manager()
             if not pool_manager:
@@ -81,10 +83,14 @@ class ConnectionPoolsHealthChecker(BaseHealthChecker):
                 message = "No database connections available"
             else:
                 # Calculate connection usage percentage
-                connection_usage_percent = active_connections / total_connections * 100
+                connection_usage_percent = (
+                    active_connections / total_connections * 100
+                )
 
                 # Use database-specific threshold for database pool
-                threshold_percent = self.config.database_connection_threshold_percent
+                threshold_percent = (
+                    self.config.database_connection_threshold_percent
+                )
 
                 if connection_usage_percent > threshold_percent:
                     status = HealthStatus.DEGRADED
@@ -103,7 +109,10 @@ class ConnectionPoolsHealthChecker(BaseHealthChecker):
 
             # Enhance metadata with calculated percentages and thresholds
             enhanced_metadata = dict(pool_stats)
-            if "active_connections" in pool_stats and "total_connections" in pool_stats:
+            if (
+                "active_connections" in pool_stats
+                and "total_connections" in pool_stats
+            ):
                 enhanced_metadata["connection_usage_percent"] = round(
                     connection_usage_percent, 1
                 )
@@ -138,7 +147,7 @@ class ConnectionPoolsHealthChecker(BaseHealthChecker):
         """Determine health status based on connection pool exception type."""
         return ComponentType.CONNECTION_POOL
 
-    def get_component_config(self) -> Dict[str, Any]:
+    def get_component_config(self) -> dict[str, Any]:
         """Get connection pools-specific configuration."""
         return {
             "timeout_seconds": self.config.timeout_seconds,

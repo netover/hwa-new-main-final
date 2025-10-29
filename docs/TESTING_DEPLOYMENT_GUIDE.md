@@ -7,7 +7,7 @@ This guide provides step-by-step instructions for testing and deploying the Phas
 ## Prerequisites
 
 - Python 3.12+
-- All dependencies installed (`pip install -r requirements.txt` or `poetry install`)
+- All dependencies installed (`pip install -r requirements/dev.txt` or `uv sync`)
 - Proper configuration in `settings.toml` or environment variables
 
 ## Testing Steps
@@ -445,7 +445,7 @@ After updating configuration:
 cd D:\Python\GITHUB\hwa-new
 
 # Install dependencies
-pip install -r requirements.txt
+pip install -r requirements/dev.txt
 
 # Or use poetry
 poetry install

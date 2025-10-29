@@ -54,7 +54,7 @@ class TestInputValidation:
     @pytest.mark.security
     def test_health_endpoints_robustness(self, security_test_data):
         """Test health endpoints against malicious-looking but valid input."""
-        response = self.client.get(f"/health/tws")
+        response = self.client.get("/health/tws")
         # The endpoint should correctly handle the input without crashing.
         # A 422 is an acceptable response if validation fails.
         assert response.status_code != 500

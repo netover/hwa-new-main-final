@@ -9,11 +9,10 @@ from __future__ import annotations
 
 import os
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import structlog
-
-from resync.core.health_models import HealthCheckConfig
+from resync_new.models.health_models import HealthCheckConfig
 
 logger = structlog.get_logger(__name__)
 
@@ -29,7 +28,7 @@ class HealthCheckConfigurationManager:
     - Providing configuration validation and defaults
     """
 
-    def __init__(self, config: Optional[HealthCheckConfig] = None):
+    def __init__(self, config: HealthCheckConfig | None = None):
         """
         Initialize the configuration manager.
 
@@ -37,7 +36,7 @@ class HealthCheckConfigurationManager:
             config: Base health check configuration (creates default if None)
         """
         self.config = config or self._create_default_config()
-        self._config_history: List[Dict[str, Any]] = []
+        self._config_history: list[dict[str, Any]] = []
         self._max_history_size = 100
 
     def _create_default_config(self) -> HealthCheckConfig:
@@ -69,20 +68,23 @@ class HealthCheckConfigurationManager:
             if hasattr(self.config, key):
                 setattr(self.config, key, value)
             else:
-                logger.warning("unknown_config_parameter", parameter=key, value=value)
+                logger.warning(
+                    "unknown_config_parameter", parameter=key, value=value
+                )
 
         # Store in history
         self._add_to_config_history(old_config, kwargs)
 
         logger.info(
-            "health_check_config_updated", updated_parameters=list(kwargs.keys())
+            "health_check_config_updated",
+            updated_parameters=list(kwargs.keys()),
         )
 
     def get_config(self) -> HealthCheckConfig:
         """Get current configuration."""
         return self.config
 
-    def get_component_config(self, component_name: str) -> Dict[str, Any]:
+    def get_component_config(self, component_name: str) -> dict[str, Any]:
         """
         Get configuration specific to a component.
 
@@ -151,7 +153,11 @@ class HealthCheckConfigurationManager:
     def load_from_environment(self) -> None:
         """Load configuration from environment variables."""
         env_mappings = {
-            "check_interval_seconds": ("HEALTH_CHECK_INTERVAL_SECONDS", int, 30),
+            "check_interval_seconds": (
+                "HEALTH_CHECK_INTERVAL_SECONDS",
+                int,
+                30,
+            ),
             "timeout_seconds": ("HEALTH_CHECK_TIMEOUT_SECONDS", int, 30),
             "database_connection_threshold_percent": (
                 "HEALTH_DB_THRESHOLD_PERCENT",
@@ -169,14 +175,26 @@ class HealthCheckConfigurationManager:
                 True,
             ),
             "max_history_entries": ("HEALTH_MAX_HISTORY_ENTRIES", int, 10000),
-            "history_retention_days": ("HEALTH_HISTORY_RETENTION_DAYS", int, 30),
-            "memory_usage_threshold_mb": ("HEALTH_MEMORY_THRESHOLD_MB", float, 100.0),
-            "history_cleanup_threshold": ("HEALTH_CLEANUP_THRESHOLD", float, 0.8),
+            "history_retention_days": (
+                "HEALTH_HISTORY_RETENTION_DAYS",
+                int,
+                30,
+            ),
+            "memory_usage_threshold_mb": (
+                "HEALTH_MEMORY_THRESHOLD_MB",
+                float,
+                100.0,
+            ),
+            "history_cleanup_threshold": (
+                "HEALTH_CLEANUP_THRESHOLD",
+                float,
+                0.8,
+            ),
             "cleanup_batch_size": ("HEALTH_CLEANUP_BATCH_SIZE", int, 100),
         }
 
         updates = {}
-        for config_key, (env_var, converter, default) in env_mappings.items():
+        for config_key, (env_var, converter, _default) in env_mappings.items():
             env_value = os.getenv(env_var)
             if env_value is not None:
                 try:
@@ -199,7 +217,7 @@ class HealthCheckConfigurationManager:
         if updates:
             self.update_config(**updates)
 
-    def validate_config(self) -> List[str]:
+    def validate_config(self) -> list[str]:
         """
         Validate current configuration.
 
@@ -241,11 +259,13 @@ class HealthCheckConfigurationManager:
 
         return errors
 
-    def get_config_summary(self) -> Dict[str, Any]:
+    def get_config_summary(self) -> dict[str, Any]:
         """Get a summary of current configuration."""
         config_dict = self.config.model_dump()
         return {
-            "check_interval_seconds": config_dict.get("check_interval_seconds", 30),
+            "check_interval_seconds": config_dict.get(
+                "check_interval_seconds", 30
+            ),
             "timeout_seconds": config_dict.get("timeout_seconds", 30),
             "database_threshold_percent": config_dict.get(
                 "database_connection_threshold_percent", 80
@@ -254,9 +274,15 @@ class HealthCheckConfigurationManager:
             "memory_monitoring_enabled": config_dict.get(
                 "enable_memory_monitoring", True
             ),
-            "max_history_entries": config_dict.get("max_history_entries", 10000),
-            "history_retention_days": config_dict.get("history_retention_days", 30),
-            "memory_threshold_mb": config_dict.get("memory_usage_threshold_mb", 100.0),
+            "max_history_entries": config_dict.get(
+                "max_history_entries", 10000
+            ),
+            "history_retention_days": config_dict.get(
+                "history_retention_days", 30
+            ),
+            "memory_threshold_mb": config_dict.get(
+                "memory_usage_threshold_mb", 100.0
+            ),
             "validation_errors": self.validate_config(),
             "is_valid": len(self.validate_config()) == 0,
         }
@@ -271,7 +297,7 @@ class HealthCheckConfigurationManager:
         logger.info("health_check_config_reset_to_defaults")
 
     def _add_to_config_history(
-        self, old_config: Dict[str, Any], changes: Dict[str, Any]
+        self, old_config: dict[str, Any], changes: dict[str, Any]
     ) -> None:
         """Add configuration change to history."""
         self._config_history.append(
@@ -284,9 +310,13 @@ class HealthCheckConfigurationManager:
 
         # Cleanup old entries if needed
         if len(self._config_history) > self._max_history_size:
-            self._config_history = self._config_history[-self._max_history_size :]
+            self._config_history = self._config_history[
+                -self._max_history_size :
+            ]
 
-    def get_config_history(self, limit: Optional[int] = None) -> List[Dict[str, Any]]:
+    def get_config_history(
+        self, limit: int | None = None
+    ) -> list[dict[str, Any]]:
         """
         Get configuration change history.
 
@@ -300,7 +330,7 @@ class HealthCheckConfigurationManager:
             return self._config_history[-limit:]
         return self._config_history.copy()
 
-    def export_config(self) -> Dict[str, Any]:
+    def export_config(self) -> dict[str, Any]:
         """Export current configuration as dictionary."""
         config_dict = self.config.model_dump()
         return {
@@ -310,7 +340,7 @@ class HealthCheckConfigurationManager:
             "is_valid": len(self.validate_config()) == 0,
         }
 
-    def import_config(self, config_data: Dict[str, Any]) -> bool:
+    def import_config(self, config_data: dict[str, Any]) -> bool:
         """
         Import configuration from dictionary.
 
@@ -337,7 +367,9 @@ class HealthCheckConfigurationManager:
             logger.error("health_check_config_import_failed", error=str(e))
             return False
 
-    def get_component_thresholds(self, component_name: str) -> Dict[str, float]:
+    def get_component_thresholds(
+        self, component_name: str
+    ) -> dict[str, float]:
         """
         Get threshold values for a specific component.
 
@@ -377,7 +409,7 @@ class HealthCheckConfigurationManager:
         )
 
     def set_component_thresholds(
-        self, component_name: str, thresholds: Dict[str, float]
+        self, component_name: str, thresholds: dict[str, float]
     ) -> None:
         """
         Set threshold values for a specific component.
@@ -386,13 +418,15 @@ class HealthCheckConfigurationManager:
             component_name: Name of the component
             thresholds: Dictionary with threshold values
         """
-        if component_name == "database":
-            if "connection_usage_warning" in thresholds:
-                self.update_config(
-                    database_connection_threshold_percent=int(
-                        thresholds["connection_usage_warning"]
-                    )
+        if (
+            component_name == "database"
+            and "connection_usage_warning" in thresholds
+        ):
+            self.update_config(
+                database_connection_threshold_percent=int(
+                    thresholds["connection_usage_warning"]
                 )
+            )
 
         logger.info(
             "component_thresholds_updated",
@@ -400,7 +434,7 @@ class HealthCheckConfigurationManager:
             thresholds=thresholds,
         )
 
-    def get_monitoring_intervals(self) -> Dict[str, int]:
+    def get_monitoring_intervals(self) -> dict[str, int]:
         """Get monitoring intervals for different components."""
         return {
             "health_check": self.config.check_interval_seconds,
@@ -434,7 +468,7 @@ class HealthCheckConfigurationManager:
 
         return component_name in enabled_components
 
-    def get_retry_configuration(self, component_name: str) -> Dict[str, Any]:
+    def get_retry_configuration(self, component_name: str) -> dict[str, Any]:
         """
         Get retry configuration for a component.
 

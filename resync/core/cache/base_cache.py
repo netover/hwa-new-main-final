@@ -6,10 +6,12 @@ It defines the core cache operations that all cache implementations must support
 """
 
 from abc import ABC, abstractmethod
-from typing import Any, Optional
+from typing import Generic, TypeVar
+
+T = TypeVar("T")
 
 
-class BaseCache(ABC):
+class BaseCache(ABC, Generic[T]):
     """
     Abstract base class for cache implementations.
 
@@ -19,7 +21,7 @@ class BaseCache(ABC):
     """
 
     @abstractmethod
-    def get(self, key: str) -> Optional[Any]:
+    def get(self, key: str) -> T | None:
         """
         Retrieve a value from the cache by key.
 
@@ -29,10 +31,9 @@ class BaseCache(ABC):
         Returns:
             The cached value if found, None otherwise
         """
-        pass
 
     @abstractmethod
-    def set(self, key: str, value: Any, ttl: Optional[int] = None) -> bool:
+    def set(self, key: str, value: T, ttl: int | None = None) -> bool:
         """
         Store a value in the cache with an optional time-to-live.
 
@@ -45,7 +46,6 @@ class BaseCache(ABC):
         Returns:
             True if the value was successfully stored, False otherwise
         """
-        pass
 
     @abstractmethod
     def delete(self, key: str) -> bool:
@@ -58,7 +58,6 @@ class BaseCache(ABC):
         Returns:
             True if the key was found and removed, False if the key was not found
         """
-        pass
 
     @abstractmethod
     def clear(self) -> None:
@@ -67,4 +66,3 @@ class BaseCache(ABC):
 
         This operation should clear the entire cache, removing all keys and values.
         """
-        pass

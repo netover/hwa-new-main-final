@@ -8,15 +8,15 @@ from __future__ import annotations
 
 import time
 from datetime import datetime
-from typing import Any, Dict
+from typing import Any
 
 import structlog
-
-from resync.core.health_models import (
+from resync_new.models.health_models import (
     ComponentHealth,
     ComponentType,
     HealthStatus,
 )
+
 from .base_health_checker import BaseHealthChecker
 
 logger = structlog.get_logger(__name__)
@@ -46,7 +46,7 @@ class RedisHealthChecker(BaseHealthChecker):
 
         try:
             # Check Redis configuration
-            from resync.settings import settings
+            from resync_new.config.settings import settings
 
             if not settings.REDIS_URL:
                 return ComponentHealth(
@@ -59,7 +59,8 @@ class RedisHealthChecker(BaseHealthChecker):
 
             # Test actual Redis connectivity
             import redis.asyncio as redis_async
-            from redis.exceptions import RedisError, TimeoutError as RedisTimeoutError
+            from redis.exceptions import RedisError
+            from redis.exceptions import TimeoutError as RedisTimeoutError
 
             try:
                 redis_client = redis_async.from_url(settings.REDIS_URL)
@@ -68,7 +69,9 @@ class RedisHealthChecker(BaseHealthChecker):
 
                 # Test read/write operation
                 test_key = f"health_check_{int(time.time())}"
-                await redis_client.setex(test_key, 1, "test")  # Set with expiration
+                await redis_client.setex(
+                    test_key, 1, "test"
+                )  # Set with expiration
                 value = await redis_client.get(test_key)
 
                 if value != b"test":
@@ -88,7 +91,9 @@ class RedisHealthChecker(BaseHealthChecker):
                     last_check=datetime.now(),
                     metadata={
                         "redis_version": redis_info.get("redis_version"),
-                        "connected_clients": redis_info.get("connected_clients"),
+                        "connected_clients": redis_info.get(
+                            "connected_clients"
+                        ),
                         "used_memory": redis_info.get("used_memory_human"),
                         "uptime_seconds": redis_info.get("uptime_in_seconds"),
                         "test_key_result": value.decode() if value else None,
@@ -112,7 +117,9 @@ class RedisHealthChecker(BaseHealthChecker):
                 try:
                     await redis_client.close()
                 except Exception as e:
-                    logger.debug(f"Redis client close error during health check: {e}")
+                    logger.debug(
+                        f"Redis client close error during health check: {e}"
+                    )
 
         except Exception as e:
             response_time = (time.time() - start_time) * 1000
@@ -131,7 +138,7 @@ class RedisHealthChecker(BaseHealthChecker):
         """Determine health status based on Redis exception type."""
         return ComponentType.REDIS
 
-    def get_component_config(self) -> Dict[str, Any]:
+    def get_component_config(self) -> dict[str, Any]:
         """Get Redis-specific configuration."""
         return {
             "timeout_seconds": self.config.timeout_seconds,

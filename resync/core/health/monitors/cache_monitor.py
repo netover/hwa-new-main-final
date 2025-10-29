@@ -8,13 +8,17 @@ reporting for the cache hierarchy system.
 
 from __future__ import annotations
 
+import asyncio
+
 import time
 from datetime import datetime
-from typing import Optional
 
 import structlog
-
-from resync.core.health_models import ComponentHealth, ComponentType, HealthStatus
+from resync.models.health_models import (
+    ComponentHealth,
+    ComponentType,
+    HealthStatus,
+)
 
 logger = structlog.get_logger(__name__)
 
@@ -32,8 +36,8 @@ class CacheHierarchyHealthMonitor:
 
     def __init__(self):
         """Initialize the cache hierarchy health monitor."""
-        self._last_check: Optional[datetime] = None
-        self._cached_result: Optional[ComponentHealth] = None
+        self._last_check: datetime | None = None
+        self._cached_result: ComponentHealth | None = None
 
     async def check_cache_health(self) -> ComponentHealth:
         """
@@ -46,7 +50,7 @@ class CacheHierarchyHealthMonitor:
 
         try:
             # Import and test the actual cache implementation
-            from resync.core.async_cache import AsyncTTLCache
+            from resync.core.cache import AsyncTTLCache
 
             # Create a test cache instance to verify functionality
             test_cache = AsyncTTLCache(ttl_seconds=60, cleanup_interval=30)
@@ -152,7 +156,7 @@ class CacheHierarchyHealthMonitor:
             last_check=datetime.now(),
         )
 
-    def get_cached_health(self) -> Optional[ComponentHealth]:
+    def get_cached_health(self) -> ComponentHealth | None:
         """
         Get cached health result if available and recent.
 
@@ -164,9 +168,8 @@ class CacheHierarchyHealthMonitor:
             age = datetime.now() - self._last_check
             if age.total_seconds() < 300:
                 return self._cached_result
-            else:
-                # Cache expired
-                self._cached_result = None
+            # Cache expired
+            self._cached_result = None
 
         return None
 

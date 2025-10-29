@@ -6,25 +6,28 @@ from typing import Any
 
 from fastapi import APIRouter, HTTPException, Query, status
 from pydantic import BaseModel
-
-from resync.core.health_models import (
+from resync_new.models.health_models import (
     ComponentType,
     HealthStatus,
     get_status_color,
     get_status_description,
 )
-from resync.core.health_service import (
-    get_health_check_service,
-    shutdown_health_check_service,
+
+from resync.core.health.health_service_consolidated import (
+    get_consolidated_health_service,
+    shutdown_consolidated_health_service,
 )
 
 logger = logging.getLogger(__name__)
 
+
 # Lazy import of runtime_metrics to avoid circular dependencies
 def _get_runtime_metrics():
     """Lazy import of runtime_metrics."""
-    from resync.core.metrics import runtime_metrics
+    from resync_new.core.monitoring.metrics import runtime_metrics
+
     return runtime_metrics
+
 
 # Main health router
 router = APIRouter(prefix="/health", tags=["health"])
@@ -111,19 +114,27 @@ async def get_health_summary(
         HealthSummaryResponse: Overall system health status with color-coded indicators
     """
     try:
-        health_service = await get_health_check_service()
-        health_result = await health_service.perform_comprehensive_health_check()
+        health_service = await get_consolidated_health_service()
+        health_result = (
+            await health_service.perform_comprehensive_health_check()
+        )
 
         # If auto_enable is true and health is good, attempt to enable any disabled components
-        if auto_enable and health_result.overall_status != HealthStatus.UNHEALTHY:
+        if (
+            auto_enable
+            and health_result.overall_status != HealthStatus.UNHEALTHY
+        ):
             # In a real implementation, this would enable components that might be disabled
-            logger.info(f"Health check successful with auto_enable: {auto_enable}")
+            logger.info(
+                f"Health check successful with auto_enable: {auto_enable}"
+            )
 
         # Add auto_enable information to the response
         summary_with_auto_enable = health_result.summary.copy()
         summary_with_auto_enable["auto_enable"] = auto_enable
         summary_with_auto_enable["auto_enable_applied"] = (
-            auto_enable and health_result.overall_status != HealthStatus.UNHEALTHY
+            auto_enable
+            and health_result.overall_status != HealthStatus.UNHEALTHY
         )
 
         _get_runtime_metrics().health_check_with_auto_enable.increment()
@@ -131,7 +142,9 @@ async def get_health_summary(
         return HealthSummaryResponse(
             status=health_result.overall_status.value,
             status_color=get_status_color(health_result.overall_status),
-            status_description=get_status_description(health_result.overall_status),
+            status_description=get_status_description(
+                health_result.overall_status
+            ),
             timestamp=health_result.timestamp.isoformat(),
             correlation_id=health_result.correlation_id or "",
             summary=summary_with_auto_enable,
@@ -147,7 +160,8 @@ async def get_health_summary(
         except (AttributeError, ImportError, Exception) as metrics_e:
             # Log metrics failure but don't fail the health check
             logger.warning(
-                f"Failed to increment health check metrics: {metrics_e}", exc_info=True
+                f"Failed to increment health check metrics: {metrics_e}",
+                exc_info=True,
             )
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
@@ -164,8 +178,10 @@ async def get_core_health() -> CoreHealthResponse:
         CoreHealthResponse: Health status of core components with status indicators
     """
     try:
-        health_service = await get_health_check_service()
-        health_result = await health_service.perform_comprehensive_health_check()
+        health_service = await get_consolidated_health_service()
+        health_result = (
+            await health_service.perform_comprehensive_health_check()
+        )
 
         # Filter only core components
         core_components = {
@@ -180,7 +196,7 @@ async def get_core_health() -> CoreHealthResponse:
             if component.status == HealthStatus.UNHEALTHY:
                 core_status = HealthStatus.UNHEALTHY
                 break
-            elif component.status == HealthStatus.DEGRADED:
+            if component.status == HealthStatus.DEGRADED:
                 core_status = HealthStatus.DEGRADED
 
         # Convert components to response format
@@ -203,7 +219,9 @@ async def get_core_health() -> CoreHealthResponse:
         core_summary = {
             "total_core_components": len(core_components),
             "healthy_core_components": sum(
-                1 for c in core_components.values() if c.status == HealthStatus.HEALTHY
+                1
+                for c in core_components.values()
+                if c.status == HealthStatus.HEALTHY
             ),
             "unhealthy_core_components": sum(
                 1
@@ -248,8 +266,10 @@ async def get_detailed_health(
         DetailedHealthResponse: Comprehensive health status with all components
     """
     try:
-        health_service = await get_health_check_service()
-        health_result = await health_service.perform_comprehensive_health_check()
+        health_service = await get_consolidated_health_service()
+        health_result = (
+            await health_service.perform_comprehensive_health_check()
+        )
 
         # Convert components to response format
         components_response = {
@@ -275,7 +295,9 @@ async def get_detailed_health(
                 {
                     "timestamp": entry.timestamp.isoformat(),
                     "overall_status": entry.overall_status.value,
-                    "overall_status_color": get_status_color(entry.overall_status),
+                    "overall_status_color": get_status_color(
+                        entry.overall_status
+                    ),
                     "summary": get_status_description(entry.overall_status),
                 }
                 for entry in history
@@ -283,7 +305,9 @@ async def get_detailed_health(
 
         return DetailedHealthResponse(
             overall_status=health_result.overall_status.value,
-            overall_status_color=get_status_color(health_result.overall_status),
+            overall_status_color=get_status_color(
+                health_result.overall_status
+            ),
             timestamp=health_result.timestamp.isoformat(),
             correlation_id=health_result.correlation_id or "",
             components=components_response,
@@ -312,8 +336,10 @@ async def readiness_probe() -> dict[str, Any]:
         dict[str, Any]: Readiness status with core component details
     """
     try:
-        health_service = await get_health_check_service()
-        health_result = await health_service.perform_comprehensive_health_check()
+        health_service = await get_consolidated_health_service()
+        health_result = (
+            await health_service.perform_comprehensive_health_check()
+        )
 
         # Check only core components for readiness
         core_components = {
@@ -345,7 +371,8 @@ async def readiness_probe() -> dict[str, Any]:
         if not ready:
             # Return 503 Service Unavailable if not ready
             raise HTTPException(
-                status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail=response_data
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                detail=response_data,
             )
 
         return response_data
@@ -375,7 +402,7 @@ async def liveness_probe() -> dict[str, Any]:
         dict[str, Any]: Liveness status
     """
     try:
-        health_service = await get_health_check_service()
+        health_service = await get_consolidated_health_service()
 
         # Simple liveness check - just verify the service is responding
         # We don't check actual component health, just that the system is alive
@@ -397,7 +424,9 @@ async def liveness_probe() -> dict[str, Any]:
                 detail={
                     "status": "dead",
                     "timestamp": current_time.isoformat(),
-                    "last_health_check": last_check.isoformat() if last_check else None,
+                    "last_health_check": (
+                        last_check.isoformat() if last_check else None
+                    ),
                     "message": "Health check system appears to be stuck",
                 },
             )
@@ -405,7 +434,9 @@ async def liveness_probe() -> dict[str, Any]:
         return {
             "status": "alive",
             "timestamp": current_time.isoformat(),
-            "last_health_check": last_check.isoformat() if last_check else None,
+            "last_health_check": (
+                last_check.isoformat() if last_check else None
+            ),
             "message": "System is responding",
         }
 
@@ -434,26 +465,36 @@ async def recover_component(component_name: str) -> dict[str, Any]:
         dict[str, Any]: Recovery attempt result
     """
     try:
-        health_service = await get_health_check_service()
+        health_service = await get_consolidated_health_service()
 
         # Attempt recovery
-        recovery_success = await health_service.attempt_recovery(component_name)
+        recovery_success = await health_service.attempt_recovery(
+            component_name
+        )
 
         # Get updated component health
-        component_health = await health_service.get_component_health(component_name)
+        component_health = await health_service.get_component_health(
+            component_name
+        )
 
         response_data = {
             "component": component_name,
             "recovery_attempted": True,
             "recovery_successful": recovery_success,
             "current_status": (
-                component_health.status.value if component_health else "unknown"
+                component_health.status.value
+                if component_health
+                else "unknown"
             ),
             "status_color": (
-                get_status_color(component_health.status) if component_health else "⚪"
+                get_status_color(component_health.status)
+                if component_health
+                else "⚪"
             ),
             "message": (
-                component_health.message if component_health else "Component not found"
+                component_health.message
+                if component_health
+                else "Component not found"
             ),
             "timestamp": datetime.now().isoformat(),
         }
@@ -494,8 +535,10 @@ async def get_redis_health() -> dict[str, Any]:
         dict[str, Any]: Redis health status with connection details
     """
     try:
-        health_service = await get_health_check_service()
-        health_result = await health_service.perform_comprehensive_health_check()
+        health_service = await get_consolidated_health_service()
+        health_result = (
+            await health_service.perform_comprehensive_health_check()
+        )
 
         redis_component = health_result.components.get("redis")
 
@@ -617,7 +660,9 @@ async def list_components() -> dict[str, list[dict[str, str]]]:
 async def shutdown_health_service():
     """Shutdown health check service on application shutdown."""
     try:
-        await shutdown_health_check_service()
+        await shutdown_consolidated_health_service()
         logger.info("Health service shutdown completed")
     except Exception as e:
-        logger.error(f"Error during health service shutdown: {e}", exc_info=True)
+        logger.error(
+            f"Error during health service shutdown: {e}", exc_info=True
+        )

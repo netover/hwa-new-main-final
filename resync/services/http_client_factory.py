@@ -17,7 +17,7 @@ from resync.core.constants import (
     DEFAULT_READ_TIMEOUT,
     DEFAULT_WRITE_TIMEOUT,
 )
-from resync_new.config.settings import settings
+from resync.config.settings import settings
 
 
 def create_async_http_client(

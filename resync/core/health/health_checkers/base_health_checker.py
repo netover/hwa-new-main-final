@@ -9,11 +9,14 @@ from __future__ import annotations
 import time
 from abc import ABC, abstractmethod
 from datetime import datetime
-from typing import Any, Dict, Optional
+from typing import Any
 
 import structlog
-
-from resync.core.health_models import ComponentHealth, ComponentType, HealthCheckConfig
+from resync_new.models.health_models import (
+    ComponentHealth,
+    ComponentType,
+    HealthCheckConfig,
+)
 
 logger = structlog.get_logger(__name__)
 
@@ -26,7 +29,7 @@ class BaseHealthChecker(ABC):
     health checkers must implement.
     """
 
-    def __init__(self, config: Optional[HealthCheckConfig] = None):
+    def __init__(self, config: HealthCheckConfig | None = None):
         """
         Initialize the health checker.
 
@@ -34,19 +37,19 @@ class BaseHealthChecker(ABC):
             config: Health check configuration
         """
         self.config = config or HealthCheckConfig()
-        self.logger = structlog.get_logger(f"{__name__}.{self.__class__.__name__}")
+        self.logger = structlog.get_logger(
+            f"{__name__}.{self.__class__.__name__}"
+        )
 
     @property
     @abstractmethod
     def component_name(self) -> str:
         """Name of the component this checker monitors."""
-        pass
 
     @property
     @abstractmethod
     def component_type(self) -> ComponentType:
         """Type of the component this checker monitors."""
-        pass
 
     @abstractmethod
     async def check_health(self) -> ComponentHealth:
@@ -56,10 +59,9 @@ class BaseHealthChecker(ABC):
         Returns:
             ComponentHealth: Health status of the component
         """
-        pass
 
     async def check_health_with_timeout(
-        self, timeout_seconds: Optional[float] = None
+        self, timeout_seconds: float | None = None
     ) -> ComponentHealth:
         """
         Perform health check with timeout protection.
@@ -70,7 +72,6 @@ class BaseHealthChecker(ABC):
         Returns:
             ComponentHealth: Health status of the component
         """
-        timeout = timeout_seconds or self.config.timeout_seconds
         start_time = time.time()
 
         try:
@@ -115,7 +116,7 @@ class BaseHealthChecker(ABC):
         # Default to UNKNOWN for most exceptions
         return ComponentType.UNKNOWN
 
-    def get_component_config(self) -> Dict[str, Any]:
+    def get_component_config(self) -> dict[str, Any]:
         """
         Get configuration specific to this component.
 
@@ -138,6 +139,8 @@ class BaseHealthChecker(ABC):
         errors = []
 
         if self.config.timeout_seconds <= 0:
-            errors.append(f"{self.component_name}: timeout_seconds must be positive")
+            errors.append(
+                f"{self.component_name}: timeout_seconds must be positive"
+            )
 
         return errors

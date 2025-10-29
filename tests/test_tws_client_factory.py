@@ -2,14 +2,15 @@
 Testes para o TWS Client Factory.
 """
 
-import pytest
 from unittest.mock import MagicMock
 
+import pytest
+
 from resync.services.tws_client_factory import (
-    TWSClientFactory,
-    TWSConfig,
     ProductionTWSClient,
     TestTWSClient,
+    TWSClientFactory,
+    TWSConfig,
 )
 
 

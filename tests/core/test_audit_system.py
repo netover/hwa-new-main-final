@@ -10,19 +10,19 @@ This module includes tests for:
 
 import json
 from datetime import datetime, timedelta
-from unittest.mock import AsyncMock, Mock, patch, MagicMock
+from unittest.mock import AsyncMock, MagicMock, Mock, patch
 
 import pytest
 import pytest_asyncio
 
 from resync.core.audit_log import AuditLogManager
-from resync.core.logger import log_audit_event, _sanitize_audit_details
 from resync.core.audit_queue import AsyncAuditQueue
 from resync.core.connection_pool_manager import (
     ConnectionPoolManager,
     DatabaseConnectionPool,
     RedisConnectionPool,
 )
+from resync.core.logger import _sanitize_audit_details, log_audit_event
 
 
 @pytest.fixture
@@ -223,7 +223,7 @@ class TestConnectionPoolInitialization:
         manager = ConnectionPoolManager()
         await manager.initialize()
 
-        pools = manager.get_all_pools()
+        manager.get_all_pools()
         # Test that pools are created based on settings
         # At least Redis and Database pools should exist if properly configured
 
@@ -290,10 +290,12 @@ class TestAuditQueueIntegration:
     @pytest.mark.asyncio
     async def test_audit_api_logging(self, temp_db_path):
         """Test that audit API calls properly log to the audit log database."""
-        from resync.api.audit import get_flagged_memories, get_audit_metrics
-        from fastapi import Request
-        from unittest.mock import AsyncMock
         import uuid
+        from unittest.mock import AsyncMock
+
+        from fastapi import Request
+
+        from resync.api.audit import get_audit_metrics, get_flagged_memories
 
         # Create audit log manager and patch global function
         db_manager = AuditLogManager(db_path=temp_db_path)
@@ -352,8 +354,8 @@ class TestAuditQueueIntegration:
 
 def test_audit_db_functions():
     """Test the audit_db functions directly."""
-    import tempfile
     import os
+    import tempfile
 
     # Create a temporary database for testing
     with tempfile.NamedTemporaryFile(suffix=".db", delete=False) as tmp_file:

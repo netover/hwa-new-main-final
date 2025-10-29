@@ -5,10 +5,11 @@ This module tests the core Flask application routes, middleware functions,
 and integration points to ensure proper functionality and improve test coverage.
 """
 
-from unittest.mock import patch, MagicMock
-from flask import g
 import time
 import uuid
+from unittest.mock import MagicMock, patch
+
+from flask import g
 
 
 class TestMainRoutes:
@@ -116,7 +117,7 @@ class TestMiddleware:
 
             with patch('routes.main.request', mock_request):
                 with patch('routes.main.log_request_end') as mock_log:
-                    result = after_request(mock_response)
+                    after_request(mock_response)
 
                     # Verify logging was called
                     mock_log.assert_called_once()
@@ -151,7 +152,7 @@ class TestMiddleware:
             with patch('routes.main.request', mock_request):
                 with patch('routes.main.log_request_end') as mock_log:
                     # Should not raise an exception
-                    result = after_request(mock_response)
+                    after_request(mock_response)
 
                     # Logging should still be called with duration=0
                     mock_log.assert_called_once()
@@ -216,7 +217,7 @@ class TestMiddleware:
             with patch('routes.main.request', mock_request):
                 with patch('routes.main.log_error') as mock_log:
                     # Should not raise an exception
-                    result = handle_exception(test_exception)
+                    handle_exception(test_exception)
 
                     # Logging should be called with duration=0
                     mock_log.assert_called_once()
@@ -267,7 +268,7 @@ class TestLoggingContext:
             # Mock the LoggingContext
             with patch('routes.main.LoggingContext') as mock_context:
                 with patch('routes.main.log_info') as mock_log:
-                    result = login()
+                    login()
 
                     # Check that LoggingContext was used
                     mock_context.assert_called_once()

@@ -8,16 +8,16 @@ Este módulo demonstra o uso completo de:
 """
 
 from datetime import datetime
-from typing import Annotated, Any, Dict, List, Optional
+from typing import Annotated, Any
 from uuid import uuid4
 
 from fastapi import APIRouter, Query, Request, status
 from pydantic import BaseModel, ConfigDict, Field, StringConstraints
+from resync_new.utils.exceptions import ResourceNotFoundError, ValidationError
+from resync_new.utils.simple_logger import get_logger
 
 from resync.api.models.links import LinkBuilder
 from resync.api.models.responses import create_paginated_response
-from resync.core.exceptions import ResourceNotFoundError, ValidationError
-from resync.core.structured_logger import get_logger
 
 logger = get_logger(__name__)
 
@@ -35,8 +35,8 @@ class Book(BaseModel):
     id: str = Field(..., description="ID único do livro")
     title: str = Field(..., description="Título do livro")
     author: str = Field(..., description="Autor do livro")
-    isbn: Optional[str] = Field(None, description="ISBN")
-    published_year: Optional[int] = Field(None, description="Ano de publicação")
+    isbn: str | None = Field(None, description="ISBN")
+    published_year: int | None = Field(None, description="Ano de publicação")
     created_at: str = Field(..., description="Data de criação")
 
     model_config = ConfigDict(
@@ -53,7 +53,11 @@ class Book(BaseModel):
 
 
 class BookOut(Book):
-    _links: Dict[str, Any]
+    """Output model for Book data with HATEOAS links.
+    
+    Extends Book model with hypermedia controls for REST API navigation.
+    """
+    _links: dict[str, Any]
 
 
 ISBN = Annotated[str, StringConstraints(pattern=r"^[\d-]+$")]
@@ -62,16 +66,20 @@ ISBN = Annotated[str, StringConstraints(pattern=r"^[\d-]+$")]
 class BookCreate(BaseModel):
     """Request para criar livro."""
 
-    title: str = Field(..., description="Título do livro", min_length=1, max_length=200)
-    author: str = Field(..., description="Autor do livro", min_length=1, max_length=100)
-    isbn: Optional[ISBN] = Field(None, description="ISBN")
-    published_year: Optional[int] = Field(
+    title: str = Field(
+        ..., description="Título do livro", min_length=1, max_length=200
+    )
+    author: str = Field(
+        ..., description="Autor do livro", min_length=1, max_length=100
+    )
+    isbn: ISBN | None = Field(None, description="ISBN")
+    published_year: int | None = Field(
         None, description="Ano de publicação", ge=1000, le=9999
     )
 
 
 # Simulação de banco de dados em memória
-_books_db: List[Book] = [
+_books_db: list[Book] = [
     Book(
         id=str(uuid4()),
         title="Clean Code",
@@ -101,12 +109,12 @@ _books_db: List[Book] = [
     summary="List books with pagination and HATEOAS",
     description="""
     Lista livros com paginação e links HATEOAS.
-    
+
     **Características**:
     - Paginação com links de navegação (first, last, prev, next)
     - Links HATEOAS para cada recurso
     - Respostas padronizadas
-    
+
     **Exemplo de Response**:
     ```json
     {
@@ -131,7 +139,7 @@ async def list_books(
     request: Request,
     page: int = Query(1, ge=1, description="Número da página"),
     page_size: int = Query(10, ge=1, le=100, description="Tamanho da página"),
-    author: Optional[str] = Query(None, description="Filtrar por autor"),
+    author: str | None = Query(None, description="Filtrar por autor"),
 ):
     """Lista livros com paginação e HATEOAS."""
 
@@ -176,7 +184,7 @@ async def list_books(
     if author:
         query_params["author"] = author
 
-    response = create_paginated_response(
+    return create_paginated_response(
         items=items_with_links,
         total=total,
         page=page,
@@ -185,8 +193,6 @@ async def list_books(
         query_params=query_params,
     )
 
-    return response
-
 
 @router.get(
     "/books/{book_id}",
@@ -194,11 +200,11 @@ async def list_books(
     summary="Get book by ID with HATEOAS",
     description="""
     Obtém um livro específico com links HATEOAS.
-    
+
     **Características**:
     - Links para operações relacionadas (update, delete, collection)
     - Tratamento de erro RFC 7807 se não encontrado
-    
+
     **Exemplo de Response**:
     ```json
     {
@@ -213,7 +219,7 @@ async def list_books(
       }
     }
     ```
-    
+
     **Exemplo de Erro (RFC 7807)**:
     ```json
     {
@@ -236,7 +242,8 @@ async def get_book(book_id: str):
 
     if not book:
         raise ResourceNotFoundError(
-            message=f"Book with ID '{book_id}' not found", details={"book_id": book_id}
+            message=f"Book with ID '{book_id}' not found",
+            details={"book_id": book_id},
         )
 
     # Adicionar links HATEOAS
@@ -273,12 +280,12 @@ async def get_book(book_id: str):
     summary="Create a new book",
     description="""
     Cria um novo livro.
-    
+
     **Características**:
     - Validação automática com erros RFC 7807
     - Response com links HATEOAS
     - Status 201 Created
-    
+
     **Exemplo de Erro de Validação (RFC 7807)**:
     ```json
     {
@@ -309,7 +316,10 @@ async def create_book(book_data: BookCreate):
     """Cria um novo livro."""
 
     # Validação customizada
-    if book_data.published_year and book_data.published_year > datetime.now().year:
+    if (
+        book_data.published_year
+        and book_data.published_year > datetime.now().year
+    ):
         raise ValidationError(
             message="Published year cannot be in the future",
             details={
@@ -339,10 +349,14 @@ async def create_book(book_data: BookCreate):
             path=f"/api/v1/examples/books/{book.id}"
         ).model_dump(),
         "update": builder.build_link(
-            path=f"/api/v1/examples/books/{book.id}", rel="update", method="PUT"
+            path=f"/api/v1/examples/books/{book.id}",
+            rel="update",
+            method="PUT",
         ).model_dump(),
         "delete": builder.build_link(
-            path=f"/api/v1/examples/books/{book.id}", rel="delete", method="DELETE"
+            path=f"/api/v1/examples/books/{book.id}",
+            rel="delete",
+            method="DELETE",
         ).model_dump(),
         "collection": builder.build_collection_link(
             path="/api/v1/examples/books"
@@ -360,7 +374,7 @@ async def create_book(book_data: BookCreate):
     summary="Delete a book",
     description="""
     Deleta um livro.
-    
+
     **Características**:
     - Status 204 No Content em sucesso
     - Erro RFC 7807 se não encontrado
@@ -374,7 +388,8 @@ async def delete_book(book_id: str):
 
     if index is None:
         raise ResourceNotFoundError(
-            message=f"Book with ID '{book_id}' not found", details={"book_id": book_id}
+            message=f"Book with ID '{book_id}' not found",
+            details={"book_id": book_id},
         )
 
     # Remover livro
@@ -382,7 +397,7 @@ async def delete_book(book_id: str):
 
     logger.info("Book deleted", book_id=book_id, title=deleted_book.title)
 
-    return None
+    return
 
 
 @router.get(

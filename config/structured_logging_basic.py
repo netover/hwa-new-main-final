@@ -4,11 +4,11 @@ Basic Structured Logging Configuration
 This module provides a basic structured logging implementation that works reliably.
 """
 
+import json
 import logging
 import logging.config
 import uuid
-import json
-from typing import Optional
+
 
 # Configure standard library logging with JSON format
 class JSONFormatter(logging.Formatter):
@@ -185,13 +185,13 @@ class StructuredLogger:
 structured_logger = StructuredLogger("app")
 
 # Utility functions for common logging patterns
-def log_request_start(method: str, endpoint: str, request_id: Optional[str] = None) -> None:
+def log_request_start(method: str, endpoint: str, request_id: str | None = None) -> None:
     """Log the start of a request."""
     if request_id:
         set_request_id(request_id)
     structured_logger.info("Request started", method=method, endpoint=endpoint, request_type="start")
 
-def log_request_end(method: str, endpoint: str, status_code: int, duration: float, request_id: Optional[str] = None) -> None:
+def log_request_end(method: str, endpoint: str, status_code: int, duration: float, request_id: str | None = None) -> None:
     """Log's end of a request."""
     structured_logger.info(
         "Request completed",

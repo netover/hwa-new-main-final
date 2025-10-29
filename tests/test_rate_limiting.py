@@ -64,8 +64,7 @@ def mock_authenticated_request():
 @pytest.fixture
 def test_app():
     """Create a test FastAPI application."""
-    app = FastAPI()
-    return app
+    return FastAPI()
 
 
 class TestRateLimitConfiguration:

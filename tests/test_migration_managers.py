@@ -2,13 +2,14 @@
 Testes para os Migration Managers.
 """
 
-import pytest
 from unittest.mock import AsyncMock
+
+import pytest
 
 from resync.core.migration_managers import (
     CacheMigrationManager,
-    TWSMigrationManager,
     RateLimitMigrationManager,
+    TWSMigrationManager,
 )
 from resync.settings import Settings
 
@@ -201,10 +202,10 @@ async def test_migration_managers_integration():
     """Testa integração entre os migration managers."""
     from resync.core.migration_managers import (
         cache_migration_manager,
-        tws_migration_manager,
-        rate_limit_migration_manager,
         initialize_migration_managers,
+        rate_limit_migration_manager,
         shutdown_migration_managers,
+        tws_migration_manager,
     )
 
     try:

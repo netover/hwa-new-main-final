@@ -1,7 +1,7 @@
 import pytest
 from fastapi import FastAPI
-from fastapi.testclient import TestClient
 from fastapi.responses import HTMLResponse
+from fastapi.testclient import TestClient
 
 
 @pytest.fixture

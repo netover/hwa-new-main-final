@@ -8,24 +8,26 @@ through OpenAI library, which has been tested and confirmed to work.
 from __future__ import annotations
 
 import logging
-from functools import lru_cache
-from typing import Any, AsyncGenerator, Optional
+from collections.abc import AsyncGenerator
+from functools import lru_cache, wraps
+from typing import Any
 
-from resync.core.exceptions import IntegrationError
-from resync.settings import settings
+from resync.config.settings import settings
+from resync.utils.exceptions import IntegrationError
 
 try:
-    from openai import AsyncOpenAI
     # Import specific exceptions from OpenAI v1.x
     from openai import (
+        APIConnectionError,
+        APIError,
+        APIStatusError,
+        APITimeoutError,
+        AsyncOpenAI,
         AuthenticationError,
         BadRequestError,
-        APIConnectionError,
         RateLimitError,
-        APIError,
-        APITimeoutError,
-        APIStatusError,
     )
+
     OPENAI_AVAILABLE = True
 except ImportError:  # pragma: no cover
     OPENAI_AVAILABLE = False
@@ -33,7 +35,101 @@ except ImportError:  # pragma: no cover
 logger = logging.getLogger(__name__)
 
 
-def _coerce_secret(value: Any) -> Optional[str]:
+# Circuit Breaker Implementation
+class CircuitBreakerError(Exception):
+    """Exception raised when circuit breaker is open."""
+
+
+class CircuitState:
+    """Circuit breaker state enumeration."""
+
+    CLOSED = "closed"  # Normal operation
+    OPEN = "open"  # Circuit is open, blocking calls
+    HALF_OPEN = "half_open"  # Testing if service has recovered
+
+
+class SimpleCircuitBreaker:
+    """
+    Simple circuit breaker implementation for protecting against cascading failures.
+    """
+
+    def __init__(self, failure_threshold: int = 3, timeout: int = 30):
+        """
+        Initialize circuit breaker.
+
+        Args:
+            failure_threshold: Number of failures before opening circuit
+            timeout: Seconds to wait before transitioning from OPEN to HALF_OPEN
+        """
+        self.failure_threshold = failure_threshold
+        self.timeout = timeout
+        self.failure_count = 0
+        self.last_failure_time = None
+        self.state = CircuitState.CLOSED
+
+    def __call__(self, func):
+        """Decorator to apply circuit breaker to a function."""
+
+        @wraps(func)
+        async def wrapper(*args, **kwargs):
+            if self.state == CircuitState.OPEN:
+                if self._should_attempt_reset():
+                    self.state = CircuitState.HALF_OPEN
+                    logger.info("Circuit breaker transitioning to HALF_OPEN")
+                else:
+                    raise CircuitBreakerError("Circuit breaker is OPEN")
+
+            try:
+                result = await func(*args, **kwargs)
+                self._on_success()
+                return result
+            except Exception as e:
+                self._on_failure()
+                raise e
+
+        return wrapper
+
+    def _should_attempt_reset(self) -> bool:
+        """Check if enough time has passed to attempt reset."""
+        import time
+
+        return (time.time() - self.last_failure_time) >= self.timeout
+
+    def _on_success(self):
+        """Handle successful call."""
+        self.failure_count = 0
+        if self.state == CircuitState.HALF_OPEN:
+            self.state = CircuitState.CLOSED
+            logger.info("Circuit breaker transitioning to CLOSED")
+
+    def _on_failure(self):
+        """Handle failed call."""
+        import time
+
+        self.failure_count += 1
+        self.last_failure_time = time.time()
+
+        if self.failure_count >= self.failure_threshold:
+            self.state = CircuitState.OPEN
+            logger.warning(
+                f"Circuit breaker transitioning to OPEN after {self.failure_count} failures"
+            )
+
+    def get_state(self) -> str:
+        """Get current circuit breaker state."""
+        return self.state
+
+    def get_stats(self) -> dict[str, Any]:
+        """Get circuit breaker statistics."""
+        return {
+            "state": self.state,
+            "failure_count": self.failure_count,
+            "failure_threshold": self.failure_threshold,
+            "last_failure_time": self.last_failure_time,
+        }
+
+
+def _coerce_secret(value: Any) -> str | None:
     """Accept str or pydantic SecretStr; return plain str or None."""
     if value is None:
         return None
@@ -62,7 +158,9 @@ class LLMService:
         if not model:
             raise IntegrationError(
                 message="No LLM model configured",
-                details={"hint": "Define settings.llm_model or settings.agent_model_name"},
+                details={
+                    "hint": "Define settings.llm_model or settings.agent_model_name"
+                },
             )
         self.model: str = str(model)
 
@@ -79,7 +177,9 @@ class LLMService:
         if not base_url:
             raise IntegrationError(
                 message="Missing LLM base_url",
-                details={"hint": "Configure settings.llm_endpoint (NVIDIA OpenAI-compatible)"},
+                details={
+                    "hint": "Configure settings.llm_endpoint (NVIDIA OpenAI-compatible)"
+                },
             )
 
         if api_key:
@@ -88,6 +188,11 @@ class LLMService:
         else:
             logger.info("No LLM API key configured")
         logger.info("LLM base URL: %s", base_url)
+
+        # Initialize circuit breaker for LLM calls
+        self.circuit_breaker = SimpleCircuitBreaker(
+            failure_threshold=3, timeout=30
+        )
 
         try:
             self.client = AsyncOpenAI(
@@ -106,7 +211,11 @@ class LLMService:
             APITimeoutError,
             APIStatusError,
         ) as exc:
-            logger.error("Failed to initialize LLM service (OpenAI error): %s", exc, exc_info=True)
+            logger.error(
+                "Failed to initialize LLM service (OpenAI error): %s",
+                exc,
+                exc_info=True,
+            )
             raise IntegrationError(
                 message="Failed to initialize LLM service",
                 details={
@@ -115,7 +224,9 @@ class LLMService:
                 },
             ) from exc
         except Exception as exc:  # pylint: disable=broad-exception-caught
-            logger.error("Failed to initialize LLM service: %s", exc, exc_info=True)
+            logger.error(
+                "Failed to initialize LLM service: %s", exc, exc_info=True
+            )
             raise IntegrationError(
                 message="Failed to initialize LLM service",
                 details={"error": str(exc)},
@@ -124,11 +235,11 @@ class LLMService:
     async def generate_response(
         self,
         messages: list[dict[str, str]],
-        temperature: Optional[float] = None,
-        top_p: Optional[float] = None,
-        max_tokens: Optional[int] = None,
-        frequency_penalty: Optional[float] = None,
-        presence_penalty: Optional[float] = None,
+        temperature: float | None = None,
+        top_p: float | None = None,
+        max_tokens: int | None = None,
+        frequency_penalty: float | None = None,
+        presence_penalty: float | None = None,
         stream: bool = False,
     ) -> str:
         """
@@ -148,72 +259,104 @@ class LLMService:
         """
         # pylint: disable=too-many-arguments,too-many-positional-arguments
         # Required for OpenAI API compatibility - all parameters are needed
-        temperature = self.default_temperature if temperature is None else temperature
+        temperature = (
+            self.default_temperature if temperature is None else temperature
+        )
         top_p = self.default_top_p if top_p is None else top_p
-        max_tokens = self.default_max_tokens if max_tokens is None else max_tokens
+        max_tokens = (
+            self.default_max_tokens if max_tokens is None else max_tokens
+        )
         frequency_penalty = (
-            self.default_frequency_penalty if frequency_penalty is None else frequency_penalty
+            self.default_frequency_penalty
+            if frequency_penalty is None
+            else frequency_penalty
         )
         presence_penalty = (
-            self.default_presence_penalty if presence_penalty is None else presence_penalty
+            self.default_presence_penalty
+            if presence_penalty is None
+            else presence_penalty
         )
 
         logger.info("Generating LLM response with model: %s", self.model)
 
-        try:
-            if stream:
-                # Aggregate all chunks and return complete response
-                chunks: list[str] = []
-                async for piece in self._generate_response_streaming(
-                    messages,
-                    temperature,
-                    top_p,
-                    max_tokens,
-                    frequency_penalty,
-                    presence_penalty,
-                ):
-                    chunks.append(piece)
-                content = "".join(chunks)
-            else:
-                response = await self.client.chat.completions.create(
-                    model=self.model,
-                    messages=messages,
-                    temperature=temperature,
-                    top_p=top_p,
-                    max_tokens=max_tokens,  # NVIDIA: keep explicit (known bug)
-                    frequency_penalty=frequency_penalty,
-                    presence_penalty=presence_penalty,
-                    stream=False,
+        # Apply circuit breaker to protect against cascading failures
+        @self.circuit_breaker
+        async def _generate_with_circuit_breaker():
+            try:
+                if stream:
+                    # Aggregate all chunks and return complete response
+                    chunks: list[str] = []
+                    async for piece in self._generate_response_streaming(
+                        messages,
+                        temperature,
+                        top_p,
+                        max_tokens,
+                        frequency_penalty,
+                        presence_penalty,
+                    ):
+                        chunks.append(piece)
+                    content = "".join(chunks)
+                else:
+                    response = await self.client.chat.completions.create(
+                        model=self.model,
+                        messages=messages,
+                        temperature=temperature,
+                        top_p=top_p,
+                        max_tokens=max_tokens,  # NVIDIA: keep explicit (known bug)
+                        frequency_penalty=frequency_penalty,
+                        presence_penalty=presence_penalty,
+                        stream=False,
+                    )
+                    content = response.choices[0].message.content or ""
+
+                logger.info(
+                    "Generated LLM response (%d characters)", len(content)
                 )
-                content = response.choices[0].message.content or ""
+                return content
 
-            logger.info("Generated LLM response (%d characters)", len(content))
-            return content
+            except (
+                AuthenticationError,
+                RateLimitError,
+                APIConnectionError,
+                BadRequestError,
+                APIError,
+                APITimeoutError,
+                APIStatusError,
+            ) as exc:
+                logger.error(
+                    "Error generating LLM response: %s", exc, exc_info=True
+                )
+                raise IntegrationError(
+                    message="Failed to generate LLM response",
+                    details={
+                        "error": str(exc),
+                        "request_id": getattr(exc, "request_id", None),
+                        "model": self.model,
+                    },
+                ) from exc
+            except Exception as exc:  # pylint: disable=broad-exception-caught
+                logger.error(
+                    "Unexpected error generating LLM response: %s",
+                    exc,
+                    exc_info=True,
+                )
+                raise IntegrationError(
+                    message="Failed to generate LLM response",
+                    details={"error": str(exc), "model": self.model},
+                ) from exc
 
-        except (
-            AuthenticationError,
-            RateLimitError,
-            APIConnectionError,
-            BadRequestError,
-            APIError,
-            APITimeoutError,
-            APIStatusError,
-        ) as exc:
-            logger.error("Error generating LLM response: %s", exc, exc_info=True)
+        try:
+            return await _generate_with_circuit_breaker()
+        except CircuitBreakerError as e:
+            logger.error("Circuit breaker is OPEN: %s", e)
             raise IntegrationError(
-                message="Failed to generate LLM response",
+                message="LLM service temporarily unavailable due to repeated failures",
                 details={
-                    "error": str(exc),
-                    "request_id": getattr(exc, "request_id", None),
+                    "error": str(e),
+                    "circuit_breaker_state": self.circuit_breaker.get_state(),
                     "model": self.model,
                 },
-            ) from exc
-        except Exception as exc:  # pylint: disable=broad-exception-caught
-            logger.error("Unexpected error generating LLM response: %s", exc, exc_info=True)
-            raise IntegrationError(
-                message="Failed to generate LLM response",
-                details={"error": str(exc), "model": self.model},
-            ) from exc
+            ) from e
 
     async def _generate_response_streaming(
         self,
@@ -240,7 +383,9 @@ class LLMService:
         """
         # pylint: disable=too-many-arguments,too-many-positional-arguments
         # Required for OpenAI API compatibility - all parameters are needed
-        logger.info("Generating streaming LLM response with model: %s", self.model)
+        logger.info(
+            "Generating streaming LLM response with model: %s", self.model
+        )
 
         try:
             response = await self.client.chat.completions.create(
@@ -266,7 +411,11 @@ class LLMService:
             APITimeoutError,
             APIStatusError,
         ) as exc:
-            logger.error("Error generating streaming LLM response: %s", exc, exc_info=True)
+            logger.error(
+                "Error generating streaming LLM response: %s",
+                exc,
+                exc_info=True,
+            )
             raise IntegrationError(
                 message="Failed to generate streaming LLM response",
                 details={
@@ -286,7 +435,9 @@ class LLMService:
                 details={"error": str(exc), "model": self.model},
             ) from exc
 
-    async def generate_system_status_message(self, system_info: dict[str, Any]) -> str:
+    async def generate_system_status_message(
+        self, system_info: dict[str, Any]
+    ) -> str:
         """
         Generate a status message about system
 
@@ -319,8 +470,8 @@ class LLMService:
         self,
         agent_id: str,
         user_message: str,
-        conversation_history: Optional[list[dict[str, str]]] = None,
-        agent_config: Optional[dict[str, Any]] = None,
+        conversation_history: list[dict[str, str]] | None = None,
+        agent_config: dict[str, Any] | None = None,
     ) -> str:
         """
         Generate a response from an AI agent
@@ -336,7 +487,9 @@ class LLMService:
         """
         agent_type = (agent_config or {}).get("type", "general")
         agent_name = (agent_config or {}).get("name", f"Agente {agent_id}")
-        agent_description = (agent_config or {}).get("description", f"Assistente {agent_type}")
+        agent_description = (agent_config or {}).get(
+            "description", f"Assistente {agent_type}"
+        )
 
         system_message = (
             f"Você é {agent_name}, {agent_description}. "
@@ -344,7 +497,9 @@ class LLMService:
             "Seja conciso e forneça informações precisas."
         )
 
-        messages: list[dict[str, str]] = [{"role": "system", "content": system_message}]
+        messages: list[dict[str, str]] = [
+            {"role": "system", "content": system_message}
+        ]
         if conversation_history:
             messages.extend(conversation_history[-5:])  # últimas 5
 
@@ -355,7 +510,7 @@ class LLMService:
         self,
         query: str,
         context: str,
-        conversation_history: Optional[list[dict[str, str]]] = None,
+        conversation_history: list[dict[str, str]] | None = None,
     ) -> str:
         """
         Generate a response using RAG (Retrieval-Augmented Generation)
@@ -375,11 +530,15 @@ class LLMService:
             "informações suficientes, diga que não sabe. Responda em português brasileiro."
         )
 
-        messages: list[dict[str, str]] = [{"role": "system", "content": system_message}]
+        messages: list[dict[str, str]] = [
+            {"role": "system", "content": system_message}
+        ]
         if conversation_history:
             messages.extend(conversation_history[-3:])
 
-        contextual_query = f"Contexto relevante:\n{context}\n\nPergunta do usuário: {query}"
+        contextual_query = (
+            f"Contexto relevante:\n{context}\n\nPergunta do usuário: {query}"
+        )
         messages.append({"role": "user", "content": contextual_query})
         return await self.generate_response(messages, max_tokens=1000)
 
@@ -392,7 +551,9 @@ class LLMService:
         """
         try:
             test_response = await self.generate_response(
-                messages=[{"role": "user", "content": "Responda apenas com 'OK'."}],
+                messages=[
+                    {"role": "user", "content": "Responda apenas com 'OK'."}
+                ],
                 max_tokens=10,  # keep explicit (NVIDIA)
             )
             ok = test_response.strip() == "OK"
@@ -402,10 +563,19 @@ class LLMService:
                 "model": self.model,
                 "endpoint": getattr(settings, "llm_endpoint", None),
                 "test_response": test_response,
+                "circuit_breaker": self.circuit_breaker.get_stats(),
             }
             if not ok:
                 result["error"] = "Unexpected response"
             return result
+        except CircuitBreakerError as e:
+            return {
+                "status": "unhealthy",
+                "model": self.model,
+                "endpoint": getattr(settings, "llm_endpoint", None),
+                "error": str(e),
+                "circuit_breaker": self.circuit_breaker.get_stats(),
+            }
         except (
             AuthenticationError,
             RateLimitError,
@@ -421,6 +591,7 @@ class LLMService:
                 "endpoint": getattr(settings, "llm_endpoint", None),
                 "error": str(exc),
                 "request_id": getattr(exc, "request_id", None),
+                "circuit_breaker": self.circuit_breaker.get_stats(),
             }
         except Exception as exc:  # pylint: disable=broad-exception-caught
             return {
@@ -428,14 +599,15 @@ class LLMService:
                 "model": self.model,
                 "endpoint": getattr(settings, "llm_endpoint", None),
                 "error": str(exc),
+                "circuit_breaker": self.circuit_breaker.get_stats(),
             }
 
     async def chat_completion(
         self,
         user_message: str,
         agent_id: str,
-        agent_config: Optional[dict[str, Any]] = None,
-        conversation_history: Optional[list[dict[str, str]]] = None,
+        agent_config: dict[str, Any] | None = None,
+        conversation_history: list[dict[str, str]] | None = None,
         stream: bool = False,  # pylint: disable=unused-argument
     ) -> str:
         """

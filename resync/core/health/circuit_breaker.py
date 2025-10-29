@@ -8,8 +8,9 @@ temporarily stopping calls to failing services.
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from datetime import datetime
-from typing import Any, Callable, Optional
+from typing import Any
 
 import structlog
 
@@ -30,7 +31,7 @@ class CircuitBreaker:
         self,
         failure_threshold: int = 5,
         recovery_timeout: int = 60,
-        name: Optional[str] = None,
+        name: str | None = None,
     ):
         """
         Initialize the circuit breaker.
@@ -45,7 +46,7 @@ class CircuitBreaker:
         self.name = name or "unnamed_circuit_breaker"
 
         self.failure_count = 0
-        self.last_failure_time: Optional[datetime] = None
+        self.last_failure_time: datetime | None = None
         self.state: str = "closed"  # closed, open, half-open
         self._last_check = datetime.now()
 
@@ -131,7 +132,9 @@ class CircuitBreaker:
             "failure_threshold": self.failure_threshold,
             "recovery_timeout": self.recovery_timeout,
             "last_failure_time": (
-                self.last_failure_time.isoformat() if self.last_failure_time else None
+                self.last_failure_time.isoformat()
+                if self.last_failure_time
+                else None
             ),
             "last_check": self._last_check.isoformat(),
         }

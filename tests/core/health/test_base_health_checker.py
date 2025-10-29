@@ -9,8 +9,8 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-from resync.core.health_models import ComponentType, HealthCheckConfig
 from resync.core.health.health_checkers.base_health_checker import BaseHealthChecker
+from resync.core.health_models import ComponentType, HealthCheckConfig
 
 
 class ConcreteHealthChecker(BaseHealthChecker):

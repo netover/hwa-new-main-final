@@ -1,17 +1,17 @@
 from __future__ import annotations
 
+from collections import Counter, defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any, Dict, List, Optional
-from collections import defaultdict, Counter
+from typing import Any
 
-from resync.core.health_models import (
+from resync.core.health_service import HealthCheckService
+from resync_new.models.health_models import (
     ComponentHealth,
     ComponentType,
     HealthCheckResult,
     HealthStatus,
 )
-from resync.core.health_service import HealthCheckService
 
 
 @dataclass
@@ -24,8 +24,8 @@ class ComponentHealthSummary:
     degraded_count: int
     unhealthy_count: int
     unknown_count: int
-    average_response_time_ms: Optional[float] = None
-    components: List[ComponentHealth] = field(default_factory=list)
+    average_response_time_ms: float | None = None
+    components: list[ComponentHealth] = field(default_factory=list)
 
     @property
     def health_percentage(self) -> float:
@@ -39,12 +39,11 @@ class ComponentHealthSummary:
         """Determine overall status for this component type."""
         if self.unhealthy_count > 0:
             return HealthStatus.UNHEALTHY
-        elif self.degraded_count > 0:
+        if self.degraded_count > 0:
             return HealthStatus.DEGRADED
-        elif self.unknown_count > 0:
+        if self.unknown_count > 0:
             return HealthStatus.UNKNOWN
-        else:
-            return HealthStatus.HEALTHY
+        return HealthStatus.HEALTHY
 
 
 @dataclass
@@ -59,11 +58,11 @@ class OverallHealthStatus:
     unhealthy_components: int
     unknown_components: int
     overall_health_percentage: float
-    component_summaries: Dict[ComponentType, ComponentHealthSummary] = field(
+    component_summaries: dict[ComponentType, ComponentHealthSummary] = field(
         default_factory=dict
     )
-    critical_issues: List[str] = field(default_factory=list)
-    recommendations: List[str] = field(default_factory=list)
+    critical_issues: list[str] = field(default_factory=list)
+    recommendations: list[str] = field(default_factory=list)
 
     @property
     def is_system_healthy(self) -> bool:
@@ -77,11 +76,11 @@ class HealthReport:
 
     timestamp: datetime
     overall_status: OverallHealthStatus
-    component_health: Dict[str, ComponentHealth] = field(default_factory=dict)
-    performance_metrics: Dict[str, Any] = field(default_factory=dict)
-    trends: Dict[str, Any] = field(default_factory=dict)
-    alerts: List[str] = field(default_factory=list)
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    component_health: dict[str, ComponentHealth] = field(default_factory=dict)
+    performance_metrics: dict[str, Any] = field(default_factory=dict)
+    trends: dict[str, Any] = field(default_factory=dict)
+    alerts: list[str] = field(default_factory=list)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 
 class HealthMonitoringAggregator:
@@ -93,7 +92,7 @@ class HealthMonitoringAggregator:
     health, generating overall system status, and identifying trends and issues.
     """
 
-    def __init__(self, health_service: Optional[HealthCheckService] = None):
+    def __init__(self, health_service: HealthCheckService | None = None):
         """
         Initialize the HealthMonitoringAggregator.
 
@@ -102,8 +101,8 @@ class HealthMonitoringAggregator:
                           a new instance will be created when needed.
         """
         self.health_service = health_service
-        self._last_collection_time: Optional[datetime] = None
-        self._cached_report: Optional[HealthReport] = None
+        self._last_collection_time: datetime | None = None
+        self._cached_report: HealthReport | None = None
 
     async def get_health_service(self) -> HealthCheckService:
         """Get or create the health check service instance."""
@@ -123,10 +122,14 @@ class HealthMonitoringAggregator:
         health_service = await self.get_health_service()
 
         # Perform comprehensive health check
-        health_result = await health_service.perform_comprehensive_health_check()
+        health_result = (
+            await health_service.perform_comprehensive_health_check()
+        )
 
         # Create overall health status
-        overall_status = await self.generate_overall_health_status(health_result)
+        overall_status = await self.generate_overall_health_status(
+            health_result
+        )
 
         # Generate the complete report
         report = HealthReport(
@@ -152,7 +155,7 @@ class HealthMonitoringAggregator:
 
     async def aggregate_component_health(
         self,
-    ) -> Dict[ComponentType, ComponentHealthSummary]:
+    ) -> dict[ComponentType, ComponentHealthSummary]:
         """
         Aggregate health data by component type.
 
@@ -168,8 +171,8 @@ class HealthMonitoringAggregator:
             await self.collect_all_health_checks()
 
         # Group components by type
-        components_by_type: Dict[ComponentType, List[ComponentHealth]] = defaultdict(
-            list
+        components_by_type: dict[ComponentType, list[ComponentHealth]] = (
+            defaultdict(list)
         )
 
         for component in self._cached_report.component_health.values():
@@ -178,13 +181,15 @@ class HealthMonitoringAggregator:
         # Create summaries for each component type
         summaries = {}
         for component_type, components in components_by_type.items():
-            summary = self._create_component_summary(component_type, components)
+            summary = self._create_component_summary(
+                component_type, components
+            )
             summaries[component_type] = summary
 
         return summaries
 
     async def generate_overall_health_status(
-        self, health_result: Optional[HealthCheckResult] = None
+        self, health_result: HealthCheckResult | None = None
     ) -> OverallHealthStatus:
         """
         Generate overall health status for the system.
@@ -220,7 +225,9 @@ class HealthMonitoringAggregator:
 
         # Calculate overall health percentage
         overall_health_percentage = (
-            (healthy_count / total_components * 100) if total_components > 0 else 0.0
+            (healthy_count / total_components * 100)
+            if total_components > 0
+            else 0.0
         )
 
         # Determine overall status (worst status wins)
@@ -237,7 +244,9 @@ class HealthMonitoringAggregator:
         component_summaries = await self.aggregate_component_health()
 
         # Generate critical issues and recommendations
-        critical_issues = self._identify_critical_issues(health_result.components)
+        critical_issues = self._identify_critical_issues(
+            health_result.components
+        )
         recommendations = self._generate_recommendations(
             health_result.components, component_summaries
         )
@@ -257,17 +266,21 @@ class HealthMonitoringAggregator:
         )
 
     def _create_component_summary(
-        self, component_type: ComponentType, components: List[ComponentHealth]
+        self, component_type: ComponentType, components: list[ComponentHealth]
     ) -> ComponentHealthSummary:
         """Create a summary for a specific component type."""
         status_counts = Counter(component.status for component in components)
 
         # Calculate average response time
         response_times = [
-            c.response_time_ms for c in components if c.response_time_ms is not None
+            c.response_time_ms
+            for c in components
+            if c.response_time_ms is not None
         ]
         average_response_time = (
-            sum(response_times) / len(response_times) if response_times else None
+            sum(response_times) / len(response_times)
+            if response_times
+            else None
         )
 
         return ComponentHealthSummary(
@@ -278,14 +291,16 @@ class HealthMonitoringAggregator:
             unhealthy_count=status_counts.get(HealthStatus.UNHEALTHY, 0),
             unknown_count=status_counts.get(HealthStatus.UNKNOWN, 0),
             average_response_time=(
-                round(average_response_time, 2) if average_response_time else None
+                round(average_response_time, 2)
+                if average_response_time
+                else None
             ),
             components=components,
         )
 
     def _identify_critical_issues(
-        self, components: Dict[str, ComponentHealth]
-    ) -> List[str]:
+        self, components: dict[str, ComponentHealth]
+    ) -> list[str]:
         """Identify critical issues from component health data."""
         issues = []
 
@@ -298,7 +313,9 @@ class HealthMonitoringAggregator:
 
             # Check for specific critical conditions
             if component.component_type == ComponentType.DATABASE:
-                usage_percent = component.metadata.get("connection_usage_percent")
+                usage_percent = component.metadata.get(
+                    "connection_usage_percent"
+                )
                 if usage_percent and usage_percent > 95:
                     issues.append(
                         f"Database connection pool critically high: {usage_percent}%"
@@ -307,20 +324,24 @@ class HealthMonitoringAggregator:
             elif component.component_type == ComponentType.MEMORY:
                 usage_percent = component.metadata.get("memory_usage_percent")
                 if usage_percent and usage_percent > 95:
-                    issues.append(f"Memory usage critically high: {usage_percent}%")
+                    issues.append(
+                        f"Memory usage critically high: {usage_percent}%"
+                    )
 
             elif component.component_type == ComponentType.FILE_SYSTEM:
                 usage_percent = component.metadata.get("disk_usage_percent")
                 if usage_percent and usage_percent > 95:
-                    issues.append(f"Disk usage critically high: {usage_percent}%")
+                    issues.append(
+                        f"Disk usage critically high: {usage_percent}%"
+                    )
 
         return issues
 
     def _generate_recommendations(
         self,
-        components: Dict[str, ComponentHealth],
-        summaries: Dict[ComponentType, ComponentHealthSummary],
-    ) -> List[str]:
+        components: dict[str, ComponentHealth],
+        summaries: dict[ComponentType, ComponentHealthSummary],
+    ) -> list[str]:
         """Generate recommendations based on component health."""
         recommendations = []
 
@@ -343,7 +364,8 @@ class HealthMonitoringAggregator:
         # Check for high response times
         for component_type, summary in summaries.items():
             if (
-                summary.average_response_time and summary.average_response_time > 1000
+                summary.average_response_time
+                and summary.average_response_time > 1000
             ):  # > 1 second
                 recommendations.append(
                     f"High response times detected for {component_type.value} components"
@@ -370,7 +392,7 @@ class HealthMonitoringAggregator:
         age = datetime.now() - self._last_collection_time
         return age.total_seconds() > max_age_seconds
 
-    async def get_cached_report(self) -> Optional[HealthReport]:
+    async def get_cached_report(self) -> HealthReport | None:
         """Get cached health report if available and fresh."""
         if self._should_refresh_cache():
             return None

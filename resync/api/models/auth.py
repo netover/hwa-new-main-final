@@ -1,7 +1,5 @@
 """Authentication and user management models."""
 
-from typing import Optional
-
 from pydantic import BaseModel
 
 
@@ -11,9 +9,9 @@ class LoginRequest(BaseModel):
     username: str
     password: str
     # Security fields
-    captcha_token: Optional[str] = None
-    client_fingerprint: Optional[str] = None
-    session_token: Optional[str] = None
+    captcha_token: str | None = None
+    client_fingerprint: str | None = None
+    session_token: str | None = None
 
 
 class UserRegistrationRequest(BaseModel):
@@ -23,9 +21,9 @@ class UserRegistrationRequest(BaseModel):
     email: str
     password: str
     # Security fields
-    captcha_token: Optional[str] = None
+    captcha_token: str | None = None
     terms_accepted: bool = False
-    client_fingerprint: Optional[str] = None
+    client_fingerprint: str | None = None
 
 
 class PasswordChangeRequest(BaseModel):
@@ -35,8 +33,8 @@ class PasswordChangeRequest(BaseModel):
     new_password: str
     confirm_password: str
     # Security fields
-    session_token: Optional[str] = None
-    client_fingerprint: Optional[str] = None
+    session_token: str | None = None
+    client_fingerprint: str | None = None
 
 
 class Token(BaseModel):
@@ -49,26 +47,4 @@ class Token(BaseModel):
 class TokenData(BaseModel):
     """JWT token payload data."""
 
-    username: Optional[str] = None
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    username: str | None = None

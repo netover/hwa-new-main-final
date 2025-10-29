@@ -863,15 +863,15 @@ We welcome contributions to improve Resync! Please follow these guidelines:
 
 **Requirements:**
 - Python 3.13 or later
-- All dependencies listed in requirements.txt
+- Dependencies from `requirements/dev.txt` (development) or `requirements/prod.txt` (production)
 
 ```bash
 # Clone the repository
 git clone https://github.com/your-org/resync.git
 cd resync
 
-# Install dependencies
-pip install -r requirements.txt
+# Install dependencies (development)
+pip install -r requirements/dev.txt
 
 # Set up environment variables
 cp settings.development.toml.example settings.development.toml

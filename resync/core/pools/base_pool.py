@@ -10,10 +10,11 @@ import dataclasses
 import logging
 from abc import ABC, abstractmethod
 from collections import deque
+from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
 from datetime import datetime
-from typing import AsyncIterator, Generic, Optional, TypeVar
+from typing import Generic, TypeVar
 
 # --- Logging Setup ---
 logger = logging.getLogger(__name__)
@@ -37,9 +38,13 @@ class ConnectionPoolStats:
     pool_hits: int = 0
     pool_misses: int = 0
     pool_exhaustions: int = 0
-    acquisition_attempts: int = 0  # Nova métrica para contagem de tentativas de aquisição
-    session_acquisitions: int = 0   # Nova métrica para contagem de sessões adquiridas com sucesso
-    last_health_check: Optional[datetime] = None
+    acquisition_attempts: int = (
+        0  # Nova métrica para contagem de tentativas de aquisição
+    )
+    session_acquisitions: int = (
+        0  # Nova métrica para contagem de sessões adquiridas com sucesso
+    )
+    last_health_check: datetime | None = None
     average_wait_time: float = 0.0
     peak_connections: int = 0
 
@@ -83,7 +88,9 @@ class ConnectionPool(ABC, Generic[T]):
             try:
                 await self._setup_pool()
                 self._initialized = True
-                logger.info(f"Initialized {self.config.pool_name} connection pool")
+                logger.info(
+                    f"Initialized {self.config.pool_name} connection pool"
+                )
             except Exception as e:
                 logger.error(
                     f"Failed to initialize {self.config.pool_name} connection pool: {e}"
@@ -128,7 +135,9 @@ class ConnectionPool(ABC, Generic[T]):
             if self._wait_times:
                 average = sum(self._wait_times) / len(self._wait_times)
                 # Update stats with new average (immutable, so create new instance)
-                self.stats = dataclasses.replace(self.stats, average_wait_time=average)
+                self.stats = dataclasses.replace(
+                    self.stats, average_wait_time=average
+                )
 
     async def increment_stat(self, stat_name: str, amount: int = 1) -> None:
         """Increment a statistic in a thread-safe manner."""
@@ -136,7 +145,9 @@ class ConnectionPool(ABC, Generic[T]):
             current_value = getattr(self.stats, stat_name, 0)
             new_value = current_value + amount
             # Create a new immutable stats object with the updated value
-            updated_stats = dataclasses.replace(self.stats, **{stat_name: new_value})
+            updated_stats = dataclasses.replace(
+                self.stats, **{stat_name: new_value}
+            )
             self.stats = updated_stats
 
     def get_stats_copy(self) -> dict:
@@ -156,5 +167,7 @@ class ConnectionPool(ABC, Generic[T]):
                 pass
             return True
         except Exception as e:
-            logger.warning(f"Health check failed for {self.config.pool_name}: {e}")
+            logger.warning(
+                f"Health check failed for {self.config.pool_name}: {e}"
+            )
             return False

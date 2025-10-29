@@ -90,9 +90,8 @@ The system uses a comprehensive dependency injection container:
 
 #### Advanced Caching Layer
 - **`resync/core/async_cache.py`** - High-performance async TTL cache with Redis backend
-- **`resync/core/cache_manager.py`** - Multi-level cache management (memory + Redis)
-- **`resync/core/memory_bounds.py`** - Memory-bounded cache with automatic eviction
-- **`resync/core/connection_pool_manager.py`** - Optimized connection pool management
+  - Includes multi-level caching (memory + Redis), memory bounds, and performance monitoring.
+- **`resync/core/connection_pool_manager.py`** - Optimized connection pool management for DB, Redis, and HTTP.
 
 #### Security Layer
 - **CSP Validation** - Content Security Policy with nonce support
@@ -688,7 +687,7 @@ git clone https://github.com/your-org/resync.git
 cd resync
 
 # Install dependencies
-pip install -r requirements.txt
+pip install -r requirements/dev.txt
 
 # Set up environment variables
 cp settings.development.toml.example settings.development.toml
@@ -725,6 +724,42 @@ The application uses a hierarchical configuration system with:
 - Environment variables with `APP_` prefix
 
 ## Configuration
+
+### Health Check Configuration
+
+The simplified health check system provides minimal resource usage while maintaining API compatibility:
+
+```toml
+[default.HEALTH]
+HEALTH_CHECK_INTERVAL_SECONDS = 300    # Interval for health checks (default: 5 minutes)
+HEALTH_ENABLE_PROACTIVE = false          # Disable proactive monitoring (resource intensive)
+HEALTH_ENABLE_PREDICTIVE = false        # Disable predictive analysis (resource intensive)
+```
+
+#### Health Check Features
+
+The simplified health service includes:
+
+- **Minimal Component Checks**: Database, Redis, Cache, System Resources, WebSocket Pool
+- **Background Monitoring**: Runs every 300 seconds (configurable)
+- **Pure Asyncio**: No thread pools or circuit breakers
+- **Low-Cardinality Metrics**: Only essential Prometheus metrics
+- **API Compatibility**: Maintains exact same JSON structure and endpoints
+
+#### Prometheus Metrics
+
+The simplified health service exposes only three essential metrics:
+
+- `health_checks_total` (Counter): Total number of health checks performed
+- `health_check_duration_seconds` (Histogram): Time spent performing health checks
+- `component_health` (Gauge): Health status of components (0=UNKNOWN,1=HEALTHY,2=DEGRADED,3=UNHEALTHY)
+
+#### Component Status Values
+
+- **0**: UNKNOWN - Component status unavailable
+- **1**: HEALTHY - All systems operational
+- **2**: DEGRADED - Some components experiencing issues
+- **3**: UNHEALTHY - Critical components failing
 
 ### Environment Variables
 
@@ -1271,7 +1306,7 @@ async def update_prometheus_metrics():
 cd D:\Python\GITHUB\hwa-new
 
 # Install dependencies
-pip install -r requirements.txt
+pip install -r requirements/dev.txt
 
 # Or use poetry
 poetry install
@@ -1330,29 +1365,3 @@ await resource_pool.cleanup_all()
 
 **Documentation Last Updated:** October 2025
 **Version:** 1.0.0
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

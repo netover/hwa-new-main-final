@@ -1,9 +1,8 @@
 """Health-related API models."""
 
-
+from resync_new.models.health_models import SystemHealthStatus
 
 from .base import BaseModelWithTime
-from resync.core.health_models import SystemHealthStatus
 
 
 class SystemMetric(BaseModelWithTime):

@@ -12,7 +12,7 @@ O Correlation ID é:
 
 import logging
 import uuid
-from typing import Callable, Optional
+from collections.abc import Callable
 
 from fastapi import Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware
@@ -57,7 +57,9 @@ class CorrelationIdMiddleware(BaseHTTPMiddleware):
         self.header_name = header_name
         self.generate_if_missing = generate_if_missing
 
-    async def dispatch(self, request: Request, call_next: Callable) -> Response:
+    async def dispatch(
+        self, request: Request, call_next: Callable
+    ) -> Response:
         """Processa a requisição adicionando Correlation ID.
 
         Args:
@@ -118,7 +120,7 @@ class CorrelationIdMiddleware(BaseHTTPMiddleware):
         return str(uuid.uuid4())
 
 
-def get_correlation_id_from_request(request: Request) -> Optional[str]:
+def get_correlation_id_from_request(request: Request) -> str | None:
     """Extrai Correlation ID da requisição.
 
     Args:
@@ -131,7 +133,9 @@ def get_correlation_id_from_request(request: Request) -> Optional[str]:
 
 
 def add_correlation_id_to_response(
-    response: Response, correlation_id: str, header_name: str = CORRELATION_ID_HEADER
+    response: Response,
+    correlation_id: str,
+    header_name: str = CORRELATION_ID_HEADER,
 ) -> None:
     """Adiciona Correlation ID ao header da resposta.
 

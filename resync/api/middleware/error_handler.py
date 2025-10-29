@@ -16,7 +16,7 @@ from resync.core.utils.error_utils import (
     generate_correlation_id,
     log_error_response,
 )
-from resync_new.utils.exceptions import ResyncException
+from resync.utils.exceptions import ResyncException
 from starlette.middleware.base import BaseHTTPMiddleware
 
 logger = logging.getLogger(__name__)
@@ -85,7 +85,7 @@ class GlobalExceptionHandlerMiddleware(BaseHTTPMiddleware):
     ) -> None:
         """Log error metrics for monitoring and alerting."""
         try:
-            from resync_new.core.monitoring.metrics import runtime_metrics
+            from resync.core.monitoring.metrics import runtime_metrics
 
             runtime_metrics.record_error(error_type, processing_time)
         except ImportError:

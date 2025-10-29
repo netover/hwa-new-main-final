@@ -3,14 +3,16 @@ from unittest.mock import AsyncMock, MagicMock
 import pytest
 
 from resync.api.chat import _handle_agent_interaction
+
 pytestmark = pytest.mark.asyncio
 
 
 @pytest.fixture
 def client():
     """Create a TestClient for the FastAPI app."""
-    from resync.api.chat import chat_router
     from fastapi import FastAPI
+
+    from resync.api.chat import chat_router
 
     app = FastAPI()
     app.include_router(chat_router)

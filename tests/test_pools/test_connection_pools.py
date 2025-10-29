@@ -1,12 +1,12 @@
-import pytest
 import asyncio
+
+import pytest
 
 from resync.core.pools.base_pool import ConnectionPoolConfig
 from resync.core.pools.pool_manager import (
     get_connection_pool_manager,
     reset_connection_pool_manager,
 )
-
 
 # ============================================================================
 # FIXTURES

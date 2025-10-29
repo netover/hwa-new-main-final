@@ -13,15 +13,15 @@ import psutil
 import pytest
 
 
-
 class TestConnectionPoolPerformance:
     """Test connection pool performance characteristics."""
 
     @pytest.fixture
     def client(self):
         """Create a TestClient for the FastAPI app."""
-        from resync.api.endpoints import api_router
         from fastapi import FastAPI
+
+        from resync.api.endpoints import api_router
 
         app = FastAPI()
         app.include_router(api_router)
@@ -42,8 +42,7 @@ class TestConnectionPoolPerformance:
                 task = asyncio.create_task(self._simulate_connection_workload(i))
                 tasks.append(task)
 
-            results = await asyncio.gather(*tasks, return_exceptions=True)
-            return results
+            return await asyncio.gather(*tasks, return_exceptions=True)
 
         # Test with various connection counts
         for n_conn in [10, 50, 100]:
@@ -356,8 +355,7 @@ class TestConcurrentLoadHandling:
             futures = [
                 executor.submit(test_client.get, "/health") for _ in range(n_requests)
             ]
-            responses = [future.result() for future in futures]
-        return responses
+            return [future.result() for future in futures]
 
         # Test with increasing concurrency
         for concurrency in [10, 50, 100]:
@@ -376,6 +374,7 @@ class TestConcurrentLoadHandling:
             total_time = end_time - start_time
             avg_response_time = total_time / concurrency
             assert avg_response_time < 1.0  # Less than 1 second average
+        return None
 
     @pytest.mark.performance
     @pytest.mark.slow

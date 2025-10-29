@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function loadMetrics() {
         try {
-            const response = await fetch('/api/audit/metrics'); // New endpoint for metrics
+            const response = await fetch('/api/v1/audit/metrics'); // New endpoint for metrics
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
             statusDiv.textContent = 'Processando...';
 
             try {
-                const response = await fetch('/api/audit/review', {
+                const response = await fetch('/api/v1/audit/review', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

@@ -45,9 +45,9 @@ Este documento serve como um guia passo a passo para implantar a aplicação Res
   source .venv/bin/activate
   ```
 
-- [ ] **Instalação de Dependências**: Instale as bibliotecas necessárias a partir do `requirements.txt`.
+- [ ] **Instalação de Dependências**: Instale as bibliotecas necessárias a partir do `requirements/prod.txt` (produção) ou `requirements/dev.txt` (desenvolvimento).
   ```bash
-  pip install -r requirements.txt
+  pip install -r requirements/prod.txt
   ```
 
 ---

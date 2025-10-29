@@ -1,13 +1,15 @@
 """Tests for CSP violation report validation utilities."""
 
 import json
+
 import pytest
+
 from resync.csp_validation import (
-    validate_csp_report,
-    _is_safe_uri,
-    _is_safe_directive_value,
-    sanitize_csp_report,
     CSPValidationError,
+    _is_safe_directive_value,
+    _is_safe_uri,
+    sanitize_csp_report,
+    validate_csp_report,
     validate_csp_report_legacy,
 )
 

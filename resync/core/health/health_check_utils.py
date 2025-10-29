@@ -9,11 +9,15 @@ check patterns.
 from __future__ import annotations
 
 import asyncio
-from typing import Any, Callable, Dict, List, Optional, TypeVar
+from collections.abc import Callable
+from typing import Any, TypeVar
 
 import structlog
-
-from resync.core.health_models import ComponentHealth, ComponentType, HealthStatus
+from resync_new.models.health_models import (
+    ComponentHealth,
+    ComponentType,
+    HealthStatus,
+)
 
 logger = structlog.get_logger(__name__)
 
@@ -76,10 +80,11 @@ class HealthCheckUtils:
                     error=str(e),
                 )
                 await asyncio.sleep(wait_time)
+        return None
 
     @staticmethod
     def calculate_overall_status(
-        components: Dict[str, ComponentHealth],
+        components: dict[str, ComponentHealth],
     ) -> HealthStatus:
         """
         Calculate overall health status from component health results.
@@ -106,7 +111,9 @@ class HealthCheckUtils:
         return worst_status
 
     @staticmethod
-    def generate_summary(components: Dict[str, ComponentHealth]) -> Dict[str, int]:
+    def generate_summary(
+        components: dict[str, ComponentHealth],
+    ) -> dict[str, int]:
         """
         Generate summary statistics from component health results.
 
@@ -116,7 +123,7 @@ class HealthCheckUtils:
         Returns:
             Dictionary with health status counts
         """
-        summary: Dict[str, int] = {
+        summary: dict[str, int] = {
             "healthy": 0,
             "degraded": 0,
             "unhealthy": 0,
@@ -138,9 +145,9 @@ class HealthCheckUtils:
 
     @staticmethod
     def check_alerts(
-        components: Dict[str, ComponentHealth],
-        thresholds: Optional[Dict[str, float]] = None,
-    ) -> List[str]:
+        components: dict[str, ComponentHealth],
+        thresholds: dict[str, float] | None = None,
+    ) -> list[str]:
         """
         Check for alert conditions in component health results.
 
@@ -151,7 +158,7 @@ class HealthCheckUtils:
         Returns:
             List of alert messages
         """
-        alerts: List[str] = []
+        alerts: list[str] = []
         default_thresholds = {
             "database_connection_threshold_percent": 80.0,
             "memory_usage_threshold_percent": 85.0,
@@ -171,13 +178,18 @@ class HealthCheckUtils:
                 ):
                     threshold = thresholds.get(
                         "database_connection_threshold_percent",
-                        default_thresholds["database_connection_threshold_percent"],
+                        default_thresholds[
+                            "database_connection_threshold_percent"
+                        ],
                     )
                     usage = component.metadata["connection_usage_percent"]
                     alerts.append(
                         f"Database connection pool usage at {usage:.1f}% (threshold: {threshold}%)"
                     )
-                elif name == "memory" and "memory_usage_percent" in component.metadata:
+                elif (
+                    name == "memory"
+                    and "memory_usage_percent" in component.metadata
+                ):
                     threshold = thresholds.get(
                         "memory_usage_threshold_percent",
                         default_thresholds["memory_usage_threshold_percent"],
@@ -186,7 +198,9 @@ class HealthCheckUtils:
                     alerts.append(
                         f"Memory usage at {usage:.1f}% (threshold: {threshold}%)"
                     )
-                elif name == "cpu" and "cpu_usage_percent" in component.metadata:
+                elif (
+                    name == "cpu" and "cpu_usage_percent" in component.metadata
+                ):
                     threshold = thresholds.get(
                         "cpu_usage_threshold_percent",
                         default_thresholds["cpu_usage_threshold_percent"],
@@ -201,7 +215,7 @@ class HealthCheckUtils:
         return alerts
 
     @staticmethod
-    def get_component_type_mapping() -> Dict[str, ComponentType]:
+    def get_component_type_mapping() -> dict[str, ComponentType]:
         """
         Get mapping of component names to component types.
 
@@ -236,8 +250,8 @@ class HealthCheckUtils:
 
     @staticmethod
     def calculate_performance_metrics(
-        components: Dict[str, ComponentHealth],
-    ) -> Dict[str, Any]:
+        components: dict[str, ComponentHealth],
+    ) -> dict[str, Any]:
         """
         Calculate performance metrics from component health results.
 
@@ -256,7 +270,10 @@ class HealthCheckUtils:
                 total_response_time += component.response_time_ms
                 response_times.append(component.response_time_ms)
 
-            if component.status in [HealthStatus.UNHEALTHY, HealthStatus.UNKNOWN]:
+            if component.status in [
+                HealthStatus.UNHEALTHY,
+                HealthStatus.UNKNOWN,
+            ]:
                 failed_checks += 1
 
         component_count = len(components)
@@ -273,12 +290,18 @@ class HealthCheckUtils:
                 else 0
             ),
             "avg_response_time_ms": avg_response_time,
-            "min_response_time_ms": min(response_times) if response_times else 0,
-            "max_response_time_ms": max(response_times) if response_times else 0,
+            "min_response_time_ms": (
+                min(response_times) if response_times else 0
+            ),
+            "max_response_time_ms": (
+                max(response_times) if response_times else 0
+            ),
         }
 
     @staticmethod
-    def format_component_metadata(component: ComponentHealth) -> Dict[str, Any]:
+    def format_component_metadata(
+        component: ComponentHealth,
+    ) -> dict[str, Any]:
         """
         Format component metadata for consistent output.
 
@@ -293,7 +316,9 @@ class HealthCheckUtils:
             "status": component.status.value,
             "response_time_ms": component.response_time_ms,
             "last_check": (
-                component.last_check.isoformat() if component.last_check else None
+                component.last_check.isoformat()
+                if component.last_check
+                else None
             ),
             "error_count": component.error_count,
         }

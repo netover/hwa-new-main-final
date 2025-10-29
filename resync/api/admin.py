@@ -8,17 +8,17 @@ from __future__ import annotations
 
 import logging
 from datetime import datetime
-from typing import Any, Dict
+from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from fastapi.responses import HTMLResponse
 from pydantic import BaseModel, Field
+from resync.core.teams_integration import TeamsIntegration
+from resync.config.settings import settings
+from resync.core.fastapi_di import get_teams_integration, get_tws_client
+from resync.utils.interfaces import ITWSClient
 
 from resync.api.auth import verify_admin_credentials
-from resync.core.fastapi_di import get_teams_integration, get_tws_client
-from resync.core.interfaces import ITWSClient
-from resync.core.teams_integration import TeamsIntegration
-from resync.settings import settings
 
 logger = logging.getLogger(__name__)
 
@@ -62,11 +62,13 @@ class TeamsConfigUpdate(BaseModel):
 class AdminConfigResponse(BaseModel):
     """Admin configuration response model."""
 
-    teams: Dict[str, Any] = Field(
+    teams: dict[str, Any] = Field(
         default_factory=dict, description="Teams integration configuration"
     )
-    tws: Dict[str, Any] = Field(default_factory=dict, description="TWS configuration")
-    system: Dict[str, Any] = Field(
+    tws: dict[str, Any] = Field(
+        default_factory=dict, description="TWS configuration"
+    )
+    system: dict[str, Any] = Field(
         default_factory=dict, description="System configuration"
     )
     last_updated: str = Field(
@@ -78,7 +80,7 @@ class AdminConfigResponse(BaseModel):
 class TeamsHealthResponse(BaseModel):
     """Teams integration health check response."""
 
-    status: Dict[str, Any] = Field(
+    status: dict[str, Any] = Field(
         default_factory=dict, description="Teams integration status"
     )
     timestamp: str = Field(
@@ -117,7 +119,8 @@ async def admin_dashboard(request: Request) -> HTMLResponse:
     dependencies=[Depends(verify_admin_credentials)],
 )
 async def get_admin_config(
-    request: Request, teams_integration: TeamsIntegration = teams_integration_dependency
+    request: Request,
+    teams_integration: TeamsIntegration = teams_integration_dependency,
 ) -> AdminConfigResponse:
     """Get current admin configuration.
 
@@ -147,7 +150,9 @@ async def get_admin_config(
             "port": getattr(settings, "TWS_PORT", None),
             "user": getattr(settings, "TWS_USER", None),
             "mock_mode": getattr(settings, "TWS_MOCK_MODE", False),
-            "monitored_instances": getattr(settings, "MONITORED_TWS_INSTANCES", []),
+            "monitored_instances": getattr(
+                settings, "MONITORED_TWS_INSTANCES", []
+            ),
         }
 
         # Get system configuration
@@ -224,7 +229,9 @@ async def update_teams_config(
             "port": getattr(settings, "TWS_PORT", None),
             "user": getattr(settings, "TWS_USER", None),
             "mock_mode": getattr(settings, "TWS_MOCK_MODE", False),
-            "monitored_instances": getattr(settings, "MONITORED_TWS_INSTANCES", []),
+            "monitored_instances": getattr(
+                settings, "MONITORED_TWS_INSTANCES", []
+            ),
         }
 
         system_config = {
@@ -242,7 +249,9 @@ async def update_teams_config(
         )
 
     except Exception as e:
-        logger.error(f"Failed to update Teams configuration: {e}", exc_info=True)
+        logger.error(
+            f"Failed to update Teams configuration: {e}", exc_info=True
+        )
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to update configuration: {str(e)}",
@@ -256,7 +265,8 @@ async def update_teams_config(
     dependencies=[Depends(verify_admin_credentials)],
 )
 async def get_teams_health(
-    request: Request, teams_integration: TeamsIntegration = teams_integration_dependency
+    request: Request,
+    teams_integration: TeamsIntegration = teams_integration_dependency,
 ) -> TeamsHealthResponse:
     """Get Microsoft Teams integration health status.
 
@@ -285,7 +295,7 @@ async def test_teams_notification(
     request: Request,
     message: str = "Test notification from Resync",
     teams_integration: TeamsIntegration = teams_integration_dependency,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Send test notification to Microsoft Teams.
 
     Sends a test notification to verify Teams integration is working correctly.
@@ -313,15 +323,16 @@ async def test_teams_notification(
                 "message": "Test notification sent successfully",
                 "timestamp": datetime.now().isoformat(),
             }
-        else:
-            return {
-                "status": "error",
-                "message": "Failed to send test notification",
-                "timestamp": datetime.now().isoformat(),
-            }
+        return {
+            "status": "error",
+            "message": "Failed to send test notification",
+            "timestamp": datetime.now().isoformat(),
+        }
 
     except Exception as e:
-        logger.error(f"Failed to send test Teams notification: {e}", exc_info=True)
+        logger.error(
+            f"Failed to send test Teams notification: {e}", exc_info=True
+        )
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to send test notification: {str(e)}",
@@ -337,7 +348,7 @@ async def get_admin_status(
     request: Request,
     tws_client: ITWSClient = tws_client_dependency,
     teams_integration: TeamsIntegration = teams_integration_dependency,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Get overall system status for administration.
 
     Returns comprehensive status information for system administration.

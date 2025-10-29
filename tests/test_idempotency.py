@@ -9,11 +9,12 @@ Date: October 2025
 
 import json
 from datetime import datetime, timedelta
-from unittest.mock import AsyncMock, MagicMock, ANY
+from unittest.mock import ANY, AsyncMock, MagicMock
 
 import pytest
 from redis.asyncio import Redis
 
+from resync.api.middleware.idempotency import IdempotencyMiddleware
 from resync.core.idempotency import (
     IdempotencyConfig,
     IdempotencyManager,
@@ -21,7 +22,6 @@ from resync.core.idempotency import (
     generate_idempotency_key,
     validate_idempotency_key,
 )
-from resync.api.middleware.idempotency import IdempotencyMiddleware
 
 
 class TestIdempotencyManager:
@@ -373,7 +373,7 @@ class TestIdempotencyMiddleware:
         call_next = AsyncMock(return_value=mock_response)
 
         # Executar middleware
-        response = await middleware.dispatch(request, call_next)
+        await middleware.dispatch(request, call_next)
 
         # Verificar que operação foi executada
         call_next.assert_called_once()
@@ -396,7 +396,7 @@ class TestIdempotencyMiddleware:
         call_next = AsyncMock(return_value=MagicMock())
 
         # Executar middleware
-        response = await middleware.dispatch(request, call_next)
+        await middleware.dispatch(request, call_next)
 
         # Verificar que idempotency não foi aplicada
         call_next.assert_called_once()

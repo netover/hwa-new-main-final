@@ -1,3 +1,0 @@
-"""
-RAG microservice package.
-"""

@@ -5,10 +5,10 @@ import stat
 import time
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
-from resync.core.health_models import HealthStatus
-from resync.core.structured_logger import get_logger
+from resync_new.models.health_models import HealthStatus
+from resync_new.utils.simple_logger import get_logger
 
 logger = get_logger(__name__)
 
@@ -59,10 +59,12 @@ class IntegrityStatus:
 
     # Health indicators
     status: HealthStatus = HealthStatus.UNKNOWN
-    integrity_score: float = 100.0  # Percentage of files that passed integrity checks
+    integrity_score: float = (
+        100.0  # Percentage of files that passed integrity checks
+    )
 
     # Error details
-    error_details: List[str] = None
+    error_details: list[str] = None
 
     # Timestamp
     timestamp: float = 0.0
@@ -94,10 +96,12 @@ class PermissionStatus:
 
     # Health indicators
     status: HealthStatus = HealthStatus.UNKNOWN
-    security_score: float = 100.0  # Percentage of paths with secure permissions
+    security_score: float = (
+        100.0  # Percentage of paths with secure permissions
+    )
 
     # Error details
-    error_details: List[str] = None
+    error_details: list[str] = None
 
     # Timestamp
     timestamp: float = 0.0
@@ -121,7 +125,7 @@ class FileSystemHealthMonitor:
     - File system performance metrics
     """
 
-    def __init__(self, config: Optional[Dict[str, Any]] = None):
+    def __init__(self, config: dict[str, Any] | None = None):
         """
         Initialize the filesystem health monitor.
 
@@ -135,12 +139,16 @@ class FileSystemHealthMonitor:
         self.disk_space_threshold = self.config.get(
             "disk_space_threshold_percent", 90.0
         )
-        self.integrity_check_paths = self.config.get("integrity_check_paths", ["/"])
-        self.permission_check_paths = self.config.get("permission_check_paths", ["/"])
+        self.integrity_check_paths = self.config.get(
+            "integrity_check_paths", ["/"]
+        )
+        self.permission_check_paths = self.config.get(
+            "permission_check_paths", ["/"]
+        )
         self.exclude_patterns = self.config.get("exclude_patterns", [])
 
         # Performance tracking
-        self._check_history: List[Dict[str, Any]] = []
+        self._check_history: list[dict[str, Any]] = []
         self._max_history_size = 100
 
     def check_disk_space(self) -> DiskSpaceStatus:
@@ -150,7 +158,7 @@ class FileSystemHealthMonitor:
         Returns:
             DiskSpaceStatus: Current disk space status
         """
-        start_time = time.time()
+        time.time()
 
         try:
             disk_status = DiskSpaceStatus()
@@ -173,7 +181,9 @@ class FileSystemHealthMonitor:
                     free_bytes = stat_info.f_bavail * stat_info.f_frsize
                     used_bytes = total_bytes - free_bytes
                     used_percent = (
-                        (used_bytes / total_bytes) * 100 if total_bytes > 0 else 0.0
+                        (used_bytes / total_bytes) * 100
+                        if total_bytes > 0
+                        else 0.0
                     )
 
                     # Track maximum usage across all paths
@@ -193,7 +203,9 @@ class FileSystemHealthMonitor:
 
                 except (OSError, AttributeError) as e:
                     logger.warning(
-                        f"disk_space_check_failed_for_path", path=path, error=str(e)
+                        "disk_space_check_failed_for_path",
+                        path=path,
+                        error=str(e),
                     )
                     continue
 
@@ -215,7 +227,9 @@ class FileSystemHealthMonitor:
 
         except Exception as e:
             logger.error("disk_space_check_failed", error=str(e))
-            return DiskSpaceStatus(status=HealthStatus.UNHEALTHY, timestamp=time.time())
+            return DiskSpaceStatus(
+                status=HealthStatus.UNHEALTHY, timestamp=time.time()
+            )
 
     def check_file_integrity(self) -> IntegrityStatus:
         """
@@ -224,7 +238,7 @@ class FileSystemHealthMonitor:
         Returns:
             IntegrityStatus: Current file integrity status
         """
-        start_time = time.time()
+        time.time()
 
         try:
             integrity_status = IntegrityStatus()
@@ -241,21 +255,31 @@ class FileSystemHealthMonitor:
 
                 except (OSError, AttributeError) as e:
                     logger.warning(
-                        f"integrity_check_failed_for_path", path=path, error=str(e)
+                        "integrity_check_failed_for_path",
+                        path=path,
+                        error=str(e),
                     )
                     integrity_status.scan_errors += 1
-                    integrity_status.error_details.append(f"Path {path}: {str(e)}")
+                    integrity_status.error_details.append(
+                        f"Path {path}: {str(e)}"
+                    )
                     continue
 
             # Calculate integrity score
             if integrity_status.total_files > 0:
                 integrity_status.integrity_score = (
-                    (integrity_status.total_files - integrity_status.corrupted_files)
+                    (
+                        integrity_status.total_files
+                        - integrity_status.corrupted_files
+                    )
                     / integrity_status.total_files
                 ) * 100
 
             # Determine health status
-            if integrity_status.corrupted_files > 0 or integrity_status.scan_errors > 0:
+            if (
+                integrity_status.corrupted_files > 0
+                or integrity_status.scan_errors > 0
+            ):
                 integrity_status.status = HealthStatus.UNHEALTHY
             elif integrity_status.missing_files > 0:
                 integrity_status.status = HealthStatus.DEGRADED
@@ -266,7 +290,9 @@ class FileSystemHealthMonitor:
             integrity_status.timestamp = time.time()
 
             # Add to history
-            self._add_check_to_history("file_integrity", integrity_status.__dict__)
+            self._add_check_to_history(
+                "file_integrity", integrity_status.__dict__
+            )
 
             return integrity_status
 
@@ -286,7 +312,7 @@ class FileSystemHealthMonitor:
         Returns:
             PermissionStatus: Current permission status
         """
-        start_time = time.time()
+        time.time()
 
         try:
             permission_status = PermissionStatus()
@@ -299,20 +325,27 @@ class FileSystemHealthMonitor:
                         continue
 
                     # Scan directory recursively for permission issues
-                    self._scan_directory_permissions(path_obj, permission_status)
+                    self._scan_directory_permissions(
+                        path_obj, permission_status
+                    )
 
                 except (OSError, AttributeError) as e:
                     logger.warning(
-                        f"permission_check_failed_for_path", path=path, error=str(e)
+                        "permission_check_failed_for_path",
+                        path=path,
+                        error=str(e),
                     )
                     permission_status.permission_errors += 1
-                    permission_status.error_details.append(f"Path {path}: {str(e)}")
+                    permission_status.error_details.append(
+                        f"Path {path}: {str(e)}"
+                    )
                     continue
 
             # Calculate security score
             if permission_status.total_paths > 0:
                 permission_status.security_score = (
-                    permission_status.accessible_paths / permission_status.total_paths
+                    permission_status.accessible_paths
+                    / permission_status.total_paths
                 ) * 100
 
             # Determine health status
@@ -330,7 +363,9 @@ class FileSystemHealthMonitor:
             permission_status.timestamp = time.time()
 
             # Add to history
-            self._add_check_to_history("permissions", permission_status.__dict__)
+            self._add_check_to_history(
+                "permissions", permission_status.__dict__
+            )
 
             return permission_status
 
@@ -343,7 +378,9 @@ class FileSystemHealthMonitor:
                 timestamp=time.time(),
             )
 
-    def _scan_directory_integrity(self, path: Path, status: IntegrityStatus) -> None:
+    def _scan_directory_integrity(
+        self, path: Path, status: IntegrityStatus
+    ) -> None:
         """Recursively scan directory for file integrity issues."""
         try:
             # Count directories
@@ -375,7 +412,9 @@ class FileSystemHealthMonitor:
             status.scan_errors += 1
             status.error_details.append(f"Directory {path}: {str(e)}")
 
-    def _scan_directory_permissions(self, path: Path, status: PermissionStatus) -> None:
+    def _scan_directory_permissions(
+        self, path: Path, status: PermissionStatus
+    ) -> None:
         """Recursively scan directory for permission issues."""
         try:
             # Count paths
@@ -423,11 +462,7 @@ class FileSystemHealthMonitor:
         """Check if a path should be excluded from scanning."""
         path_str = str(path)
 
-        for pattern in self.exclude_patterns:
-            if pattern in path_str:
-                return True
-
-        return False
+        return any(pattern in path_str for pattern in self.exclude_patterns)
 
     def _has_suspicious_permissions(self, path: Path, mode: int) -> bool:
         """Check if file has suspicious permissions."""
@@ -447,7 +482,9 @@ class FileSystemHealthMonitor:
 
         return False
 
-    def _add_check_to_history(self, check_type: str, data: Dict[str, Any]) -> None:
+    def _add_check_to_history(
+        self, check_type: str, data: dict[str, Any]
+    ) -> None:
         """Add check result to history for trend analysis."""
         history_entry = {
             "type": check_type,
@@ -459,11 +496,13 @@ class FileSystemHealthMonitor:
 
         # Maintain history size limit
         if len(self._check_history) > self._max_history_size:
-            self._check_history = self._check_history[-self._max_history_size :]
+            self._check_history = self._check_history[
+                -self._max_history_size :
+            ]
 
     def get_check_history(
-        self, check_type: Optional[str] = None, limit: Optional[int] = None
-    ) -> List[Dict[str, Any]]:
+        self, check_type: str | None = None, limit: int | None = None
+    ) -> list[dict[str, Any]]:
         """
         Get historical check results.
 
@@ -478,7 +517,9 @@ class FileSystemHealthMonitor:
 
         if check_type:
             filtered_history = [
-                entry for entry in filtered_history if entry["type"] == check_type
+                entry
+                for entry in filtered_history
+                if entry["type"] == check_type
             ]
 
         if limit:

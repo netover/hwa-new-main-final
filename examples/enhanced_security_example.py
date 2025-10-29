@@ -5,7 +5,6 @@ Example usage of enhanced security features in Resync application.
 from __future__ import annotations
 
 import asyncio
-from typing import Optional
 
 from fastapi import Depends, FastAPI, HTTPException, Request, status
 from pydantic import BaseModel, Field
@@ -36,7 +35,7 @@ class SecureUserRegistration(BaseModel):
     )
 
     # Security fields
-    captcha_token: Optional[str] = Field(
+    captcha_token: str | None = Field(
         None, description="CAPTCHA token for bot protection"
     )
 
@@ -55,11 +54,11 @@ class SecureLoginRequest(BaseModel):
     password: str = Field(..., min_length=8, description="Password for authentication")
 
     # Security fields
-    captcha_token: Optional[str] = Field(
+    captcha_token: str | None = Field(
         None, description="CAPTCHA token for bot protection"
     )
 
-    client_fingerprint: Optional[str] = Field(
+    client_fingerprint: str | None = Field(
         None, description="Client fingerprint for device recognition"
     )
 
@@ -121,7 +120,7 @@ async def register_user(  # type: ignore[no-untyped-def]
         )
 
     # Log security event
-    security_context = SecurityContext(
+    SecurityContext(
         user_id=None,  # Not yet assigned
         ip_address="192.168.1.100",  # Would come from request in real app
         threat_level=SecurityLevel.MEDIUM,
@@ -314,8 +313,8 @@ async def example_secure_operation(user_id: str, operation: str) -> dict[str, st
         # Log security event
         from resync.api.validation.enhanced_security import (
             SecurityEventLog,
-            SecurityEventType,
             SecurityEventSeverity,
+            SecurityEventType,
         )
 
         event = SecurityEventLog(
@@ -372,7 +371,7 @@ async def main() -> None:
     result = await example_secure_operation("test_user", "data_access")
     print(f"Secure operation result: {result}")
 
-    return None
+    return
 
 
 if __name__ == "__main__":

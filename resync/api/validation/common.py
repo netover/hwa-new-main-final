@@ -5,11 +5,16 @@ import re
 import uuid
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Pattern, Union
+from re import Pattern
+from typing import Annotated, Any
 
-from pydantic import field_validator, StringConstraints, BaseModel, ConfigDict, Field
-from pydantic.types import constr
-from typing_extensions import Annotated
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    Field,
+    StringConstraints,
+    field_validator,
+)
 
 
 class ValidationErrorResponse(BaseModel):
@@ -31,7 +36,7 @@ class ValidationErrorResponse(BaseModel):
         message: str,
         error_type: str = "value_error",
         severity: str = "error",
-        context: Optional[Dict[str, Any]] = None,
+        context: dict[str, Any] | None = None,
     ) -> None:
         """Add a validation error detail."""
         error_detail = {
@@ -45,11 +50,15 @@ class ValidationErrorResponse(BaseModel):
 
     def has_errors(self) -> bool:
         """Check if there are any error-level validation issues."""
-        return any(detail.get("severity") == "error" for detail in self.details)
+        return any(
+            detail.get("severity") == "error" for detail in self.details
+        )
 
     def has_warnings(self) -> bool:
         """Check if there are any warning-level validation issues."""
-        return any(detail.get("severity") == "warning" for detail in self.details)
+        return any(
+            detail.get("severity") == "warning" for detail in self.details
+        )
 
     def get_error_count(self) -> int:
         """Get total number of validation errors."""
@@ -86,46 +95,70 @@ class StringConstraints:
     """Common string validation constraints."""
 
     # Agent IDs: alphanumeric, underscore, hyphen (3-50 chars)
-    AGENT_ID = Annotated[str, StringConstraints(
-        pattern=r"^[a-zA-Z0-9_-]+$", min_length=3, max_length=50, strip_whitespace=True
-    )]
+    AGENT_ID = Annotated[
+        str,
+        StringConstraints(
+            pattern=r"^[a-zA-Z0-9_-]+$",
+            min_length=3,
+            max_length=50,
+            strip_whitespace=True,
+        ),
+    ]
 
     # Safe text: alphanumeric, spaces, common punctuation
-    SAFE_TEXT = Annotated[str, StringConstraints(
-        pattern=r"^[a-zA-Z0-9\s.,!?'\"()\-:;]*$",
-        min_length=1,
-        max_length=1000,
-        strip_whitespace=True,
-    )]
+    SAFE_TEXT = Annotated[
+        str,
+        StringConstraints(
+            pattern=r"^[a-zA-Z0-9\s.,!?'\"()\-:;]*$",
+            min_length=1,
+            max_length=1000,
+            strip_whitespace=True,
+        ),
+    ]
 
     # Role/Goal text: more permissive but still safe
-    ROLE_TEXT = Annotated[str, StringConstraints(
-        pattern=r"^[a-zA-Z0-9\s.,!?'\"()\-:;/]+$",
-        min_length=5,
-        max_length=500,
-        strip_whitespace=True,
-    )]
+    ROLE_TEXT = Annotated[
+        str,
+        StringConstraints(
+            pattern=r"^[a-zA-Z0-9\s.,!?'\"()\-:;/]+$",
+            min_length=5,
+            max_length=500,
+            strip_whitespace=True,
+        ),
+    ]
 
     # Model names: alphanumeric and common separators
-    MODEL_NAME = Annotated[str, StringConstraints(
-        pattern=r"^[a-zA-Z0-9\-:_/]+$",
-        min_length=3,
-        max_length=100,
-        strip_whitespace=True,
-    )]
+    MODEL_NAME = Annotated[
+        str,
+        StringConstraints(
+            pattern=r"^[a-zA-Z0-9\-:_/]+$",
+            min_length=3,
+            max_length=100,
+            strip_whitespace=True,
+        ),
+    ]
 
     # Tool names: alphanumeric and underscore
-    TOOL_NAME = Annotated[str, StringConstraints(
-        pattern=r"^[a-zA-Z0-9_]+$", min_length=3, max_length=50, strip_whitespace=True
-    )]
+    TOOL_NAME = Annotated[
+        str,
+        StringConstraints(
+            pattern=r"^[a-zA-Z0-9_]+$",
+            min_length=3,
+            max_length=50,
+            strip_whitespace=True,
+        ),
+    ]
 
     # File names: alphanumeric, underscore, hyphen, dot
-    FILENAME = Annotated[str, StringConstraints(
-        pattern=r"^[a-zA-Z0-9_.\-]+$",
-        min_length=1,
-        max_length=255,
-        strip_whitespace=True,
-    )]
+    FILENAME = Annotated[
+        str,
+        StringConstraints(
+            pattern=r"^[a-zA-Z0-9_.\-]+$",
+            min_length=1,
+            max_length=255,
+            strip_whitespace=True,
+        ),
+    ]
 
 
 class UUIDValidator:
@@ -141,7 +174,7 @@ class UUIDValidator:
             raise ValueError(f"Invalid UUID format: {uuid_str}")
 
     @staticmethod
-    def validate_uuid_list(uuid_list: List[str]) -> List[str]:
+    def validate_uuid_list(uuid_list: list[str]) -> list[str]:
         """Validate list of UUIDs."""
         validated_uuids = []
         for uuid_str in uuid_list:
@@ -186,7 +219,9 @@ class ValidationPatterns:
     """Common regex patterns for validation."""
 
     # Email pattern (more restrictive than EmailStr)
-    EMAIL_PATTERN = re.compile(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")
+    EMAIL_PATTERN = re.compile(
+        r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+    )
 
     # URL pattern for API endpoints
     API_ENDPOINT_PATTERN = re.compile(
@@ -206,7 +241,9 @@ class ValidationPatterns:
     )
 
     # Command injection pattern
-    COMMAND_INJECTION_PATTERN = re.compile(r"(;|\||&&|`|\$|\(|\)|<|>|\\n|\\r|\\t)")
+    COMMAND_INJECTION_PATTERN = re.compile(
+        r"(;|\||&&|`|\$|\(|\)|<|>|\\n|\\r|\\t)"
+    )
 
     # Path traversal pattern
     PATH_TRAVERSAL_PATTERN = re.compile(
@@ -215,7 +252,8 @@ class ValidationPatterns:
 
     # UUID pattern
     UUID_PATTERN = re.compile(
-        r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$", re.IGNORECASE
+        r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+        re.IGNORECASE,
     )
 
 
@@ -279,9 +317,7 @@ def sanitize_input(
         text = ValidationPatterns.SCRIPT_PATTERN.sub("", text)
 
     # Remove excessive whitespace
-    text = re.sub(r"\s+", " ", text).strip()
-
-    return text
+    return re.sub(r"\s+", " ", text).strip()
 
 
 def validate_string_length(text: str, min_length: int, max_length: int) -> str:
@@ -306,19 +342,23 @@ def validate_string_length(text: str, min_length: int, max_length: int) -> str:
     length = len(text)
 
     if length < min_length:
-        raise ValueError(f"String length {length} is below minimum {min_length}")
+        raise ValueError(
+            f"String length {length} is below minimum {min_length}"
+        )
 
     if length > max_length:
-        raise ValueError(f"String length {length} exceeds maximum {max_length}")
+        raise ValueError(
+            f"String length {length} exceeds maximum {max_length}"
+        )
 
     return text
 
 
 def validate_numeric_range(
-    value: Union[int, float],
-    min_value: Optional[Union[int, float]] = None,
-    max_value: Optional[Union[int, float]] = None,
-) -> Union[int, float]:
+    value: int | float,
+    min_value: int | float | None = None,
+    max_value: int | float | None = None,
+) -> int | float:
     """
     Validate numeric value within specified range.
 
@@ -346,7 +386,7 @@ def validate_numeric_range(
 
 
 def validate_pattern(
-    text: str, pattern: Union[str, Pattern], message: Optional[str] = None
+    text: str, pattern: str | Pattern, message: str | None = None
 ) -> str:
     """
     Validate text against a regex pattern.
@@ -368,8 +408,9 @@ def validate_pattern(
     if not pattern.match(text):
         if message:
             raise ValueError(message)
-        else:
-            raise ValueError(f"Text does not match required pattern: {pattern.pattern}")
+        raise ValueError(
+            f"Text does not match required pattern: {pattern.pattern}"
+        )
 
     return text
 
@@ -409,6 +450,6 @@ class FieldValidationRule(BaseModel):
 
     field_name: str
     rule_type: str  # "length", "pattern", "range", "custom"
-    constraint: Union[str, int, float, Dict[str, Any]]
+    constraint: str | int | float | dict[str, Any]
     message: str
     severity: ValidationSeverity = ValidationSeverity.ERROR

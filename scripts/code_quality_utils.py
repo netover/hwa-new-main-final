@@ -23,7 +23,6 @@ import tempfile
 from collections import defaultdict
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple, Union
 
 
 # Type definitions
@@ -44,19 +43,19 @@ class CodeQualityReport:
     """Report structure for code quality analysis."""
 
     total_issues: int = 0
-    issues_by_type: Dict[str, int] = field(default_factory=dict)
-    issues_by_file: Dict[str, List[PyflakesIssue]] = field(
+    issues_by_type: dict[str, int] = field(default_factory=dict)
+    issues_by_file: dict[str, list[PyflakesIssue]] = field(
         default_factory=lambda: defaultdict(list)
     )
-    errors: List[str] = field(default_factory=list)
+    errors: list[str] = field(default_factory=list)
 
 
 # File operation utilities
 
 
 def backup_file(
-    file_path: Union[str, Path], backup_suffix: str = ".backup"
-) -> Optional[str]:
+    file_path: str | Path, backup_suffix: str = ".backup"
+) -> str | None:
     """
     Create a backup of the specified file.
 
@@ -84,7 +83,7 @@ def backup_file(
         raise PermissionError(f"Failed to create backup: {e}")
 
 
-def restore_file(file_path: Union[str, Path], backup_suffix: str = ".backup") -> bool:
+def restore_file(file_path: str | Path, backup_suffix: str = ".backup") -> bool:
     """
     Restore a file from its backup.
 
@@ -110,8 +109,8 @@ def restore_file(file_path: Union[str, Path], backup_suffix: str = ".backup") ->
 
 
 def safe_write_file(
-    file_path: Union[str, Path],
-    content: Union[str, List[str]],
+    file_path: str | Path,
+    content: str | list[str],
     backup: bool = True,
     encoding: str = "utf-8",
 ) -> bool:
@@ -171,7 +170,7 @@ def safe_write_file(
 # Code analysis functions
 
 
-def parse_pyflakes_output(pyflakes_output: str) -> List[PyflakesIssue]:
+def parse_pyflakes_output(pyflakes_output: str) -> list[PyflakesIssue]:
     """
     Parse Pyflakes output and return structured issues.
 
@@ -228,7 +227,7 @@ def parse_pyflakes_output(pyflakes_output: str) -> List[PyflakesIssue]:
     return issues
 
 
-def categorize_issues(issues: List[PyflakesIssue]) -> CodeQualityReport:
+def categorize_issues(issues: list[PyflakesIssue]) -> CodeQualityReport:
     """
     Categorize Pyflakes issues into a structured report.
 
@@ -252,7 +251,7 @@ def categorize_issues(issues: List[PyflakesIssue]) -> CodeQualityReport:
 # Import analysis utilities
 
 
-def detect_missing_imports(file_path: Union[str, Path]) -> List[str]:
+def detect_missing_imports(file_path: str | Path) -> list[str]:
     """
     Detect missing imports in a Python file using AST analysis.
 
@@ -263,7 +262,7 @@ def detect_missing_imports(file_path: Union[str, Path]) -> List[str]:
         List of missing import names
     """
     try:
-        with open(file_path, "r", encoding="utf-8") as f:
+        with open(file_path, encoding="utf-8") as f:
             source = f.read()
 
         tree = ast.parse(source, filename=str(file_path))
@@ -428,7 +427,7 @@ def detect_missing_imports(file_path: Union[str, Path]) -> List[str]:
         return []
 
 
-def detect_unused_imports(file_path: Union[str, Path]) -> List[str]:
+def detect_unused_imports(file_path: str | Path) -> list[str]:
     """
     Detect unused imports in a Python file using AST analysis.
 
@@ -439,7 +438,7 @@ def detect_unused_imports(file_path: Union[str, Path]) -> List[str]:
         List of unused import names
     """
     try:
-        with open(file_path, "r", encoding="utf-8") as f:
+        with open(file_path, encoding="utf-8") as f:
             source = f.read()
 
         tree = ast.parse(source, filename=str(file_path))
@@ -496,12 +495,11 @@ def fix_regex_patterns(text: str) -> str:
     # Fix unquoted regex patterns in forward annotations
     # Pattern: '^[a-zA-Z0-9_.-]+$' -> "^[a-zA-Z0-9_.-]+$"
     pattern = r"'(\^[^']+\$)'"
-    fixed = re.sub(pattern, r'"\1"', text)
-
-    return fixed
+    return re.sub(pattern, r'"\1"', text)
 
 
-def validate_f_string(f_string: str) -> Tuple[bool, Optional[str]]:
+
+def validate_f_string(f_string: str) -> tuple[bool, str | None]:
     """
     Validate an f-string expression.
 
@@ -514,7 +512,7 @@ def validate_f_string(f_string: str) -> Tuple[bool, Optional[str]]:
     try:
         # Remove the f prefix and parse as regular string
         if f_string.startswith("f"):
-            string_content = f_string[1:]
+            f_string[1:]
         else:
             return False, "Not an f-string"
 
@@ -543,7 +541,7 @@ class ProgressTracker:
         """Update progress by increment."""
         self.current += increment
 
-    def get_progress(self) -> Tuple[int, int, float]:
+    def get_progress(self) -> tuple[int, int, float]:
         """Get current progress as (current, total, percentage)."""
         percentage = (self.current / self.total * 100) if self.total > 0 else 0
         return self.current, self.total, percentage
@@ -555,7 +553,7 @@ class ProgressTracker:
 
 
 def generate_quality_report(
-    issues: List[PyflakesIssue], output_file: Optional[str] = None
+    issues: list[PyflakesIssue], output_file: str | None = None
 ) -> str:
     """
     Generate a comprehensive code quality report.
@@ -613,7 +611,7 @@ def generate_quality_report(
 # Validation functions
 
 
-def check_syntax(file_path: Union[str, Path]) -> Tuple[bool, Optional[str]]:
+def check_syntax(file_path: str | Path) -> tuple[bool, str | None]:
     """
     Check Python file syntax.
 
@@ -624,7 +622,7 @@ def check_syntax(file_path: Union[str, Path]) -> Tuple[bool, Optional[str]]:
         Tuple of (is_valid, error_message)
     """
     try:
-        with open(file_path, "r", encoding="utf-8") as f:
+        with open(file_path, encoding="utf-8") as f:
             source = f.read()
 
         ast.parse(source, filename=str(file_path))
@@ -636,7 +634,7 @@ def check_syntax(file_path: Union[str, Path]) -> Tuple[bool, Optional[str]]:
         return False, f"Error checking syntax: {e}"
 
 
-def verify_imports(file_path: Union[str, Path]) -> Tuple[bool, List[str]]:
+def verify_imports(file_path: str | Path) -> tuple[bool, list[str]]:
     """
     Verify that all imports in a file can be resolved.
 
@@ -649,7 +647,7 @@ def verify_imports(file_path: Union[str, Path]) -> Tuple[bool, List[str]]:
     failed_imports = []
 
     try:
-        with open(file_path, "r", encoding="utf-8") as f:
+        with open(file_path, encoding="utf-8") as f:
             source = f.read()
 
         tree = ast.parse(source, filename=str(file_path))
@@ -698,7 +696,7 @@ class AnalysisError(CodeQualityError):
 
 
 def setup_logging(
-    level: int = logging.INFO, log_file: Optional[str] = None
+    level: int = logging.INFO, log_file: str | None = None
 ) -> logging.Logger:
     """
     Setup logging for code quality operations.
@@ -736,7 +734,7 @@ def setup_logging(
 
 
 def log_operation(
-    logger: logging.Logger, operation: str, success: bool, details: Optional[str] = None
+    logger: logging.Logger, operation: str, success: bool, details: str | None = None
 ) -> None:
     """
     Log an operation result.

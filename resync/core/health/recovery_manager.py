@@ -11,12 +11,14 @@ from __future__ import annotations
 import asyncio
 import time
 from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import structlog
-
-from resync.core.health_models import RecoveryResult
-from resync.core.connection_pool_manager import get_advanced_connection_pool_manager
+from resync.core.pools.pool_manager import get_connection_pool_manager
+from resync.core.connection_pool_manager import (
+    get_advanced_connection_pool_manager,
+)
+from resync.models.health_models import RecoveryResult
 
 logger = structlog.get_logger(__name__)
 
@@ -32,7 +34,7 @@ class HealthRecoveryManager:
 
     def __init__(self):
         """Initialize the Health Recovery Manager."""
-        self.recovery_history: List[RecoveryResult] = []
+        self.recovery_history: list[RecoveryResult] = []
         self.max_history_entries = 1000
         self._recovery_lock = asyncio.Lock()
 
@@ -74,7 +76,10 @@ class HealthRecoveryManager:
                 metadata["pool_metrics"] = pool_metrics
 
                 # 3. Attempt pool reset if error rate is high
-                if pool_metrics.get("auto_scaling", {}).get("load_score", 0) > 0.9:
+                if (
+                    pool_metrics.get("auto_scaling", {}).get("load_score", 0)
+                    > 0.9
+                ):
                     logger.info("resetting_database_connection_pool")
                     reset_result = await pool_manager.reset_pool("database")
                     recovery_actions.append("pool_reset")
@@ -98,7 +103,9 @@ class HealthRecoveryManager:
 
             # Determine success based on recovery actions performed
             success = len(recovery_actions) > 0
-            message = f"Database recovery completed: {', '.join(recovery_actions)}"
+            message = (
+                f"Database recovery completed: {', '.join(recovery_actions)}"
+            )
 
             logger.info(
                 "database_recovery_completed",
@@ -125,7 +132,9 @@ class HealthRecoveryManager:
             error_message = f"Database recovery failed: {str(e)}"
 
             logger.error(
-                "database_recovery_failed", error=str(e), duration_ms=recovery_time_ms
+                "database_recovery_failed",
+                error=str(e),
+                duration_ms=recovery_time_ms,
             )
 
             result = RecoveryResult(
@@ -194,7 +203,9 @@ class HealthRecoveryManager:
 
             # Determine success based on recovery actions
             success = len(recovery_actions) > 0
-            message = f"Cache recovery completed: {', '.join(recovery_actions)}"
+            message = (
+                f"Cache recovery completed: {', '.join(recovery_actions)}"
+            )
 
             logger.info(
                 "cache_recovery_completed",
@@ -221,7 +232,9 @@ class HealthRecoveryManager:
             error_message = f"Cache recovery failed: {str(e)}"
 
             logger.error(
-                "cache_recovery_failed", error=str(e), duration_ms=recovery_time_ms
+                "cache_recovery_failed",
+                error=str(e),
+                duration_ms=recovery_time_ms,
             )
 
             result = RecoveryResult(
@@ -273,7 +286,9 @@ class HealthRecoveryManager:
                     metadata["circuit_breakers"] = circuit_breaker_result
 
                 # 3. Validate service health endpoints
-                health_endpoint_result = await self._validate_health_endpoints()
+                health_endpoint_result = (
+                    await self._validate_health_endpoints()
+                )
                 if health_endpoint_result.get("success", False):
                     recovery_actions.append("health_endpoint_validation")
                     metadata["health_endpoints"] = health_endpoint_result
@@ -288,7 +303,9 @@ class HealthRecoveryManager:
 
             # Determine success based on recovery actions
             success = len(recovery_actions) > 0
-            message = f"Service recovery completed: {', '.join(recovery_actions)}"
+            message = (
+                f"Service recovery completed: {', '.join(recovery_actions)}"
+            )
 
             logger.info(
                 "service_recovery_completed",
@@ -315,7 +332,9 @@ class HealthRecoveryManager:
             error_message = f"Service recovery failed: {str(e)}"
 
             logger.error(
-                "service_recovery_failed", error=str(e), duration_ms=recovery_time_ms
+                "service_recovery_failed",
+                error=str(e),
+                duration_ms=recovery_time_ms,
             )
 
             result = RecoveryResult(
@@ -331,7 +350,7 @@ class HealthRecoveryManager:
             await self._add_to_history(result)
             return result
 
-    async def _test_database_connectivity(self) -> Dict[str, Any]:
+    async def _test_database_connectivity(self) -> dict[str, Any]:
         """Test database connectivity and return diagnostic information."""
         try:
             pool_manager = get_connection_pool_manager()
@@ -357,9 +376,13 @@ class HealthRecoveryManager:
             }
 
         except Exception as e:
-            return {"success": False, "error": str(e), "error_type": type(e).__name__}
+            return {
+                "success": False,
+                "error": str(e),
+                "error_type": type(e).__name__,
+            }
 
-    async def _test_cache_connectivity(self) -> Dict[str, Any]:
+    async def _test_cache_connectivity(self) -> dict[str, Any]:
         """Test cache connectivity and performance."""
         try:
             # Import and test cache implementation
@@ -401,7 +424,7 @@ class HealthRecoveryManager:
         except Exception as e:
             return {"success": False, "error": str(e), "needs_restart": True}
 
-    async def _test_external_services(self) -> Dict[str, Any]:
+    async def _test_external_services(self) -> dict[str, Any]:
         """Test external service connectivity."""
         # Placeholder implementation
         return {
@@ -411,7 +434,7 @@ class HealthRecoveryManager:
             "services_unavailable": 0,
         }
 
-    async def _clear_stale_cache_entries(self) -> Dict[str, Any]:
+    async def _clear_stale_cache_entries(self) -> dict[str, Any]:
         """Clear stale cache entries."""
         try:
             # This would implement cache cleanup logic
@@ -424,39 +447,55 @@ class HealthRecoveryManager:
         except Exception as e:
             return {"success": False, "error": str(e)}
 
-    async def _restart_cache_connections(self) -> Dict[str, Any]:
+    async def _restart_cache_connections(self) -> dict[str, Any]:
         """Restart cache connections."""
         try:
             # This would implement cache restart logic
-            return {"success": True, "connections_restarted": 1, "restart_time_ms": 50}
+            return {
+                "success": True,
+                "connections_restarted": 1,
+                "restart_time_ms": 50,
+            }
         except Exception as e:
             return {"success": False, "error": str(e)}
 
-    async def _reset_cache_system(self) -> Dict[str, Any]:
+    async def _reset_cache_system(self) -> dict[str, Any]:
         """Reset the entire cache system."""
         try:
             # This would implement full cache reset logic
-            return {"success": True, "system_reset": True, "reset_time_ms": 100}
+            return {
+                "success": True,
+                "system_reset": True,
+                "reset_time_ms": 100,
+            }
         except Exception as e:
             return {"success": False, "error": str(e)}
 
-    async def _check_circuit_breakers(self) -> Dict[str, Any]:
+    async def _check_circuit_breakers(self) -> dict[str, Any]:
         """Check and reset circuit breakers if needed."""
         try:
             # This would check circuit breaker status and reset if appropriate
-            return {"reset_performed": False, "breakers_checked": 0, "breakers_open": 0}
+            return {
+                "reset_performed": False,
+                "breakers_checked": 0,
+                "breakers_open": 0,
+            }
         except Exception as e:
             return {"success": False, "error": str(e)}
 
-    async def _validate_health_endpoints(self) -> Dict[str, Any]:
+    async def _validate_health_endpoints(self) -> dict[str, Any]:
         """Validate external service health endpoints."""
         try:
             # This would validate health endpoints of external services
-            return {"success": True, "endpoints_validated": 1, "endpoints_healthy": 1}
+            return {
+                "success": True,
+                "endpoints_validated": 1,
+                "endpoints_healthy": 1,
+            }
         except Exception as e:
             return {"success": False, "error": str(e)}
 
-    async def _diagnose_network_issues(self) -> Dict[str, Any]:
+    async def _diagnose_network_issues(self) -> dict[str, Any]:
         """Diagnose network connectivity issues."""
         try:
             # This would implement network diagnostics
@@ -482,10 +521,10 @@ class HealthRecoveryManager:
 
     def get_recovery_history(
         self,
-        component_name: Optional[str] = None,
+        component_name: str | None = None,
         hours: int = 24,
-        limit: Optional[int] = None,
-    ) -> List[RecoveryResult]:
+        limit: int | None = None,
+    ) -> list[RecoveryResult]:
         """
         Get recovery history with optional filtering.
 
@@ -523,7 +562,7 @@ class HealthRecoveryManager:
 
         return filtered_results
 
-    def get_recovery_stats(self) -> Dict[str, Any]:
+    def get_recovery_stats(self) -> dict[str, Any]:
         """Get recovery statistics and success rates."""
         if not self.recovery_history:
             return {"total_attempts": 0, "success_rate": 0.0}

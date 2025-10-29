@@ -31,3 +31,24 @@ Esta versão marca a transição do Resync para um estado **pronto para produç�
 *   **Documentação Abrangente**: As docstrings e a documentação do projeto (`security.md`) foram atualizadas para refletir as novas funcionalidades e melhores práticas.
 *   **Alta Cobertura de Testes**: A suíte de testes foi expandida para cobrir cenários de falha, e a cobertura de código mínima de 99% agora é imposta pelo pipeline de testes.
 *   **Código Limpo**: Mocks e utilitários obsoletos foram removidos, reduzindo a complexidade e o débito técnico do projeto.
+
+## 🔒 Correções de Segurança (Security Patches)
+
+### Dependências Vulneráveis Atualizadas
+
+*   **python-multipart**: Atualizado de `0.0.6` para `0.0.20`
+    *   **Correções**: Resolve vulnerabilidades de ReDoS (Regular Expression Denial of Service) e alocação de recursos sem limites
+    *   **CVE**: Múltiplas CVEs de negação de serviço corrigidas
+
+*   **python-jose**: Atualizado de `3.3.0` para `3.5.0`
+    *   **Correções**: Resolve vulnerabilidades de DoS ("JWT bomb") e algorithm confusion
+    *   **Impacto**: Melhora significativa na segurança do processamento de tokens JWT
+
+*   **aiohttp**: Atualizado de `3.9.5` para `3.12.14`
+    *   **Correções**: Resolve vulnerabilidades de HTTP Request Smuggling
+    *   **Segurança**: Previne bypass de controles de segurança através de requisições HTTP malformadas
+
+### Validação de Segurança
+*   Todas as atualizações foram testadas para compatibilidade com o código existente
+*   Não foram identificados breaking changes que afetem a funcionalidade da aplicação
+*   As dependências atualizadas mantêm compatibilidade com as versões atuais do FastAPI e demais componentes do ecossistema

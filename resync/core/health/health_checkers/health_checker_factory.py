@@ -6,18 +6,17 @@ This module provides a factory for creating and managing health checker instance
 
 from __future__ import annotations
 
-from typing import Dict, List, Optional, Type
+from resync_new.models.health_models import ComponentType, HealthCheckConfig
 
-from resync.core.health_models import ComponentType, HealthCheckConfig
 from .base_health_checker import BaseHealthChecker
-from .database_health_checker import DatabaseHealthChecker
-from .redis_health_checker import RedisHealthChecker
 from .cache_health_checker import CacheHealthChecker
+from .connection_pools_health_checker import ConnectionPoolsHealthChecker
+from .cpu_health_checker import CpuHealthChecker
+from .database_health_checker import DatabaseHealthChecker
 from .filesystem_health_checker import FileSystemHealthChecker
 from .memory_health_checker import MemoryHealthChecker
-from .cpu_health_checker import CpuHealthChecker
+from .redis_health_checker import RedisHealthChecker
 from .tws_monitor_health_checker import TWSMonitorHealthChecker
-from .connection_pools_health_checker import ConnectionPoolsHealthChecker
 from .websocket_pool_health_checker import WebSocketPoolHealthChecker
 
 
@@ -28,7 +27,7 @@ class HealthCheckerFactory:
     Provides dependency injection and centralized management of all health checkers.
     """
 
-    def __init__(self, config: Optional[HealthCheckConfig] = None):
+    def __init__(self, config: HealthCheckConfig | None = None):
         """
         Initialize the health checker factory.
 
@@ -36,8 +35,8 @@ class HealthCheckerFactory:
             config: Health check configuration
         """
         self.config = config
-        self._checkers: Dict[str, BaseHealthChecker] = {}
-        self._checker_classes: Dict[str, Type[BaseHealthChecker]] = {
+        self._checkers: dict[str, BaseHealthChecker] = {}
+        self._checker_classes: dict[str, type[BaseHealthChecker]] = {
             "database": DatabaseHealthChecker,
             "redis": RedisHealthChecker,
             "cache_hierarchy": CacheHealthChecker,
@@ -55,7 +54,9 @@ class HealthCheckerFactory:
         for name, checker_class in self._checker_classes.items():
             self._checkers[name] = checker_class(self.config)
 
-    def get_health_checker(self, component_name: str) -> Optional[BaseHealthChecker]:
+    def get_health_checker(
+        self, component_name: str
+    ) -> BaseHealthChecker | None:
         """
         Get a health checker instance by component name.
 
@@ -67,7 +68,7 @@ class HealthCheckerFactory:
         """
         return self._checkers.get(component_name)
 
-    def get_all_health_checkers(self) -> Dict[str, BaseHealthChecker]:
+    def get_all_health_checkers(self) -> dict[str, BaseHealthChecker]:
         """
         Get all health checker instances.
 
@@ -76,7 +77,7 @@ class HealthCheckerFactory:
         """
         return self._checkers.copy()
 
-    def get_enabled_health_checkers(self) -> Dict[str, BaseHealthChecker]:
+    def get_enabled_health_checkers(self) -> dict[str, BaseHealthChecker]:
         """
         Get all enabled health checker instances.
 
@@ -113,7 +114,7 @@ class HealthCheckerFactory:
         }
         return component_name in enabled_components
 
-    def get_health_checker_names(self) -> List[str]:
+    def get_health_checker_names(self) -> list[str]:
         """
         Get list of all available health checker names.
 
@@ -122,7 +123,7 @@ class HealthCheckerFactory:
         """
         return list(self._checkers.keys())
 
-    def get_enabled_health_checker_names(self) -> List[str]:
+    def get_enabled_health_checker_names(self) -> list[str]:
         """
         Get list of enabled health checker names.
 
@@ -130,11 +131,11 @@ class HealthCheckerFactory:
             List of enabled component names
         """
         return [
-            name for name in self._checkers.keys() if self._is_component_enabled(name)
+            name for name in self._checkers if self._is_component_enabled(name)
         ]
 
     def register_health_checker(
-        self, component_name: str, checker_class: Type[BaseHealthChecker]
+        self, component_name: str, checker_class: type[BaseHealthChecker]
     ) -> None:
         """
         Register a new health checker class.
@@ -156,7 +157,7 @@ class HealthCheckerFactory:
         self._checkers.pop(component_name, None)
         self._checker_classes.pop(component_name, None)
 
-    def validate_all_checkers(self) -> Dict[str, List[str]]:
+    def validate_all_checkers(self) -> dict[str, list[str]]:
         """
         Validate configuration for all health checkers.
 
@@ -168,7 +169,7 @@ class HealthCheckerFactory:
             validation_results[name] = checker.validate_config()
         return validation_results
 
-    def get_component_type_mapping(self) -> Dict[str, ComponentType]:
+    def get_component_type_mapping(self) -> dict[str, ComponentType]:
         """
         Get mapping of component names to component types.
 

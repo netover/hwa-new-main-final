@@ -11,7 +11,7 @@ import logging
 import uuid
 from dataclasses import dataclass, field
 from time import time
-from typing import Any, Dict, List, Optional, Set
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -23,7 +23,7 @@ class TransactionState:
     transaction_id: str
     key: str
     start_time: float
-    operations: List[Dict[str, Any]] = field(default_factory=list)
+    operations: list[dict[str, Any]] = field(default_factory=list)
     status: str = "active"  # active, committed, rolled_back
     committed: bool = False
     rolled_back: bool = False
@@ -78,19 +78,15 @@ class CacheTransactionManager:
         self.cleanup_interval = cleanup_interval
 
         # In-memory storage for transaction states
-        self._transactions: Dict[str, TransactionState] = {}
-        self._active_transactions: Set[str] = set()
+        self._transactions: dict[str, TransactionState] = {}
+        self._active_transactions: set[str] = set()
 
         # Cleanup task management
         self._cleanup_task = None
         self._is_running = False
 
-        logger.info(
-            "CacheTransactionManager initialized",
-            max_transactions=max_transactions,
-            transaction_timeout=transaction_timeout,
-            cleanup_interval=cleanup_interval,
-        )
+        msg = f"CacheTransactionManager initialized, max_transactions={max_transactions}, transaction_timeout={transaction_timeout}, cleanup_interval={cleanup_interval}"
+        logger.info(msg)
 
     async def begin_transaction(self, key: str) -> str:
         """
@@ -153,23 +149,31 @@ class CacheTransactionManager:
         try:
             # Validate transaction ID
             if not transaction_id or not isinstance(transaction_id, str):
-                logger.warning(f"Invalid transaction ID for commit: {transaction_id}")
+                logger.warning(
+                    f"Invalid transaction ID for commit: {transaction_id}"
+                )
                 return False
 
             # Get transaction state
             if transaction_id not in self._transactions:
-                logger.warning(f"Transaction not found for commit: {transaction_id}")
+                logger.warning(
+                    f"Transaction not found for commit: {transaction_id}"
+                )
                 return False
 
             transaction_state = self._transactions[transaction_id]
 
             # Check if transaction is already committed or rolled back
             if transaction_state.committed:
-                logger.warning(f"Transaction already committed: {transaction_id}")
+                logger.warning(
+                    f"Transaction already committed: {transaction_id}"
+                )
                 return True
 
             if transaction_state.rolled_back:
-                logger.warning(f"Transaction already rolled back: {transaction_id}")
+                logger.warning(
+                    f"Transaction already rolled back: {transaction_id}"
+                )
                 return False
 
             # Mark transaction as committed
@@ -209,12 +213,16 @@ class CacheTransactionManager:
         try:
             # Validate transaction ID
             if not transaction_id or not isinstance(transaction_id, str):
-                logger.warning(f"Invalid transaction ID for rollback: {transaction_id}")
+                logger.warning(
+                    f"Invalid transaction ID for rollback: {transaction_id}"
+                )
                 return False
 
             # Get transaction state
             if transaction_id not in self._transactions:
-                logger.warning(f"Transaction not found for rollback: {transaction_id}")
+                logger.warning(
+                    f"Transaction not found for rollback: {transaction_id}"
+                )
                 return False
 
             transaction_state = self._transactions[transaction_id]
@@ -227,7 +235,9 @@ class CacheTransactionManager:
                 return False
 
             if transaction_state.rolled_back:
-                logger.warning(f"Transaction already rolled back: {transaction_id}")
+                logger.warning(
+                    f"Transaction already rolled back: {transaction_id}"
+                )
                 return True
 
             # Mark transaction as rolled back
@@ -254,7 +264,9 @@ class CacheTransactionManager:
             )
             return False
 
-    def get_transaction_state(self, transaction_id: str) -> Optional[TransactionState]:
+    def get_transaction_state(
+        self, transaction_id: str
+    ) -> TransactionState | None:
         """
         Get the current state of a transaction.
 
@@ -275,7 +287,9 @@ class CacheTransactionManager:
         """
         return len(self._active_transactions)
 
-    def get_transaction_info(self, transaction_id: str) -> Optional[Dict[str, Any]]:
+    def get_transaction_info(
+        self, transaction_id: str
+    ) -> dict[str, Any] | None:
         """
         Get detailed information about a transaction.
 
@@ -344,7 +358,7 @@ class CacheTransactionManager:
 
         return cleaned_count
 
-    def get_all_transaction_info(self) -> Dict[str, Dict[str, Any]]:
+    def get_all_transaction_info(self) -> dict[str, dict[str, Any]]:
         """
         Get information about all transactions (for debugging/monitoring).
 
@@ -353,7 +367,7 @@ class CacheTransactionManager:
         """
         return {
             tx_id: self.get_transaction_info(tx_id)
-            for tx_id in self._transactions.keys()
+            for tx_id in self._transactions
         }
 
     def clear_all_transactions(self) -> int:

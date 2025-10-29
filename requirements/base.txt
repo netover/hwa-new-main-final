@@ -26,7 +26,7 @@ pybreaker==1.1.0
 jinja2==3.1.4
 
 # Security
-python-jose[cryptography]==3.3.0
+python-jose[cryptography]==3.5.0
 passlib[bcrypt]==1.7.4
 cryptography==42.0.0  # Updated to latest secure version
 
@@ -51,10 +51,10 @@ python-docx==1.1.0
 openpyxl==3.1.2
 
 # Web features
-python-multipart==0.0.6
+python-multipart==0.0.20
 
 # Async HTTP
-aiohttp==3.9.5
+aiohttp==3.12.14
 
 # Environment
 python-dotenv==1.0.0
@@ -62,3 +62,5 @@ python-dotenv==1.0.0
 # AI agent framework
 agno==0.1.0
 
+# Logging
+structlog==24.1.0

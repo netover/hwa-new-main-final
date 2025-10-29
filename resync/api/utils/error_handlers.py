@@ -5,21 +5,24 @@ This module provides standardized error handling and response mapping
 for consistent API error responses across all endpoints.
 """
 
-from typing import Dict, Tuple
-
 from fastapi import HTTPException, status
-
 from resync.core.constants import ErrorMessages
-from resync.core.structured_logger import get_logger
+from resync_new.utils.simple_logger import get_logger
 
 logger = get_logger(__name__)
 
 # Error status code mapping for consistent API responses
-ERROR_STATUS_MAP: Dict[str, Tuple[int, str]] = {
+ERROR_STATUS_MAP: dict[str, tuple[int, str]] = {
     "timeout": (status.HTTP_504_GATEWAY_TIMEOUT, ErrorMessages.TIMEOUT.value),
-    "connection": (status.HTTP_504_GATEWAY_TIMEOUT, ErrorMessages.CONNECTION.value),
+    "connection": (
+        status.HTTP_504_GATEWAY_TIMEOUT,
+        ErrorMessages.CONNECTION.value,
+    ),
     "auth": (status.HTTP_401_UNAUTHORIZED, ErrorMessages.AUTH_REQUIRED.value),
-    "unauthorized": (status.HTTP_401_UNAUTHORIZED, ErrorMessages.UNAUTHORIZED.value),
+    "unauthorized": (
+        status.HTTP_401_UNAUTHORIZED,
+        ErrorMessages.UNAUTHORIZED.value,
+    ),
     "forbidden": (status.HTTP_403_FORBIDDEN, ErrorMessages.FORBIDDEN.value),
     "not found": (status.HTTP_404_NOT_FOUND, ErrorMessages.NOT_FOUND.value),
     "404": (status.HTTP_404_NOT_FOUND, ErrorMessages.NOT_FOUND.value),
@@ -41,7 +44,10 @@ ERROR_STATUS_MAP: Dict[str, Tuple[int, str]] = {
         status.HTTP_429_TOO_MANY_REQUESTS,
         ErrorMessages.RATE_LIMIT_EXCEEDED.value,
     ),
-    "quota": (status.HTTP_429_TOO_MANY_REQUESTS, ErrorMessages.QUOTA_EXCEEDED.value),
+    "quota": (
+        status.HTTP_429_TOO_MANY_REQUESTS,
+        ErrorMessages.QUOTA_EXCEEDED.value,
+    ),
 }
 
 
@@ -86,7 +92,9 @@ def handle_api_error(
     # Find matching error pattern and return appropriate HTTP exception
     for keyword, (status_code, message_template) in ERROR_STATUS_MAP.items():
         if keyword in error_lower:
-            detail = message_template.format(operation=operation, detail=str(exception))
+            detail = message_template.format(
+                operation=operation, detail=str(exception)
+            )
             return HTTPException(status_code=status_code, detail=detail)
 
     # Default error response for unmatched exceptions

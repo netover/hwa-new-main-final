@@ -29,7 +29,6 @@ import shutil
 import sys
 from collections import defaultdict
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional
 
 
 @dataclass
@@ -51,11 +50,11 @@ class FixReport:
     total_issues: int = 0
     fixed_issues: int = 0
     failed_fixes: int = 0
-    issues_by_type: Dict[str, int] = field(default_factory=dict)
-    issues_by_file: Dict[str, List[PyflakesIssue]] = field(
+    issues_by_type: dict[str, int] = field(default_factory=dict)
+    issues_by_file: dict[str, list[PyflakesIssue]] = field(
         default_factory=lambda: defaultdict(list)
     )
-    errors: List[str] = field(default_factory=list)
+    errors: list[str] = field(default_factory=list)
 
 
 class PyflakesFixer:
@@ -67,10 +66,10 @@ class PyflakesFixer:
         self.pyflakes_output = pyflakes_output
         self.dry_run = dry_run
         self.backup = backup
-        self.issues: List[PyflakesIssue] = []
+        self.issues: list[PyflakesIssue] = []
         self.report = FixReport()
         self.logger = logging.getLogger(__name__)
-        self.backups: Dict[str, str] = {}  # file -> backup_path
+        self.backups: dict[str, str] = {}  # file -> backup_path
 
         # Parse issues from pyflakes output
         self._parse_pyflakes_output()
@@ -179,7 +178,7 @@ class PyflakesFixer:
     def _fix_forward_annotation(self, issue: PyflakesIssue) -> None:
         """Fix a single forward annotation issue."""
         # Read the file
-        with open(issue.file_path, "r", encoding="utf-8") as f:
+        with open(issue.file_path, encoding="utf-8") as f:
             lines = f.readlines()
 
         line_content = lines[issue.line - 1]
@@ -228,7 +227,7 @@ class PyflakesFixer:
         undefined_name = match.group(1)
 
         # Read the file
-        with open(issue.file_path, "r", encoding="utf-8") as f:
+        with open(issue.file_path, encoding="utf-8") as f:
             content = f.read()
 
         # Common fixes based on context
@@ -267,7 +266,7 @@ class PyflakesFixer:
             for i, line in enumerate(lines):
                 if line.startswith("#"):
                     continue
-                if line.startswith("import ") or line.startswith("from "):
+                if line.startswith(("import ", "from ")):
                     insert_pos = i + 1
                 else:
                     break
@@ -301,7 +300,7 @@ class PyflakesFixer:
     def _fix_fstring_placeholder(self, issue: PyflakesIssue) -> None:
         """Fix a single f-string placeholder issue."""
         # Read the file
-        with open(issue.file_path, "r", encoding="utf-8") as f:
+        with open(issue.file_path, encoding="utf-8") as f:
             lines = f.readlines()
 
         line_content = lines[issue.line - 1]
@@ -348,10 +347,10 @@ class PyflakesFixer:
                 self.report.failed_fixes += len(file_issues)
 
     def _remove_unused_imports_from_file(
-        self, file_path: str, issues: List[PyflakesIssue]
+        self, file_path: str, issues: list[PyflakesIssue]
     ) -> None:
         """Remove unused imports from a single file."""
-        with open(file_path, "r", encoding="utf-8") as f:
+        with open(file_path, encoding="utf-8") as f:
             lines = f.readlines()
 
         # Extract unused import names
@@ -365,7 +364,7 @@ class PyflakesFixer:
         new_lines = []
         removed_count = 0
 
-        for line_num, line in enumerate(lines, 1):
+        for _line_num, line in enumerate(lines, 1):
             skip_line = False
 
             # Check if this line has an unused import
@@ -413,7 +412,7 @@ class PyflakesFixer:
     def _remove_unused_variable(self, issue: PyflakesIssue) -> None:
         """Remove a single unused variable."""
         # Read the file
-        with open(issue.file_path, "r", encoding="utf-8") as f:
+        with open(issue.file_path, encoding="utf-8") as f:
             lines = f.readlines()
 
         # Extract variable name
@@ -462,7 +461,7 @@ class PyflakesFixer:
     def _fix_redefinition(self, issue: PyflakesIssue) -> None:
         """Fix a single redefinition issue."""
         # Read the file
-        with open(issue.file_path, "r", encoding="utf-8") as f:
+        with open(issue.file_path, encoding="utf-8") as f:
             lines = f.readlines()
 
         # Extract the redefined name
@@ -486,7 +485,7 @@ class PyflakesFixer:
                 f"Removed redefinition of '{redefined_name}' in {issue.file_path}:{issue.line}"
             )
 
-    def _write_file_with_backup(self, file_path: str, lines: List[str]) -> None:
+    def _write_file_with_backup(self, file_path: str, lines: list[str]) -> None:
         """Write file with backup if enabled."""
         if self.backup and file_path not in self.backups:
             backup_path = f"{file_path}.backup"
@@ -507,7 +506,7 @@ class PyflakesFixer:
 
         self.backups.clear()
 
-    def generate_report(self, output_file: Optional[str] = None) -> str:
+    def generate_report(self, output_file: str | None = None) -> str:
         """Generate a comprehensive fix report."""
         report_lines = [
             "Pyflakes Issues Fix Report",
@@ -600,7 +599,7 @@ def main():
         print(f"Error: Pyflakes output file '{args.pyflakes_output}' not found")
         sys.exit(1)
 
-    with open(args.pyflakes_output, "r", encoding="utf-8") as f:
+    with open(args.pyflakes_output, encoding="utf-8") as f:
         pyflakes_output = f.read()
 
     # Create fixer

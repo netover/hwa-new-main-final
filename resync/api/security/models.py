@@ -3,13 +3,18 @@ from __future__ import annotations
 from datetime import datetime
 
 from passlib.context import CryptContext
-from pydantic import field_validator, BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field, field_validator
 
 # --- Password Validation Context ---
 password_hasher = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 class LoginRequest(BaseModel):
+    """Request model for user authentication.
+    
+    Contains username and password for login validation.
+    Password must be at least 8 characters long.
+    """
     username: str = Field(..., min_length=3, max_length=32)
     password: str = Field(..., min_length=8)
 
@@ -21,13 +26,23 @@ class LoginRequest(BaseModel):
         if not any(c.isdigit() for c in v):
             raise ValueError("Password must contain at least one digit")
         if not any(c.isupper() for c in v):
-            raise ValueError("Password must contain at least one uppercase letter")
+            raise ValueError(
+                "Password must contain at least one uppercase letter"
+            )
         return v
 
 
 class UserCreate(BaseModel):
+    """Request model for user creation.
+    
+    Contains user information for account registration.
+    Password must be at least 8 characters with one digit and one uppercase letter.
+    """
     username: str = Field(
-        ..., min_length=3, max_length=32, json_schema_extra={"example": "johndoe"}
+        ...,
+        min_length=3,
+        max_length=32,
+        json_schema_extra={"example": "johndoe"},
     )
     email: EmailStr = Field(...)
     password: str = Field(

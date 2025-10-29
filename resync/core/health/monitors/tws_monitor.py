@@ -10,12 +10,14 @@ from __future__ import annotations
 
 import time
 from datetime import datetime
-from typing import Optional
 
 import structlog
-
-from resync.core.health_models import ComponentHealth, ComponentType, HealthStatus
-from resync.settings import settings
+from resync_new.config.settings import settings
+from resync_new.models.health_models import (
+    ComponentHealth,
+    ComponentType,
+    HealthStatus,
+)
 
 logger = structlog.get_logger(__name__)
 
@@ -32,8 +34,8 @@ class TWSMonitorHealthChecker:
 
     def __init__(self):
         """Initialize the TWS monitor health checker."""
-        self._last_check: Optional[datetime] = None
-        self._cached_result: Optional[ComponentHealth] = None
+        self._last_check: datetime | None = None
+        self._cached_result: ComponentHealth | None = None
 
     async def check_tws_monitor_health(self) -> ComponentHealth:
         """
@@ -90,7 +92,7 @@ class TWSMonitorHealthChecker:
             )
 
     async def check_external_api_health(
-        self, api_name: str, endpoint: Optional[str] = None
+        self, api_name: str, endpoint: str | None = None
     ) -> ComponentHealth:
         """
         Check health of external API services.
@@ -128,7 +130,9 @@ class TWSMonitorHealthChecker:
             response_time = (time.time() - start_time) * 1000
 
             logger.error(
-                "external_api_health_check_failed", api_name=api_name, error=str(e)
+                "external_api_health_check_failed",
+                api_name=api_name,
+                error=str(e),
             )
             return ComponentHealth(
                 name=f"external_api_{api_name}",
@@ -140,7 +144,7 @@ class TWSMonitorHealthChecker:
                 error_count=1,
             )
 
-    def get_cached_health(self) -> Optional[ComponentHealth]:
+    def get_cached_health(self) -> ComponentHealth | None:
         """
         Get cached health result if available and recent.
 
@@ -152,9 +156,8 @@ class TWSMonitorHealthChecker:
             age = datetime.now() - self._last_check
             if age.total_seconds() < 300:
                 return self._cached_result
-            else:
-                # Cache expired
-                self._cached_result = None
+            # Cache expired
+            self._cached_result = None
 
         return None
 

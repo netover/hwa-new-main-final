@@ -8,5 +8,6 @@
         ".yoyo": true
     },
     "codium.codeCompletion.enable": false,
-    "terminal.integrated.enableVisualBell": true
+    "terminal.integrated.enableVisualBell": true,
+    "workbench.editor.closeOnFileDelete": true
 }

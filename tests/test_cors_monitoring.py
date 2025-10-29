@@ -1,10 +1,11 @@
-import pytest
 from unittest.mock import patch
+
+import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
 from resync.api.cors_monitoring import cors_monitor_router
-from resync.core.rate_limiter import limiter, CustomRateLimitMiddleware
+from resync.core.rate_limiter import CustomRateLimitMiddleware, limiter
 from resync.models.validation import (
     CorsConfigResponse,
     CorsTestResponse,

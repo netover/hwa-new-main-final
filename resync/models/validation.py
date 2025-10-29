@@ -222,7 +222,9 @@ class AuditRecord(BaseModel):
         """
         valid_statuses = {"pending", "approved", "rejected"}
         if v not in valid_statuses:
-            raise ValueError(f"Invalid status: {v}. Must be one of {valid_statuses}")
+            raise ValueError(
+                f"Invalid status: {v}. Must be one of {valid_statuses}"
+            )
         return v
 
     @field_serializer("timestamp")
@@ -280,7 +282,13 @@ class JobStatusUpdate(BaseModel):
         Returns:
             The validated status
         """
-        valid_statuses = {"running", "completed", "failed", "cancelled", "pending"}
+        valid_statuses = {
+            "running",
+            "completed",
+            "failed",
+            "cancelled",
+            "pending",
+        }
         if v.lower() not in valid_statuses:
             raise ValueError(
                 f"Invalid job status: {v}. Must be one of {valid_statuses}"
@@ -323,7 +331,14 @@ class DocumentUpload(BaseModel):
             raise ValueError("Filename contains invalid characters")
 
         # Check file extension (only allow specific file types)
-        allowed_extensions = {".pdf", ".docx", ".xlsx", ".txt", ".csv", ".json"}
+        allowed_extensions = {
+            ".pdf",
+            ".docx",
+            ".xlsx",
+            ".txt",
+            ".csv",
+            ".json",
+        }
         file_extension = ""
         if "." in v:
             file_extension = "." + v.lower().split(".")[-1]
@@ -360,7 +375,9 @@ class DocumentUpload(BaseModel):
             "application/json",
         ]
 
-        if not any(allowed_type in v.lower() for allowed_type in valid_content_types):
+        if not any(
+            allowed_type in v.lower() for allowed_type in valid_content_types
+        ):
             raise ValueError("Unsupported content type")
 
         return v

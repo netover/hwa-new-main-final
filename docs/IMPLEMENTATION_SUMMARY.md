@@ -268,7 +268,7 @@
 
 ```bash
 # Instalar dependências
-pip install -r requirements.txt
+pip install -r requirements/dev.txt
 
 # Iniciar servidor
 uvicorn resync.main:app --reload --port 8000

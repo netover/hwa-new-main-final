@@ -35,10 +35,10 @@ def mock_redis_client():
     client.eval.return_value = 1
     client.script_load.return_value = "mock_release_script_sha"
     client.exists.return_value = 1
-    client.get.return_value = "mock_uuid".encode("utf-8")
+    client.get.return_value = b"mock_uuid"
     client.delete.return_value = 1
     client.keys.return_value = [
-        f"audit_lock:expired_key_{i}".encode("utf-8") for i in range(3)
+        f"audit_lock:expired_key_{i}".encode() for i in range(3)
     ]
     client.ttl.return_value = -2
     client.ping.return_value = True
@@ -60,13 +60,12 @@ async def audit_lock_instance(mock_redis_client):
 @pytest.fixture
 def audit_lock_context(mock_redis_client):
     """Create an AuditLockContext for testing."""
-    context = AuditLockContext(
+    return AuditLockContext(
         client=mock_redis_client,
         lock_key="audit_lock:test_context_key",
         timeout=30,
         release_script_sha="mock_release_script_sha",
     )
-    return context
 
 
 class TestDistributedAuditLock:

@@ -3,12 +3,14 @@ from __future__ import annotations
 import time
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import structlog
-
-from resync.core.health_models import ComponentHealth, ComponentType, HealthStatus
-
+from resync_new.models.health_models import (
+    ComponentHealth,
+    ComponentType,
+    HealthStatus,
+)
 
 logger = structlog.get_logger(__name__)
 
@@ -19,11 +21,11 @@ class ServiceDependencyStatus:
 
     service_name: str
     status: HealthStatus
-    dependencies: List[str] = field(default_factory=list)
-    dependency_status: Dict[str, HealthStatus] = field(default_factory=dict)
-    last_check: Optional[datetime] = None
-    response_time_ms: Optional[float] = None
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    dependencies: list[str] = field(default_factory=list)
+    dependency_status: dict[str, HealthStatus] = field(default_factory=dict)
+    last_check: datetime | None = None
+    response_time_ms: float | None = None
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
@@ -33,11 +35,11 @@ class ExternalServiceStatus:
     service_name: str
     service_type: str
     status: HealthStatus
-    endpoint: Optional[str] = None
-    last_check: Optional[datetime] = None
-    response_time_ms: Optional[float] = None
-    error_message: Optional[str] = None
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    endpoint: str | None = None
+    last_check: datetime | None = None
+    response_time_ms: float | None = None
+    error_message: str | None = None
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 
 class ServiceHealthMonitor:
@@ -52,8 +54,8 @@ class ServiceHealthMonitor:
 
     def __init__(self):
         """Initialize the service health monitor."""
-        self._cache: Dict[str, Any] = {}
-        self._cache_expiry: Dict[str, datetime] = {}
+        self._cache: dict[str, Any] = {}
+        self._cache_expiry: dict[str, datetime] = {}
         self._cache_ttl_seconds = 300  # 5 minutes default TTL
 
     async def check_service_dependencies(self) -> ServiceDependencyStatus:
@@ -71,7 +73,13 @@ class ServiceHealthMonitor:
 
         try:
             # Basic dependency checks - can be extended based on actual dependencies
-            dependencies = ["database", "redis", "file_system", "memory", "cpu"]
+            dependencies = [
+                "database",
+                "redis",
+                "file_system",
+                "memory",
+                "cpu",
+            ]
 
             dependency_status = {}
 
@@ -94,7 +102,8 @@ class ServiceHealthMonitor:
             if unhealthy_deps:
                 overall_status = HealthStatus.UNHEALTHY
             elif any(
-                status == HealthStatus.DEGRADED for status in dependency_status.values()
+                status == HealthStatus.DEGRADED
+                for status in dependency_status.values()
             ):
                 overall_status = HealthStatus.DEGRADED
 
@@ -252,21 +261,23 @@ class ServiceHealthMonitor:
             return True
         return datetime.now() > self._cache_expiry[cache_key]
 
-    def _get_cached_result(self, cache_key: str) -> Optional[Any]:
+    def _get_cached_result(self, cache_key: str) -> Any | None:
         """Get a cached result if it exists and hasn't expired."""
         if self._is_cache_expired(cache_key):
             return None
         return self._cache.get(cache_key)
 
     def _set_cached_result(
-        self, cache_key: str, result: Any, ttl_seconds: Optional[int] = None
+        self, cache_key: str, result: Any, ttl_seconds: int | None = None
     ) -> None:
         """Cache a result with optional TTL."""
         if ttl_seconds is None:
             ttl_seconds = self._cache_ttl_seconds
 
         self._cache[cache_key] = result
-        self._cache_expiry[cache_key] = datetime.now() + timedelta(seconds=ttl_seconds)
+        self._cache_expiry[cache_key] = datetime.now() + timedelta(
+            seconds=ttl_seconds
+        )
 
     def clear_cache(self) -> None:
         """Clear all cached results."""

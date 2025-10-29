@@ -14,14 +14,20 @@ PEP 563 and PEP 649 for details.
 from __future__ import annotations
 
 # resync/api/rag_upload.py
-
 import logging
 
-from fastapi import APIRouter, BackgroundTasks, Depends, File, HTTPException, UploadFile
-
-from resync.core.exceptions import FileProcessingError
+from fastapi import (
+    APIRouter,
+    BackgroundTasks,
+    Depends,
+    File,
+    HTTPException,
+    UploadFile,
+)
 from resync.core.fastapi_di import get_file_ingestor
-from resync.core.interfaces import IFileIngestor
+from resync.utils.exceptions import FileProcessingError
+from resync.utils.interfaces import IFileIngestor
+
 from resync.models.validation import DocumentUpload
 
 logger = logging.getLogger(__name__)
@@ -30,7 +36,7 @@ logger = logging.getLogger(__name__)
 file_dependency = File(...)
 file_ingestor_dependency = Depends(get_file_ingestor)
 
-router = APIRouter(prefix="/api/rag", tags=["rag"])
+router = APIRouter(prefix="/rag", tags=["rag"])
 
 
 @router.post("/upload", summary="Upload a document for RAG ingestion")

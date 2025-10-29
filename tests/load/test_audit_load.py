@@ -148,13 +148,12 @@ async def test_audit_load_test(mock_audit_queue, mock_ia_auditor):
                         "success": True,
                         "error": None,
                     }
-                else:
-                    # If not flagged, consider it successful for the purpose of this load test
-                    return {
-                        "memory_id": memory_id,
-                        "success": True,
-                        "error": None,
-                    }
+                # If not flagged, consider it successful for the purpose of this load test
+                return {
+                    "memory_id": memory_id,
+                    "success": True,
+                    "error": None,
+                }
 
             except Exception as e:
                 if "lock" in str(e).lower() or "timeout" in str(e).lower():

@@ -8,15 +8,15 @@ from __future__ import annotations
 
 import time
 from datetime import datetime
-from typing import Any, Dict
+from typing import Any
 
 import structlog
-
-from resync.core.health_models import (
+from resync_new.models.health_models import (
     ComponentHealth,
     ComponentType,
     HealthStatus,
 )
+
 from .base_health_checker import BaseHealthChecker
 
 logger = structlog.get_logger(__name__)
@@ -46,7 +46,7 @@ class TWSMonitorHealthChecker(BaseHealthChecker):
 
         try:
             # Check TWS configuration
-            from resync.settings import settings
+            from resync_new.config.settings import settings
 
             tws_config = settings.get("tws_monitor", {})
             if not tws_config or not tws_config.get("enabled", False):
@@ -91,7 +91,7 @@ class TWSMonitorHealthChecker(BaseHealthChecker):
         """Determine health status based on TWS monitor exception type."""
         return ComponentType.EXTERNAL_API
 
-    def get_component_config(self) -> Dict[str, Any]:
+    def get_component_config(self) -> dict[str, Any]:
         """Get TWS monitor-specific configuration."""
         return {
             "timeout_seconds": self.config.timeout_seconds,

@@ -1,9 +1,14 @@
-"""Authentication and authorization API endpoints.
+"""Authentication and authorization API endpoints - SECURE VERSION.
 
 This module provides JWT-based authentication endpoints and utilities,
 including token generation, validation, and user session management.
 It implements secure authentication flows with proper error handling
 and integrates with the application's security middleware.
+
+SECURITY FIXES:
+- Removed fallback SECRET_KEY for production
+- Added proper SECRET_KEY validation
+- Enhanced error handling for missing security configuration
 """
 
 from __future__ import annotations
@@ -12,15 +17,15 @@ import asyncio
 import hashlib
 import hmac
 import secrets
+import os
 from datetime import datetime, timedelta
-from typing import Any
+from typing import Any, Dict, List, Optional
 
 import jwt
 from fastapi import Depends, HTTPException, Request, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
-
-from resync.core.structured_logger import get_logger
-from resync.settings import settings
+from resync.config.settings import settings
+from resync.utils.simple_logger import get_logger
 
 logger = get_logger(__name__)
 
@@ -28,8 +33,30 @@ logger = get_logger(__name__)
 # Allow missing Authorization to support HttpOnly cookie fallback
 security = HTTPBearer(auto_error=False)
 
-# Secret key for JWT tokens
-SECRET_KEY = getattr(settings, "SECRET_KEY", "fallback_secret_key_for_development")
+# Secret key for JWT tokens - CRITICAL SECURITY FIX
+SECRET_KEY = getattr(settings, "SECRET_KEY", None)
+
+# Validate SECRET_KEY is properly configured
+if SECRET_KEY is None:
+    raise ValueError(
+        "CRITICAL SECURITY ERROR: SECRET_KEY is not configured. "
+        "Set SECRET_KEY environment variable with at least 32 characters."
+    )
+
+if isinstance(SECRET_KEY, str) and len(SECRET_KEY) < 32:
+    raise ValueError(
+        "CRITICAL SECURITY ERROR: SECRET_KEY must be at least 32 characters long. "
+        "Current length: {}".format(len(SECRET_KEY))
+    )
+
+# Additional production security checks
+if getattr(settings, 'environment', 'development') == 'production':
+    if not SECRET_KEY or SECRET_KEY in ['fallback_secret_key_for_development', 'dev', 'test']:
+        raise ValueError(
+            "CRITICAL SECURITY ERROR: Cannot use development fallback SECRET_KEY in production. "
+            "Set a secure, random SECRET_KEY environment variable."
+        )
+
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
@@ -62,7 +89,9 @@ class SecureAuthenticator:
                 )
                 # Still perform full verification to maintain constant time
                 # but will return failure regardless
-                lockout_remaining = await self._get_lockout_remaining(request_ip)
+                lockout_remaining = await self._get_lockout_remaining(
+                    request_ip
+                )
                 await asyncio.sleep(0.5)  # Artificial delay
                 return (
                     False,
@@ -89,7 +118,9 @@ class SecureAuthenticator:
         credentials_valid = username_valid and password_valid
 
         # Artificial delay to prevent timing analysis
-        await asyncio.sleep(secrets.randbelow(100) / 1000)  # 0-100ms random delay
+        await asyncio.sleep(
+            secrets.randbelow(100) / 1000
+        )  # 0-100ms random delay
 
         if not credentials_valid:
             await self._record_failed_attempt(request_ip)
@@ -98,7 +129,8 @@ class SecureAuthenticator:
                 "Failed authentication attempt",
                 extra={
                     "ip": request_ip,
-                    "username_provided": username[:3] + "***",  # Partial for logs
+                    "username_provided": username[:3]
+                    + "***",  # Partial for logs
                     "timestamp": datetime.utcnow().isoformat(),
                 },
             )
@@ -112,7 +144,10 @@ class SecureAuthenticator:
 
         logger.info(
             "Successful authentication",
-            extra={"ip": request_ip, "timestamp": datetime.utcnow().isoformat()},
+            extra={
+                "ip": request_ip,
+                "timestamp": datetime.utcnow().isoformat(),
+            },
         )
 
         return True, None
@@ -120,8 +155,10 @@ class SecureAuthenticator:
     def _hash_credential(self, credential: str) -> bytes:
         """Hash credential for constant-time comparison."""
         # Use HMAC with secret key to prevent rainbow table attacks
-        secret_key = getattr(settings, "secret_key", SECRET_KEY).encode("utf-8")
-        return hmac.new(secret_key, credential.encode("utf-8"), hashlib.sha256).digest()
+        secret_key = SECRET_KEY.encode("utf-8")  # Use validated SECRET_KEY
+        return hmac.new(
+            secret_key, credential.encode("utf-8"), hashlib.sha256
+        ).digest()
 
     async def _record_failed_attempt(self, ip: str) -> None:
         """Record failed authentication attempt."""
@@ -137,7 +174,9 @@ class SecureAuthenticator:
             # Remove attempts outside lockout window
             cutoff = now - self._lockout_duration
             self._failed_attempts[ip] = [
-                attempt for attempt in self._failed_attempts[ip] if attempt > cutoff
+                attempt
+                for attempt in self._failed_attempts[ip]
+                if attempt > cutoff
             ]
 
             # Log if approaching lockout
@@ -158,7 +197,9 @@ class SecureAuthenticator:
 
         # Count recent attempts
         recent_attempts = [
-            attempt for attempt in self._failed_attempts[ip] if attempt > cutoff
+            attempt
+            for attempt in self._failed_attempts[ip]
+            if attempt > cutoff
         ]
 
         return len(recent_attempts) >= self._max_attempts
@@ -245,11 +286,12 @@ def create_access_token(
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
     else:
-        expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+        expire = datetime.utcnow() + timedelta(
+            minutes=ACCESS_TOKEN_EXPIRE_MINUTES
+        )
 
     to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-    return encoded_jwt
+    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
 
 async def authenticate_admin(username: str, password: str) -> bool:
@@ -265,5 +307,7 @@ async def authenticate_admin(username: str, password: str) -> bool:
 
     # Use the SecureAuthenticator for constant-time comparison
     client_ip = "unknown"  # In this context, we don't have the request object
-    is_valid, _ = await authenticator.verify_credentials(username, password, client_ip)
+    is_valid, _ = await authenticator.verify_credentials(
+        username, password, client_ip
+    )
     return is_valid

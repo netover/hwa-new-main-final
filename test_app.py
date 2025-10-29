@@ -36,7 +36,7 @@ async def health():
     )
 
 
-@app.get("/api/status")
+@app.get("/api/v1/status")
 async def api_status():
     return JSONResponse(
         {
@@ -54,5 +54,5 @@ if __name__ == "__main__":
     print("Starting Resync TWS Integration API...")
     print("Server will run on http://localhost:8000")
     print("Health check: http://localhost:8000/health")
-    print("API status: http://localhost:8000/api/status")
+    print("API status: http://localhost:8000/api/v1/status")
     uvicorn.run(app, host="0.0.0.0", port=8000)

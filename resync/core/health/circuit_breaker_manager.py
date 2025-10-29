@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import asyncio
 from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import structlog
 
@@ -29,11 +29,13 @@ class CircuitBreakerManager:
 
     def __init__(self):
         """Initialize the circuit breaker manager."""
-        self._circuit_breakers: Dict[str, Any] = {}
-        self._breaker_stats: Dict[str, Dict[str, Any]] = {}
+        self._circuit_breakers: dict[str, Any] = {}
+        self._breaker_stats: dict[str, dict[str, Any]] = {}
         self._lock = asyncio.Lock()
 
-    def register_circuit_breaker(self, name: str, circuit_breaker: Any) -> None:
+    def register_circuit_breaker(
+        self, name: str, circuit_breaker: Any
+    ) -> None:
         """
         Register a circuit breaker for management.
 
@@ -80,7 +82,9 @@ class CircuitBreakerManager:
         """
         circuit_breaker = self._circuit_breakers.get(breaker_name)
         if not circuit_breaker:
-            logger.warning("circuit_breaker_not_found", breaker_name=breaker_name)
+            logger.warning(
+                "circuit_breaker_not_found", breaker_name=breaker_name
+            )
             # Execute without circuit breaker protection
             return await func(*args, **kwargs)
 
@@ -105,7 +109,7 @@ class CircuitBreakerManager:
 
     async def get_circuit_breaker_status(
         self, breaker_name: str
-    ) -> Optional[Dict[str, Any]]:
+    ) -> dict[str, Any] | None:
         """
         Get the status of a specific circuit breaker.
 
@@ -142,7 +146,9 @@ class CircuitBreakerManager:
                 "successes": stats.get("successes", 0),
                 "error_rate": stats.get("failure_rate", 0),
                 "last_failure": stats.get("last_failure_time"),
-                "latency_p95": stats.get("latency_percentiles", {}).get("p95", 0),
+                "latency_p95": stats.get("latency_percentiles", {}).get(
+                    "p95", 0
+                ),
                 "our_stats": our_stats,
                 "timestamp": datetime.now().isoformat(),
             }
@@ -159,7 +165,9 @@ class CircuitBreakerManager:
                 "timestamp": datetime.now().isoformat(),
             }
 
-    async def get_all_circuit_breaker_statuses(self) -> Dict[str, Dict[str, Any]]:
+    async def get_all_circuit_breaker_statuses(
+        self,
+    ) -> dict[str, dict[str, Any]]:
         """
         Get status of all registered circuit breakers.
 
@@ -168,7 +176,7 @@ class CircuitBreakerManager:
         """
         statuses = {}
 
-        for breaker_name in self._circuit_breakers.keys():
+        for breaker_name in self._circuit_breakers:
             status = await self.get_circuit_breaker_status(breaker_name)
             if status:
                 statuses[breaker_name] = status
@@ -188,7 +196,8 @@ class CircuitBreakerManager:
         circuit_breaker = self._circuit_breakers.get(breaker_name)
         if not circuit_breaker:
             logger.warning(
-                "circuit_breaker_not_found_for_reset", breaker_name=breaker_name
+                "circuit_breaker_not_found_for_reset",
+                breaker_name=breaker_name,
             )
             return False
 
@@ -210,11 +219,13 @@ class CircuitBreakerManager:
 
         except Exception as e:
             logger.error(
-                "circuit_breaker_reset_failed", breaker_name=breaker_name, error=str(e)
+                "circuit_breaker_reset_failed",
+                breaker_name=breaker_name,
+                error=str(e),
             )
             return False
 
-    async def reset_all_circuit_breakers(self) -> Dict[str, bool]:
+    async def reset_all_circuit_breakers(self) -> dict[str, bool]:
         """
         Reset all circuit breakers to closed state.
 
@@ -223,13 +234,15 @@ class CircuitBreakerManager:
         """
         results = {}
 
-        for breaker_name in self._circuit_breakers.keys():
-            results[breaker_name] = await self.reset_circuit_breaker(breaker_name)
+        for breaker_name in self._circuit_breakers:
+            results[breaker_name] = await self.reset_circuit_breaker(
+                breaker_name
+            )
 
         logger.info("all_circuit_breakers_reset", results=results)
         return results
 
-    async def get_open_circuit_breakers(self) -> List[str]:
+    async def get_open_circuit_breakers(self) -> list[str]:
         """
         Get list of circuit breakers that are currently open.
 
@@ -252,7 +265,7 @@ class CircuitBreakerManager:
 
         return open_breakers
 
-    async def get_circuit_breaker_summary(self) -> Dict[str, Any]:
+    async def get_circuit_breaker_summary(self) -> dict[str, Any]:
         """
         Get a summary of all circuit breaker states.
 
@@ -313,7 +326,7 @@ class CircuitBreakerManager:
                 stats["failed_calls"] += 1
                 stats["last_failure"] = datetime.now()
 
-    def get_registered_breakers(self) -> List[str]:
+    def get_registered_breakers(self) -> list[str]:
         """Get list of registered circuit breaker names."""
         return list(self._circuit_breakers.keys())
 
@@ -355,12 +368,13 @@ class CircuitBreakerManager:
 
         if cleaned_count > 0:
             logger.info(
-                "cleaned_stale_circuit_breaker_stats", cleaned_count=cleaned_count
+                "cleaned_stale_circuit_breaker_stats",
+                cleaned_count=cleaned_count,
             )
 
         return cleaned_count
 
-    def get_manager_stats(self) -> Dict[str, Any]:
+    def get_manager_stats(self) -> dict[str, Any]:
         """Get statistics about the circuit breaker manager itself."""
         return {
             "registered_breakers": len(self._circuit_breakers),

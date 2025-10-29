@@ -4,7 +4,7 @@ from __future__ import annotations
 
 
 def clean_main_py() -> None:
-    with open("resync/main.py", "r", encoding="utf-8") as f:
+    with open("resync/main.py", encoding="utf-8") as f:
         lines = f.readlines()
 
     print(f"Total de linhas ANTES: {len(lines)}")

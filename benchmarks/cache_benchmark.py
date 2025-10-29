@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import asyncio
-import random
+import secrets
 import statistics
 import time
 from typing import Any
@@ -80,7 +80,7 @@ class CacheBenchmark:
                 await cache.set(keys[i], values[i])
         elif operation == "mixed":
             for i in range(num_operations):
-                if random.random() < 0.7:  # 70% reads, 30% writes
+                if secrets.randbelow(10) < 7:  # 70% reads, 30% writes
                     await cache.get(keys[i])
                 else:
                     await cache.set(keys[i], values[i])
@@ -125,10 +125,10 @@ class CacheBenchmark:
         async def worker(worker_id: int) -> list[float]:
             latencies = []
             for i in range(operations_per_worker):
-                key = f"concurrent_key_{random.randint(0, operations_per_worker-1)}"
+                key = f"concurrent_key_{secrets.randbelow(operations_per_worker)}"
 
                 start_time = time.time()
-                if random.random() < read_ratio:
+                if secrets.randbelow(10) < 7:
                     # Read operation
                     await cache.get(key)
                 else:
@@ -191,7 +191,7 @@ class CacheBenchmark:
         """
         # Add entries with mixed TTLs
         for i in range(num_entries):
-            if random.random() < expired_ratio:
+            if secrets.randbelow(10) < 5:
                 # Expired entry (TTL of 0 seconds)
                 await cache.set(f"expired_key_{i}", f"expired_value_{i}", ttl_seconds=0)
             else:

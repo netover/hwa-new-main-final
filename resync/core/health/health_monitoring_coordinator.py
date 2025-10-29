@@ -8,11 +8,10 @@ for the health check service, including monitoring loops and service lifecycle m
 from __future__ import annotations
 
 import asyncio
-from typing import Optional
+import contextlib
 
 import structlog
-
-from resync.core.health_models import HealthCheckConfig
+from resync_new.models.health_models import HealthCheckConfig
 
 logger = structlog.get_logger(__name__)
 
@@ -25,7 +24,7 @@ class HealthMonitoringCoordinator:
     and integration with the broader health monitoring ecosystem.
     """
 
-    def __init__(self, config: Optional[HealthCheckConfig] = None):
+    def __init__(self, config: HealthCheckConfig | None = None):
         """
         Initialize the health monitoring coordinator.
 
@@ -33,7 +32,7 @@ class HealthMonitoringCoordinator:
             config: Health check configuration (uses default if None)
         """
         self.config = config or HealthCheckConfig()
-        self._monitoring_task: Optional[asyncio.Task] = None
+        self._monitoring_task: asyncio.Task | None = None
         self._is_monitoring = False
         self._lock = asyncio.Lock()
 
@@ -60,10 +59,8 @@ class HealthMonitoringCoordinator:
             self._is_monitoring = False
             if self._monitoring_task:
                 self._monitoring_task.cancel()
-                try:
+                with contextlib.suppress(asyncio.CancelledError):
                     await self._monitoring_task
-                except asyncio.CancelledError:
-                    pass
                 self._monitoring_task = None
             logger.info("health_monitoring_coordinator_stopped")
 

@@ -300,13 +300,12 @@ class TestEndToEndIntegration:
 
         async def simulate_connection(user_id):
             # Each connection needs its own TestClient instance to be isolated
-            with TestClient(test_app) as local_client:
-                with local_client.websocket_connect(
-                    f"/ws/test-agent"
-                ) as websocket:
-                    websocket.send_text(f"Question from {user_id}")
-                    data = websocket.receive_text()
-                    assert "Test response" in data
+            with TestClient(test_app) as local_client, local_client.websocket_connect(
+                "/ws/test-agent"
+            ) as websocket:
+                websocket.send_text(f"Question from {user_id}")
+                data = websocket.receive_text()
+                assert "Test response" in data
 
         tasks = [simulate_connection(i) for i in range(5)]
         await asyncio.gather(*tasks)

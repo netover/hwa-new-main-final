@@ -73,7 +73,7 @@ pip install -r requirements/prod.txt
 
 ## 🔄 Migração
 
-O arquivo `requirements.txt` na raiz está **DEPRECATED** e será removido em futuras versões. Use os arquivos nesta pasta.
+O arquivo `requirements.txt` na raiz está **DEPRECATED** e permanece apenas como shim que inclui `-r requirements/dev.txt`. Use os arquivos nesta pasta.
 
 Para migrar projetos existentes:
 ```bash

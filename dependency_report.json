@@ -1,0 +1,2112 @@
+{
+  "total_files": 335,
+  "critical_files": [
+    "resync.settings",
+    "resync.core.simple_logger",
+    "resync.core.health_models",
+    "resync.core.exceptions",
+    "resync.core.interfaces",
+    "resync.core.connection_pool_manager",
+    "resync.core.metrics",
+    "resync.core.fastapi_di",
+    "resync.core.circuit_breaker",
+    "resync.core.cache",
+    "resync.fastapi_app.main",
+    "resync.core.agent_manager",
+    "resync.core.container",
+    "resync.core.logger",
+    "resync.services.tws_service",
+    "resync.core.connection_manager",
+    "resync.core.teams_integration",
+    "resync.core.exceptions_enhanced",
+    "resync.core.context",
+    "resync.core.utils.llm",
+    "resync.cqrs.base",
+    "resync.core.tws_monitor",
+    "resync.cqrs.dispatcher",
+    "resync.core.rate_limiter",
+    "resync.api.auth",
+    "resync.core.idempotency.manager",
+    "resync.core.health_service"
+  ],
+  "entry_points": [
+    "core.health.health_checkers.memory_health_checker",
+    "core.health.memory_manager",
+    "core.fastapi_di",
+    "lifespan",
+    "core.cache.cache_factory",
+    "config.cors",
+    "RAG.microservice.core.persistence",
+    "core.health.monitors.database_monitor",
+    "core.litellm_init",
+    "core.task_manager",
+    "core.health.memory_usage_tracker",
+    "core.cache",
+    "core.teams_integration",
+    "core.health.health_checkers.filesystem_health_checker",
+    "RAG.microservice.core.monitoring",
+    "fastapi_app.api.v1.routes.endpoints",
+    "api.models.rag",
+    "core.security_hardening",
+    "core.connection_pool_manager",
+    "RAG.microservice.tests.test_ingest",
+    "fastapi_app.core",
+    "core.database_optimizer",
+    "core.structured_logger",
+    "core.health.health_metrics_simplified",
+    "core.health.health_service_simplified",
+    "api.middleware.endpoint_utils",
+    "fastapi_app.tests.conftest",
+    "core.utils.error_utils",
+    "api.security.validations",
+    "models.error_models",
+    "core.utils.test_json_parser",
+    "models",
+    "api_gateway.core",
+    "core.utils.async_iterator_mock",
+    "core.idempotency.config",
+    "fastapi_app.tests.test_agents",
+    "core.incident_response",
+    "core.health.health_checkers.websocket_pool_health_checker",
+    "core.query_cache",
+    "api_gateway.services",
+    "settings_validators",
+    "api.exception_handlers",
+    "api.utils.error_handlers",
+    "core.utils.test_ia_auditor",
+    "fastapi_app",
+    "core.idempotency.metrics",
+    "core.compliance",
+    "core.agent_manager",
+    "main",
+    "core.interfaces",
+    "core.utils.test_llm",
+    "core.health.health_checkers.cache_health_checker",
+    "core.health.health_service_orchestrator",
+    "RAG.microservice.core.ingest",
+    "core.utils.json_commands",
+    "fastapi_app.api.v1.routes.agents",
+    "core.runbooks",
+    "core.migration_managers",
+    "fastapi_app.api.v1.routes.audit",
+    "fastapi_app.api.v1.models.response_models",
+    "api.validation.enhanced_security_fixed",
+    "core.startup_validation",
+    "api.validation",
+    "core.health.component_cache_manager",
+    "api.models.links",
+    "core",
+    "core.memory_manager",
+    "RAG.microservice.core",
+    "api.gateway",
+    "api.middleware.csrf_protection",
+    "api.circuit_breaker_metrics",
+    "core.rag_health_check",
+    "fastapi_app.utils",
+    "api.routes",
+    "core.health.performance_metrics_collector",
+    "core.csp_template_response",
+    "core.performance_config",
+    "api.models.responses",
+    "services.llm_service",
+    "fastapi_app.api.v1.models",
+    "core.health.health_service_facade",
+    "core.health",
+    "fastapi_app.api",
+    "core.compliance.types",
+    "api.cors_monitoring",
+    "resync",
+    "services.rag_client",
+    "core.compliance.report_strategies",
+    "cqrs.dispatcher",
+    "cqrs.query_handlers",
+    "core.header_parser",
+    "api.endpoints",
+    "core.security_dashboard",
+    "fastapi_app.tests.test_websocket",
+    "core.utils.llm_factories",
+    "api",
+    "core.exceptions_enhanced",
+    "fastapi_app.api.websocket.handlers",
+    "core.metrics_collector",
+    "core.cache.base_cache",
+    "core.health.monitoring_aggregator",
+    "core.health_models",
+    "core.predictive_analyzer",
+    "core.connection_manager",
+    "api.validation.query_params",
+    "core.health.monitors.tws_monitor",
+    "core.idempotency",
+    "core.health.global_health_service_manager",
+    "core.config_watcher",
+    "config.enhanced_security",
+    "core.knowledge_graph",
+    "tool_definitions.tws_tools",
+    "core.proactive_monitoring",
+    "core.llm_monitor",
+    "RAG.microservice.core.retriever",
+    "api.middleware.cors_monitoring",
+    "fastapi_app.utils.helpers",
+    "config.security",
+    "core.proactive_monitor",
+    "api_gateway.container",
+    "core.cache.transaction_manager",
+    "core.resilience",
+    "core.pools.redis_pool",
+    "fastapi_app.tests.test_rag",
+    "core.redis_init",
+    "api.chat",
+    "core.audit_lock",
+    "api.connection_pool_monitoring",
+    "core.idempotency.exceptions",
+    "core.health_utils",
+    "core.health.health_checkers.database_health_checker",
+    "core.utils.executors",
+    "security.oauth2",
+    "models.tws",
+    "fastapi_app.api.v1.routes.chat",
+    "core.utils",
+    "settings",
+    "api.rag_upload",
+    "config.csp",
+    "api.performance",
+    "api.validation.auth",
+    "core.constants",
+    "fastapi_app.main",
+    "core.idempotency.storage",
+    "core.shared_utils",
+    "api.validation.common",
+    "api.middleware",
+    "core.cache.strategies",
+    "api.models.base",
+    "api.validation.config",
+    "services.http_client_factory",
+    "fastapi_app.core.security",
+    "core.container",
+    "core.utils.error_factories",
+    "core.lifecycle",
+    "cqrs.queries",
+    "core.health.health_checkers",
+    "fastapi_app.api.v1.routes",
+    "core.dependencies",
+    "core.health.monitors.redis_monitor",
+    "app_factory",
+    "core.snapshot_cleaner",
+    "RAG.microservice.core.interfaces",
+    "RAG.microservice.core.vector_store",
+    "core.circuit_breakers",
+    "core.pools.pool_manager",
+    "fastapi_app.utils.validators",
+    "core.health.health_service_consolidated",
+    "core.audit_log",
+    "api.middleware.oauth2_middleware",
+    "api.utils.stream_handler",
+    "core.user_behavior",
+    "api.validation.enhanced_security",
+    "core.smart_pooling",
+    "core.adaptive_eviction",
+    "models.validation",
+    "core.cache.persistence_manager",
+    "core.health.health_checkers.base_health_checker",
+    "core.logger",
+    "api.security.models",
+    "core.utils.common_error_handlers",
+    "core.health.proactive_monitor",
+    "core.performance_optimizer",
+    "main_clean",
+    "core.retry",
+    "core.llm_wrapper",
+    "core.cache.unified_cache",
+    "core.knowledge_graph_circuit_breaker",
+    "core.cache_hierarchy",
+    "RAG.microservice.tests",
+    "fastapi_app.api.v1.websocket.handlers",
+    "core.health.health_service_manager_simplified",
+    "core.global_utils",
+    "core.circuit_breaker",
+    "core.health.circuit_breaker",
+    "core.rag_watcher",
+    "cqrs.command_handlers",
+    "config.slo",
+    "cqrs",
+    "core.benchmarking",
+    "core.health.health_checkers.tws_monitor_health_checker",
+    "services",
+    "api.health_simplified",
+    "fastapi_app.api.v1.routes.admin",
+    "api.middleware.csp_middleware",
+    "core.encryption_service",
+    "csp_validation",
+    "core.auto_recovery",
+    "core.health.health_check_retry",
+    "environment_managers",
+    "api.audit",
+    "core.utils.test_tws_tools",
+    "core.simple_logger",
+    "core.health.refactored_health_check_service",
+    "test_agents",
+    "fastapi_app.api.v1.routes.rag",
+    "core.resource_manager",
+    "cqrs.base",
+    "core.health.health_history_manager",
+    "api.operations",
+    "core.health.health_checkers.health_checker_factory",
+    "core.utils.llm",
+    "fastapi_app.api.v1.routes.admin_config",
+    "fastapi_app.core.exceptions",
+    "core.anomaly_detector",
+    "core.pools.db_pool",
+    "core.pools.base_pool",
+    "services.tws_service",
+    "core.rate_limiter_improved",
+    "core.tws_monitor",
+    "core.idempotency.validation",
+    "core.idempotency.manager",
+    "core.logging_utils",
+    "core.health.health_service_manager",
+    "fastapi_app.core.config",
+    "api.dependencies",
+    "api.middleware.cors_middleware",
+    "services.tws_client_factory",
+    "core.distributed_tracing",
+    "fastapi_app.tests",
+    "core.shard_balancer",
+    "core.llm_optimizer",
+    "api.models",
+    "core.health.monitors.filesystem_monitor",
+    "api.middleware.idempotency",
+    "RAG.microservice.core.embedding_service",
+    "core.health.refactored_health_service_orchestrator",
+    "core.health.monitors.connection_monitor",
+    "api.cache",
+    "core.chaos_engineering",
+    "settings_legacy",
+    "fastapi_app.api.v1.models.request_models",
+    "core.health.health_config_manager",
+    "api.health",
+    "core.utils.validation",
+    "core.metrics",
+    "core.websocket_pool_manager",
+    "models.agents",
+    "core.audit_queue",
+    "api.admin",
+    "fastapi_app.api.v1.routes.status",
+    "core.security",
+    "core.service_discovery",
+    "RAG.microservice.tests.test_retriever",
+    "fastapi_app.api.v1.routes.health",
+    "api_gateway",
+    "core.health.health_monitoring_coordinator",
+    "api.agents",
+    "core.utils.resource_managers",
+    "api.models.auth",
+    "api.validation.middleware",
+    "core.rate_limiter",
+    "core.health.health_monitoring_observer",
+    "core.log_aggregator",
+    "fastapi_app.api.websocket",
+    "core.health.health_alerting",
+    "api.middleware.correlation_id",
+    "core.write_ahead_log",
+    "core.health.circuit_breaker_manager",
+    "core.csp_jinja_extension",
+    "core.encrypted_audit",
+    "core.app_context",
+    "core.audit_db",
+    "core.di_container",
+    "services.mock_tws_service",
+    "fastapi_app.tests.test_auth",
+    "core.context",
+    "core.utils.test_agent_manager",
+    "api.models.health",
+    "settings_types",
+    "fastapi_app.tests.test_chat",
+    "RAG",
+    "core.predictive_analysis",
+    "core.health.health_check_service",
+    "fastapi_app.api.v1",
+    "api.auth",
+    "core.health.monitors.system_monitor",
+    "api.middleware.cors_config",
+    "api.validation.files",
+    "core.health.monitors.service_monitor",
+    "fastapi_app.api.v1.dependencies",
+    "core.health_service",
+    "core.cache.memory_manager",
+    "core.health.health_checkers.connection_pools_health_checker",
+    "RAG.microservice.core.config",
+    "core.ia_auditor",
+    "core.idempotency.models",
+    "fastapi_app.api.v1.routes.auth",
+    "RAG.microservice.core.chunking",
+    "RAG.microservice",
+    "core.health_config",
+    "cqrs.commands",
+    "core.health.monitors.cache_monitor",
+    "core.alerting",
+    "core.performance_tracker",
+    "core.health.health_checkers.redis_health_checker",
+    "api.validation.chat",
+    "api.middleware.error_handler",
+    "tool_definitions",
+    "fastapi_app.tests.test_audit",
+    "core.encoding_utils",
+    "core.health.health_check_utils",
+    "core.health.health_checkers.cpu_health_checker",
+    "core.pools.connection_pool_monitor",
+    "core.pools.http_pool",
+    "api.models.agents",
+    "core.file_ingestor",
+    "api.validation.agents",
+    "core.exceptions",
+    "api.validation.monitoring",
+    "core.utils.json_parser",
+    "core.health.recovery_manager",
+    "core.health.enhanced_health_config_manager",
+    "core.stress_testing",
+    "api.rfc_examples"
+  ],
+  "circular_dependencies": [],
+  "dependency_graph": {
+    "app_factory": [
+      "resync.api.middleware.correlation_id",
+      "resync.csp_validation",
+      "resync.api.middleware.csp_middleware",
+      "resync.config.security",
+      "resync.lifespan",
+      "resync.api.cache",
+      "resync.api.performance",
+      "resync.core.tws_monitor",
+      "resync.api.agents",
+      "resync.core.exceptions",
+      "resync.core.container",
+      "resync.cqrs.dispatcher",
+      "resync.core.rate_limiter",
+      "resync.core.simple_logger",
+      "resync.api.endpoints",
+      "resync.api.admin",
+      "resync.settings",
+      "resync.api.cors_monitoring",
+      "resync.api.health",
+      "resync.api_gateway.container",
+      "resync.core.fastapi_di",
+      "resync.api.exception_handlers",
+      "resync.core.csp_template_response",
+      "resync.api.middleware.cors_config",
+      "resync.api.middleware.error_handler",
+      "resync.api.audit",
+      "resync.api.chat",
+      "resync.core.interfaces",
+      "resync.api.rag_upload"
+    ],
+    "lifespan": [
+      "resync.api_gateway.container",
+      "resync.settings",
+      "resync.core.async_cache",
+      "resync.core.tws_monitor",
+      "resync.core.exceptions",
+      "resync.core.redis_init",
+      "resync.core.container",
+      "resync.cqrs.dispatcher",
+      "resync.core.interfaces",
+      "resync.core.simple_logger",
+      "resync.api.dependencies"
+    ],
+    "main": [
+      "resync.settings",
+      "resync.core.connection_pool_manager",
+      "resync.core.encoding_utils",
+      "resync.fastapi_app.main",
+      "resync.core.startup_validation"
+    ],
+    "main_clean": [
+      "resync.fastapi_app.main",
+      "resync.settings",
+      "resync.core.startup_validation",
+      "resync.core.encoding_utils"
+    ],
+    "test_agents": [
+      "resync.core.fastapi_di",
+      "resync.main",
+      "resync.core.agent_manager"
+    ],
+    "api.admin": [
+      "resync.settings",
+      "resync.core.teams_integration",
+      "resync.api.auth",
+      "resync.core.fastapi_di",
+      "resync.core.interfaces"
+    ],
+    "api.agents": [
+      "resync.core.fastapi_di",
+      "resync.core.security",
+      "resync.core.exceptions_enhanced"
+    ],
+    "api.audit": [
+      "resync.core.logger",
+      "resync.core.fastapi_di",
+      "resync.core.interfaces",
+      "resync.core.idempotency.manager",
+      "resync.api.dependencies"
+    ],
+    "api.auth": [
+      "resync.settings",
+      "resync.core.simple_logger"
+    ],
+    "api.cache": [
+      "resync.core.fastapi_di",
+      "resync.settings",
+      "resync.core.rate_limiter",
+      "resync.core.interfaces"
+    ],
+    "api.chat": [
+      "resync.core.security",
+      "resync.core.llm_wrapper",
+      "resync.core.exceptions",
+      "resync.core.fastapi_di",
+      "resync.api.utils.stream_handler",
+      "resync.core.interfaces",
+      "resync.core.ia_auditor"
+    ],
+    "api.circuit_breaker_metrics": [
+      "resync.core.health_service",
+      "resync.core.circuit_breaker",
+      "resync.core.simple_logger"
+    ],
+    "api.connection_pool_monitoring": [
+      "resync.core.pools.connection_pool_monitor",
+      "resync.core.simple_logger"
+    ],
+    "api.cors_monitoring": [
+      "resync.models.validation",
+      "resync.settings"
+    ],
+    "api.dependencies": [
+      "resync.core.exceptions",
+      "resync.core.container",
+      "resync.core.simple_logger",
+      "resync.core.context",
+      "resync.core.idempotency.manager"
+    ],
+    "api.endpoints": [
+      "resync.api.utils.error_handlers",
+      "resync.core.encryption_service",
+      "resync.core.agent_manager",
+      "resync.core.llm_wrapper",
+      "resync.core.alerting",
+      "resync.core.tws_monitor",
+      "resync.core.logger",
+      "resync.api.auth",
+      "resync.core.container",
+      "resync.cqrs.dispatcher",
+      "resync.core.rate_limiter",
+      "resync.api.circuit_breaker_metrics",
+      "resync.settings",
+      "resync.core.fastapi_di",
+      "resync.core.benchmarking",
+      "resync.core.metrics",
+      "resync.core.interfaces",
+      "resync.core.runbooks",
+      "resync.cqrs.queries"
+    ],
+    "api.exception_handlers": [
+      "resync.api.models.responses",
+      "resync.core.exceptions_enhanced",
+      "resync.core.exceptions",
+      "resync.core.simple_logger",
+      "resync.core.context"
+    ],
+    "api.gateway": [
+      "resync.core.circuit_breaker",
+      "resync.core.simple_logger"
+    ],
+    "api.health": [
+      "resync.core.health.health_service_consolidated",
+      "resync.core.health_models",
+      "resync.core.metrics"
+    ],
+    "api.health_simplified": [
+      "resync.core.health_models",
+      "resync.core.health.health_service_manager_simplified"
+    ],
+    "api.operations": [
+      "resync.core.idempotency.manager",
+      "resync.api.dependencies",
+      "resync.core.simple_logger"
+    ],
+    "api.performance": [
+      "resync.core.pools.pool_manager",
+      "resync.core.performance_optimizer",
+      "resync.core.resource_manager"
+    ],
+    "api.rag_upload": [
+      "resync.core.fastapi_di",
+      "resync.models.validation",
+      "resync.core.interfaces",
+      "resync.core.exceptions"
+    ],
+    "api.rfc_examples": [
+      "resync.api.models.responses",
+      "resync.core.simple_logger",
+      "resync.api.models.links",
+      "resync.core.exceptions"
+    ],
+    "api_gateway.container": [
+      "resync.api_gateway.services",
+      "resync.core.interfaces"
+    ],
+    "api_gateway.core": [
+      "resync.core.logger",
+      "resync.core.metrics",
+      "resync.core.audit_log"
+    ],
+    "api_gateway.services": [
+      "resync.core.cache_hierarchy",
+      "resync.models.tws",
+      "resync.core.logger",
+      "resync.core.interfaces"
+    ],
+    "config.cors": [
+      "resync.api.middleware.cors_config",
+      "resync.api.middleware.cors_middleware",
+      "resync.settings"
+    ],
+    "config.csp": [
+      "resync.settings",
+      "resync.api.middleware.csp_middleware"
+    ],
+    "config.enhanced_security": [
+      "resync.settings",
+      "resync.api.validation.enhanced_security_fixed"
+    ],
+    "core.agent_manager": [
+      "resync.services.tws_service",
+      "resync.services.mock_tws_service",
+      "resync.core.metrics",
+      "resync.settings",
+      "resync.core.exceptions",
+      "resync.models.agents",
+      "resync.core.fastapi_di",
+      "resync.core.interfaces",
+      "resync.tool_definitions.tws_tools"
+    ],
+    "core.alerting": [
+      "resync.core.teams_integration",
+      "resync.config.slo",
+      "resync.core.metrics"
+    ],
+    "core.anomaly_detector": [
+      "resync.core.simple_logger"
+    ],
+    "core.audit_db": [
+      "resync.settings",
+      "resync.core.connection_pool_manager"
+    ],
+    "core.audit_lock": [
+      "resync.settings",
+      "resync.core.exceptions"
+    ],
+    "core.audit_log": [
+      "resync.settings"
+    ],
+    "core.audit_queue": [
+      "resync.core.simple_logger",
+      "resync.settings",
+      "resync.core.exceptions",
+      "resync.core.audit_lock"
+    ],
+    "core.auto_recovery": [
+      "resync.core.circuit_breaker",
+      "resync.core.connection_pool_manager"
+    ],
+    "core.benchmarking": [
+      "resync.core.metrics",
+      "resync.core.interfaces"
+    ],
+    "core.cache_hierarchy": [
+      "resync.core.cache",
+      "resync.settings"
+    ],
+    "core.chaos_engineering": [
+      "resync.core.metrics",
+      "resync.core.audit_db",
+      "resync.core.agent_manager",
+      "resync.core.cache.unified_cache",
+      "resync.core.audit_log",
+      "resync.core"
+    ],
+    "core.circuit_breakers": [
+      "resync.core.simple_logger",
+      "resync.core.metrics",
+      "resync.core.exceptions"
+    ],
+    "core.config_watcher": [
+      "resync.core.di_container",
+      "resync.core.agent_manager",
+      "resync.core.interfaces",
+      "resync.core.connection_manager"
+    ],
+    "core.connection_manager": [
+      "resync.core.websocket_pool_manager"
+    ],
+    "core.connection_pool_manager": [
+      "resync.core.pools.http_pool",
+      "resync.core.pools.base_pool",
+      "resync.core.pools.redis_pool",
+      "resync.core.smart_pooling",
+      "resync.core.simple_logger",
+      "resync.core.pools.pool_manager",
+      "resync.core.pools.db_pool"
+    ],
+    "core.container": [
+      "resync.services.tws_service",
+      "resync.services.mock_tws_service",
+      "resync.core.knowledge_graph",
+      "resync.settings",
+      "resync.core.di_container",
+      "resync.core.interfaces",
+      "resync.core.agent_manager",
+      "resync.core.connection_manager"
+    ],
+    "core.database_optimizer": [
+      "resync.core.simple_logger"
+    ],
+    "core.dependencies": [
+      "resync.settings",
+      "resync.services.tws_service",
+      "resync.core.agent_manager",
+      "resync.services.mock_tws_service"
+    ],
+    "core.distributed_tracing": [
+      "resync.core.simple_logger"
+    ],
+    "core.di_container": [
+      "resync.core.audit_queue",
+      "resync.core.simple_logger"
+    ],
+    "core.encrypted_audit": [
+      "resync.core.simple_logger"
+    ],
+    "core.fastapi_di": [
+      "resync.core.file_ingestor",
+      "resync.services.tws_service",
+      "resync.services.mock_tws_service",
+      "resync.core.knowledge_graph",
+      "resync.settings",
+      "resync.core.teams_integration",
+      "resync.core.di_container",
+      "resync.core.interfaces",
+      "resync.core.simple_logger",
+      "resync.core.agent_manager",
+      "resync.core.audit_queue",
+      "resync.core.connection_manager"
+    ],
+    "core.file_ingestor": [
+      "resync.core.simple_logger",
+      "resync.settings",
+      "resync.core.interfaces",
+      "resync.core.exceptions"
+    ],
+    "core.health_service": [
+      "resync.settings",
+      "resync.core.health_models",
+      "resync.core.cache",
+      "resync.core.connection_pool_manager",
+      "resync.core.circuit_breaker"
+    ],
+    "core.ia_auditor": [
+      "resync.core.utils.json_parser",
+      "resync.settings",
+      "resync.core.knowledge_graph",
+      "resync.core.constants",
+      "resync.core.audit_lock",
+      "resync.core.exceptions",
+      "resync.core.utils.llm",
+      "resync.core.simple_logger",
+      "resync.core.audit_queue"
+    ],
+    "core.incident_response": [
+      "resync.core.simple_logger"
+    ],
+    "core.knowledge_graph": [
+      "resync.core.simple_logger",
+      "resync.settings",
+      "resync.core.circuit_breaker",
+      "resync.core.exceptions"
+    ],
+    "core.knowledge_graph_circuit_breaker": [
+      "resync.core.simple_logger",
+      "resync.core.knowledge_graph",
+      "resync.core.health.circuit_breaker",
+      "resync.core.exceptions"
+    ],
+    "core.lifecycle": [
+      "resync.core.container",
+      "resync.core.connection_pool_manager",
+      "resync.core.interfaces",
+      "resync.core.audit_queue"
+    ],
+    "core.litellm_init": [
+      "resync.settings"
+    ],
+    "core.llm_monitor": [
+      "resync.core.cache",
+      "resync.core.utils.llm"
+    ],
+    "core.llm_optimizer": [
+      "resync.settings",
+      "resync.core.cache",
+      "resync.core.llm_monitor",
+      "resync.core.litellm_init",
+      "resync.core.utils.llm"
+    ],
+    "core.llm_wrapper": [
+      "resync.core.llm_optimizer",
+      "resync.core.utils.llm",
+      "resync.core.simple_logger"
+    ],
+    "core.logger": [
+      "resync.core.audit_log"
+    ],
+    "core.log_aggregator": [
+      "resync.core.distributed_tracing",
+      "resync.core.simple_logger"
+    ],
+    "core.metrics_collector": [
+      "resync.core.simple_logger"
+    ],
+    "core.migration_managers": [
+      "resync.core.cache",
+      "resync.services.tws_client_factory",
+      "resync.services.tws_service",
+      "resync.settings"
+    ],
+    "core.performance_optimizer": [
+      "resync.core.metrics"
+    ],
+    "core.predictive_analysis": [
+      "resync.core.circuit_breaker",
+      "resync.core.connection_pool_manager"
+    ],
+    "core.predictive_analyzer": [
+      "resync.core.circuit_breaker",
+      "resync.settings",
+      "resync.core.connection_pool_manager"
+    ],
+    "core.proactive_monitor": [
+      "resync.core.circuit_breaker",
+      "resync.core.health_service",
+      "resync.core.connection_pool_manager"
+    ],
+    "core.proactive_monitoring": [
+      "resync.core.circuit_breaker",
+      "resync.core.connection_pool_manager"
+    ],
+    "core.query_cache": [
+      "resync.core.advanced_cache",
+      "resync.core.simple_logger"
+    ],
+    "core.rag_health_check": [
+      "resync.core.file_ingestor",
+      "resync.settings",
+      "resync.core.interfaces",
+      "resync.core.simple_logger"
+    ],
+    "core.rag_watcher": [
+      "resync.settings",
+      "resync.core.interfaces"
+    ],
+    "core.rate_limiter": [
+      "resync.settings"
+    ],
+    "core.redis_init": [
+      "resync.core.container",
+      "resync.core.idempotency.manager",
+      "resync.settings"
+    ],
+    "core.resilience": [
+      "resync.core.simple_logger",
+      "resync.core.exceptions"
+    ],
+    "core.security_dashboard": [
+      "resync.core.simple_logger"
+    ],
+    "core.service_discovery": [
+      "resync.core.simple_logger"
+    ],
+    "core.simple_logger": [
+      "resync.settings"
+    ],
+    "core.smart_pooling": [
+      "resync.core.circuit_breaker",
+      "resync.core.simple_logger"
+    ],
+    "core.startup_validation": [
+      "resync.settings"
+    ],
+    "core.stress_testing": [
+      "resync.core.metrics",
+      "resync.core.cache",
+      "resync.core.audit_db",
+      "resync.core.agent_manager",
+      "resync.core"
+    ],
+    "core.structured_logger": [
+      "resync.core.context",
+      "resync.settings"
+    ],
+    "core.task_manager": [
+      "resync.core.simple_logger"
+    ],
+    "core.teams_integration": [
+      "resync.settings",
+      "resync.core.exceptions"
+    ],
+    "core.tws_monitor": [
+      "resync.core.teams_integration",
+      "resync.core.interfaces",
+      "resync.core.exceptions"
+    ],
+    "core.user_behavior": [
+      "resync.core.simple_logger"
+    ],
+    "core.websocket_pool_manager": [
+      "resync.settings",
+      "resync.core.metrics"
+    ],
+    "core": [
+      "resync.core.exceptions"
+    ],
+    "cqrs.commands": [
+      "resync.cqrs.base"
+    ],
+    "cqrs.command_handlers": [
+      "resync.cqrs.commands",
+      "resync.cqrs.base",
+      "resync.core.interfaces"
+    ],
+    "cqrs.dispatcher": [
+      "resync.cqrs.commands",
+      "resync.cqrs.base",
+      "resync.cqrs.query_handlers",
+      "resync.cqrs.queries",
+      "resync.cqrs.command_handlers"
+    ],
+    "cqrs.queries": [
+      "resync.cqrs.base"
+    ],
+    "cqrs.query_handlers": [
+      "resync.core.cache",
+      "resync.cqrs.base",
+      "resync.cqrs.queries",
+      "resync.core.interfaces"
+    ],
+    "services.http_client_factory": [
+      "resync.settings",
+      "resync.core.constants"
+    ],
+    "services.llm_service": [
+      "resync.settings",
+      "resync.core.exceptions"
+    ],
+    "services.mock_tws_service": [
+      "resync.models.tws"
+    ],
+    "services.rag_client": [
+      "resync.settings",
+      "resync.core.resilience",
+      "resync.core.simple_logger"
+    ],
+    "services.tws_client_factory": [
+      "resync.services.tws_service"
+    ],
+    "services.tws_service": [
+      "resync.core.resilience",
+      "resync.settings",
+      "resync.services.http_client_factory",
+      "resync.models.tws",
+      "resync.core.exceptions",
+      "resync.core.connection_pool_manager",
+      "resync.core.cache_hierarchy"
+    ],
+    "tool_definitions.tws_tools": [
+      "resync.services.tws_service",
+      "resync.core.exceptions"
+    ],
+    "RAG.microservice.tests.test_ingest": [
+      "resync.RAG.microservice.core.config",
+      "resync.RAG.microservice.core.ingest",
+      "resync.RAG.microservice.core.interfaces"
+    ],
+    "RAG.microservice.tests.test_retriever": [
+      "resync.RAG.microservice.core.config",
+      "resync.RAG.microservice.core.interfaces",
+      "resync.RAG.microservice.core.retriever"
+    ],
+    "fastapi_app.tests.conftest": [
+      "resync.fastapi_app.main"
+    ],
+    "fastapi_app.tests.test_agents": [
+      "resync.fastapi_app.main"
+    ],
+    "fastapi_app.tests.test_audit": [
+      "resync.fastapi_app.main"
+    ],
+    "fastapi_app.tests.test_auth": [
+      "resync.fastapi_app.main"
+    ],
+    "fastapi_app.tests.test_chat": [
+      "resync.fastapi_app.main"
+    ],
+    "fastapi_app.tests.test_rag": [
+      "resync.fastapi_app.main"
+    ],
+    "fastapi_app.api.websocket.handlers": [
+      "resync.services.llm_service"
+    ],
+    "fastapi_app.api.v1.routes.admin": [
+      "resync.settings",
+      "resync.core.teams_integration",
+      "resync.api.auth",
+      "resync.core.fastapi_di",
+      "resync.core.interfaces"
+    ],
+    "fastapi_app.api.v1.routes.chat": [
+      "resync.RAG.microservice.core.ingest",
+      "resync.RAG.microservice.core.embedding_service",
+      "resync.RAG.microservice.core.retriever",
+      "resync.RAG.microservice.core.vector_store"
+    ],
+    "fastapi_app.api.v1.routes.endpoints": [
+      "resync.api.utils.error_handlers",
+      "resync.api.circuit_breaker_metrics",
+      "resync.settings",
+      "resync.core.metrics",
+      "resync.core.llm_wrapper",
+      "resync.core.alerting",
+      "resync.core.tws_monitor",
+      "resync.core.logger",
+      "resync.api.auth",
+      "resync.core.fastapi_di",
+      "resync.core.container",
+      "resync.core.benchmarking",
+      "resync.cqrs.dispatcher",
+      "resync.core.interfaces",
+      "resync.core.rate_limiter",
+      "resync.core.encryption_service",
+      "resync.core.runbooks",
+      "resync.cqrs.queries"
+    ],
+    "fastapi_app.api.v1.routes.health": [
+      "resync.core.health_service",
+      "resync.core.health_models",
+      "resync.core.metrics"
+    ],
+    "core.cache.cache_factory": [
+      "resync.core.cache.base_cache",
+      "resync.core.cache_with_stampede_protection",
+      "resync.core.cache.unified_cache"
+    ],
+    "core.cache.memory_manager": [
+      "resync.core.metrics"
+    ],
+    "core.cache.strategies": [
+      "resync.core.cache.memory_manager",
+      "resync.core.metrics",
+      "resync.core.write_ahead_log"
+    ],
+    "core.cache.unified_cache": [
+      "resync.core.cache.persistence_manager",
+      "resync.core.cache.base_cache",
+      "resync.core.cache.transaction_manager",
+      "resync.core.exceptions",
+      "resync.core.write_ahead_log",
+      "resync.core.cache.memory_manager"
+    ],
+    "core.health.component_cache_manager": [
+      "resync.core.health_models"
+    ],
+    "core.health.enhanced_health_config_manager": [
+      "resync.core.health_models"
+    ],
+    "core.health.global_health_service_manager": [
+      "resync.core.health_models"
+    ],
+    "core.health.health_alerting": [
+      "resync.core.health_models"
+    ],
+    "core.health.health_check_service": [
+      "resync.core.health_models"
+    ],
+    "core.health.health_check_utils": [
+      "resync.core.health_models"
+    ],
+    "core.health.health_config_manager": [
+      "resync.core.health_models"
+    ],
+    "core.health.health_history_manager": [
+      "resync.core.health_models"
+    ],
+    "core.health.health_metrics_simplified": [
+      "resync.core.health_models"
+    ],
+    "core.health.health_monitoring_coordinator": [
+      "resync.core.health_models"
+    ],
+    "core.health.health_monitoring_observer": [
+      "resync.core.health_models"
+    ],
+    "core.health.health_service_consolidated": [
+      "resync.core.websocket_pool_manager",
+      "resync.core.connection_pool_manager",
+      "resync.core.health_models",
+      "resync.core.cache.unified_cache"
+    ],
+    "core.health.health_service_facade": [
+      "resync.core.health_models"
+    ],
+    "core.health.health_service_manager": [
+      "resync.core.health_models"
+    ],
+    "core.health.health_service_orchestrator": [
+      "resync.settings",
+      "resync.core.health_models",
+      "resync.core.cache",
+      "resync.core.health_utils",
+      "resync.core.connection_manager"
+    ],
+    "core.health.health_service_simplified": [
+      "resync.settings",
+      "resync.core.websocket_pool_manager",
+      "resync.core.health_models",
+      "resync.core.cache",
+      "resync.core.connection_pool_manager"
+    ],
+    "core.health.monitoring_aggregator": [
+      "resync.core.health_service",
+      "resync.core.health_models"
+    ],
+    "core.health.performance_metrics_collector": [
+      "resync.core.connection_pool_manager"
+    ],
+    "core.health.proactive_monitor": [
+      "resync.core.circuit_breaker",
+      "resync.settings",
+      "resync.core.connection_pool_manager",
+      "resync.core.connection_manager"
+    ],
+    "core.health.recovery_manager": [
+      "resync.core.async_cache",
+      "resync.core.connection_pool_manager",
+      "resync.core.health_models"
+    ],
+    "core.health.refactored_health_check_service": [
+      "resync.core.health_models"
+    ],
+    "core.health.refactored_health_service_orchestrator": [
+      "resync.core.health_models"
+    ],
+    "core.idempotency.manager": [
+      "resync.core.idempotency.storage",
+      "resync.core.idempotency.exceptions",
+      "resync.core.idempotency.validation",
+      "resync.core.idempotency.models",
+      "resync.core.simple_logger",
+      "resync.core.idempotency.metrics",
+      "resync.core.idempotency.config"
+    ],
+    "core.idempotency.storage": [
+      "resync.core.idempotency.models",
+      "resync.core.idempotency.exceptions"
+    ],
+    "core.pools.connection_pool_monitor": [
+      "resync.core.pools.pool_manager",
+      "resync.core.simple_logger"
+    ],
+    "core.pools.db_pool": [
+      "resync.core.pools.base_pool",
+      "resync.core.exceptions"
+    ],
+    "core.pools.http_pool": [
+      "resync.core.pools.base_pool",
+      "resync.core.exceptions"
+    ],
+    "core.pools.pool_manager": [
+      "resync.core.pools.http_pool",
+      "resync.core.pools.base_pool",
+      "resync.settings",
+      "resync.core.exceptions",
+      "resync.core.pools.redis_pool",
+      "resync.core.pools.db_pool"
+    ],
+    "core.pools.redis_pool": [
+      "resync.core.redis_init"
+    ],
+    "core.utils.error_factories": [
+      "resync.models.error_models",
+      "resync.core.utils.error_utils",
+      "resync.core.exceptions_enhanced",
+      "resync.core.exceptions"
+    ],
+    "core.utils.error_utils": [
+      "resync.models.error_models",
+      "resync.settings",
+      "resync.core.exceptions_enhanced",
+      "resync.core.exceptions"
+    ],
+    "core.utils.llm_factories": [
+      "resync.core.litellm_init"
+    ],
+    "core.utils.resource_managers": [
+      "resync.core.utils.llm"
+    ],
+    "core.health.health_checkers.base_health_checker": [
+      "resync.core.health_models"
+    ],
+    "core.health.health_checkers.cache_health_checker": [
+      "resync.core.cache",
+      "resync.core.health_models"
+    ],
+    "core.health.health_checkers.connection_pools_health_checker": [
+      "resync.core.health_models",
+      "resync.core.connection_manager"
+    ],
+    "core.health.health_checkers.cpu_health_checker": [
+      "resync.core.health_models"
+    ],
+    "core.health.health_checkers.database_health_checker": [
+      "resync.core.health_models",
+      "resync.core.connection_manager"
+    ],
+    "core.health.health_checkers.filesystem_health_checker": [
+      "resync.core.health_models"
+    ],
+    "core.health.health_checkers.health_checker_factory": [
+      "resync.core.health_models"
+    ],
+    "core.health.health_checkers.memory_health_checker": [
+      "resync.core.health_models"
+    ],
+    "core.health.health_checkers.redis_health_checker": [
+      "resync.settings",
+      "resync.core.health_models"
+    ],
+    "core.health.health_checkers.tws_monitor_health_checker": [
+      "resync.settings",
+      "resync.core.health_models"
+    ],
+    "core.health.health_checkers.websocket_pool_health_checker": [
+      "resync.core.health_models"
+    ],
+    "core.health.monitors.cache_monitor": [
+      "resync.core.cache",
+      "resync.core.health_models"
+    ],
+    "core.health.monitors.connection_monitor": [
+      "resync.core.connection_pool_manager",
+      "resync.core.health_models"
+    ],
+    "core.health.monitors.database_monitor": [
+      "resync.core.connection_pool_manager",
+      "resync.core.health_models",
+      "resync.core.simple_logger"
+    ],
+    "core.health.monitors.filesystem_monitor": [
+      "resync.core.health_models",
+      "resync.core.simple_logger"
+    ],
+    "core.health.monitors.redis_monitor": [
+      "resync.settings",
+      "resync.core.health_models"
+    ],
+    "core.health.monitors.service_monitor": [
+      "resync.core.health_models"
+    ],
+    "core.health.monitors.system_monitor": [
+      "resync.core.health_models"
+    ],
+    "core.health.monitors.tws_monitor": [
+      "resync.settings",
+      "resync.core.health_models"
+    ],
+    "api.middleware.correlation_id": [
+      "resync.core.context"
+    ],
+    "api.middleware.cors_middleware": [
+      "resync.api.middleware.cors_config",
+      "resync.settings"
+    ],
+    "api.middleware.cors_monitoring": [
+      "resync.core.logger"
+    ],
+    "api.middleware.csp_middleware": [
+      "resync.csp_validation",
+      "resync.settings"
+    ],
+    "api.middleware.csrf_protection": [
+      "resync.core.simple_logger"
+    ],
+    "api.middleware.endpoint_utils": [
+      "resync.core.utils.error_utils",
+      "resync.core.logger",
+      "resync.core.metrics"
+    ],
+    "api.middleware.error_handler": [
+      "resync.core.metrics",
+      "resync.core.utils.error_utils",
+      "resync.core.exceptions_enhanced",
+      "resync.core.exceptions"
+    ],
+    "api.middleware.idempotency": [
+      "resync.core.idempotency",
+      "resync.core.context",
+      "resync.core.simple_logger"
+    ],
+    "api.middleware.oauth2_middleware": [
+      "resync.security.oauth2"
+    ],
+    "api.middleware": [
+      "resync.api.middleware.csrf_protection",
+      "resync.api.middleware.correlation_id"
+    ],
+    "api.models.health": [
+      "resync.core.health_models"
+    ],
+    "api.utils.error_handlers": [
+      "resync.core.constants",
+      "resync.core.simple_logger"
+    ],
+    "api.utils.stream_handler": [
+      "resync.core.simple_logger"
+    ],
+    "api.validation.enhanced_security": [
+      "resync.api.validation.common",
+      "resync.settings"
+    ],
+    "api.validation.enhanced_security_fixed": [
+      "resync.api.validation.common",
+      "resync.settings"
+    ]
+  },
+  "reverse_dependency_graph": {
+    "resync.core.simple_logger": [
+      "core.task_manager",
+      "core.knowledge_graph",
+      "api.rfc_examples",
+      "core.metrics_collector",
+      "api.exception_handlers",
+      "core.circuit_breakers",
+      "core.service_discovery",
+      "core.security_dashboard",
+      "services.rag_client",
+      "core.audit_queue",
+      "core.health.monitors.database_monitor",
+      "core.idempotency.manager",
+      "core.distributed_tracing",
+      "core.llm_wrapper",
+      "core.database_optimizer",
+      "core.encrypted_audit",
+      "core.knowledge_graph_circuit_breaker",
+      "core.user_behavior",
+      "api.utils.stream_handler",
+      "api.connection_pool_monitoring",
+      "lifespan",
+      "api.circuit_breaker_metrics",
+      "api.auth",
+      "api.gateway",
+      "core.health.monitors.filesystem_monitor",
+      "core.anomaly_detector",
+      "core.resilience",
+      "core.pools.connection_pool_monitor",
+      "api.operations",
+      "api.dependencies",
+      "core.incident_response",
+      "core.file_ingestor",
+      "api.middleware.idempotency",
+      "core.ia_auditor",
+      "core.log_aggregator",
+      "core.fastapi_di",
+      "core.smart_pooling",
+      "api.utils.error_handlers",
+      "core.di_container",
+      "core.connection_pool_manager",
+      "api.middleware.csrf_protection",
+      "core.rag_health_check",
+      "core.query_cache",
+      "app_factory"
+    ],
+    "resync.settings": [
+      "api.middleware.csp_middleware",
+      "core.knowledge_graph",
+      "core.health.health_checkers.redis_health_checker",
+      "api.endpoints",
+      "services.tws_service",
+      "core.rag_watcher",
+      "api.admin",
+      "core.predictive_analyzer",
+      "api.validation.enhanced_security_fixed",
+      "core.llm_optimizer",
+      "core.rate_limiter",
+      "services.llm_service",
+      "services.rag_client",
+      "fastapi_app.api.v1.routes.admin",
+      "core.health.monitors.redis_monitor",
+      "core.audit_queue",
+      "main_clean",
+      "core.agent_manager",
+      "core.container",
+      "config.cors",
+      "config.enhanced_security",
+      "core.pools.pool_manager",
+      "core.startup_validation",
+      "core.migration_managers",
+      "main",
+      "services.http_client_factory",
+      "config.csp",
+      "api.validation.enhanced_security",
+      "core.audit_log",
+      "fastapi_app.api.v1.routes.endpoints",
+      "core.litellm_init",
+      "core.websocket_pool_manager",
+      "core.health.health_service_orchestrator",
+      "lifespan",
+      "api.auth",
+      "core.health.health_checkers.tws_monitor_health_checker",
+      "core.health.monitors.tws_monitor",
+      "core.dependencies",
+      "core.health_service",
+      "core.health.health_service_simplified",
+      "core.utils.error_utils",
+      "core.redis_init",
+      "core.cache_hierarchy",
+      "core.audit_db",
+      "api.cors_monitoring",
+      "core.file_ingestor",
+      "core.simple_logger",
+      "core.structured_logger",
+      "core.ia_auditor",
+      "api.cache",
+      "core.fastapi_di",
+      "core.rag_health_check",
+      "core.health.proactive_monitor",
+      "api.middleware.cors_middleware",
+      "core.teams_integration",
+      "core.audit_lock",
+      "app_factory"
+    ],
+    "resync.api.middleware.correlation_id": [
+      "api.middleware",
+      "app_factory"
+    ],
+    "resync.api.middleware.cors_config": [
+      "api.middleware.cors_middleware",
+      "config.cors",
+      "app_factory"
+    ],
+    "resync.api.middleware.csp_middleware": [
+      "app_factory",
+      "config.csp"
+    ],
+    "resync.api.middleware.error_handler": [
+      "app_factory"
+    ],
+    "resync.config.security": [
+      "app_factory"
+    ],
+    "resync.api.exception_handlers": [
+      "app_factory"
+    ],
+    "resync.core.fastapi_di": [
+      "fastapi_app.api.v1.routes.endpoints",
+      "core.agent_manager",
+      "api.rag_upload",
+      "api.audit",
+      "api.cache",
+      "api.endpoints",
+      "api.admin",
+      "api.chat",
+      "test_agents",
+      "api.agents",
+      "fastapi_app.api.v1.routes.admin",
+      "app_factory"
+    ],
+    "resync.api.admin": [
+      "app_factory"
+    ],
+    "resync.api.agents": [
+      "app_factory"
+    ],
+    "resync.api.audit": [
+      "app_factory"
+    ],
+    "resync.api.cache": [
+      "app_factory"
+    ],
+    "resync.api.chat": [
+      "app_factory"
+    ],
+    "resync.api.cors_monitoring": [
+      "app_factory"
+    ],
+    "resync.api.health": [
+      "app_factory"
+    ],
+    "resync.api.performance": [
+      "app_factory"
+    ],
+    "resync.api_gateway.container": [
+      "app_factory",
+      "lifespan"
+    ],
+    "resync.core.container": [
+      "fastapi_app.api.v1.routes.endpoints",
+      "lifespan",
+      "api.endpoints",
+      "core.lifecycle",
+      "core.redis_init",
+      "api.dependencies",
+      "app_factory"
+    ],
+    "resync.core.exceptions": [
+      "core.knowledge_graph",
+      "api.rfc_examples",
+      "services.tws_service",
+      "tool_definitions.tws_tools",
+      "api.exception_handlers",
+      "core.circuit_breakers",
+      "services.llm_service",
+      "core.utils.error_factories",
+      "core.audit_queue",
+      "core.agent_manager",
+      "api.rag_upload",
+      "core.pools.pool_manager",
+      "api.chat",
+      "core.knowledge_graph_circuit_breaker",
+      "core.cache.unified_cache",
+      "core.pools.db_pool",
+      "core",
+      "core.pools.http_pool",
+      "lifespan",
+      "core.resilience",
+      "core.utils.error_utils",
+      "api.dependencies",
+      "core.file_ingestor",
+      "core.tws_monitor",
+      "core.ia_auditor",
+      "api.middleware.error_handler",
+      "core.teams_integration",
+      "core.audit_lock",
+      "app_factory"
+    ],
+    "resync.core.interfaces": [
+      "core.config_watcher",
+      "api.endpoints",
+      "core.rag_watcher",
+      "api.admin",
+      "core.lifecycle",
+      "api_gateway.services",
+      "cqrs.command_handlers",
+      "fastapi_app.api.v1.routes.admin",
+      "core.agent_manager",
+      "core.container",
+      "api.rag_upload",
+      "api.audit",
+      "api.chat",
+      "fastapi_app.api.v1.routes.endpoints",
+      "lifespan",
+      "api_gateway.container",
+      "core.file_ingestor",
+      "cqrs.query_handlers",
+      "core.tws_monitor",
+      "core.benchmarking",
+      "api.cache",
+      "core.fastapi_di",
+      "core.rag_health_check",
+      "app_factory"
+    ],
+    "resync.core.tws_monitor": [
+      "api.endpoints",
+      "fastapi_app.api.v1.routes.endpoints",
+      "app_factory",
+      "lifespan"
+    ],
+    "resync.cqrs.dispatcher": [
+      "api.endpoints",
+      "fastapi_app.api.v1.routes.endpoints",
+      "app_factory",
+      "lifespan"
+    ],
+    "resync.lifespan": [
+      "app_factory"
+    ],
+    "resync.api.endpoints": [
+      "app_factory"
+    ],
+    "resync.api.rag_upload": [
+      "app_factory"
+    ],
+    "resync.core.csp_template_response": [
+      "app_factory"
+    ],
+    "resync.csp_validation": [
+      "api.middleware.csp_middleware",
+      "app_factory"
+    ],
+    "resync.core.rate_limiter": [
+      "api.cache",
+      "api.endpoints",
+      "fastapi_app.api.v1.routes.endpoints",
+      "app_factory"
+    ],
+    "resync.core.redis_init": [
+      "core.pools.redis_pool",
+      "lifespan"
+    ],
+    "resync.core.async_cache": [
+      "core.health.recovery_manager",
+      "lifespan"
+    ],
+    "resync.api.dependencies": [
+      "api.operations",
+      "api.audit",
+      "lifespan"
+    ],
+    "resync.core.connection_pool_manager": [
+      "core.health.monitors.database_monitor",
+      "core.health.monitors.connection_monitor",
+      "core.health.recovery_manager",
+      "core.proactive_monitor",
+      "core.proactive_monitoring",
+      "services.tws_service",
+      "core.health.health_service_simplified",
+      "core.auto_recovery",
+      "core.predictive_analyzer",
+      "main",
+      "core.health_service",
+      "core.health.health_service_consolidated",
+      "core.health.proactive_monitor",
+      "core.lifecycle",
+      "core.health.performance_metrics_collector",
+      "core.predictive_analysis",
+      "core.audit_db"
+    ],
+    "resync.core.encoding_utils": [
+      "main_clean",
+      "main"
+    ],
+    "resync.core.startup_validation": [
+      "main_clean",
+      "main"
+    ],
+    "resync.fastapi_app.main": [
+      "main_clean",
+      "fastapi_app.tests.test_auth",
+      "fastapi_app.tests.test_audit",
+      "fastapi_app.tests.test_agents",
+      "fastapi_app.tests.test_chat",
+      "main",
+      "fastapi_app.tests.test_rag",
+      "fastapi_app.tests.conftest"
+    ],
+    "resync.core.agent_manager": [
+      "core.container",
+      "core.config_watcher",
+      "core.chaos_engineering",
+      "api.endpoints",
+      "core.fastapi_di",
+      "core.stress_testing",
+      "test_agents",
+      "core.dependencies"
+    ],
+    "resync.main": [
+      "test_agents"
+    ],
+    "resync.api.auth": [
+      "api.endpoints",
+      "fastapi_app.api.v1.routes.endpoints",
+      "api.admin",
+      "fastapi_app.api.v1.routes.admin"
+    ],
+    "resync.core.teams_integration": [
+      "core.tws_monitor",
+      "core.fastapi_di",
+      "api.admin",
+      "fastapi_app.api.v1.routes.admin",
+      "core.alerting"
+    ],
+    "resync.core.exceptions_enhanced": [
+      "api.exception_handlers",
+      "api.agents",
+      "api.middleware.error_handler",
+      "core.utils.error_utils",
+      "core.utils.error_factories"
+    ],
+    "resync.core.security": [
+      "api.agents",
+      "api.chat"
+    ],
+    "resync.core.idempotency.manager": [
+      "api.operations",
+      "core.redis_init",
+      "api.dependencies",
+      "api.audit"
+    ],
+    "resync.core.logger": [
+      "fastapi_app.api.v1.routes.endpoints",
+      "api.audit",
+      "api.endpoints",
+      "api.middleware.endpoint_utils",
+      "api_gateway.core",
+      "api_gateway.services",
+      "api.middleware.cors_monitoring"
+    ],
+    "resync.api.utils.stream_handler": [
+      "api.chat"
+    ],
+    "resync.core.ia_auditor": [
+      "api.chat"
+    ],
+    "resync.core.llm_wrapper": [
+      "api.endpoints",
+      "fastapi_app.api.v1.routes.endpoints",
+      "api.chat"
+    ],
+    "resync.core.circuit_breaker": [
+      "core.knowledge_graph",
+      "core.proactive_monitor",
+      "core.proactive_monitoring",
+      "core.smart_pooling",
+      "api.circuit_breaker_metrics",
+      "api.gateway",
+      "core.auto_recovery",
+      "core.predictive_analyzer",
+      "core.health_service",
+      "core.health.proactive_monitor",
+      "core.predictive_analysis"
+    ],
+    "resync.core.health_service": [
+      "core.health.monitoring_aggregator",
+      "api.circuit_breaker_metrics",
+      "core.proactive_monitor",
+      "fastapi_app.api.v1.routes.health"
+    ],
+    "resync.core.pools.connection_pool_monitor": [
+      "api.connection_pool_monitoring"
+    ],
+    "resync.models.validation": [
+      "api.cors_monitoring",
+      "api.rag_upload"
+    ],
+    "resync.core.context": [
+      "api.middleware.idempotency",
+      "core.structured_logger",
+      "api.exception_handlers",
+      "api.middleware.correlation_id",
+      "api.dependencies"
+    ],
+    "resync.api.utils.error_handlers": [
+      "api.endpoints",
+      "fastapi_app.api.v1.routes.endpoints"
+    ],
+    "resync.api.circuit_breaker_metrics": [
+      "api.endpoints",
+      "fastapi_app.api.v1.routes.endpoints"
+    ],
+    "resync.core.metrics": [
+      "fastapi_app.api.v1.routes.endpoints",
+      "core.agent_manager",
+      "core.websocket_pool_manager",
+      "api.health",
+      "core.benchmarking",
+      "core.chaos_engineering",
+      "core.performance_optimizer",
+      "api.endpoints",
+      "core.stress_testing",
+      "fastapi_app.api.v1.routes.health",
+      "core.cache.memory_manager",
+      "core.circuit_breakers",
+      "api.middleware.endpoint_utils",
+      "api_gateway.core",
+      "api.middleware.error_handler",
+      "core.alerting",
+      "core.cache.strategies"
+    ],
+    "resync.core.runbooks": [
+      "api.endpoints",
+      "fastapi_app.api.v1.routes.endpoints"
+    ],
+    "resync.cqrs.queries": [
+      "cqrs.dispatcher",
+      "api.endpoints",
+      "cqrs.query_handlers",
+      "fastapi_app.api.v1.routes.endpoints"
+    ],
+    "resync.core.benchmarking": [
+      "api.endpoints",
+      "fastapi_app.api.v1.routes.endpoints"
+    ],
+    "resync.core.alerting": [
+      "api.endpoints",
+      "fastapi_app.api.v1.routes.endpoints"
+    ],
+    "resync.core.encryption_service": [
+      "api.endpoints",
+      "fastapi_app.api.v1.routes.endpoints"
+    ],
+    "resync.api.models.responses": [
+      "api.exception_handlers",
+      "api.rfc_examples"
+    ],
+    "resync.core.health_models": [
+      "core.health.health_alerting",
+      "core.health.recovery_manager",
+      "api.health",
+      "core.health.health_checkers.memory_health_checker",
+      "core.health.health_checkers.redis_health_checker",
+      "core.health.health_history_manager",
+      "core.health.health_metrics_simplified",
+      "core.health.monitors.redis_monitor",
+      "core.health.health_monitoring_coordinator",
+      "core.health.monitors.cache_monitor",
+      "core.health.monitors.database_monitor",
+      "core.health.monitors.connection_monitor",
+      "core.health.health_checkers.health_checker_factory",
+      "core.health.health_checkers.database_health_checker",
+      "core.health.health_service_manager",
+      "api.health_simplified",
+      "core.health.health_checkers.cache_health_checker",
+      "core.health.health_checkers.connection_pools_health_checker",
+      "api.models.health",
+      "core.health.global_health_service_manager",
+      "core.health.refactored_health_check_service",
+      "core.health.monitors.system_monitor",
+      "core.health.health_service_orchestrator",
+      "core.health.health_checkers.websocket_pool_health_checker",
+      "core.health.health_monitoring_observer",
+      "core.health.monitors.filesystem_monitor",
+      "core.health.health_checkers.tws_monitor_health_checker",
+      "core.health.enhanced_health_config_manager",
+      "core.health.monitors.tws_monitor",
+      "core.health_service",
+      "core.health.health_service_simplified",
+      "core.health.health_checkers.base_health_checker",
+      "core.health.component_cache_manager",
+      "core.health.health_checkers.cpu_health_checker",
+      "fastapi_app.api.v1.routes.health",
+      "core.health.health_check_utils",
+      "core.health.health_checkers.filesystem_health_checker",
+      "core.health.monitors.service_monitor",
+      "core.health.refactored_health_service_orchestrator",
+      "core.health.health_config_manager",
+      "core.health.health_service_consolidated",
+      "core.health.health_service_facade",
+      "core.health.health_check_service",
+      "core.health.monitoring_aggregator"
+    ],
+    "resync.core.health.health_service_consolidated": [
+      "api.health"
+    ],
+    "resync.core.health.health_service_manager_simplified": [
+      "api.health_simplified"
+    ],
+    "resync.core.performance_optimizer": [
+      "api.performance"
+    ],
+    "resync.core.pools.pool_manager": [
+      "core.connection_pool_manager",
+      "api.performance",
+      "core.pools.connection_pool_monitor"
+    ],
+    "resync.core.resource_manager": [
+      "api.performance"
+    ],
+    "resync.api.models.links": [
+      "api.rfc_examples"
+    ],
+    "resync.api_gateway.services": [
+      "api_gateway.container"
+    ],
+    "resync.core.audit_log": [
+      "core.chaos_engineering",
+      "core.logger",
+      "api_gateway.core"
+    ],
+    "resync.core.cache_hierarchy": [
+      "api_gateway.services",
+      "services.tws_service"
+    ],
+    "resync.models.tws": [
+      "api_gateway.services",
+      "services.tws_service",
+      "services.mock_tws_service"
+    ],
+    "resync.api.middleware.cors_middleware": [
+      "config.cors"
+    ],
+    "resync.api.validation.enhanced_security_fixed": [
+      "config.enhanced_security"
+    ],
+    "resync.tool_definitions.tws_tools": [
+      "core.agent_manager"
+    ],
+    "resync.services.mock_tws_service": [
+      "core.agent_manager",
+      "core.container",
+      "core.fastapi_di",
+      "core.dependencies"
+    ],
+    "resync.services.tws_service": [
+      "core.agent_manager",
+      "core.container",
+      "tool_definitions.tws_tools",
+      "core.fastapi_di",
+      "core.migration_managers",
+      "core.dependencies",
+      "services.tws_client_factory"
+    ],
+    "resync.models.agents": [
+      "core.agent_manager"
+    ],
+    "resync.config.slo": [
+      "core.alerting"
+    ],
+    "resync.core.audit_lock": [
+      "core.audit_queue",
+      "core.ia_auditor"
+    ],
+    "resync.core.cache": [
+      "cqrs.query_handlers",
+      "core.llm_monitor",
+      "core.health.health_service_orchestrator",
+      "core.stress_testing",
+      "core.migration_managers",
+      "core.health.health_checkers.cache_health_checker",
+      "core.health_service",
+      "core.llm_optimizer",
+      "core.health.health_service_simplified",
+      "core.health.monitors.cache_monitor",
+      "core.cache_hierarchy"
+    ],
+    "resync.core": [
+      "core.stress_testing",
+      "core.chaos_engineering"
+    ],
+    "resync.core.audit_db": [
+      "core.stress_testing",
+      "core.chaos_engineering"
+    ],
+    "resync.core.cache.unified_cache": [
+      "core.cache.cache_factory",
+      "core.health.health_service_consolidated",
+      "core.chaos_engineering"
+    ],
+    "resync.core.di_container": [
+      "core.fastapi_di",
+      "core.container",
+      "core.config_watcher"
+    ],
+    "resync.core.connection_manager": [
+      "core.health.health_service_orchestrator",
+      "core.container",
+      "core.config_watcher",
+      "core.health.health_checkers.database_health_checker",
+      "core.fastapi_di",
+      "core.health.health_checkers.connection_pools_health_checker",
+      "core.health.proactive_monitor"
+    ],
+    "resync.core.websocket_pool_manager": [
+      "core.health.health_service_consolidated",
+      "core.connection_manager",
+      "core.health.health_service_simplified"
+    ],
+    "resync.core.pools.base_pool": [
+      "core.connection_pool_manager",
+      "core.pools.db_pool",
+      "core.pools.pool_manager",
+      "core.pools.http_pool"
+    ],
+    "resync.core.pools.db_pool": [
+      "core.connection_pool_manager",
+      "core.pools.pool_manager"
+    ],
+    "resync.core.pools.http_pool": [
+      "core.connection_pool_manager",
+      "core.pools.pool_manager"
+    ],
+    "resync.core.pools.redis_pool": [
+      "core.connection_pool_manager",
+      "core.pools.pool_manager"
+    ],
+    "resync.core.smart_pooling": [
+      "core.connection_pool_manager"
+    ],
+    "resync.core.knowledge_graph": [
+      "core.fastapi_di",
+      "core.container",
+      "core.knowledge_graph_circuit_breaker",
+      "core.ia_auditor"
+    ],
+    "resync.core.audit_queue": [
+      "core.fastapi_di",
+      "core.di_container",
+      "core.ia_auditor",
+      "core.lifecycle"
+    ],
+    "resync.core.file_ingestor": [
+      "core.fastapi_di",
+      "core.rag_health_check"
+    ],
+    "resync.core.constants": [
+      "api.utils.error_handlers",
+      "services.http_client_factory",
+      "core.ia_auditor"
+    ],
+    "resync.core.utils.json_parser": [
+      "core.ia_auditor"
+    ],
+    "resync.core.utils.llm": [
+      "core.llm_monitor",
+      "core.utils.resource_managers",
+      "core.ia_auditor",
+      "core.llm_wrapper",
+      "core.llm_optimizer"
+    ],
+    "resync.core.health.circuit_breaker": [
+      "core.knowledge_graph_circuit_breaker"
+    ],
+    "resync.core.litellm_init": [
+      "core.utils.llm_factories",
+      "core.llm_optimizer"
+    ],
+    "resync.core.llm_monitor": [
+      "core.llm_optimizer"
+    ],
+    "resync.core.llm_optimizer": [
+      "core.llm_wrapper"
+    ],
+    "resync.core.distributed_tracing": [
+      "core.log_aggregator"
+    ],
+    "resync.services.tws_client_factory": [
+      "core.migration_managers"
+    ],
+    "resync.core.advanced_cache": [
+      "core.query_cache"
+    ],
+    "resync.cqrs.base": [
+      "cqrs.query_handlers",
+      "cqrs.queries",
+      "cqrs.dispatcher",
+      "cqrs.commands",
+      "cqrs.command_handlers"
+    ],
+    "resync.cqrs.commands": [
+      "cqrs.dispatcher",
+      "cqrs.command_handlers"
+    ],
+    "resync.cqrs.command_handlers": [
+      "cqrs.dispatcher"
+    ],
+    "resync.cqrs.query_handlers": [
+      "cqrs.dispatcher"
+    ],
+    "resync.core.resilience": [
+      "services.rag_client",
+      "services.tws_service"
+    ],
+    "resync.services.http_client_factory": [
+      "services.tws_service"
+    ],
+    "resync.RAG.microservice.core.config": [
+      "RAG.microservice.tests.test_ingest",
+      "RAG.microservice.tests.test_retriever"
+    ],
+    "resync.RAG.microservice.core.ingest": [
+      "RAG.microservice.tests.test_ingest",
+      "fastapi_app.api.v1.routes.chat"
+    ],
+    "resync.RAG.microservice.core.interfaces": [
+      "RAG.microservice.tests.test_ingest",
+      "RAG.microservice.tests.test_retriever"
+    ],
+    "resync.RAG.microservice.core.retriever": [
+      "RAG.microservice.tests.test_retriever",
+      "fastapi_app.api.v1.routes.chat"
+    ],
+    "resync.services.llm_service": [
+      "fastapi_app.api.websocket.handlers"
+    ],
+    "resync.RAG.microservice.core.embedding_service": [
+      "fastapi_app.api.v1.routes.chat"
+    ],
+    "resync.RAG.microservice.core.vector_store": [
+      "fastapi_app.api.v1.routes.chat"
+    ],
+    "resync.core.cache.base_cache": [
+      "core.cache.cache_factory",
+      "core.cache.unified_cache"
+    ],
+    "resync.core.cache_with_stampede_protection": [
+      "core.cache.cache_factory"
+    ],
+    "resync.core.cache.memory_manager": [
+      "core.cache.strategies",
+      "core.cache.unified_cache"
+    ],
+    "resync.core.write_ahead_log": [
+      "core.cache.strategies",
+      "core.cache.unified_cache"
+    ],
+    "resync.core.cache.persistence_manager": [
+      "core.cache.unified_cache"
+    ],
+    "resync.core.cache.transaction_manager": [
+      "core.cache.unified_cache"
+    ],
+    "resync.core.health_utils": [
+      "core.health.health_service_orchestrator"
+    ],
+    "resync.core.idempotency.config": [
+      "core.idempotency.manager"
+    ],
+    "resync.core.idempotency.exceptions": [
+      "core.idempotency.manager",
+      "core.idempotency.storage"
+    ],
+    "resync.core.idempotency.metrics": [
+      "core.idempotency.manager"
+    ],
+    "resync.core.idempotency.models": [
+      "core.idempotency.manager",
+      "core.idempotency.storage"
+    ],
+    "resync.core.idempotency.storage": [
+      "core.idempotency.manager"
+    ],
+    "resync.core.idempotency.validation": [
+      "core.idempotency.manager"
+    ],
+    "resync.models.error_models": [
+      "core.utils.error_utils",
+      "core.utils.error_factories"
+    ],
+    "resync.core.utils.error_utils": [
+      "api.middleware.error_handler",
+      "api.middleware.endpoint_utils",
+      "core.utils.error_factories"
+    ],
+    "resync.core.idempotency": [
+      "api.middleware.idempotency"
+    ],
+    "resync.security.oauth2": [
+      "api.middleware.oauth2_middleware"
+    ],
+    "resync.api.middleware.csrf_protection": [
+      "api.middleware"
+    ],
+    "resync.api.validation.common": [
+      "api.validation.enhanced_security_fixed",
+      "api.validation.enhanced_security"
+    ]
+  }
+}

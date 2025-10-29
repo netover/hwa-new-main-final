@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements files
-COPY requirements/base.txt requirements/dev.txt requirements/fastapi.txt requirements/prod.txt requirements/test.txt ./requirements/
+COPY requirements/base.txt requirements/dev.txt requirements/fastapi.txt requirements/prod.txt ./requirements/
 
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements/fastapi.txt

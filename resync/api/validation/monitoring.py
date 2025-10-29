@@ -3,13 +3,11 @@
 import re
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Annotated, Any
 
-from pydantic import field_validator, StringConstraints, Field, ConfigDict
-from pydantic.types import constr
+from pydantic import ConfigDict, Field, StringConstraints, field_validator
 
 from .common import BaseValidatedModel, ValidationPatterns
-from typing_extensions import Annotated
 
 
 class MetricType(str, Enum):
@@ -58,7 +56,7 @@ class HealthStatus(str, Enum):
 class SystemMetricRequest(BaseValidatedModel):
     """System metric request validation."""
 
-    metric_types: List[MetricType] = Field(
+    metric_types: list[MetricType] = Field(
         default_factory=lambda: [MetricType.CPU, MetricType.MEMORY],
         description="Types of metrics to retrieve",
         min_length=1,
@@ -78,14 +76,20 @@ class SystemMetricRequest(BaseValidatedModel):
     )
 
     granularity: str = Field(
-        default="1m", pattern=r"^(1m|5m|15m|1h|6h|24h)$", description="Data granularity"
+        default="1m",
+        pattern=r"^(1m|5m|15m|1h|6h|24h)$",
+        description="Data granularity",
     )
 
     format: str = Field(
-        default="json", pattern=r"^(json|csv|prometheus)$", description="Output format"
+        default="json",
+        pattern=r"^(json|csv|prometheus)$",
+        description="Output format",
     )
 
-    include_alerts: bool = Field(default=True, description="Include active alerts")
+    include_alerts: bool = Field(
+        default=True, description="Include active alerts"
+    )
 
     model_config = ConfigDict(
         extra="forbid",
@@ -106,9 +110,10 @@ class SystemMetricRequest(BaseValidatedModel):
 class CustomMetricRequest(BaseValidatedModel):
     """Custom metric submission request validation."""
 
-    metric_name: Annotated[str, StringConstraints(min_length=1, max_length=100, strip_whitespace=True)] = Field(
-        ..., description="Custom metric name"
-    )
+    metric_name: Annotated[
+        str,
+        StringConstraints(min_length=1, max_length=100, strip_whitespace=True),
+    ] = Field(..., description="Custom metric name")
 
     metric_value: float = Field(..., description="Metric value")
 
@@ -116,21 +121,31 @@ class CustomMetricRequest(BaseValidatedModel):
         default=MetricType.CUSTOM, description="Metric type"
     )
 
-    timestamp: Optional[datetime] = Field(
+    timestamp: datetime | None = Field(
         None, description="Metric timestamp (defaults to now)"
     )
 
-    labels: Optional[Dict[str, str]] = Field(
-        default_factory=dict, description="Metric labels/dimensions", max_length=10
+    labels: dict[str, str] | None = Field(
+        default_factory=dict,
+        description="Metric labels/dimensions",
+        max_length=10,
     )
 
-    unit: Optional[str] = Field(
-        None, description="Unit of measurement", pattern=r"^[a-zA-Z0-9_\-/]{1,20}$"
+    unit: str | None = Field(
+        None,
+        description="Unit of measurement",
+        pattern=r"^[a-zA-Z0-9_\-/]{1,20}$",
     )
 
-    description: Optional[
-        Annotated[str, StringConstraints(min_length=1, max_length=500, strip_whitespace=True)]
-    ] = Field(None, description="Metric description")
+    description: (
+        Annotated[
+            str,
+            StringConstraints(
+                min_length=1, max_length=500, strip_whitespace=True
+            ),
+        ]
+        | None
+    ) = Field(None, description="Metric description")
 
     model_config = ConfigDict(
         extra="forbid",
@@ -180,7 +195,9 @@ class CustomMetricRequest(BaseValidatedModel):
                 raise ValueError(f"Invalid label key: {key}")
             # Validate label value
             if not value or len(value) > 100:
-                raise ValueError(f"Label value too long or empty for key '{key}'")
+                raise ValueError(
+                    f"Label value too long or empty for key '{key}'"
+                )
             if ValidationPatterns.SCRIPT_PATTERN.search(value):
                 raise ValueError(
                     f"Label value contains malicious content for key '{key}'"
@@ -201,35 +218,50 @@ class CustomMetricRequest(BaseValidatedModel):
 class AlertRequest(BaseValidatedModel):
     """Alert creation/update request validation."""
 
-    alert_name: Annotated[str, StringConstraints(min_length=1, max_length=100, strip_whitespace=True)] = Field(
-        ..., description="Alert name"
-    )
+    alert_name: Annotated[
+        str,
+        StringConstraints(min_length=1, max_length=100, strip_whitespace=True),
+    ] = Field(..., description="Alert name")
 
     severity: AlertSeverity = Field(..., description="Alert severity level")
 
-    description: Annotated[str, StringConstraints(min_length=1, max_length=1000, strip_whitespace=True)] = Field(
-        ..., description="Detailed alert description"
-    )
+    description: Annotated[
+        str,
+        StringConstraints(
+            min_length=1, max_length=1000, strip_whitespace=True
+        ),
+    ] = Field(..., description="Detailed alert description")
 
-    metric_name: Optional[
-        Annotated[str, StringConstraints(min_length=1, max_length=100, strip_whitespace=True)]
-    ] = Field(None, description="Related metric name")
+    metric_name: (
+        Annotated[
+            str,
+            StringConstraints(
+                min_length=1, max_length=100, strip_whitespace=True
+            ),
+        ]
+        | None
+    ) = Field(None, description="Related metric name")
 
-    threshold_value: Optional[float] = Field(
+    threshold_value: float | None = Field(
         None, description="Threshold value that triggered alert"
     )
 
-    current_value: Optional[float] = Field(None, description="Current metric value")
+    current_value: float | None = Field(
+        None, description="Current metric value"
+    )
 
-    labels: Optional[Dict[str, str]] = Field(
-        default_factory=dict, description="Alert labels/dimensions", max_length=10
+    labels: dict[str, str] | None = Field(
+        default_factory=dict,
+        description="Alert labels/dimensions",
+        max_length=10,
     )
 
     auto_resolve: bool = Field(
-        default=False, description="Whether alert auto-resolves when condition clears"
+        default=False,
+        description="Whether alert auto-resolves when condition clears",
     )
 
-    notification_channels: Optional[List[str]] = Field(
+    notification_channels: list[str] | None = Field(
         None, description="Notification channels to use", max_length=5
     )
 
@@ -244,7 +276,9 @@ class AlertRequest(BaseValidatedModel):
         if not v or not v.strip():
             raise ValueError("Alert name cannot be empty")
         if ValidationPatterns.SCRIPT_PATTERN.search(v):
-            raise ValueError("Alert name contains potentially malicious content")
+            raise ValueError(
+                "Alert name contains potentially malicious content"
+            )
         return v
 
     @field_validator("description")
@@ -279,7 +313,9 @@ class AlertRequest(BaseValidatedModel):
             if not re.match(r"^[a-zA-Z_][a-zA-Z0-9_]*$", key):
                 raise ValueError(f"Invalid label key: {key}")
             if not value or len(value) > 100:
-                raise ValueError(f"Label value too long or empty for key '{key}'")
+                raise ValueError(
+                    f"Label value too long or empty for key '{key}'"
+                )
             if ValidationPatterns.SCRIPT_PATTERN.search(value):
                 raise ValueError(
                     f"Label value contains malicious content for key '{key}'"
@@ -295,7 +331,9 @@ class AlertRequest(BaseValidatedModel):
         valid_channels = {"email", "slack", "webhook", "sms", "push"}
         invalid_channels = set(v) - valid_channels
         if invalid_channels:
-            raise ValueError(f"Invalid notification channels: {invalid_channels}")
+            raise ValueError(
+                f"Invalid notification channels: {invalid_channels}"
+            )
         # Check for duplicates
         if len(v) != len(set(v)):
             raise ValueError("Duplicate notification channels found")
@@ -305,19 +343,33 @@ class AlertRequest(BaseValidatedModel):
 class AlertQueryParams(BaseValidatedModel):
     """Alert query parameters validation."""
 
-    status: Optional[AlertStatus] = Field(None, description="Filter by alert status")
+    status: AlertStatus | None = Field(
+        None, description="Filter by alert status"
+    )
 
-    severity: Optional[List[AlertSeverity]] = Field(
+    severity: list[AlertSeverity] | None = Field(
         None, description="Filter by severity levels", max_length=4
     )
 
-    alert_name: Optional[
-        Annotated[str, StringConstraints(min_length=1, max_length=100, strip_whitespace=True)]
-    ] = Field(None, description="Filter by alert name (partial match)")
+    alert_name: (
+        Annotated[
+            str,
+            StringConstraints(
+                min_length=1, max_length=100, strip_whitespace=True
+            ),
+        ]
+        | None
+    ) = Field(None, description="Filter by alert name (partial match)")
 
-    metric_name: Optional[
-        Annotated[str, StringConstraints(min_length=1, max_length=100, strip_whitespace=True)]
-    ] = Field(None, description="Filter by metric name")
+    metric_name: (
+        Annotated[
+            str,
+            StringConstraints(
+                min_length=1, max_length=100, strip_whitespace=True
+            ),
+        ]
+        | None
+    ) = Field(None, description="Filter by metric name")
 
     time_range: str = Field(
         default="24h",
@@ -325,7 +377,9 @@ class AlertQueryParams(BaseValidatedModel):
         description="Time range for alerts",
     )
 
-    include_resolved: bool = Field(default=False, description="Include resolved alerts")
+    include_resolved: bool = Field(
+        default=False, description="Include resolved alerts"
+    )
 
     model_config = ConfigDict(
         extra="forbid",
@@ -356,9 +410,15 @@ class AlertQueryParams(BaseValidatedModel):
 class HealthCheckRequest(BaseValidatedModel):
     """Health check request validation."""
 
-    component: Optional[Annotated[str, StringConstraints(min_length=1, max_length=100, strip_whitespace=True)]] = (
-        Field(None, description="Specific component to check")
-    )
+    component: (
+        Annotated[
+            str,
+            StringConstraints(
+                min_length=1, max_length=100, strip_whitespace=True
+            ),
+        ]
+        | None
+    ) = Field(None, description="Specific component to check")
 
     depth: str = Field(
         default="basic",
@@ -387,27 +447,43 @@ class HealthCheckRequest(BaseValidatedModel):
         if not v or not v.strip():
             raise ValueError("Component name cannot be empty")
         if ValidationPatterns.SCRIPT_PATTERN.search(v):
-            raise ValueError("Component name contains potentially malicious content")
+            raise ValueError(
+                "Component name contains potentially malicious content"
+            )
         return v
 
 
 class LogQueryParams(BaseValidatedModel):
     """Log query parameters validation."""
 
-    level: Optional[List[str]] = Field(
+    level: list[str] | None = Field(
         None, description="Filter by log levels", max_length=5
     )
 
-    component: Optional[Annotated[str, StringConstraints(min_length=1, max_length=100, strip_whitespace=True)]] = (
-        Field(None, description="Filter by component")
-    )
+    component: (
+        Annotated[
+            str,
+            StringConstraints(
+                min_length=1, max_length=100, strip_whitespace=True
+            ),
+        ]
+        | None
+    ) = Field(None, description="Filter by component")
 
-    search: Optional[Annotated[str, StringConstraints(min_length=1, max_length=200, strip_whitespace=True)]] = (
-        Field(None, description="Search in log messages")
-    )
+    search: (
+        Annotated[
+            str,
+            StringConstraints(
+                min_length=1, max_length=200, strip_whitespace=True
+            ),
+        ]
+        | None
+    ) = Field(None, description="Search in log messages")
 
     time_range: str = Field(
-        default="1h", pattern=r"^(1h|6h|24h|7d|30d)$", description="Time range for logs"
+        default="1h",
+        pattern=r"^(1h|6h|24h|7d|30d)$",
+        description="Time range for logs",
     )
 
     limit: int = Field(
@@ -453,9 +529,10 @@ class PerformanceTestRequest(BaseValidatedModel):
         description="Type of performance test",
     )
 
-    target_endpoint: Annotated[str, StringConstraints(min_length=1, max_length=200, strip_whitespace=True)] = (
-        Field(..., description="Target endpoint to test")
-    )
+    target_endpoint: Annotated[
+        str,
+        StringConstraints(min_length=1, max_length=200, strip_whitespace=True),
+    ] = Field(..., description="Target endpoint to test")
 
     concurrent_users: int = Field(
         ..., ge=1, le=1000, description="Number of concurrent users"
@@ -469,8 +546,10 @@ class PerformanceTestRequest(BaseValidatedModel):
         default=0, ge=0, le=300, description="Ramp up time in seconds"
     )
 
-    success_criteria: Optional[Dict[str, Any]] = Field(
-        default_factory=dict, description="Success criteria for the test", max_length=10
+    success_criteria: dict[str, Any] | None = Field(
+        default_factory=dict,
+        description="Success criteria for the test",
+        max_length=10,
     )
 
     model_config = ConfigDict(
@@ -486,7 +565,9 @@ class PerformanceTestRequest(BaseValidatedModel):
         if not v.startswith("/"):
             raise ValueError("Target endpoint must start with /")
         if ValidationPatterns.SCRIPT_PATTERN.search(v):
-            raise ValueError("Target endpoint contains potentially malicious content")
+            raise ValueError(
+                "Target endpoint contains potentially malicious content"
+            )
         return v
 
     @field_validator("success_criteria")

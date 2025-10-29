@@ -129,7 +129,7 @@ Key technologies include:
 ### Environment Setup
 1. Create a virtual environment: `python -m venv .venv`
 2. Activate it: `source .venv/bin/activate` (Linux/Mac) or `.venv\Scripts\activate` (Windows)
-3. Install dependencies: `pip install -r requirements.txt`
+3. Install dependencies: `pip install -r requirements/dev.txt`
 4. Create `.env` file from `.env.example`
 5. Configure environment variables for TWS connection and LLM providers
 

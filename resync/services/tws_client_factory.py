@@ -189,7 +189,10 @@ class TestTWSClient(BaseTWSClient):
         """Health check específico para mock."""
         base_check = await super().health_check()
         base_check.update(
-            {"executed_commands_count": len(self.executed_commands), "mock_mode": True}
+            {
+                "executed_commands_count": len(self.executed_commands),
+                "mock_mode": True,
+            }
         )
         return base_check
 
@@ -223,8 +226,7 @@ class TWSClientFactory:
 
         if config.mock_mode:
             return TestTWSClient(config)
-        else:
-            return ProductionTWSClient(config)
+        return ProductionTWSClient(config)
 
     @staticmethod
     def create_from_settings(settings: any) -> BaseTWSClient:

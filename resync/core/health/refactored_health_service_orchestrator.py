@@ -10,19 +10,19 @@ from __future__ import annotations
 import asyncio
 import time
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import structlog
-
-from resync.core.health_models import (
+from resync_new.models.health_models import (
     ComponentHealth,
     ComponentType,
     HealthCheckConfig,
     HealthCheckResult,
     HealthStatus,
 )
-from .health_checkers.health_checker_factory import HealthCheckerFactory
+
 from .enhanced_health_config_manager import EnhancedHealthConfigurationManager
+from .health_checkers.health_checker_factory import HealthCheckerFactory
 
 logger = structlog.get_logger(__name__)
 
@@ -35,7 +35,7 @@ class RefactoredHealthServiceOrchestrator:
     the new architecture with improved modularity and maintainability.
     """
 
-    def __init__(self, config: Optional[HealthCheckConfig] = None):
+    def __init__(self, config: HealthCheckConfig | None = None):
         """
         Initialize the refactored health service orchestrator.
 
@@ -45,11 +45,13 @@ class RefactoredHealthServiceOrchestrator:
         self.config_manager = EnhancedHealthConfigurationManager(
             config or HealthCheckConfig()
         )
-        self.checker_factory = HealthCheckerFactory(self.config_manager.get_config())
+        self.checker_factory = HealthCheckerFactory(
+            self.config_manager.get_config()
+        )
         self.config_manager.set_health_checker_factory(self.checker_factory)
 
-        self.last_health_check: Optional[datetime] = None
-        self._component_results: Dict[str, ComponentHealth] = {}
+        self.last_health_check: datetime | None = None
+        self._component_results: dict[str, ComponentHealth] = {}
         self._lock = asyncio.Lock()
 
         # Performance tracking
@@ -62,9 +64,9 @@ class RefactoredHealthServiceOrchestrator:
 
     async def perform_comprehensive_health_check(
         self,
-        proactive_monitor: Optional[Any] = None,
-        performance_collector: Optional[Any] = None,
-        cache_manager: Optional[Any] = None,
+        proactive_monitor: Any | None = None,
+        performance_collector: Any | None = None,
+        cache_manager: Any | None = None,
     ) -> HealthCheckResult:
         """
         Perform comprehensive health check using modular health checkers.
@@ -105,11 +107,15 @@ class RefactoredHealthServiceOrchestrator:
                 performance_metrics = (
                     await performance_collector.get_system_performance_metrics()
                 )
-                pool_metrics = await performance_collector.get_connection_pool_metrics()
+                pool_metrics = (
+                    await performance_collector.get_connection_pool_metrics()
+                )
                 if "error" not in pool_metrics:
                     connection_pool_stats = pool_metrics
             except Exception as e:
-                logger.warning("failed_to_collect_performance_metrics", error=str(e))
+                logger.warning(
+                    "failed_to_collect_performance_metrics", error=str(e)
+                )
 
         result.metadata = {
             "check_start_time": start_time,
@@ -125,7 +131,8 @@ class RefactoredHealthServiceOrchestrator:
         check_tasks = {}
         for name, checker in enabled_checkers.items():
             task = asyncio.create_task(
-                checker.check_health_with_timeout(), name=f"health_check_{name}"
+                checker.check_health_with_timeout(),
+                name=f"health_check_{name}",
             )
             check_tasks[name] = task
 
@@ -141,8 +148,10 @@ class RefactoredHealthServiceOrchestrator:
                 timeout_seconds=self.config_manager.get_config().timeout_seconds,
             )
             check_results = [
-                asyncio.TimeoutError(f"Health check component {name} timed out")
-                for name in check_tasks.keys()
+                asyncio.TimeoutError(
+                    f"Health check component {name} timed out"
+                )
+                for name in check_tasks
             ]
 
         # Process results
@@ -171,14 +180,18 @@ class RefactoredHealthServiceOrchestrator:
                 # For timeout errors specifically, mark as unhealthy
                 if isinstance(check_result, asyncio.TimeoutError):
                     error_health.status = HealthStatus.UNHEALTHY
-                    error_health.message = f"Check timeout: {str(check_result)}"
+                    error_health.message = (
+                        f"Check timeout: {str(check_result)}"
+                    )
 
                 result.components[component_name] = error_health
             else:
                 result.components[component_name] = check_result
 
         # Calculate overall status and summary
-        result.overall_status = self._calculate_overall_status(result.components)
+        result.overall_status = self._calculate_overall_status(
+            result.components
+        )
         result.summary = self._generate_summary(result.components)
 
         # Check for alerts if alerting is enabled
@@ -210,7 +223,7 @@ class RefactoredHealthServiceOrchestrator:
         return result
 
     def _calculate_overall_status(
-        self, components: Dict[str, ComponentHealth]
+        self, components: dict[str, ComponentHealth]
     ) -> HealthStatus:
         """Calculate overall health status from component results."""
         # Simple aggregation: worst status wins
@@ -227,8 +240,8 @@ class RefactoredHealthServiceOrchestrator:
         return worst
 
     def _generate_summary(
-        self, components: Dict[str, ComponentHealth]
-    ) -> Dict[str, int]:
+        self, components: dict[str, ComponentHealth]
+    ) -> dict[str, int]:
         """Generate summary of health status counts."""
         summary = {
             "healthy": 0,
@@ -247,7 +260,9 @@ class RefactoredHealthServiceOrchestrator:
                 summary["unknown"] += 1
         return summary
 
-    def _check_alerts(self, components: Dict[str, ComponentHealth]) -> List[str]:
+    def _check_alerts(
+        self, components: dict[str, ComponentHealth]
+    ) -> list[str]:
         """Check for alerts based on component health status."""
         alerts = []
         for name, comp in components.items():
@@ -255,7 +270,10 @@ class RefactoredHealthServiceOrchestrator:
                 alerts.append(f"{name} is unhealthy")
             elif comp.status == HealthStatus.DEGRADED:
                 # Include specific threshold breach information in alerts
-                if name == "database" and "connection_usage_percent" in comp.metadata:
+                if (
+                    name == "database"
+                    and "connection_usage_percent" in comp.metadata
+                ):
                     threshold = comp.metadata.get(
                         "threshold_percent",
                         self.config_manager.get_config().database_connection_threshold_percent,
@@ -291,29 +309,29 @@ class RefactoredHealthServiceOrchestrator:
 
     async def get_component_health(
         self, component_name: str
-    ) -> Optional[ComponentHealth]:
+    ) -> ComponentHealth | None:
         """Get the current health status of a specific component."""
         async with self._lock:
             return self._component_results.get(component_name)
 
-    async def get_all_component_health(self) -> Dict[str, ComponentHealth]:
+    async def get_all_component_health(self) -> dict[str, ComponentHealth]:
         """Get all current component health results."""
         async with self._lock:
             return self._component_results.copy()
 
-    def get_last_check_time(self) -> Optional[datetime]:
+    def get_last_check_time(self) -> datetime | None:
         """Get the timestamp of the last health check."""
         return self.last_health_check
 
-    def get_performance_metrics(self) -> Dict[str, Any]:
+    def get_performance_metrics(self) -> dict[str, Any]:
         """Get performance metrics for the orchestrator."""
         return self._performance_metrics.copy()
 
-    def get_config_summary(self) -> Dict[str, Any]:
+    def get_config_summary(self) -> dict[str, Any]:
         """Get configuration summary."""
         return self.config_manager.get_config_summary_enhanced()
 
-    def validate_configuration(self) -> Dict[str, Any]:
+    def validate_configuration(self) -> dict[str, Any]:
         """Validate current configuration."""
         return {
             "config_validation": self.config_manager.validate_config(),

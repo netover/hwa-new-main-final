@@ -14,9 +14,10 @@ import weakref
 from typing import Any, Protocol
 
 from fastapi import APIRouter, Depends, WebSocket, WebSocketDisconnect
-
-from resync.api.utils.stream_handler import AgentResponseStreamer
-from resync.core.exceptions import (
+from resync.core.ia_auditor import analyze_and_flag_memories
+from resync.core.llm_wrapper import optimized_llm
+from resync.core.fastapi_di import get_agent_manager, get_knowledge_graph
+from resync.utils.exceptions import (
     AgentExecutionError,
     AuditError,
     DatabaseError,
@@ -24,10 +25,9 @@ from resync.core.exceptions import (
     LLMError,
     ToolExecutionError,
 )
-from resync.core.fastapi_di import get_agent_manager, get_knowledge_graph
-from resync.core.ia_auditor import analyze_and_flag_memories
-from resync.core.interfaces import IAgentManager, IKnowledgeGraph
-from resync.core.llm_wrapper import optimized_llm
+from resync.utils.interfaces import IAgentManager, IKnowledgeGraph
+
+from resync.api.utils.stream_handler import AgentResponseStreamer
 from resync.core.security import SafeAgentID, sanitize_input
 
 # --- Logging Setup ---
@@ -41,7 +41,7 @@ knowledge_graph_dependency = Depends(get_knowledge_graph)
 chat_router = APIRouter()
 
 # Optional: track background tasks for observability (non-blocking)
-_bg_tasks: "weakref.WeakSet[asyncio.Task[Any]]" = weakref.WeakSet()
+_bg_tasks: weakref.WeakSet[asyncio.Task[Any]] = weakref.WeakSet()
 
 
 class SupportsAgentMeta(Protocol):
@@ -51,7 +51,7 @@ class SupportsAgentMeta(Protocol):
     description: str | None
     # Some agents expose 'llm_model', others 'model'
     llm_model: Any | None  # type: ignore[assignment]
-    model: Any | None      # type: ignore[assignment]
+    model: Any | None  # type: ignore[assignment]
 
 
 async def send_error_message(websocket: WebSocket, message: str) -> None:
@@ -71,13 +71,16 @@ async def send_error_message(websocket: WebSocket, message: str) -> None:
         logger.debug("Failed to send error message, WebSocket disconnected.")
     except RuntimeError as exc:
         # This typically happens when the WebSocket is already closed
-        logger.debug("Failed to send error message, WebSocket runtime error: %s", exc)
+        logger.debug(
+            "Failed to send error message, WebSocket runtime error: %s", exc
+        )
     except ConnectionError as exc:
         logger.debug("Failed to send error message, connection error: %s", exc)
     except Exception:  # pylint: disable=broad-exception-caught
         # Last resort to prevent the application from crashing if sending fails.
         logger.warning(
-            "Failed to send error message due to an unexpected error.", exc_info=True
+            "Failed to send error message due to an unexpected error.",
+            exc_info=True,
         )
 
 
@@ -91,11 +94,15 @@ async def run_auditor_safely() -> None:
     except asyncio.TimeoutError:
         logger.error("IA Auditor timed out during execution.", exc_info=True)
     except KnowledgeGraphError:
-        logger.error("IA Auditor encountered a knowledge graph error.", exc_info=True)
+        logger.error(
+            "IA Auditor encountered a knowledge graph error.", exc_info=True
+        )
     except DatabaseError:
         logger.error("IA Auditor encountered a database error.", exc_info=True)
     except AuditError:
-        logger.error("IA Auditor encountered an audit-specific error.", exc_info=True)
+        logger.error(
+            "IA Auditor encountered an audit-specific error.", exc_info=True
+        )
     except asyncio.CancelledError:  # pylint: disable=try-except-raise
         # Propagate task cancellation correctly
         raise
@@ -113,7 +120,9 @@ async def _get_enhanced_query(
     context = await knowledge_graph.get_relevant_context(sanitized_data)
     # Use %-formatting for lazy evaluation, preventing crashes if context is not sliceable
     # and improving performance when DEBUG level is not active.
-    logger.debug("Retrieved knowledge graph context: %s...", str(context)[:200])
+    logger.debug(
+        "Retrieved knowledge graph context: %s...", str(context)[:200]
+    )
     return f"""
 Contexto de soluções anteriores:
 {context}
@@ -136,15 +145,19 @@ async def _get_optimized_response(
     optimizations like template matching, caching, and model selection.
     """
     try:
-        response = await optimized_llm.get_response(
-            query=query, context=context or {}, use_cache=use_cache, stream=stream
+        return await optimized_llm.get_response(
+            query=query,
+            context=context or {},
+            use_cache=use_cache,
+            stream=stream,
         )
-        return response
     except (LLMError, asyncio.TimeoutError) as exc:
         logger.error("LLM optimization failed (expected): %s", exc)
         return query
     except Exception as exc:  # pylint: disable=broad-exception-caught
-        logger.error("LLM optimization failed unexpectedly: %s", exc, exc_info=True)
+        logger.error(
+            "LLM optimization failed unexpectedly: %s", exc, exc_info=True
+        )
         # Return the original query to be handled by the normal agent flow
         return query
 
@@ -175,7 +188,9 @@ async def _finalize_and_store_interaction(
     # Safe access to agent attributes - FIXED
     agent_name = getattr(agent, "name", "Unknown Agent")
     agent_description = getattr(agent, "description", "No description")
-    agent_model = getattr(agent, "llm_model", getattr(agent, "model", "Unknown Model"))
+    agent_model = getattr(
+        agent, "llm_model", getattr(agent, "model", "Unknown Model")
+    )
 
     # Store the interaction in the Knowledge Graph
     await knowledge_graph.add_conversation(
@@ -216,7 +231,8 @@ async def _handle_agent_interaction(
 
         # Get optimized response
         optimized_response = await _get_optimized_response(
-            query=data, context={"agent_id": agent_id, "user_query": sanitized_data}
+            query=data,
+            context={"agent_id": agent_id, "user_query": sanitized_data},
         )
 
         # Send the optimized response
@@ -300,8 +316,12 @@ async def _setup_websocket_session(
 
     if not agent:
         logger.warning("Agent '%s' not found.", agent_id)
-        await send_error_message(websocket, f"Agente '{agent_id}' não encontrado.")
-        raise WebSocketDisconnect(code=1008, reason=f"Agent '{agent_id}' not found")
+        await send_error_message(
+            websocket, f"Agente '{agent_id}' não encontrado."
+        )
+        raise WebSocketDisconnect(
+            code=1008, reason=f"Agent '{agent_id}' not found"
+        )
 
     welcome_data = {
         "type": "info",
@@ -328,7 +348,9 @@ async def _message_processing_loop(
     """Main loop for receiving and processing messages from the client."""
     while True:
         raw_data = await websocket.receive_text()
-        logger.info("Received message for agent '%s': %s...", agent_id, raw_data[:200])
+        logger.info(
+            "Received message for agent '%s': %s...", agent_id, raw_data[:200]
+        )
 
         validation = await _validate_input(raw_data, agent_id, websocket)
         if not validation["is_valid"]:
@@ -348,7 +370,9 @@ async def websocket_endpoint(
     """Main WebSocket endpoint for real-time chat with an agent."""
     try:
         agent = await _setup_websocket_session(websocket, agent_id)
-        await _message_processing_loop(websocket, agent, agent_id, knowledge_graph)
+        await _message_processing_loop(
+            websocket, agent, agent_id, knowledge_graph
+        )
     except WebSocketDisconnect:
         code = getattr(websocket.state, "code", "unknown")
         reason = getattr(websocket.state, "reason", "unknown")
@@ -360,14 +384,19 @@ async def websocket_endpoint(
         )
     except (LLMError, ToolExecutionError, AgentExecutionError) as exc:
         logger.error(
-            "Agent-related error in WebSocket for agent '%s': %s", agent_id, exc, exc_info=True
+            "Agent-related error in WebSocket for agent '%s': %s",
+            agent_id,
+            exc,
+            exc_info=True,
         )
         await send_error_message(
             websocket, f"Ocorreu um erro com o agente: {str(exc)}"
         )
     except Exception:  # pylint: disable=broad-exception-caught
         logger.critical(
-            "Unhandled exception in WebSocket for agent '%s'", agent_id, exc_info=True
+            "Unhandled exception in WebSocket for agent '%s'",
+            agent_id,
+            exc_info=True,
         )
         await send_error_message(
             websocket, "Ocorreu um erro inesperado no servidor."
@@ -382,7 +411,7 @@ async def _validate_input(
     if len(raw_data) > 10000:  # Limit message size to 10KB
         await send_error_message(
             websocket,
-            "Mensagem muito longa. Máximo de 10.000 caracteres permitido."
+            "Mensagem muito longa. Máximo de 10.000 caracteres permitido.",
         )
         return {"is_valid": False}
 
@@ -393,7 +422,9 @@ async def _validate_input(
             agent_id,
             raw_data[:100],
         )
-        await send_error_message(websocket, "Conteúdo não permitido detectado.")
+        await send_error_message(
+            websocket, "Conteúdo não permitido detectado."
+        )
         return {"is_valid": False}
 
     return {"is_valid": True}

@@ -1,6 +1,7 @@
 import subprocess
-import schedule
 from datetime import datetime
+
+import schedule
 
 
 class SecurityConfigurer:
@@ -11,8 +12,8 @@ class SecurityConfigurer:
 
     def _setup_logger(self):
         """Configura o logger estruturado."""
-        import logging
         import json
+        import logging
 
         logger = logging.getLogger("security_logger")
         logger.setLevel(logging.INFO)
@@ -38,7 +39,7 @@ class SecurityConfigurer:
         """Atualiza as dependências do projeto."""
         self.logger.info("Atualizando dependências")
         subprocess.run(["pip", "list", "--outdated"])
-        subprocess.run(["pip", "install", "--upgrade", "-r", "requirements.txt"])
+        subprocess.run(["pip", "install", "--upgrade", "-r", "requirements/dev.txt"])
 
     def schedule_security_audit(self):
         """Agenda auditorias de segurança."""

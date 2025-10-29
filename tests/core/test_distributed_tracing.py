@@ -1,6 +1,8 @@
+from unittest.mock import MagicMock, patch
+
 import pytest
-from unittest.mock import patch, MagicMock
 from opentelemetry.trace import TracerProvider
+
 from resync.core.distributed_tracing import setup_tracing, traced
 
 
@@ -25,14 +27,13 @@ class TestDistributedTracing:
         with patch(
             "resync.core.distributed_tracing.OTLPSpanExporter",
             lambda *args, **kwargs: mock_exporter,
+        ), patch(
+            "resync.core.distributed_tracing.TracerProvider", lambda: mock_tracer
         ):
-            with patch(
-                "resync.core.distributed_tracing.TracerProvider", lambda: mock_tracer
-            ):
-                setup_tracing(app=MagicMock())
+            setup_tracing(app=MagicMock())
 
-                # Verificar que o tracer foi configurado corretamente
-                assert mock_exporter.create_span.called
+            # Verificar que o tracer foi configurado corretamente
+            assert mock_exporter.create_span.called
 
     @pytest.mark.asyncio
     async def test_traced_decorator(self):

@@ -10,11 +10,10 @@ from __future__ import annotations
 import asyncio
 import time
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import structlog
-
-from resync.core.health_models import (
+from resync.models.health_models import (
     ComponentHealth,
     ComponentType,
     HealthCheckConfig,
@@ -36,7 +35,7 @@ class HealthServiceOrchestrator:
     - Providing a unified health check interface
     """
 
-    def __init__(self, config: Optional[HealthCheckConfig] = None):
+    def __init__(self, config: HealthCheckConfig | None = None):
         """
         Initialize the health service orchestrator.
 
@@ -44,15 +43,15 @@ class HealthServiceOrchestrator:
             config: Health check configuration (uses default if None)
         """
         self.config = config or HealthCheckConfig()
-        self.last_health_check: Optional[datetime] = None
-        self._component_results: Dict[str, ComponentHealth] = {}
+        self.last_health_check: datetime | None = None
+        self._component_results: dict[str, ComponentHealth] = {}
         self._lock = asyncio.Lock()
 
     async def perform_comprehensive_health_check(
         self,
-        proactive_monitor: Optional[Any] = None,
-        performance_collector: Optional[Any] = None,
-        cache_manager: Optional[Any] = None,
+        proactive_monitor: Any | None = None,
+        performance_collector: Any | None = None,
+        cache_manager: Any | None = None,
     ) -> HealthCheckResult:
         """
         Perform comprehensive health check with coordination of all subsystems.
@@ -69,7 +68,8 @@ class HealthServiceOrchestrator:
         correlation_id = f"health_{int(start_time)}"
 
         logger.debug(
-            "starting_comprehensive_health_check", correlation_id=correlation_id
+            "starting_comprehensive_health_check",
+            correlation_id=correlation_id,
         )
 
         # Initialize result with enhanced metadata
@@ -86,11 +86,15 @@ class HealthServiceOrchestrator:
                 performance_metrics = (
                     await performance_collector.get_system_performance_metrics()
                 )
-                pool_metrics = await performance_collector.get_connection_pool_metrics()
+                pool_metrics = (
+                    await performance_collector.get_connection_pool_metrics()
+                )
                 if "error" not in pool_metrics:
                     connection_pool_stats = pool_metrics
             except Exception as e:
-                logger.warning("failed_to_collect_performance_metrics", error=str(e))
+                logger.warning(
+                    "failed_to_collect_performance_metrics", error=str(e)
+                )
 
         result.metadata = {
             "check_start_time": start_time,
@@ -105,15 +109,19 @@ class HealthServiceOrchestrator:
         # Execute all checks with timeout protection
         try:
             check_results = await asyncio.wait_for(
-                asyncio.gather(*health_checks.values(), return_exceptions=True),
+                asyncio.gather(
+                    *health_checks.values(), return_exceptions=True
+                ),
                 timeout=30.0,  # 30 second global timeout
             )
         except asyncio.TimeoutError:
             # Handle timeout by creating timeout errors for all checks
             logger.error("health_check_timed_out", timeout_seconds=30)
             check_results = [
-                asyncio.TimeoutError(f"Health check component {name} timed out")
-                for name in health_checks.keys()
+                asyncio.TimeoutError(
+                    f"Health check component {name} timed out"
+                )
+                for name in health_checks
             ]
 
         # Process results
@@ -138,7 +146,9 @@ class HealthServiceOrchestrator:
                 if isinstance(check_result, asyncio.TimeoutError):
                     component_health = ComponentHealth(
                         name=component_name,
-                        component_type=self._get_component_type(component_name),
+                        component_type=self._get_component_type(
+                            component_name
+                        ),
                         status=HealthStatus.UNHEALTHY,  # Timeout indicates unhealthiness
                         message=f"Check timeout: {str(check_result)}",
                         last_check=datetime.now(),
@@ -149,7 +159,9 @@ class HealthServiceOrchestrator:
             result.components[component_name] = component_health
 
         # Determine overall status
-        result.overall_status = self._calculate_overall_status(result.components)
+        result.overall_status = self._calculate_overall_status(
+            result.components
+        )
 
         # Generate summary
         result.summary = self._generate_summary(result.components)
@@ -173,12 +185,14 @@ class HealthServiceOrchestrator:
 
         logger.debug(
             "health_check_completed",
-            total_check_time_ms=result.performance_metrics["total_check_time_ms"],
+            total_check_time_ms=result.performance_metrics[
+                "total_check_time_ms"
+            ],
         )
 
         return result
 
-    async def _get_health_checks_dict(self) -> Dict[str, Any]:
+    async def _get_health_checks_dict(self) -> dict[str, Any]:
         """Get dictionary of all health check coroutines."""
         return {
             "database": self._check_database_health(),
@@ -197,7 +211,9 @@ class HealthServiceOrchestrator:
         start_time = time.time()
 
         try:
-            from resync.core.connection_manager import get_connection_pool_manager
+            from resync.core.connection_manager import (
+                get_connection_pool_manager,
+            )
 
             pool_manager = get_connection_pool_manager()
             if not pool_manager:
@@ -262,7 +278,9 @@ class HealthServiceOrchestrator:
             )
 
             # Determine status based on configurable threshold
-            threshold_percent = self.config.database_connection_threshold_percent
+            threshold_percent = (
+                self.config.database_connection_threshold_percent
+            )
             if connection_usage_percent > threshold_percent:
                 status = HealthStatus.DEGRADED
                 message = f"Database connection pool near capacity: {active_connections}/{total_connections} ({connection_usage_percent:.1f}%)"
@@ -322,7 +340,7 @@ class HealthServiceOrchestrator:
 
         try:
             # Check Redis configuration
-            from resync.settings import settings
+            from resync.config.settings import settings
 
             if not settings.REDIS_URL:
                 return ComponentHealth(
@@ -335,7 +353,8 @@ class HealthServiceOrchestrator:
 
             # Test actual Redis connectivity
             import redis.asyncio as redis_async
-            from redis.exceptions import RedisError, TimeoutError as RedisTimeoutError
+            from redis.exceptions import RedisError
+            from redis.exceptions import TimeoutError as RedisTimeoutError
 
             try:
                 redis_client = redis_async.from_url(settings.REDIS_URL)
@@ -344,7 +363,9 @@ class HealthServiceOrchestrator:
 
                 # Test read/write operation
                 test_key = f"health_check_{int(time.time())}"
-                await redis_client.setex(test_key, 1, "test")  # Set with expiration
+                await redis_client.setex(
+                    test_key, 1, "test"
+                )  # Set with expiration
                 value = await redis_client.get(test_key)
 
                 if value != b"test":
@@ -364,7 +385,9 @@ class HealthServiceOrchestrator:
                     last_check=datetime.now(),
                     metadata={
                         "redis_version": redis_info.get("redis_version"),
-                        "connected_clients": redis_info.get("connected_clients"),
+                        "connected_clients": redis_info.get(
+                            "connected_clients"
+                        ),
                         "used_memory": redis_info.get("used_memory_human"),
                         "uptime_seconds": redis_info.get("uptime_in_seconds"),
                         "test_key_result": value.decode() if value else None,
@@ -388,7 +411,9 @@ class HealthServiceOrchestrator:
                 try:
                     await redis_client.close()
                 except Exception as e:
-                    logger.debug(f"Redis client close error during health check: {e}")
+                    logger.debug(
+                        f"Redis client close error during health check: {e}"
+                    )
 
         except Exception as e:
             response_time = (time.time() - start_time) * 1000
@@ -409,7 +434,7 @@ class HealthServiceOrchestrator:
 
         try:
             # Import and test the actual cache implementation
-            from resync.core.async_cache import AsyncTTLCache
+            from resync.core.cache import AsyncTTLCache
 
             # Create a test cache instance to verify functionality
             test_cache = AsyncTTLCache(ttl_seconds=60, cleanup_interval=30)
@@ -482,7 +507,9 @@ class HealthServiceOrchestrator:
                 message = f"Disk space critically low: {disk_usage_percent:.1f}% used"
             elif disk_usage_percent > 85:
                 status = HealthStatus.DEGRADED
-                message = f"Disk space getting low: {disk_usage_percent:.1f}% used"
+                message = (
+                    f"Disk space getting low: {disk_usage_percent:.1f}% used"
+                )
             else:
                 status = HealthStatus.HEALTHY
                 message = f"Disk space OK: {disk_usage_percent:.1f}% used"
@@ -629,7 +656,7 @@ class HealthServiceOrchestrator:
 
         try:
             # Check TWS configuration
-            from resync.settings import settings
+            from resync.config.settings import settings
 
             tws_config = settings.get("tws_monitor", {})
             if not tws_config or not tws_config.get("enabled", False):
@@ -671,7 +698,9 @@ class HealthServiceOrchestrator:
         start_time = time.time()
 
         try:
-            from resync.core.connection_manager import get_connection_pool_manager
+            from resync.core.connection_manager import (
+                get_connection_pool_manager,
+            )
 
             pool_manager = get_connection_pool_manager()
             if not pool_manager:
@@ -707,10 +736,14 @@ class HealthServiceOrchestrator:
                 message = "No database connections available"
             else:
                 # Calculate connection usage percentage
-                connection_usage_percent = active_connections / total_connections * 100
+                connection_usage_percent = (
+                    active_connections / total_connections * 100
+                )
 
                 # Use database-specific threshold for database pool
-                threshold_percent = self.config.database_connection_threshold_percent
+                threshold_percent = (
+                    self.config.database_connection_threshold_percent
+                )
 
                 if connection_usage_percent > threshold_percent:
                     status = HealthStatus.DEGRADED
@@ -729,7 +762,10 @@ class HealthServiceOrchestrator:
 
             # Enhance metadata with calculated percentages and thresholds
             enhanced_metadata = dict(pool_stats)
-            if "active_connections" in pool_stats and "total_connections" in pool_stats:
+            if (
+                "active_connections" in pool_stats
+                and "total_connections" in pool_stats
+            ):
                 enhanced_metadata["connection_usage_percent"] = round(
                     connection_usage_percent, 1
                 )
@@ -803,7 +839,7 @@ class HealthServiceOrchestrator:
         return mapping.get(name, ComponentType.OTHER)
 
     def _calculate_overall_status(
-        self, components: Dict[str, ComponentHealth]
+        self, components: dict[str, ComponentHealth]
     ) -> HealthStatus:
         """Calculate overall health status from component results."""
         # Simple aggregation: worst status wins
@@ -820,8 +856,8 @@ class HealthServiceOrchestrator:
         return worst
 
     def _generate_summary(
-        self, components: Dict[str, ComponentHealth]
-    ) -> Dict[str, int]:
+        self, components: dict[str, ComponentHealth]
+    ) -> dict[str, int]:
         """Generate summary of health status counts."""
         summary = {
             "healthy": 0,
@@ -840,7 +876,9 @@ class HealthServiceOrchestrator:
                 summary["unknown"] += 1
         return summary
 
-    def _check_alerts(self, components: Dict[str, ComponentHealth]) -> List[str]:
+    def _check_alerts(
+        self, components: dict[str, ComponentHealth]
+    ) -> list[str]:
         """Check for alerts based on component health status."""
         alerts = []
         for name, comp in components.items():
@@ -848,7 +886,10 @@ class HealthServiceOrchestrator:
                 alerts.append(f"{name} is unhealthy")
             elif comp.status == HealthStatus.DEGRADED:
                 # Include specific threshold breach information in alerts
-                if name == "database" and "connection_usage_percent" in comp.metadata:
+                if (
+                    name == "database"
+                    and "connection_usage_percent" in comp.metadata
+                ):
                     threshold = comp.metadata.get(
                         "threshold_percent",
                         self.config.database_connection_threshold_percent,
@@ -863,16 +904,16 @@ class HealthServiceOrchestrator:
 
     async def get_component_health(
         self, component_name: str
-    ) -> Optional[ComponentHealth]:
+    ) -> ComponentHealth | None:
         """Get the current health status of a specific component."""
         async with self._lock:
             return self._component_results.get(component_name)
 
-    async def get_all_component_health(self) -> Dict[str, ComponentHealth]:
+    async def get_all_component_health(self) -> dict[str, ComponentHealth]:
         """Get all current component health results."""
         async with self._lock:
             return self._component_results.copy()
 
-    def get_last_check_time(self) -> Optional[datetime]:
+    def get_last_check_time(self) -> datetime | None:
         """Get the timestamp of the last health check."""
         return self.last_health_check

@@ -10,9 +10,9 @@ from __future__ import annotations
 import logging
 import sys
 import time
-from typing import Any
+from typing import Any, List, Dict
 
-from resync_new.core.monitoring.metrics import runtime_metrics
+from resync.core.monitoring.metrics import runtime_metrics
 
 logger = logging.getLogger(__name__)
 
@@ -458,7 +458,7 @@ class CacheMemoryManager:
 
 # Import here to avoid circular imports
 try:
-    from resync_new.core.monitoring.metrics import log_with_correlation
+    from resync.core.monitoring.metrics import log_with_correlation
 except ImportError:
     # Fallback if metrics module not available
     def log_with_correlation(level, message, correlation_id):

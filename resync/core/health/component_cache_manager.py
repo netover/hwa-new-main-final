@@ -10,11 +10,9 @@ from __future__ import annotations
 
 import asyncio
 from datetime import datetime, timedelta
-from typing import Dict, Optional
 
 import structlog
-
-from resync.core.health_models import ComponentHealth
+from resync_new.models.health_models import ComponentHealth
 
 logger = structlog.get_logger(__name__)
 
@@ -37,8 +35,10 @@ class ComponentCacheManager:
         Args:
             default_cache_expiry_seconds: Default cache expiry time in seconds
         """
-        self.default_cache_expiry = timedelta(seconds=default_cache_expiry_seconds)
-        self.component_cache: Dict[str, ComponentHealth] = {}
+        self.default_cache_expiry = timedelta(
+            seconds=default_cache_expiry_seconds
+        )
+        self.component_cache: dict[str, ComponentHealth] = {}
         self._cache_lock = asyncio.Lock()
 
         # Performance tracking
@@ -47,10 +47,12 @@ class ComponentCacheManager:
         self._cache_evictions = 0
 
         # Cache maintenance
-        self._last_cleanup: Optional[datetime] = None
+        self._last_cleanup: datetime | None = None
         self.cleanup_interval = timedelta(minutes=5)  # Cleanup every 5 minutes
 
-    async def get_component(self, component_name: str) -> Optional[ComponentHealth]:
+    async def get_component(
+        self, component_name: str
+    ) -> ComponentHealth | None:
         """
         Get a component from cache with expiry validation.
 
@@ -72,21 +74,22 @@ class ComponentCacheManager:
                         age_seconds=age.total_seconds(),
                     )
                     return health
-                else:
-                    # Cache expired, remove from cache
-                    self.component_cache.pop(component_name, None)
-                    self._cache_evictions += 1
-                    logger.debug(
-                        "cache_expired",
-                        component=component_name,
-                        age_seconds=age.total_seconds(),
-                    )
+                # Cache expired, remove from cache
+                self.component_cache.pop(component_name, None)
+                self._cache_evictions += 1
+                logger.debug(
+                    "cache_expired",
+                    component=component_name,
+                    age_seconds=age.total_seconds(),
+                )
 
             self._cache_misses += 1
             logger.debug("cache_miss", component=component_name)
             return None
 
-    async def set_component(self, component_name: str, health: ComponentHealth) -> None:
+    async def set_component(
+        self, component_name: str, health: ComponentHealth
+    ) -> None:
         """
         Set a component in the cache.
 
@@ -97,7 +100,9 @@ class ComponentCacheManager:
         async with self._cache_lock:
             self.component_cache[component_name] = health
             logger.debug(
-                "component_cached", component=component_name, status=health.status.value
+                "component_cached",
+                component=component_name,
+                status=health.status.value,
             )
 
     async def update_component(
@@ -133,11 +138,13 @@ class ComponentCacheManager:
             if component_name in self.component_cache:
                 self.component_cache.pop(component_name)
                 self._cache_evictions += 1
-                logger.debug("component_removed_from_cache", component=component_name)
+                logger.debug(
+                    "component_removed_from_cache", component=component_name
+                )
                 return True
             return False
 
-    async def get_all_components(self) -> Dict[str, ComponentHealth]:
+    async def get_all_components(self) -> dict[str, ComponentHealth]:
         """
         Get all cached components with expiry validation.
 
@@ -162,7 +169,8 @@ class ComponentCacheManager:
 
             if expired_components:
                 logger.debug(
-                    "expired_components_cleaned", expired_count=len(expired_components)
+                    "expired_components_cleaned",
+                    expired_count=len(expired_components),
                 )
 
             return valid_components.copy()
@@ -206,12 +214,13 @@ class ComponentCacheManager:
 
             if expired_components:
                 logger.debug(
-                    "manual_cache_cleanup", expired_count=len(expired_components)
+                    "manual_cache_cleanup",
+                    expired_count=len(expired_components),
                 )
 
             return len(expired_components)
 
-    def get_cache_stats(self) -> Dict[str, any]:
+    def get_cache_stats(self) -> dict[str, any]:
         """
         Get cache performance statistics.
 
@@ -242,7 +251,9 @@ class ComponentCacheManager:
             ),
         }
 
-    async def get_components_by_status(self, status: str) -> Dict[str, ComponentHealth]:
+    async def get_components_by_status(
+        self, status: str
+    ) -> dict[str, ComponentHealth]:
         """
         Get all cached components with a specific status.
 
@@ -260,8 +271,8 @@ class ComponentCacheManager:
         }
 
     async def get_stale_components(
-        self, max_age_seconds: Optional[int] = None
-    ) -> Dict[str, ComponentHealth]:
+        self, max_age_seconds: int | None = None
+    ) -> dict[str, ComponentHealth]:
         """
         Get components that are stale based on age.
 
@@ -309,7 +320,9 @@ class ComponentCacheConfig:
         """Initialize cache configuration with default values."""
         # Default expiry times for different component types
         self.default_expiry_seconds = 300  # 5 minutes
-        self.database_expiry_seconds = 60  # 1 minute (databases change frequently)
+        self.database_expiry_seconds = (
+            60  # 1 minute (databases change frequently)
+        )
         self.redis_expiry_seconds = 120  # 2 minutes
         self.cache_expiry_seconds = 180  # 3 minutes
         self.filesystem_expiry_seconds = 600  # 10 minutes (less dynamic)
@@ -323,7 +336,9 @@ class ComponentCacheConfig:
 
         # Advanced settings
         self.enable_cache_warnings = True
-        self.cache_warning_threshold_percent = 80  # Warn when cache is 80% full
+        self.cache_warning_threshold_percent = (
+            80  # Warn when cache is 80% full
+        )
 
     def get_expiry_for_component(self, component_name: str) -> int:
         """
@@ -346,7 +361,7 @@ class ComponentCacheConfig:
 
         return expiry_map.get(component_name, self.default_expiry_seconds)
 
-    def to_dict(self) -> Dict[str, any]:
+    def to_dict(self) -> dict[str, any]:
         """Convert configuration to dictionary."""
         return {
             "default_expiry_seconds": self.default_expiry_seconds,

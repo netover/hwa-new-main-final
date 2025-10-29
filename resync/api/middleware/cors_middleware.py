@@ -1,15 +1,18 @@
 from __future__ import annotations
 
 import logging
-from typing import List, Union
 
 from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
+from resync_new.config.settings import settings
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.types import ASGIApp
 
-from resync.api.middleware.cors_config import CORSPolicy, Environment, cors_config
-from resync.settings import settings
+from resync.api.middleware.cors_config import (
+    CORSPolicy,
+    Environment,
+    cors_config,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -30,9 +33,9 @@ class LoggingCORSMiddleware(BaseHTTPMiddleware):
         app: ASGIApp,
         policy: CORSPolicy,
         *,
-        allow_origins: List[str] = None,
-        allow_methods: List[str] = None,
-        allow_headers: List[str] = None,
+        allow_origins: list[str] = None,
+        allow_methods: list[str] = None,
+        allow_headers: list[str] = None,
         allow_credentials: bool = False,
         max_age: int = 86400,
         allow_origin_regex: str = None,
@@ -115,8 +118,7 @@ class LoggingCORSMiddleware(BaseHTTPMiddleware):
 
         # If no origin header, proceed normally (same-origin request)
         if not origin:
-            response = await call_next(request)
-            return response
+            return await call_next(request)
 
         # Validate origin against policy
         is_allowed = self.policy.is_origin_allowed(origin)
@@ -132,7 +134,9 @@ class LoggingCORSMiddleware(BaseHTTPMiddleware):
 
         # Add CORS headers if origin is allowed
         if is_allowed:
-            response = self._add_cors_headers(response, origin, method, is_preflight)
+            response = self._add_cors_headers(
+                response, origin, method, is_preflight
+            )
 
         return response
 
@@ -212,7 +216,7 @@ class LoggingCORSMiddleware(BaseHTTPMiddleware):
 
 def add_cors_middleware(
     app: FastAPI,
-    environment: Union[str, Environment] = None,
+    environment: str | Environment = None,
     custom_policy: CORSPolicy = None,
 ) -> None:
     """
@@ -236,10 +240,7 @@ def add_cors_middleware(
         environment = Environment(environment.lower())
 
     # Get CORS policy
-    if custom_policy:
-        policy = custom_policy
-    else:
-        policy = cors_config.get_policy(environment)
+    policy = custom_policy or cors_config.get_policy(environment)
 
     logger.info(
         f"Adding CORS middleware for environment: {policy.environment} "
@@ -251,7 +252,9 @@ def add_cors_middleware(
     # Add the middleware to the app with proper parameters
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=policy.allowed_origins if not policy.allow_all_origins else ["*"],
+        allow_origins=(
+            policy.allowed_origins if not policy.allow_all_origins else ["*"]
+        ),
         allow_methods=policy.allowed_methods,
         allow_headers=policy.allowed_headers,
         allow_credentials=policy.allow_credentials,
@@ -272,7 +275,7 @@ def get_development_cors_config() -> CORSPolicy:
 
 
 def get_production_cors_config(
-    allowed_origins: List[str] = None, allow_credentials: bool = False
+    allowed_origins: list[str] = None, allow_credentials: bool = False
 ) -> CORSPolicy:
     """
     Get CORS configuration for production environment.

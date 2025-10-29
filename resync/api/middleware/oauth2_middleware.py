@@ -1,11 +1,10 @@
 from __future__ import annotations
 
-from typing import Callable
+from collections.abc import Callable
 
 from fastapi import Request
 from fastapi.exceptions import HTTPException
 from jose import JWTError
-
 from resync.security.oauth2 import verify_oauth2_token
 
 
@@ -18,7 +17,9 @@ async def oauth2_middleware(request: Request, call_next: Callable):
         # Get token from Authorization header
         token = request.headers.get("Authorization")
         if not token or not token.startswith("Bearer "):
-            raise HTTPException(status_code=401, detail="Missing Authorization header")
+            raise HTTPException(
+                status_code=401, detail="Missing Authorization header"
+            )
 
         # Verify token
         token_value = token.split(" ")[1]

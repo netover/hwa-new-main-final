@@ -3,18 +3,21 @@
 import re
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Annotated, Any
 
-from pydantic import field_validator, StringConstraints, Field, validator, ConfigDict
-from pydantic.types import constr
+from pydantic import (
+    ConfigDict,
+    Field,
+    StringConstraints,
+    field_validator,
+    validator,
+)
 
 from .common import (
     BaseValidatedModel,
     NumericConstraints,
-    StringConstraints,
     ValidationPatterns,
 )
-from typing_extensions import Annotated
 
 
 class SortOrder(str, Enum):
@@ -85,19 +88,24 @@ class PaginationParams(BaseValidatedModel):
 class SearchParams(BaseValidatedModel):
     """Search query parameters."""
 
-    query: Annotated[str, StringConstraints(min_length=1, max_length=200, strip_whitespace=True)] = Field(
-        ..., description="Search query string"
-    )
+    query: Annotated[
+        str,
+        StringConstraints(min_length=1, max_length=200, strip_whitespace=True),
+    ] = Field(..., description="Search query string")
 
-    search_fields: Optional[List[str]] = Field(
+    search_fields: list[str] | None = Field(
         None, description="Specific fields to search in", max_length=10
     )
 
     fuzzy: bool = Field(default=False, description="Enable fuzzy search")
 
-    case_sensitive: bool = Field(default=False, description="Case-sensitive search")
+    case_sensitive: bool = Field(
+        default=False, description="Case-sensitive search"
+    )
 
-    whole_words: bool = Field(default=False, description="Match whole words only")
+    whole_words: bool = Field(
+        default=False, description="Match whole words only"
+    )
 
     model_config = ConfigDict(
         extra="forbid",
@@ -111,7 +119,9 @@ class SearchParams(BaseValidatedModel):
             raise ValueError("Search query cannot be empty")
         # Check for script injection
         if ValidationPatterns.SCRIPT_PATTERN.search(v):
-            raise ValueError("Search query contains potentially malicious content")
+            raise ValueError(
+                "Search query contains potentially malicious content"
+            )
         # Check for SQL injection patterns
         sql_patterns = [
             r"(\b(union|select|insert|update|delete|drop|create|alter|exec|execute)\b)",
@@ -143,12 +153,16 @@ class SearchParams(BaseValidatedModel):
 class FilterParams(BaseValidatedModel):
     """Filter query parameters."""
 
-    filters: Optional[List[Dict[str, Any]]] = Field(
-        default_factory=list, description="List of filter conditions", max_length=20
+    filters: list[dict[str, Any]] | None = Field(
+        default_factory=list,
+        description="List of filter conditions",
+        max_length=20,
     )
 
     filter_logic: str = Field(
-        default="and", pattern=r"^(and|or)$", description="Logic to combine filters"
+        default="and",
+        pattern=r"^(and|or)$",
+        description="Logic to combine filters",
     )
 
     model_config = ConfigDict(
@@ -180,7 +194,9 @@ class FilterParams(BaseValidatedModel):
             # Validate value based on operator
             value = filter_condition["value"]
             if operator in {"in", "not_in"} and not isinstance(value, list):
-                raise ValueError(f"Filter operator '{operator}' requires a list value")
+                raise ValueError(
+                    f"Filter operator '{operator}' requires a list value"
+                )
             # Check for malicious content in string values
             if isinstance(value, str):
                 if ValidationPatterns.SCRIPT_PATTERN.search(value):
@@ -204,12 +220,14 @@ class FilterParams(BaseValidatedModel):
 class SortParams(BaseValidatedModel):
     """Sorting query parameters."""
 
-    sort_by: Optional[List[str]] = Field(
+    sort_by: list[str] | None = Field(
         default_factory=list, description="Fields to sort by", max_length=5
     )
 
-    sort_order: Optional[List[SortOrder]] = Field(
-        default_factory=list, description="Sort order for each field", max_length=5
+    sort_order: list[SortOrder] | None = Field(
+        default_factory=list,
+        description="Sort order for each field",
+        max_length=5,
     )
 
     model_config = ConfigDict(
@@ -231,25 +249,28 @@ class SortParams(BaseValidatedModel):
             raise ValueError("Duplicate sort fields found")
         return v
 
-    # TODO[pydantic]: We couldn't refactor the `validator`, please replace it by `field_validator` manually.
-    # Check https://docs.pydantic.dev/dev-v2/migration/#changes-to-validators for more information.
-    @validator("sort_order")
-    def validate_sort_order(cls, v, values):
+    @field_validator("sort_order")
+    @classmethod
+    def validate_sort_order(cls, v, info):
         """Validate sort order matches sort fields."""
-        sort_by = values.get("sort_by", [])
+        sort_by = info.data.get("sort_by", [])
         if v and sort_by and len(v) != len(sort_by):
-            raise ValueError("Number of sort orders must match number of sort fields")
+            raise ValueError(
+                "Number of sort orders must match number of sort fields"
+            )
         return v
 
 
 class DateRangeParams(BaseValidatedModel):
     """Date range query parameters."""
 
-    start_date: Optional[datetime] = Field(
+    start_date: datetime | None = Field(
         None, description="Start date (ISO 8601 format)"
     )
 
-    end_date: Optional[datetime] = Field(None, description="End date (ISO 8601 format)")
+    end_date: datetime | None = Field(
+        None, description="End date (ISO 8601 format)"
+    )
 
     date_field: str = Field(
         default="created_at",
@@ -261,12 +282,11 @@ class DateRangeParams(BaseValidatedModel):
         extra="forbid",
     )
 
-    # TODO[pydantic]: We couldn't refactor the `validator`, please replace it by `field_validator` manually.
-    # Check https://docs.pydantic.dev/dev-v2/migration/#changes-to-validators for more information.
-    @validator("end_date")
-    def validate_date_range(cls, v, values):
+    @field_validator("end_date")
+    @classmethod
+    def validate_date_range(cls, v, info):
         """Validate date range."""
-        start_date = values.get("start_date")
+        start_date = info.data.get("start_date")
         if start_date and v and v < start_date:
             raise ValueError("End date must be after start date")
         return v
@@ -275,33 +295,38 @@ class DateRangeParams(BaseValidatedModel):
 class AgentQueryParams(BaseValidatedModel):
     """Agent-specific query parameters."""
 
-    agent_id: Optional[StringConstraints.AGENT_ID] = Field(
+    agent_id: StringConstraints.AGENT_ID | None = Field(
         None, description="Filter by agent ID"
     )
 
-    name: Optional[Annotated[str, StringConstraints(min_length=1, max_length=100)]] = Field(
-        None, description="Filter by agent name (partial match)"
-    )
+    name: (
+        Annotated[str, StringConstraints(min_length=1, max_length=100)] | None
+    ) = Field(None, description="Filter by agent name (partial match)")
 
-    type: Optional[str] = Field(None, description="Filter by agent type")
+    type: str | None = Field(None, description="Filter by agent type")
 
-    status: Optional[str] = Field(None, description="Filter by agent status")
+    status: str | None = Field(None, description="Filter by agent status")
 
-    tools: Optional[List[str]] = Field(
+    tools: list[str] | None = Field(
         None, description="Filter by tools", max_length=10
     )
 
-    model_name: Optional[StringConstraints.MODEL_NAME] = Field(
+    model_name: StringConstraints.MODEL_NAME | None = Field(
         None, description="Filter by model name"
     )
 
-    memory_enabled: Optional[bool] = Field(None, description="Filter by memory setting")
-
-    include_inactive: bool = Field(default=False, description="Include inactive agents")
-
-    tags: Optional[List[Annotated[str, StringConstraints(min_length=1, max_length=50)]]] = Field(
-        None, description="Filter by tags", max_length=5
+    memory_enabled: bool | None = Field(
+        None, description="Filter by memory setting"
     )
+
+    include_inactive: bool = Field(
+        default=False, description="Include inactive agents"
+    )
+
+    tags: (
+        list[Annotated[str, StringConstraints(min_length=1, max_length=50)]]
+        | None
+    ) = Field(None, description="Filter by tags", max_length=5)
 
     model_config = ConfigDict(
         extra="forbid",
@@ -327,19 +352,23 @@ class AgentQueryParams(BaseValidatedModel):
         # Validate individual items
         for item in v:
             if ValidationPatterns.SCRIPT_PATTERN.search(item):
-                raise ValueError(f"List item contains malicious content: {item}")
+                raise ValueError(
+                    f"List item contains malicious content: {item}"
+                )
         return v
 
 
 class SystemQueryParams(BaseValidatedModel):
     """System monitoring query parameters."""
 
-    metric_types: Optional[List[str]] = Field(
+    metric_types: list[str] | None = Field(
         None, description="Types of metrics to retrieve", max_length=10
     )
 
-    time_range: Optional[str] = Field(
-        None, pattern=r"^(1h|6h|24h|7d|30d|90d)$", description="Time range for metrics"
+    time_range: str | None = Field(
+        None,
+        pattern=r"^(1h|6h|24h|7d|30d|90d)$",
+        description="Time range for metrics",
     )
 
     aggregation: str = Field(
@@ -348,9 +377,11 @@ class SystemQueryParams(BaseValidatedModel):
         description="Aggregation method",
     )
 
-    include_alerts: bool = Field(default=True, description="Include system alerts")
+    include_alerts: bool = Field(
+        default=True, description="Include system alerts"
+    )
 
-    severity_filter: Optional[List[str]] = Field(
+    severity_filter: list[str] | None = Field(
         None, description="Filter by alert severity", max_length=3
     )
 
@@ -379,19 +410,25 @@ class AuditQueryParams(BaseValidatedModel):
         description="Audit status filter",
     )
 
-    query: Optional[Annotated[str, StringConstraints(min_length=1, max_length=200, strip_whitespace=True)]] = (
-        Field(None, description="Search query")
-    )
+    query: (
+        Annotated[
+            str,
+            StringConstraints(
+                min_length=1, max_length=200, strip_whitespace=True
+            ),
+        ]
+        | None
+    ) = Field(None, description="Search query")
 
-    user_id: Optional[StringConstraints.SAFE_TEXT] = Field(
+    user_id: StringConstraints.SAFE_TEXT | None = Field(
         None, description="Filter by user ID"
     )
 
-    agent_id: Optional[StringConstraints.AGENT_ID] = Field(
+    agent_id: StringConstraints.AGENT_ID | None = Field(
         None, description="Filter by agent ID"
     )
 
-    severity: Optional[List[str]] = Field(
+    severity: list[str] | None = Field(
         None, description="Filter by severity levels", max_length=3
     )
 
@@ -404,30 +441,34 @@ class AuditQueryParams(BaseValidatedModel):
     def validate_search_query(cls, v):
         """Validate search query."""
         if v and ValidationPatterns.SCRIPT_PATTERN.search(v):
-            raise ValueError("Search query contains potentially malicious content")
+            raise ValueError(
+                "Search query contains potentially malicious content"
+            )
         return v
 
 
 class FileQueryParams(BaseValidatedModel):
     """File-related query parameters."""
 
-    file_types: Optional[List[str]] = Field(
+    file_types: list[str] | None = Field(
         None, description="Filter by file types", max_length=10
     )
 
-    size_min: Optional[int] = Field(
+    size_min: int | None = Field(
         None, ge=0, description="Minimum file size in bytes"
     )
 
-    size_max: Optional[int] = Field(
+    size_max: int | None = Field(
         None, ge=0, description="Maximum file size in bytes"
     )
 
-    uploaded_by: Optional[StringConstraints.SAFE_TEXT] = Field(
+    uploaded_by: StringConstraints.SAFE_TEXT | None = Field(
         None, description="Filter by uploader"
     )
 
-    status: Optional[str] = Field(None, description="Filter by file processing status")
+    status: str | None = Field(
+        None, description="Filter by file processing status"
+    )
 
     model_config = ConfigDict(
         extra="forbid",
@@ -436,7 +477,7 @@ class FileQueryParams(BaseValidatedModel):
     # TODO[pydantic]: We couldn't refactor the `validator`, please replace it by `field_validator` manually.
     # Check https://docs.pydantic.dev/dev-v2/migration/#changes-to-validators for more information.
     @validator("size_max")
-    def validate_size_range(cls, v, values):
+    def validate_size_range(self, v, values):
         """Validate file size range."""
         size_min = values.get("size_min")
         if size_min and v and v < size_min:
@@ -448,9 +489,13 @@ class FileQueryParams(BaseValidatedModel):
     def validate_text_fields(cls, v):
         """Validate text fields."""
         if v:
-            if isinstance(v, str) and ValidationPatterns.SCRIPT_PATTERN.search(v):
-                raise ValueError("Field contains potentially malicious content")
-            elif isinstance(v, list):
+            if isinstance(v, str) and ValidationPatterns.SCRIPT_PATTERN.search(
+                v
+            ):
+                raise ValueError(
+                    "Field contains potentially malicious content"
+                )
+            if isinstance(v, list):
                 for item in v:
                     if ValidationPatterns.SCRIPT_PATTERN.search(item):
                         raise ValueError(
@@ -460,7 +505,9 @@ class FileQueryParams(BaseValidatedModel):
 
 
 # Combined query parameters for complex endpoints
-class CombinedQueryParams(PaginationParams, SearchParams, SortParams, DateRangeParams):
+class CombinedQueryParams(
+    PaginationParams, SearchParams, SortParams, DateRangeParams
+):
     """Combined query parameters for endpoints that support multiple filtering options."""
 
     model_config = ConfigDict(

@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 import asyncio
-import random
+import secrets
 import time
-from typing import Any, List
+from typing import Any
 
 from resync.core.enhanced_async_cache import EnhancedAsyncTTLCache  # type: ignore[attr-defined]
 
@@ -34,10 +34,10 @@ async def simulate_high_concurrency(
     async def worker_task(task_id: int) -> None:
         for i in range(operations_per_task):
             # Select random key
-            key = random.choice(keys)
+            key = secrets.choice(keys)
 
             # Perform operation based on read ratio
-            if random.random() < read_ratio:
+            if secrets.random() < read_ratio:
                 # Read operation
                 await cache.get(key)
             else:
@@ -83,7 +83,7 @@ async def demonstrate_key_level_locking(cache: EnhancedAsyncTTLCache) -> None:  
     await cache.set("key2", "value2")
 
     # Define tasks that operate on different keys
-    async def task1() -> List[float]:
+    async def task1() -> list[float]:
         times = []
         for i in range(10):
             start = time.time()
@@ -93,7 +93,7 @@ async def demonstrate_key_level_locking(cache: EnhancedAsyncTTLCache) -> None:  
             times.append(time.time() - start)
         return times
 
-    async def task2() -> List[float]:
+    async def task2() -> list[float]:
         times = []
         for i in range(10):
             start = time.time()

@@ -9,11 +9,11 @@ from __future__ import annotations
 
 import asyncio
 from datetime import datetime, timedelta
-from typing import Dict, List, Optional
+from typing import Any, Dict
 
 import structlog
-
-from resync.core.health_models import (
+from resync.models.health_models import ComponentHealth
+from resync.models.health_models import (
     HealthCheckResult,
     HealthStatus,
     HealthStatusHistory,
@@ -57,7 +57,7 @@ class HealthHistoryManager:
         self.cleanup_batch_size = cleanup_batch_size
         self.history_cleanup_threshold = history_cleanup_threshold
 
-        self.health_history: List[HealthStatusHistory] = []
+        self.health_history: list[HealthStatusHistory] = []
         self._memory_usage_mb: float = 0.0
         self._cleanup_lock = asyncio.Lock()
 
@@ -69,7 +69,9 @@ class HealthHistoryManager:
             result: Health check result to add
         """
         # Create history entry
-        component_changes = await self._get_component_changes(result.components)
+        component_changes = await self._get_component_changes(
+            result.components
+        )
         history_entry = HealthStatusHistory(
             timestamp=result.timestamp,
             overall_status=result.overall_status,
@@ -87,8 +89,8 @@ class HealthHistoryManager:
             asyncio.create_task(self._update_memory_usage())
 
     async def _get_component_changes(
-        self, components: Dict[str, ComponentHealth]
-    ) -> Dict[str, HealthStatus]:
+        self, components: dict[str, ComponentHealth]
+    ) -> dict[str, HealthStatus]:
         """
         Track component status changes for history.
 
@@ -114,9 +116,7 @@ class HealthHistoryManager:
         async with self._cleanup_lock:
             try:
                 current_size = len(self.health_history)
-                cleanup_threshold = int(
-                    self.max_history_entries * self.history_cleanup_threshold
-                )
+                int(self.max_history_entries * self.history_cleanup_threshold)
 
                 # Check if cleanup is needed based on size
                 if current_size > self.max_history_entries:
@@ -125,7 +125,9 @@ class HealthHistoryManager:
                         - self.max_history_entries
                         + self.cleanup_batch_size
                     )
-                    self.health_history = self.health_history[entries_to_remove:]
+                    self.health_history = self.health_history[
+                        entries_to_remove:
+                    ]
                     logger.debug(
                         "cleaned_up_health_history_entries_size_based",
                         entries_to_remove=entries_to_remove,
@@ -160,7 +162,9 @@ class HealthHistoryManager:
                     self.health_history = self.health_history[-min_entries:]
 
             except Exception as e:
-                logger.error("error_during_health_history_cleanup", error=str(e))
+                logger.error(
+                    "error_during_health_history_cleanup", error=str(e)
+                )
 
     async def _update_memory_usage(self) -> None:
         """Update memory usage tracking for health history."""
@@ -185,7 +189,7 @@ class HealthHistoryManager:
         except Exception as e:
             logger.error("error_updating_memory_usage", error=str(e))
 
-    def get_memory_usage(self) -> Dict[str, Any]:
+    def get_memory_usage(self) -> dict[str, Any]:
         """
         Get current memory usage statistics.
 
@@ -202,7 +206,7 @@ class HealthHistoryManager:
             "cleanup_batch_size": self.cleanup_batch_size,
         }
 
-    async def force_cleanup(self) -> Dict[str, Any]:
+    async def force_cleanup(self) -> dict[str, Any]:
         """
         Force immediate cleanup of health history.
 
@@ -223,9 +227,9 @@ class HealthHistoryManager:
     def get_health_history(
         self,
         hours: int = 24,
-        max_entries: Optional[int] = None,
-        component_filter: Optional[str] = None,
-    ) -> List[HealthStatusHistory]:
+        max_entries: int | None = None,
+        component_filter: str | None = None,
+    ) -> list[HealthStatusHistory]:
         """
         Get health history for the specified time period.
 
@@ -241,7 +245,9 @@ class HealthHistoryManager:
 
         # Filter by time
         filtered_history = [
-            entry for entry in self.health_history if entry.timestamp >= cutoff_time
+            entry
+            for entry in self.health_history
+            if entry.timestamp >= cutoff_time
         ]
 
         # Filter by component if specified
@@ -260,8 +266,11 @@ class HealthHistoryManager:
         return filtered_history
 
     def get_component_status_history(
-        self, component_name: str, hours: int = 24, max_entries: Optional[int] = None
-    ) -> List[Dict[str, Any]]:
+        self,
+        component_name: str,
+        hours: int = 24,
+        max_entries: int | None = None,
+    ) -> list[dict[str, Any]]:
         """
         Get status history for a specific component.
 
@@ -294,7 +303,7 @@ class HealthHistoryManager:
 
         return component_history
 
-    def get_history_stats(self) -> Dict[str, Any]:
+    def get_history_stats(self) -> dict[str, Any]:
         """
         Get statistics about the health history.
 

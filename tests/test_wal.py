@@ -1,8 +1,10 @@
-import pytest
-import tempfile
 import asyncio
+import tempfile
 from pathlib import Path
-from resync.core.write_ahead_log import WriteAheadLog, WalEntry, WalOperationType
+
+import pytest
+
+from resync.core.write_ahead_log import WalEntry, WalOperationType, WriteAheadLog
 
 
 @pytest.mark.asyncio
@@ -166,7 +168,7 @@ async def test_wal_cleanup_old_logs():
         await wal.cleanup_old_logs(retention_hours=0)
 
         # Verify old log files were removed based on retention policy
-        log_files_final = list(wal_path.glob("wal_*.log"))
+        list(wal_path.glob("wal_*.log"))
 
         # Since we have files that were just created, they may not be old enough to be cleaned
         # But the cleanup operation should still run without error

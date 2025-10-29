@@ -1,28 +1,30 @@
 """Testes para o módulo de exceções customizadas."""
 
-import pytest
 from datetime import datetime
+
+import pytest
+
 from resync.core.exceptions import (
-    BaseAppException,
-    ErrorCode,
-    ErrorSeverity,
-    ValidationError,
     AuthenticationError,
     AuthorizationError,
-    ResourceNotFoundError,
-    ResourceConflictError,
+    BaseAppException,
     BusinessError,
-    RateLimitError,
-    InternalError,
-    IntegrationError,
-    ServiceUnavailableError,
-    CircuitBreakerError,
-    TimeoutError,
-    ConfigurationError,
-    TWSConnectionError,
-    LLMError,
-    DatabaseError,
     CacheError,
+    CircuitBreakerError,
+    ConfigurationError,
+    DatabaseError,
+    ErrorCode,
+    ErrorSeverity,
+    IntegrationError,
+    InternalError,
+    LLMError,
+    RateLimitError,
+    ResourceConflictError,
+    ResourceNotFoundError,
+    ServiceUnavailableError,
+    TimeoutError,
+    TWSConnectionError,
+    ValidationError,
     get_exception_by_error_code,
 )
 

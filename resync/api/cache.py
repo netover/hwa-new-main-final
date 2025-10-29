@@ -7,10 +7,10 @@ It supports both memory and Redis-based caching with detailed metrics.
 
 import logging
 import secrets
-from typing import Optional, Union
 
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
+
 try:
     from redis import Redis
     from redis.exceptions import ConnectionError, TimeoutError
@@ -26,11 +26,10 @@ except ImportError:
 from pydantic import BaseModel
 from redis import Redis
 from redis.exceptions import ConnectionError, TimeoutError
-
-from resync.core.fastapi_di import get_tws_client
-from resync.core.interfaces import ITWSClient
 from resync.core.rate_limiter import authenticated_rate_limit
-from resync.settings import settings
+from resync.config.settings import settings
+from resync.core.fastapi_di import get_tws_client
+from resync.utils.interfaces import ITWSClient
 
 logger = logging.getLogger(__name__)
 
@@ -45,11 +44,21 @@ tws_client_dependency = Depends(get_tws_client)
 
 
 class CacheInvalidationResponse(BaseModel):
+    """Response model for cache invalidation operations.
+    
+    Contains the status and details of cache invalidation requests,
+    providing feedback on whether the operation was successful.
+    """
     status: str
     detail: str
 
 
 class CacheStats(BaseModel):
+    """Model for cache performance statistics.
+    
+    Tracks cache hit/miss metrics and calculates hit rate for monitoring
+    cache effectiveness and performance.
+    """
     hits: int
     misses: int
     hit_rate: float
@@ -83,7 +92,9 @@ class ConnectionPoolValidator:
             return False
 
         if min_connections > max_connections:
-            logger.error("Minimum connections must not exceed maximum connections")
+            logger.error(
+                "Minimum connections must not exceed maximum connections"
+            )
             return False
 
         if timeout <= 0:
@@ -97,7 +108,7 @@ class ConnectionPoolValidator:
         return True
 
 
-def get_redis_connection() -> Optional[Redis]:
+def get_redis_connection() -> Redis | None:
     """
     Get a Redis connection using connection pooling and validation.
 
@@ -132,7 +143,7 @@ class RedisCacheManager:
     def __init__(self, redis_client: Redis):
         self.redis_client = redis_client
 
-    def get(self, key: str) -> Optional[str]:
+    def get(self, key: str) -> str | None:
         """
         Retrieve a value from Redis cache.
 
@@ -206,7 +217,9 @@ class RedisCacheManager:
             total_deleted = 0
             for key in self.redis_client.scan_iter(match=pattern, count=1000):
                 total_deleted += int(self.redis_client.delete(key))
-            logger.debug(f"Cleared {total_deleted} keys matching pattern: {pattern}")
+            logger.debug(
+                f"Cleared {total_deleted} keys matching pattern: {pattern}"
+            )
             return total_deleted
         except Exception as e:
             logger.error(f"Error clearing pattern: {e}")
@@ -225,13 +238,17 @@ class RedisCacheManager:
         misses = int(info.get("keyspace_misses", 0))
         total = hits + misses
         hit_rate = (hits / total) if total > 0 else 0.0
-        size = sum(int(db_info.get("keys", 0)) for db_info in keyspace.values())
+        size = sum(
+            int(db_info.get("keys", 0)) for db_info in keyspace.values()
+        )
 
-        return CacheStats(hits=hits, misses=misses, hit_rate=hit_rate, size=size)
+        return CacheStats(
+            hits=hits, misses=misses, hit_rate=hit_rate, size=size
+        )
 
 
 # Global Redis cache manager instance
-redis_manager: Optional[RedisCacheManager] = None
+redis_manager: RedisCacheManager | None = None
 
 
 def validate_connection_pool() -> bool:
@@ -250,7 +267,9 @@ def validate_connection_pool() -> bool:
         logger.error(f"Error parsing Redis connection settings: {e}")
         return False
 
-    return ConnectionPoolValidator.validate_connection_pool(min_conn, max_conn, timeout)
+    return ConnectionPoolValidator.validate_connection_pool(
+        min_conn, max_conn, timeout
+    )
 
 
 async def verify_admin_credentials(
@@ -352,7 +371,7 @@ async def invalidate_tws_cache(
             return CacheInvalidationResponse(
                 status="success", detail="Full TWS system cache invalidated."
             )
-        elif scope == "jobs":
+        if scope == "jobs":
             # Use Redis manager to clear job-related keys if available
             if redis_manager:
                 redis_manager.clear_pattern("tws:jobs:*")
@@ -362,7 +381,7 @@ async def invalidate_tws_cache(
             return CacheInvalidationResponse(
                 status="success", detail="All jobs list cache invalidated."
             )
-        elif scope == "workstations":
+        if scope == "workstations":
             # Use Redis manager to clear workstation-related keys if available
             if redis_manager:
                 redis_manager.clear_pattern("tws:workstations:*")
@@ -370,14 +389,16 @@ async def invalidate_tws_cache(
             await tws_client.invalidate_all_workstations()
             logger.info("All workstations list cache invalidated successfully")
             return CacheInvalidationResponse(
-                status="success", detail="All workstations list cache invalidated."
+                status="success",
+                detail="All workstations list cache invalidated.",
             )
-        else:
-            logger.warning(f"Invalid scope '{scope}' provided for cache invalidation")
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"Invalid scope '{scope}'. Must be 'system', 'jobs', or 'workstations'.",
-            )
+        logger.warning(
+            f"Invalid scope '{scope}' provided for cache invalidation"
+        )
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Invalid scope '{scope}'. Must be 'system', 'jobs', or 'workstations'.",
+        )
     except HTTPException:
         # Re-raise HTTP exceptions as-is
         raise
@@ -389,7 +410,9 @@ async def invalidate_tws_cache(
         ) from e
 
 
-@cache_router.get("/stats", summary="Get cache statistics", response_model=CacheStats)
+@cache_router.get(
+    "/stats", summary="Get cache statistics", response_model=CacheStats
+)
 @authenticated_rate_limit
 async def get_cache_stats(
     request: Request, creds: HTTPBasicCredentials = security_dependency
@@ -425,7 +448,7 @@ async def get_cache_stats(
 
 def get_database_connection(
     min_connections: int = 1, max_connections: int = 10, timeout: float = 30.0
-) -> Union[object, None]:
+) -> object | None:
     """
     Get a database connection with pool validation.
 
@@ -445,5 +468,7 @@ def get_database_connection(
 
     # In a real implementation, this would return an actual database connection
     # based on the validated pool parameters
-    logger.info("Database connection retrieved successfully after pool validation")
+    logger.info(
+        "Database connection retrieved successfully after pool validation"
+    )
     return object()  # Placeholder for actual connection

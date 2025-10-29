@@ -3,7 +3,7 @@ Service Level Objectives and Key Performance Indicators configuration
 """
 
 from dataclasses import dataclass
-from typing import Any, Dict
+from typing import Any
 
 
 @dataclass
@@ -67,7 +67,7 @@ KPI_DEFINITIONS = {
 }
 
 
-def validate_slo_compliance(metrics: Dict[str, Any]) -> Dict[str, bool]:
+def validate_slo_compliance(metrics: dict[str, Any]) -> dict[str, bool]:
     """
     Validate if current metrics are compliant with SLOs
 
@@ -95,6 +95,8 @@ def validate_slo_compliance(metrics: Dict[str, Any]) -> Dict[str, bool]:
             else:
                 compliance_report[kpi_name] = current_value <= target
         else:
-            compliance_report[kpi_name] = False  # Missing metric is non-compliant
+            compliance_report[kpi_name] = (
+                False  # Missing metric is non-compliant
+            )
 
     return compliance_report

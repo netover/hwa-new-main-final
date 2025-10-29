@@ -4,21 +4,13 @@ Este módulo implementa handlers para todas as exceções da aplicação,
 convertendo-as em respostas HTTP padronizadas seguindo RFC 7807.
 """
 
-from typing import Union
-
 from fastapi import Request, status
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from pydantic import ValidationError as PydanticValidationError
-from starlette.exceptions import HTTPException as StarletteHTTPException
-
-from resync.api.models.responses import (
-    ValidationErrorDetail,
-    create_problem_detail,
-    create_validation_problem_detail,
-)
 from resync.core.context import get_correlation_id
-from resync.core.exceptions import (
+from resync.core.exceptions_enhanced import ResyncException
+from resync_new.utils.exceptions import (
     AuthenticationError,
     AuthorizationError,
     BaseAppException,
@@ -28,8 +20,14 @@ from resync.core.exceptions import (
     ResourceNotFoundError,
     ValidationError,
 )
-from resync.core.exceptions_enhanced import ResyncException
-from resync.core.structured_logger import get_logger
+from resync_new.utils.simple_logger import get_logger
+from starlette.exceptions import HTTPException as StarletteHTTPException
+
+from resync.api.models.responses import (
+    ValidationErrorDetail,
+    create_problem_detail,
+    create_validation_problem_detail,
+)
 
 logger = get_logger(__name__)
 
@@ -65,10 +63,10 @@ async def base_app_exception_handler(
     # Criar problem detail
     problem = create_problem_detail(
         type_uri=f"https://api.example.com/errors/{exc.error_code.value.lower()}",
-        title=exc.error_code.name.replace('_', ' ').title(),
+        title=exc.error_code.name.replace("_", " ").title(),
         status=exc.status_code,
         detail=exc.message,
-        instance=str(request.url.path)
+        instance=str(request.url.path),
     )
 
     # Adicionar headers específicos
@@ -130,10 +128,10 @@ async def resync_exception_handler(
     # Criar problem detail
     problem = create_problem_detail(
         type_uri=f"https://api.example.com/errors/{exc.error_code.lower()}",
-        title=exc.error_code.replace('_', ' ').title(),
+        title=exc.error_code.replace("_", " ").title(),
         status=status_code,
         detail=exc.user_friendly_message or exc.message,
-        instance=str(request.url.path)
+        instance=str(request.url.path),
     )
 
     headers = {}
@@ -148,7 +146,7 @@ async def resync_exception_handler(
 
 
 async def validation_exception_handler(
-    request: Request, exc: Union[RequestValidationError, PydanticValidationError]
+    request: Request, exc: RequestValidationError | PydanticValidationError
 ) -> JSONResponse:
     """Handler para erros de validação do Pydantic/FastAPI.
 
@@ -228,29 +226,27 @@ async def http_exception_handler(
 
     # Mapear para nossa exceção
     if exc.status_code == 404:
-        app_exc = ResourceNotFoundError(
+        ResourceNotFoundError(
             message=str(exc.detail), correlation_id=correlation_id
         )
     elif exc.status_code == 401:
-        app_exc = AuthenticationError(
+        AuthenticationError(
             message=str(exc.detail), correlation_id=correlation_id
         )
     elif exc.status_code == 403:
-        app_exc = AuthorizationError(
+        AuthorizationError(
             message=str(exc.detail), correlation_id=correlation_id
         )
     elif exc.status_code == 409:
-        app_exc = ResourceConflictError(
+        ResourceConflictError(
             message=str(exc.detail), correlation_id=correlation_id
         )
     elif exc.status_code == 429:
-        app_exc = RateLimitError(message=str(exc.detail), correlation_id=correlation_id)
+        RateLimitError(message=str(exc.detail), correlation_id=correlation_id)
     elif exc.status_code >= 500:
-        app_exc = InternalError(message=str(exc.detail), correlation_id=correlation_id)
+        InternalError(message=str(exc.detail), correlation_id=correlation_id)
     else:
-        app_exc = ValidationError(
-            message=str(exc.detail), correlation_id=correlation_id
-        )
+        ValidationError(message=str(exc.detail), correlation_id=correlation_id)
 
     # Criar problem detail
     problem = create_problem_detail(
@@ -258,7 +254,7 @@ async def http_exception_handler(
         title="HTTP Exception",
         status=exc.status_code,
         detail=str(exc.detail),
-        instance=str(request.url.path)
+        instance=str(request.url.path),
     )
 
     headers = {}
@@ -297,9 +293,12 @@ async def unhandled_exception_handler(
     )
 
     # Criar exceção interna
-    app_exc = InternalError(
+    InternalError(
         message="An unexpected error occurred",
-        details={"exception_type": type(exc).__name__, "exception_message": str(exc)},
+        details={
+            "exception_type": type(exc).__name__,
+            "exception_message": str(exc),
+        },
         correlation_id=correlation_id,
         original_exception=exc,
     )
@@ -310,7 +309,7 @@ async def unhandled_exception_handler(
         title="Internal Server Error",
         status=500,
         detail="An unexpected error occurred",
-        instance=str(request.url.path)
+        instance=str(request.url.path),
     )
 
     headers = {}
@@ -342,8 +341,12 @@ def register_exception_handlers(app) -> None:
     app.add_exception_handler(ResyncException, resync_exception_handler)
 
     # Exceções de validação
-    app.add_exception_handler(RequestValidationError, validation_exception_handler)
-    app.add_exception_handler(PydanticValidationError, validation_exception_handler)
+    app.add_exception_handler(
+        RequestValidationError, validation_exception_handler
+    )
+    app.add_exception_handler(
+        PydanticValidationError, validation_exception_handler
+    )
 
     # Exceções HTTP do Starlette
     app.add_exception_handler(StarletteHTTPException, http_exception_handler)

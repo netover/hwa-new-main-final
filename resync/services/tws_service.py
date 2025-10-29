@@ -22,9 +22,9 @@ from resync.core.resilience import (
     CircuitBreakerManager,
     retry_with_backoff_async,
 )
-from resync_new.config.settings import settings  # New import
-from resync_new.core.connection_pool_manager import get_connection_pool_manager
-from resync_new.utils.exceptions import TWSConnectionError
+from resync.config.settings import settings  # New import
+from resync.core.connection_pool_manager import get_connection_pool_manager
+from resync.utils.exceptions import TWSConnectionError
 
 from resync.models.tws import (
     CriticalJob,

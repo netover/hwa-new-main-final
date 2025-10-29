@@ -9,11 +9,11 @@ memory optimization strategies.
 from __future__ import annotations
 
 import asyncio
+import contextlib
 import gc
-import psutil
 from datetime import datetime, timedelta
-from typing import Dict, List, Optional
 
+import psutil
 import structlog
 
 logger = structlog.get_logger(__name__)
@@ -51,11 +51,11 @@ class MemoryManager:
         # Memory tracking
         self._current_memory_usage_mb: float = 0.0
         self._peak_memory_usage_mb: float = 0.0
-        self._last_memory_check: Optional[datetime] = None
-        self._memory_history: List[Dict[str, float]] = []
+        self._last_memory_check: datetime | None = None
+        self._memory_history: list[dict[str, float]] = []
 
         # Cleanup tracking
-        self._last_cleanup: Optional[datetime] = None
+        self._last_cleanup: datetime | None = None
         self._cleanup_count = 0
         self._memory_freed_mb = 0.0
 
@@ -113,7 +113,9 @@ class MemoryManager:
 
             current_usage = await self.get_current_memory_usage()
             if current_usage > self.memory_threshold_mb:
-                logger.info("triggering_memory_cleanup", usage_mb=current_usage)
+                logger.info(
+                    "triggering_memory_cleanup", usage_mb=current_usage
+                )
                 freed_memory = await self.perform_memory_cleanup()
                 logger.info("memory_cleanup_completed", freed_mb=freed_memory)
 
@@ -129,7 +131,7 @@ class MemoryManager:
         """
         async with self._cleanup_lock:
             start_time = datetime.now()
-            initial_memory = await self.get_current_memory_usage()
+            await self.get_current_memory_usage()
 
             try:
                 # Force garbage collection
@@ -140,7 +142,6 @@ class MemoryManager:
                 memory_before = process.memory_info().rss / (1024 * 1024)  # MB
 
                 # Perform cleanup operations
-                cleanup_actions = []
 
                 # Clear any large data structures if needed
                 # This would be extended based on specific cleanup needs
@@ -157,7 +158,9 @@ class MemoryManager:
                 self._last_cleanup = datetime.now()
                 self._memory_freed_mb += memory_freed
 
-                cleanup_time_ms = (datetime.now() - start_time).total_seconds() * 1000
+                cleanup_time_ms = (
+                    datetime.now() - start_time
+                ).total_seconds() * 1000
 
                 logger.info(
                     "memory_cleanup_performed",
@@ -183,7 +186,7 @@ class MemoryManager:
             logger.warning("failed_to_get_memory_usage", error=str(e))
             return 0.0
 
-    def get_memory_stats(self) -> Dict[str, any]:
+    def get_memory_stats(self) -> dict[str, any]:
         """
         Get comprehensive memory statistics.
 
@@ -196,7 +199,9 @@ class MemoryManager:
             "threshold_mb": self.memory_threshold_mb,
             "memory_monitoring_enabled": self.enable_memory_monitoring,
             "last_memory_check": (
-                self._last_memory_check.isoformat() if self._last_memory_check else None
+                self._last_memory_check.isoformat()
+                if self._last_memory_check
+                else None
             ),
             "last_cleanup": (
                 self._last_cleanup.isoformat() if self._last_cleanup else None
@@ -209,8 +214,8 @@ class MemoryManager:
         }
 
     def get_memory_history(
-        self, hours: int = 24, limit: Optional[int] = None
-    ) -> List[Dict[str, float]]:
+        self, hours: int = 24, limit: int | None = None
+    ) -> list[dict[str, float]]:
         """
         Get memory usage history.
 
@@ -224,7 +229,9 @@ class MemoryManager:
         cutoff_time = datetime.now() - timedelta(hours=hours)
 
         filtered_history = [
-            entry for entry in self._memory_history if entry["timestamp"] >= cutoff_time
+            entry
+            for entry in self._memory_history
+            if entry["timestamp"] >= cutoff_time
         ]
 
         # Sort by timestamp (most recent first)
@@ -236,7 +243,7 @@ class MemoryManager:
 
         return filtered_history
 
-    async def force_memory_cleanup(self) -> Dict[str, any]:
+    async def force_memory_cleanup(self) -> dict[str, any]:
         """
         Force immediate memory cleanup.
 
@@ -286,7 +293,9 @@ class HealthHistoryMemoryManager(MemoryManager):
 
         self.max_history_entries = max_history_entries
         self.history_retention_days = history_retention_days
-        self.history_cleanup_threshold = 0.8  # Cleanup when 80% of max entries reached
+        self.history_cleanup_threshold = (
+            0.8  # Cleanup when 80% of max entries reached
+        )
 
         # History-specific tracking
         self._current_history_size = 0
@@ -309,7 +318,9 @@ class HealthHistoryMemoryManager(MemoryManager):
         estimated_size_bytes = entry_count * 2048
         return estimated_size_bytes / (1024 * 1024)  # Convert to MB
 
-    async def update_history_memory_usage(self, current_entry_count: int) -> None:
+    async def update_history_memory_usage(
+        self, current_entry_count: int
+    ) -> None:
         """
         Update memory usage based on current history entry count.
 
@@ -333,7 +344,7 @@ class HealthHistoryMemoryManager(MemoryManager):
             True if cleanup should be performed
         """
         # Cleanup based on entry count
-        entry_threshold = int(self.max_history_entries * self.history_cleanup_threshold)
+        int(self.max_history_entries * self.history_cleanup_threshold)
         if current_entries > self.max_history_entries:
             return True
 
@@ -344,7 +355,7 @@ class HealthHistoryMemoryManager(MemoryManager):
 
     async def perform_history_cleanup(
         self, current_entries: int, cleanup_callback=None
-    ) -> Dict[str, any]:
+    ) -> dict[str, any]:
         """
         Perform cleanup of health history based on memory pressure.
 
@@ -370,11 +381,14 @@ class HealthHistoryMemoryManager(MemoryManager):
                     target_entries = int(
                         self.max_history_entries * 0.7
                     )  # Target 70% of max
-                    entries_to_remove = max(0, current_entries - target_entries)
+                    entries_to_remove = max(
+                        0, current_entries - target_entries
+                    )
                 else:
                     # Remove based on entry count threshold
                     entry_threshold = int(
-                        self.max_history_entries * self.history_cleanup_threshold
+                        self.max_history_entries
+                        * self.history_cleanup_threshold
                     )
                     if current_entries > entry_threshold:
                         entries_to_remove = current_entries - entry_threshold
@@ -385,7 +399,9 @@ class HealthHistoryMemoryManager(MemoryManager):
 
                 # Update tracking
                 self._history_cleanup_count += 1
-                cleanup_time_ms = (datetime.now() - start_time).total_seconds() * 1000
+                cleanup_time_ms = (
+                    datetime.now() - start_time
+                ).total_seconds() * 1000
 
                 logger.info(
                     "history_cleanup_performed",
@@ -412,7 +428,7 @@ class HealthHistoryMemoryManager(MemoryManager):
                     "entries_removed": 0,
                 }
 
-    def get_history_memory_stats(self) -> Dict[str, any]:
+    def get_history_memory_stats(self) -> dict[str, any]:
         """Get memory statistics specific to health history."""
         base_stats = self.get_memory_stats()
 
@@ -446,7 +462,7 @@ class SystemMemoryMonitor:
         """
         self.warning_threshold_percent = warning_threshold_percent
         self._monitoring_active = False
-        self._monitor_task: Optional[asyncio.Task] = None
+        self._monitor_task: asyncio.Task | None = None
 
     async def start_monitoring(self) -> None:
         """Start continuous system memory monitoring."""
@@ -462,10 +478,8 @@ class SystemMemoryMonitor:
         self._monitoring_active = False
         if self._monitor_task:
             self._monitor_task.cancel()
-            try:
+            with contextlib.suppress(asyncio.CancelledError):
                 await self._monitor_task
-            except asyncio.CancelledError:
-                pass
             self._monitor_task = None
         logger.info("system_memory_monitoring_stopped")
 
@@ -492,7 +506,7 @@ class SystemMemoryMonitor:
                 logger.error("error_in_memory_monitoring_loop", error=str(e))
                 await asyncio.sleep(60)  # Wait longer on error
 
-    async def get_memory_info(self) -> Dict[str, float]:
+    async def get_memory_info(self) -> dict[str, float]:
         """
         Get current system memory information.
 

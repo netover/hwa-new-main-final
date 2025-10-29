@@ -1,7 +1,5 @@
 """RAG (Retrieval-Augmented Generation) models."""
 
-from typing import Optional
-
 from pydantic import BaseModel
 
 from .base import BaseModelWithTime
@@ -12,8 +10,8 @@ class RAGFileMetaData(BaseModel):
 
     filename: str
     content_type: str
-    uploaded_by: Optional[str] = None
-    description: Optional[str] = None
+    uploaded_by: str | None = None
+    description: str | None = None
 
 
 class RAGFileCreate(BaseModelWithTime):
@@ -21,7 +19,7 @@ class RAGFileCreate(BaseModelWithTime):
 
     filename: str
     content_type: str
-    metadata: Optional[RAGFileMetaData] = None
+    metadata: RAGFileMetaData | None = None
 
 
 class RAGFileDetail(RAGFileCreate):
@@ -30,25 +28,3 @@ class RAGFileDetail(RAGFileCreate):
     id: str
     file_size: int
     ingestion_status: str
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

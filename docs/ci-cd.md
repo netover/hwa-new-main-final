@@ -211,7 +211,7 @@ MAJOR.MINOR.PATCH
 3. **Dependency Management**:
    - Regular vulnerability scanning
    - Automatic dependency updates
-   - Version pinning in `requirements.txt`
+   - Version pinning in `requirements/*.txt` (base/dev/prod)
 
 4. **Testing**:
    - High coverage (>80%)

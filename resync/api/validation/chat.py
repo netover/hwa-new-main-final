@@ -2,18 +2,21 @@
 
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Annotated, Any
 
-from pydantic import field_validator, StringConstraints, Field, validator, ConfigDict
-from pydantic.types import constr
+from pydantic import (
+    ConfigDict,
+    Field,
+    StringConstraints,
+    field_validator,
+    validator,
+)
 
 from .common import (
     BaseValidatedModel,
     NumericConstraints,
-    StringConstraints,
     ValidationPatterns,
 )
-from typing_extensions import Annotated
 
 
 class MessageType(str, Enum):
@@ -41,12 +44,17 @@ class MessageStatus(str, Enum):
 class ChatMessage(BaseValidatedModel):
     """Chat message validation model."""
 
-    content: Annotated[str, StringConstraints(
-        min_length=NumericConstraints.MIN_MESSAGE_LENGTH,
-        max_length=NumericConstraints.MAX_MESSAGE_LENGTH,
-        strip_whitespace=True,
-    )] = Field(
-        ..., description="Message content", examples=["Hello, how can I help you today?"]
+    content: Annotated[
+        str,
+        StringConstraints(
+            min_length=NumericConstraints.MIN_MESSAGE_LENGTH,
+            max_length=NumericConstraints.MAX_MESSAGE_LENGTH,
+            strip_whitespace=True,
+        ),
+    ] = Field(
+        ...,
+        description="Message content",
+        examples=["Hello, how can I help you today?"],
     )
 
     message_type: MessageType = Field(
@@ -57,23 +65,29 @@ class ChatMessage(BaseValidatedModel):
         ..., description="Message sender identifier", examples=["user123"]
     )
 
-    recipient: Optional[StringConstraints.SAFE_TEXT] = Field(
-        None, description="Message recipient identifier", examples=["agent_tws_specialist"]
+    recipient: StringConstraints.SAFE_TEXT | None = Field(
+        None,
+        description="Message recipient identifier",
+        examples=["agent_tws_specialist"],
     )
 
-    session_id: Optional[StringConstraints.AGENT_ID] = Field(
+    session_id: StringConstraints.AGENT_ID | None = Field(
         None, description="Chat session identifier"
     )
 
-    parent_message_id: Optional[str] = Field(
+    parent_message_id: str | None = Field(
         None, description="ID of the parent message (for threading)"
     )
 
-    metadata: Dict[str, Any] = Field(
-        default_factory=dict, description="Additional message metadata", max_length=20
+    metadata: dict[str, Any] = Field(
+        default_factory=dict,
+        description="Additional message metadata",
+        max_length=20,
     )
 
-    priority: int = Field(default=0, ge=0, le=10, description="Message priority (0-10)")
+    priority: int = Field(
+        default=0, ge=0, le=10, description="Message priority (0-10)"
+    )
 
     status: MessageStatus = Field(
         default=MessageStatus.PENDING, description="Message status"
@@ -150,32 +164,43 @@ class WebSocketMessage(BaseValidatedModel):
         description="WebSocket message type",
     )
 
-    sender: StringConstraints.SAFE_TEXT = Field(..., description="Message sender")
+    sender: StringConstraints.SAFE_TEXT = Field(
+        ..., description="Message sender"
+    )
 
-    message: Optional[
-        Annotated[str, StringConstraints(
-            min_length=1,
-            max_length=NumericConstraints.MAX_MESSAGE_LENGTH,
-            strip_whitespace=True,
-        )]
-    ] = Field(None, description="Message content")
+    message: (
+        Annotated[
+            str,
+            StringConstraints(
+                min_length=1,
+                max_length=NumericConstraints.MAX_MESSAGE_LENGTH,
+                strip_whitespace=True,
+            ),
+        ]
+        | None
+    ) = Field(None, description="Message content")
 
-    agent_id: StringConstraints.AGENT_ID = Field(..., description="Target agent ID")
+    agent_id: StringConstraints.AGENT_ID = Field(
+        ..., description="Target agent ID"
+    )
 
-    session_id: Optional[StringConstraints.AGENT_ID] = Field(
+    session_id: StringConstraints.AGENT_ID | None = Field(
         None, description="WebSocket session ID"
     )
 
-    correlation_id: Optional[str] = Field(
+    correlation_id: str | None = Field(
         None, description="Correlation ID for request tracking"
     )
 
     is_final: bool = Field(
-        default=False, description="Whether this is the final message in a stream"
+        default=False,
+        description="Whether this is the final message in a stream",
     )
 
-    metadata: Dict[str, Any] = Field(
-        default_factory=dict, description="Additional message metadata", max_length=10
+    metadata: dict[str, Any] = Field(
+        default_factory=dict,
+        description="Additional message metadata",
+        max_length=10,
     )
 
     timestamp: datetime = Field(
@@ -187,14 +212,13 @@ class WebSocketMessage(BaseValidatedModel):
         validate_assignment=True,
     )
 
-    # TODO[pydantic]: We couldn't refactor the `validator`, please replace it by `field_validator` manually.
-    # Check https://docs.pydantic.dev/dev-v2/migration/#changes-to-validators for more information.
-    @validator("message")
-    def validate_message_content(cls, v, values):
+    @field_validator("message")
+    @classmethod
+    def validate_message_content(cls, v, info):
         """Validate message content based on type."""
         if v is None:
             return v
-        message_type = values.get("type")
+        message_type = info.data.get("type")
         # Validate content based on message type
         if message_type == "error" and not v:
             raise ValueError("Error messages must have content")
@@ -240,21 +264,24 @@ class ChatSession(BaseValidatedModel):
         description="Session status",
     )
 
-    context: Dict[str, Any] = Field(
+    context: dict[str, Any] = Field(
         default_factory=dict, description="Session context", max_length=10
     )
 
-    metadata: Dict[str, Any] = Field(
+    metadata: dict[str, Any] = Field(
         default_factory=dict, description="Session metadata", max_length=10
     )
 
     created_at: datetime = Field(
-        default_factory=datetime.utcnow, description="Session creation timestamp"
+        default_factory=datetime.utcnow,
+        description="Session creation timestamp",
     )
 
-    updated_at: Optional[datetime] = Field(None, description="Last update timestamp")
+    updated_at: datetime | None = Field(
+        None, description="Last update timestamp"
+    )
 
-    expires_at: Optional[datetime] = Field(
+    expires_at: datetime | None = Field(
         None, description="Session expiration timestamp"
     )
 
@@ -267,34 +294,45 @@ class ChatSession(BaseValidatedModel):
 class ChatHistoryRequest(BaseValidatedModel):
     """Chat history request validation model."""
 
-    session_id: Optional[StringConstraints.AGENT_ID] = Field(
+    session_id: StringConstraints.AGENT_ID | None = Field(
         None, description="Filter by session ID"
     )
 
-    user_id: Optional[StringConstraints.SAFE_TEXT] = Field(
+    user_id: StringConstraints.SAFE_TEXT | None = Field(
         None, description="Filter by user ID"
     )
 
-    agent_id: Optional[StringConstraints.AGENT_ID] = Field(
+    agent_id: StringConstraints.AGENT_ID | None = Field(
         None, description="Filter by agent ID"
     )
 
-    start_date: Optional[datetime] = Field(
+    start_date: datetime | None = Field(
         None, description="Start date for history range"
     )
 
-    end_date: Optional[datetime] = Field(None, description="End date for history range")
+    end_date: datetime | None = Field(
+        None, description="End date for history range"
+    )
 
-    message_types: Optional[List[MessageType]] = Field(
+    message_types: list[MessageType] | None = Field(
         None, description="Filter by message types", max_length=5
     )
 
-    search_query: Optional[
-        Annotated[str, StringConstraints(min_length=1, max_length=100, strip_whitespace=True)]
-    ] = Field(None, description="Search query for message content")
+    search_query: (
+        Annotated[
+            str,
+            StringConstraints(
+                min_length=1, max_length=100, strip_whitespace=True
+            ),
+        ]
+        | None
+    ) = Field(None, description="Search query for message content")
 
     limit: int = Field(
-        default=50, ge=1, le=500, description="Maximum number of messages to return"
+        default=50,
+        ge=1,
+        le=500,
+        description="Maximum number of messages to return",
     )
 
     offset: int = Field(
@@ -302,7 +340,9 @@ class ChatHistoryRequest(BaseValidatedModel):
     )
 
     sort_order: str = Field(
-        default="desc", pattern=r"^(asc|desc)$", description="Sort order for messages"
+        default="desc",
+        pattern=r"^(asc|desc)$",
+        description="Sort order for messages",
     )
 
     include_metadata: bool = Field(
@@ -316,7 +356,7 @@ class ChatHistoryRequest(BaseValidatedModel):
     # TODO[pydantic]: We couldn't refactor the `validator`, please replace it by `field_validator` manually.
     # Check https://docs.pydantic.dev/dev-v2/migration/#changes-to-validators for more information.
     @validator("end_date")
-    def validate_date_range(cls, v, values):
+    def validate_date_range(self, v, values):
         """Validate date range."""
         start_date = values.get("start_date")
         if start_date and v and v < start_date:
@@ -328,18 +368,23 @@ class ChatHistoryRequest(BaseValidatedModel):
     def validate_search_query(cls, v):
         """Validate search query."""
         if v and ValidationPatterns.SCRIPT_PATTERN.search(v):
-            raise ValueError("Search query contains potentially malicious content")
+            raise ValueError(
+                "Search query contains potentially malicious content"
+            )
         return v
 
 
 class MessageReaction(BaseValidatedModel):
     """Message reaction validation model."""
 
-    message_id: str = Field(..., description="ID of the message being reacted to")
-
-    reaction: Annotated[str, StringConstraints(min_length=1, max_length=10, strip_whitespace=True)] = Field(
-        ..., description="Reaction emoji or text"
+    message_id: str = Field(
+        ..., description="ID of the message being reacted to"
     )
+
+    reaction: Annotated[
+        str,
+        StringConstraints(min_length=1, max_length=10, strip_whitespace=True),
+    ] = Field(..., description="Reaction emoji or text")
 
     user_id: StringConstraints.SAFE_TEXT = Field(
         ..., description="User ID who added the reaction"
@@ -358,7 +403,17 @@ class MessageReaction(BaseValidatedModel):
     def validate_reaction(cls, v):
         """Validate reaction format."""
         # Allow common emojis and simple text reactions
-        allowed_reactions = {"👍", "👎", "❤️", "😊", "😢", "😡", "⭐", "🔥", "💯"}
+        allowed_reactions = {
+            "👍",
+            "👎",
+            "❤️",
+            "😊",
+            "😢",
+            "😡",
+            "⭐",
+            "🔥",
+            "💯",
+        }
         if v in allowed_reactions:
             return v
         # Allow simple text reactions (1-3 characters)
@@ -375,14 +430,16 @@ class ChatExportRequest(BaseValidatedModel):
     )
 
     format: str = Field(
-        default="json", pattern=r"^(json|csv|txt|pdf)$", description="Export format"
+        default="json",
+        pattern=r"^(json|csv|txt|pdf)$",
+        description="Export format",
     )
 
     include_metadata: bool = Field(
         default=True, description="Whether to include message metadata"
     )
 
-    date_range: Optional[Dict[str, datetime]] = Field(
+    date_range: dict[str, datetime] | None = Field(
         None, description="Date range for export"
     )
 
@@ -397,7 +454,9 @@ class ChatExportRequest(BaseValidatedModel):
         if not v:
             return v
         if "start" not in v or "end" not in v:
-            raise ValueError("Date range must include both 'start' and 'end' dates")
+            raise ValueError(
+                "Date range must include both 'start' and 'end' dates"
+            )
         if v["start"] >= v["end"]:
             raise ValueError("Start date must be before end date")
         return v

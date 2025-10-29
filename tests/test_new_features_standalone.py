@@ -2,29 +2,31 @@
 Tests for the new features implemented as part of the optimization and refactoring plan.
 """
 
+import os
+import sys
+from pathlib import Path
+from unittest.mock import Mock, patch
+
 import pytest
 from pydantic import ValidationError
-from unittest.mock import Mock, patch
-from pathlib import Path
-import sys
-import os
 
 # Add the project root to the path so we can import specific modules
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-from resync.api.cache import (
-    ConnectionPoolValidator,
-    get_redis_connection,
-    RedisCacheManager,
-)
-from resync.api.middleware.cors_monitoring import CORSMonitor, CORSOperation
 from resync.api.audit import (
     AuditAction,
     AuditLogger,
-    generate_audit_log,
     AuditRecordResponse,
+    generate_audit_log,
 )
-from resync.settings import Settings as ApplicationSettings, BaseSettings, Environment
+from resync.api.cache import (
+    ConnectionPoolValidator,
+    RedisCacheManager,
+    get_redis_connection,
+)
+from resync.api.middleware.cors_monitoring import CORSMonitor, CORSOperation
+from resync.settings import BaseSettings, Environment
+from resync.settings import Settings as ApplicationSettings
 
 
 class TestTypeAnnotationsAndDataValidation:

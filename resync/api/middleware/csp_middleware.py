@@ -5,9 +5,11 @@ import logging
 import secrets
 
 from fastapi import Request, Response
-from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
-
 from resync.csp_validation import CSPValidationError, process_csp_report
+from starlette.middleware.base import (
+    BaseHTTPMiddleware,
+    RequestResponseEndpoint,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -91,7 +93,7 @@ class CSPMiddleware(BaseHTTPMiddleware):
             CSP policy string
         """
         # Import settings lazily to avoid circular imports
-        from resync.settings import settings
+        from resync_new.config.settings import settings
 
         # Always get fresh settings to support mocking in tests
         # In production, settings is a singleton so this has minimal overhead
@@ -101,7 +103,10 @@ class CSPMiddleware(BaseHTTPMiddleware):
         directives = {
             "default-src": ["'self'"],
             "script-src": ["'self'", f"'nonce-{nonce}'"],
-            "style-src": ["'self'", f"'nonce-{nonce}'"],  # Allow nonce for styles too
+            "style-src": [
+                "'self'",
+                f"'nonce-{nonce}'",
+            ],  # Allow nonce for styles too
             "img-src": ["'self'", "data:", "blob:", "https:"],
             "font-src": ["'self'", "https:", "data:"],
             "connect-src": ["'self'"],
@@ -214,7 +219,7 @@ def create_csp_middleware(app) -> CSPMiddleware:
         Configured CSPMiddleware instance
     """
     # Import settings lazily to avoid circular imports
-    from resync.settings import settings
+    from resync_new.config.settings import settings
 
     # Check if CSP should be in report-only mode
     report_only = getattr(settings, "CSP_REPORT_ONLY", False)

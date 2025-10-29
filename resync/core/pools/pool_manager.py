@@ -7,7 +7,9 @@ from __future__ import annotations
 
 import asyncio
 import logging
-from typing import TYPE_CHECKING, Dict, Optional
+from typing import TYPE_CHECKING
+
+from resync.settings import settings
 
 from resync.core.exceptions import TWSConnectionError
 from resync.core.pools.base_pool import (
@@ -18,7 +20,6 @@ from resync.core.pools.base_pool import (
 from resync.core.pools.db_pool import DatabaseConnectionPool
 from resync.core.pools.http_pool import HTTPConnectionPool
 from resync.core.pools.redis_pool import RedisConnectionPool
-from resync.settings import settings
 
 # --- Logging Setup ---
 logger = logging.getLogger(__name__)
@@ -29,7 +30,7 @@ if TYPE_CHECKING:
 
 # Global lock and instance for thread-safe singleton
 _manager_lock = asyncio.Lock()
-_manager_instance: Optional[ConnectionPoolManager] = None
+_manager_instance: ConnectionPoolManager | None = None
 
 
 async def get_connection_pool_manager() -> ConnectionPoolManager:
@@ -81,7 +82,7 @@ class ConnectionPoolManager:
     """Central manager for all connection pools."""
 
     def __init__(self) -> None:
-        self.pools: Dict[str, ConnectionPool] = {}  [type-arg]
+        self.pools: dict[str, ConnectionPool] = {}
         self._initialized = False
         self._shutdown = False
         self._lock = asyncio.Lock()
@@ -106,7 +107,9 @@ class ConnectionPoolManager:
                 if db_pool_min_size > 0:
                     try:
                         db_url = getattr(
-                            settings, "DATABASE_URL", "sqlite+aiosqlite:///:memory:"
+                            settings,
+                            "DATABASE_URL",
+                            "sqlite+aiosqlite:///:memory:",
                         )
                     except AttributeError:
                         db_url = "sqlite+aiosqlite:///:memory:"
@@ -178,26 +181,29 @@ class ConnectionPoolManager:
 
                 self._initialized = True
                 logger.info(
-                    "Connection pool manager initialized with %d pools", len(self.pools)
+                    "Connection pool manager initialized with %d pools",
+                    len(self.pools),
                 )
             except Exception as e:
-                logger.error("Failed to initialize connection pool manager: %s", e)
+                logger.error(
+                    "Failed to initialize connection pool manager: %s", e
+                )
                 raise TWSConnectionError(
                     f"Failed to initialize connection pool manager: {e}"
                 ) from e
 
-    async def get_pool(self, pool_name: str) -> Optional[ConnectionPool]:
+    async def get_pool(self, pool_name: str) -> ConnectionPool | None:
         """Get a specific connection pool by name."""
         return self.pools.get(pool_name)
 
-    def get_pool_stats(self) -> Dict[str, ConnectionPoolStats]:
+    def get_pool_stats(self) -> dict[str, ConnectionPoolStats]:
         """Get statistics for all pools."""
         stats = {}
         for name, pool in self.pools.items():
             stats[name] = pool.stats
         return stats
 
-    async def health_check_all(self) -> Dict[str, bool]:
+    async def health_check_all(self) -> dict[str, bool]:
         """Perform health checks on all pools."""
         results = {}
         for name, pool in self.pools.items():

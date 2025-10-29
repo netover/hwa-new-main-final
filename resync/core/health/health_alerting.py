@@ -8,12 +8,10 @@ status reporting.
 
 from __future__ import annotations
 
-from datetime import datetime
-from typing import Dict, List, Optional
+from datetime import datetime, timedelta
 
 import structlog
-
-from resync.core.health_models import ComponentHealth, HealthStatus
+from resync.models.health_models import ComponentHealth, HealthStatus
 
 logger = structlog.get_logger(__name__)
 
@@ -36,10 +34,12 @@ class HealthAlerting:
             alert_enabled: Whether alerting is enabled
         """
         self.alert_enabled = alert_enabled
-        self.alert_history: List[Dict[str, any]] = []
+        self.alert_history: list[dict[str, any]] = []
         self.max_alert_history = 1000
 
-    def check_alerts(self, components: Dict[str, ComponentHealth]) -> List[str]:
+    def check_alerts(
+        self, components: dict[str, ComponentHealth]
+    ) -> list[str]:
         """
         Check for alerts based on component health status.
 
@@ -52,14 +52,17 @@ class HealthAlerting:
         if not self.alert_enabled:
             return []
 
-        alerts: List[str] = []
+        alerts: list[str] = []
 
         for name, comp in components.items():
             if comp.status == HealthStatus.UNHEALTHY:
                 alerts.append(f"{name} is unhealthy")
             elif comp.status == HealthStatus.DEGRADED:
                 # Include specific threshold breach information in alerts
-                if name == "database" and "connection_usage_percent" in comp.metadata:
+                if (
+                    name == "database"
+                    and "connection_usage_percent" in comp.metadata
+                ):
                     threshold = comp.metadata.get("threshold_percent", 80)
                     usage = comp.metadata["connection_usage_percent"]
                     alerts.append(
@@ -75,7 +78,7 @@ class HealthAlerting:
         return alerts
 
     def _add_to_alert_history(
-        self, alerts: List[str], components: Dict[str, ComponentHealth]
+        self, alerts: list[str], components: dict[str, ComponentHealth]
     ) -> None:
         """Add alerts to history for tracking and analysis."""
         alert_entry = {
@@ -83,10 +86,14 @@ class HealthAlerting:
             "alerts": alerts.copy(),
             "component_count": len(components),
             "unhealthy_count": sum(
-                1 for c in components.values() if c.status == HealthStatus.UNHEALTHY
+                1
+                for c in components.values()
+                if c.status == HealthStatus.UNHEALTHY
             ),
             "degraded_count": sum(
-                1 for c in components.values() if c.status == HealthStatus.DEGRADED
+                1
+                for c in components.values()
+                if c.status == HealthStatus.DEGRADED
             ),
         }
 
@@ -97,8 +104,8 @@ class HealthAlerting:
             self.alert_history = self.alert_history[-self.max_alert_history :]
 
     def get_alert_history(
-        self, hours: int = 24, limit: Optional[int] = None
-    ) -> List[Dict[str, any]]:
+        self, hours: int = 24, limit: int | None = None
+    ) -> list[dict[str, any]]:
         """
         Get alert history for the specified time period.
 
@@ -112,7 +119,9 @@ class HealthAlerting:
         cutoff_time = datetime.now() - timedelta(hours=hours)
 
         filtered_history = [
-            entry for entry in self.alert_history if entry["timestamp"] >= cutoff_time
+            entry
+            for entry in self.alert_history
+            if entry["timestamp"] >= cutoff_time
         ]
 
         # Sort by timestamp (most recent first)
@@ -124,17 +133,21 @@ class HealthAlerting:
 
         return filtered_history
 
-    def get_alert_stats(self) -> Dict[str, any]:
+    def get_alert_stats(self) -> dict[str, any]:
         """Get alert statistics and patterns."""
         if not self.alert_history:
             return {"total_alerts": 0, "alert_rate": 0.0}
 
-        total_alerts = sum(len(entry["alerts"]) for entry in self.alert_history)
+        total_alerts = sum(
+            len(entry["alerts"]) for entry in self.alert_history
+        )
 
         # Calculate alerts per hour over the last 24 hours
         cutoff_time = datetime.now() - timedelta(hours=24)
         recent_alerts = [
-            entry for entry in self.alert_history if entry["timestamp"] >= cutoff_time
+            entry
+            for entry in self.alert_history
+            if entry["timestamp"] >= cutoff_time
         ]
 
         recent_total = sum(len(entry["alerts"]) for entry in recent_alerts)
@@ -160,13 +173,13 @@ class HealthReporting:
 
     def __init__(self):
         """Initialize the health reporting system."""
-        self._report_cache: Optional[Dict[str, any]] = None
-        self._last_report_time: Optional[datetime] = None
+        self._report_cache: dict[str, any] | None = None
+        self._last_report_time: datetime | None = None
         self.cache_duration_seconds = 30  # Cache reports for 30 seconds
 
     def generate_summary(
-        self, components: Dict[str, ComponentHealth]
-    ) -> Dict[str, int]:
+        self, components: dict[str, ComponentHealth]
+    ) -> dict[str, int]:
         """
         Generate a summary of health status counts.
 
@@ -176,7 +189,7 @@ class HealthReporting:
         Returns:
             Dictionary with health status counts
         """
-        summary: Dict[str, int] = {
+        summary: dict[str, int] = {
             "healthy": 0,
             "degraded": 0,
             "unhealthy": 0,
@@ -197,10 +210,10 @@ class HealthReporting:
 
     def generate_detailed_report(
         self,
-        components: Dict[str, ComponentHealth],
+        components: dict[str, ComponentHealth],
         overall_status: HealthStatus,
         timestamp: float,
-    ) -> Dict[str, any]:
+    ) -> dict[str, any]:
         """
         Generate a detailed health report.
 
@@ -217,7 +230,9 @@ class HealthReporting:
         # Calculate additional metrics
         total_components = len(components)
         healthy_percentage = (
-            (summary["healthy"] / total_components * 100) if total_components > 0 else 0
+            (summary["healthy"] / total_components * 100)
+            if total_components > 0
+            else 0
         )
 
         # Get component details for report
@@ -230,7 +245,9 @@ class HealthReporting:
                     "message": comp.message,
                     "response_time_ms": comp.response_time_ms,
                     "last_check": (
-                        comp.last_check.isoformat() if comp.last_check else None
+                        comp.last_check.isoformat()
+                        if comp.last_check
+                        else None
                     ),
                     "error_count": getattr(comp, "error_count", 0),
                 }
@@ -255,7 +272,7 @@ class HealthReporting:
 
         return report
 
-    def get_cached_report(self) -> Optional[Dict[str, any]]:
+    def get_cached_report(self) -> dict[str, any] | None:
         """
         Get cached report if available and recent.
 
@@ -276,7 +293,7 @@ class HealthReporting:
         self._report_cache = None
         self._last_report_time = None
 
-    def format_report_for_console(self, report: Dict[str, any]) -> str:
+    def format_report_for_console(self, report: dict[str, any]) -> str:
         """
         Format a health report for console output.
 
@@ -310,11 +327,15 @@ class HealthReporting:
                 "unknown": "?",
             }.get(comp["status"], "?")
 
-            lines.append(f"{status_icon} {comp['name']}: {comp['status'].upper()}")
+            lines.append(
+                f"{status_icon} {comp['name']}: {comp['status'].upper()}"
+            )
             if comp["message"]:
                 lines.append(f"  Message: {comp['message']}")
             if comp["response_time_ms"]:
-                lines.append(f"  Response Time: {comp['response_time_ms']:.1f}ms")
+                lines.append(
+                    f"  Response Time: {comp['response_time_ms']:.1f}ms"
+                )
             lines.append("")
 
         lines.append("=" * 60)
@@ -333,12 +354,12 @@ class HealthStatusAggregator:
 
     def __init__(self):
         """Initialize the health status aggregator."""
-        self._aggregation_cache: Optional[Dict[str, any]] = None
-        self._last_aggregation: Optional[datetime] = None
+        self._aggregation_cache: dict[str, any] | None = None
+        self._last_aggregation: datetime | None = None
 
     def aggregate_health_status(
-        self, health_results: List[Dict[str, any]]
-    ) -> Dict[str, any]:
+        self, health_results: list[dict[str, any]]
+    ) -> dict[str, any]:
         """
         Aggregate health status from multiple health check results.
 
@@ -387,7 +408,7 @@ class HealthStatusAggregator:
         return aggregation
 
     def _calculate_aggregated_status(
-        self, components: Dict[str, ComponentHealth]
+        self, components: dict[str, ComponentHealth]
     ) -> str:
         """Calculate overall status from component health results."""
         if not components:
@@ -411,10 +432,10 @@ class HealthStatusAggregator:
         return worst_status.value
 
     def _calculate_health_trends(
-        self, components: Dict[str, ComponentHealth]
-    ) -> Dict[str, any]:
+        self, components: dict[str, ComponentHealth]
+    ) -> dict[str, any]:
         """Calculate health trends and patterns."""
-        trends = {
+        return {
             "improving": 0,
             "degrading": 0,
             "stable": 0,
@@ -423,9 +444,8 @@ class HealthStatusAggregator:
 
         # This would implement trend analysis based on historical data
         # For now, return basic structure
-        return trends
 
-    def get_aggregation_cache(self) -> Optional[Dict[str, any]]:
+    def get_aggregation_cache(self) -> dict[str, any] | None:
         """Get cached aggregation if available."""
         if self._aggregation_cache is None or self._last_aggregation is None:
             return None

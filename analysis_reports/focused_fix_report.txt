@@ -1,0 +1,510 @@
+# RELATÓRIO FOCADO DE CORREÇÕES
+Total de Issues Analisadas: 100
+
+## DISTRIBUIÇÃO POR SEVERIDADE
+- CRITICAL: 27
+- HIGH: 73
+
+## DISTRIBUIÇÃO POR FERRAMENTA
+- FLAKE8: 100
+
+## DETALHES DAS CORREÇÕES
+1. FLAKE8 - F401
+   Arquivo: resync/api\auth.py:20
+   Severidade: CRITICAL
+   Mensagem: 'os' imported but unused
+
+2. FLAKE8 - F401
+   Arquivo: resync/api\auth_secure.py:20
+   Severidade: CRITICAL
+   Mensagem: 'os' imported but unused
+
+3. FLAKE8 - F401
+   Arquivo: resync/core\cache\chucknorris_optimizer.py:18
+   Severidade: CRITICAL
+   Mensagem: 'weakref' imported but unused
+
+4. FLAKE8 - F401
+   Arquivo: resync/core\cache\chucknorris_optimizer.py:19
+   Severidade: CRITICAL
+   Mensagem: 'hashlib' imported but unused
+
+5. FLAKE8 - F401
+   Arquivo: resync/core\monitoring\chucknorris_metrics.py:17
+   Severidade: CRITICAL
+   Mensagem: 'typing.Tuple' imported but unused
+
+6. FLAKE8 - F401
+   Arquivo: resync/core\monitoring\chucknorris_metrics.py:20
+   Severidade: CRITICAL
+   Mensagem: 'weakref' imported but unused
+
+7. FLAKE8 - F401
+   Arquivo: resync/core\monitoring\chucknorris_metrics.py:821
+   Severidade: CRITICAL
+   Mensagem: 'prometheus_client.generate_latest' imported but unused
+
+8. FLAKE8 - F401
+   Arquivo: resync/core\monitoring\chucknorris_metrics.py:821
+   Severidade: CRITICAL
+   Mensagem: 'prometheus_client.CONTENT_TYPE_LATEST' imported but unused
+
+9. FLAKE8 - F841
+   Arquivo: resync/core\monitoring\chucknorris_metrics.py:824
+   Severidade: CRITICAL
+   Mensagem: local variable 'cache_hit_ratio' is assigned to but never used
+
+10. FLAKE8 - F841
+   Arquivo: resync/core\monitoring\chucknorris_metrics.py:830
+   Severidade: CRITICAL
+   Mensagem: local variable 'cache_misses' is assigned to but never used
+
+11. FLAKE8 - F841
+   Arquivo: resync/core\monitoring\chucknorris_metrics.py:836
+   Severidade: CRITICAL
+   Mensagem: local variable 'cache_hits' is assigned to but never used
+
+12. FLAKE8 - F841
+   Arquivo: resync/core\monitoring\chucknorris_metrics.py:844
+   Severidade: CRITICAL
+   Mensagem: local variable 'circuit_breaker_state' is assigned to but never used
+
+13. FLAKE8 - F841
+   Arquivo: resync/core\monitoring\chucknorris_metrics.py:850
+   Severidade: CRITICAL
+   Mensagem: local variable 'circuit_breaker_failures' is assigned to but never used
+
+14. FLAKE8 - F841
+   Arquivo: resync/core\monitoring\chucknorris_metrics.py:858
+   Severidade: CRITICAL
+   Mensagem: local variable 'request_duration' is assigned to but never used
+
+15. FLAKE8 - F841
+   Arquivo: resync/core\monitoring\chucknorris_metrics.py:864
+   Severidade: CRITICAL
+   Mensagem: local variable 'api_request_duration' is assigned to but never used
+
+16. FLAKE8 - F841
+   Arquivo: resync/core\monitoring\chucknorris_metrics.py:873
+   Severidade: CRITICAL
+   Mensagem: local variable 'error_rate' is assigned to but never used
+
+17. FLAKE8 - F841
+   Arquivo: resync/core\monitoring\chucknorris_metrics.py:879
+   Severidade: CRITICAL
+   Mensagem: local variable 'total_requests' is assigned to but never used
+
+18. FLAKE8 - F401
+   Arquivo: resync/core\pipeline\chucknorris_batch_processor.py:14
+   Severidade: CRITICAL
+   Mensagem: 'collections.defaultdict' imported but unused
+
+19. FLAKE8 - F401
+   Arquivo: resync/core\pipeline\chucknorris_batch_processor.py:17
+   Severidade: CRITICAL
+   Mensagem: 'typing.Tuple' imported but unused
+
+20. FLAKE8 - F401
+   Arquivo: resync/core\pipeline\chucknorris_batch_processor.py:17
+   Severidade: CRITICAL
+   Mensagem: 'typing.Union' imported but unused
+
+21. FLAKE8 - F401
+   Arquivo: resync/core\pipeline\chucknorris_batch_processor.py:18
+   Severidade: CRITICAL
+   Mensagem: 'weakref' imported but unused
+
+22. FLAKE8 - F401
+   Arquivo: resync/core\pools\chucknorris_pool_optimizer.py:14
+   Severidade: CRITICAL
+   Mensagem: 'collections.defaultdict' imported but unused
+
+23. FLAKE8 - F401
+   Arquivo: resync/core\pools\chucknorris_pool_optimizer.py:17
+   Severidade: CRITICAL
+   Mensagem: 'typing.Set' imported but unused
+
+24. FLAKE8 - F401
+   Arquivo: resync/core\pools\chucknorris_pool_optimizer.py:17
+   Severidade: CRITICAL
+   Mensagem: 'typing.Union' imported but unused
+
+25. FLAKE8 - F401
+   Arquivo: resync/core\pools\chucknorris_pool_optimizer.py:18
+   Severidade: CRITICAL
+   Mensagem: 'weakref' imported but unused
+
+26. FLAKE8 - F401
+   Arquivo: resync/core\resilience\chucknorris_circuit_breaker.py:19
+   Severidade: CRITICAL
+   Mensagem: 'math' imported but unused
+
+27. FLAKE8 - F841
+   Arquivo: resync/core\resilience\chucknorris_circuit_breaker.py:379
+   Severidade: CRITICAL
+   Mensagem: local variable 'current_time' is assigned to but never used
+
+28. FLAKE8 - E501
+   Arquivo: resync/api\admin.py:30
+   Severidade: HIGH
+   Mensagem: line too long (80 > 79 characters)
+
+29. FLAKE8 - E501
+   Arquivo: resync/api\admin.py:140
+   Severidade: HIGH
+   Mensagem: line too long (86 > 79 characters)
+
+30. FLAKE8 - E501
+   Arquivo: resync/api\admin.py:219
+   Severidade: HIGH
+   Mensagem: line too long (88 > 79 characters)
+
+31. FLAKE8 - E501
+   Arquivo: resync/api\admin.py:220
+   Severidade: HIGH
+   Mensagem: line too long (80 > 79 characters)
+
+32. FLAKE8 - E501
+   Arquivo: resync/api\audit.py:5
+   Severidade: HIGH
+   Mensagem: line too long (86 > 79 characters)
+
+33. FLAKE8 - E501
+   Arquivo: resync/api\audit.py:150
+   Severidade: HIGH
+   Mensagem: line too long (80 > 79 characters)
+
+34. FLAKE8 - E501
+   Arquivo: resync/api\audit.py:222
+   Severidade: HIGH
+   Mensagem: line too long (94 > 79 characters)
+
+35. FLAKE8 - E501
+   Arquivo: resync/api\audit.py:224
+   Severidade: HIGH
+   Mensagem: line too long (81 > 79 characters)
+
+36. FLAKE8 - E501
+   Arquivo: resync/api\audit.py:398
+   Severidade: HIGH
+   Mensagem: line too long (81 > 79 characters)
+
+37. FLAKE8 - E501
+   Arquivo: resync/api\audit.py:481
+   Severidade: HIGH
+   Mensagem: line too long (81 > 79 characters)
+
+38. FLAKE8 - E501
+   Arquivo: resync/api\auth.py:48
+   Severidade: HIGH
+   Mensagem: line too long (83 > 79 characters)
+
+39. FLAKE8 - E501
+   Arquivo: resync/api\auth.py:54
+   Severidade: HIGH
+   Mensagem: line too long (94 > 79 characters)
+
+40. FLAKE8 - E501
+   Arquivo: resync/api\auth.py:56
+   Severidade: HIGH
+   Mensagem: line too long (97 > 79 characters)
+
+41. FLAKE8 - E501
+   Arquivo: resync/api\auth.py:98
+   Severidade: HIGH
+   Mensagem: line too long (90 > 79 characters)
+
+42. FLAKE8 - E501
+   Arquivo: resync/api\auth.py:101
+   Severidade: HIGH
+   Mensagem: line too long (81 > 79 characters)
+
+43. FLAKE8 - E501
+   Arquivo: resync/api\auth.py:186
+   Severidade: HIGH
+   Mensagem: line too long (93 > 79 characters)
+
+44. FLAKE8 - E501
+   Arquivo: resync/api\auth_secure.py:48
+   Severidade: HIGH
+   Mensagem: line too long (83 > 79 characters)
+
+45. FLAKE8 - E501
+   Arquivo: resync/api\auth_secure.py:54
+   Severidade: HIGH
+   Mensagem: line too long (94 > 79 characters)
+
+46. FLAKE8 - E501
+   Arquivo: resync/api\auth_secure.py:56
+   Severidade: HIGH
+   Mensagem: line too long (97 > 79 characters)
+
+47. FLAKE8 - E501
+   Arquivo: resync/api\auth_secure.py:98
+   Severidade: HIGH
+   Mensagem: line too long (90 > 79 characters)
+
+48. FLAKE8 - E501
+   Arquivo: resync/api\auth_secure.py:101
+   Severidade: HIGH
+   Mensagem: line too long (81 > 79 characters)
+
+49. FLAKE8 - E501
+   Arquivo: resync/api\auth_secure.py:186
+   Severidade: HIGH
+   Mensagem: line too long (93 > 79 characters)
+
+50. FLAKE8 - E501
+   Arquivo: resync/api\cache.py:246
+   Severidade: HIGH
+   Mensagem: line too long (90 > 79 characters)
+
+51. FLAKE8 - E501
+   Arquivo: resync/api\cache.py:269
+   Severidade: HIGH
+   Mensagem: line too long (81 > 79 characters)
+
+52. FLAKE8 - E501
+   Arquivo: resync/api\cache.py:285
+   Severidade: HIGH
+   Mensagem: line too long (84 > 79 characters)
+
+53. FLAKE8 - E501
+   Arquivo: resync/api\cache.py:289
+   Severidade: HIGH
+   Mensagem: line too long (81 > 79 characters)
+
+54. FLAKE8 - E501
+   Arquivo: resync/api\cache.py:294
+   Severidade: HIGH
+   Mensagem: line too long (89 > 79 characters)
+
+55. FLAKE8 - E501
+   Arquivo: resync/api\cache.py:323
+   Severidade: HIGH
+   Mensagem: line too long (88 > 79 characters)
+
+56. FLAKE8 - E501
+   Arquivo: resync/api\cache.py:340
+   Severidade: HIGH
+   Mensagem: line too long (91 > 79 characters)
+
+57. FLAKE8 - E501
+   Arquivo: resync/api\cache.py:351
+   Severidade: HIGH
+   Mensagem: line too long (94 > 79 characters)
+
+58. FLAKE8 - E501
+   Arquivo: resync/api\cache.py:390
+   Severidade: HIGH
+   Mensagem: line too long (92 > 79 characters)
+
+59. FLAKE8 - E501
+   Arquivo: resync/api\chat.py:80
+   Severidade: HIGH
+   Mensagem: line too long (80 > 79 characters)
+
+60. FLAKE8 - E501
+   Arquivo: resync/api\chat.py:89
+   Severidade: HIGH
+   Mensagem: line too long (82 > 79 characters)
+
+61. FLAKE8 - E501
+   Arquivo: resync/api\chat.py:119
+   Severidade: HIGH
+   Mensagem: line too long (80 > 79 characters)
+
+62. FLAKE8 - E501
+   Arquivo: resync/api\chat.py:121
+   Severidade: HIGH
+   Mensagem: line too long (90 > 79 characters)
+
+63. FLAKE8 - E501
+   Arquivo: resync/api\chat.py:165
+   Severidade: HIGH
+   Mensagem: line too long (80 > 79 characters)
+
+64. FLAKE8 - E501
+   Arquivo: resync/api\chat.py:176
+   Severidade: HIGH
+   Mensagem: line too long (86 > 79 characters)
+
+65. FLAKE8 - E501
+   Arquivo: resync/api\circuit_breaker_metrics.py:53
+   Severidade: HIGH
+   Mensagem: line too long (92 > 79 characters)
+
+66. FLAKE8 - E501
+   Arquivo: resync/api\circuit_breaker_metrics.py:56
+   Severidade: HIGH
+   Mensagem: line too long (92 > 79 characters)
+
+67. FLAKE8 - E501
+   Arquivo: resync/api\circuit_breaker_metrics.py:65
+   Severidade: HIGH
+   Mensagem: line too long (86 > 79 characters)
+
+68. FLAKE8 - E501
+   Arquivo: resync/api\circuit_breaker_metrics.py:71
+   Severidade: HIGH
+   Mensagem: line too long (92 > 79 characters)
+
+69. FLAKE8 - E501
+   Arquivo: resync/api\circuit_breaker_metrics.py:74
+   Severidade: HIGH
+   Mensagem: line too long (92 > 79 characters)
+
+70. FLAKE8 - E501
+   Arquivo: resync/api\circuit_breaker_metrics.py:83
+   Severidade: HIGH
+   Mensagem: line too long (86 > 79 characters)
+
+71. FLAKE8 - E501
+   Arquivo: resync/api\connection_pool_monitoring.py:280
+   Severidade: HIGH
+   Mensagem: line too long (118 > 79 characters)
+
+72. FLAKE8 - E501
+   Arquivo: resync/api\connection_pool_monitoring.py:284
+   Severidade: HIGH
+   Mensagem: line too long (116 > 79 characters)
+
+73. FLAKE8 - E501
+   Arquivo: resync/api\connection_pool_monitoring.py:292
+   Severidade: HIGH
+   Mensagem: line too long (116 > 79 characters)
+
+74. FLAKE8 - E501
+   Arquivo: resync/api\connection_pool_monitoring.py:296
+   Severidade: HIGH
+   Mensagem: line too long (111 > 79 characters)
+
+75. FLAKE8 - E501
+   Arquivo: resync/api\connection_pool_monitoring.py:303
+   Severidade: HIGH
+   Mensagem: line too long (97 > 79 characters)
+
+76. FLAKE8 - E501
+   Arquivo: resync/api\connection_pool_monitoring.py:310
+   Severidade: HIGH
+   Mensagem: line too long (101 > 79 characters)
+
+77. FLAKE8 - E501
+   Arquivo: resync/api\cors_monitoring.py:3
+   Severidade: HIGH
+   Mensagem: line too long (85 > 79 characters)
+
+78. FLAKE8 - E501
+   Arquivo: resync/api\cors_monitoring.py:4
+   Severidade: HIGH
+   Mensagem: line too long (83 > 79 characters)
+
+79. FLAKE8 - E501
+   Arquivo: resync/api\dependencies.py:4
+   Severidade: HIGH
+   Mensagem: line too long (85 > 79 characters)
+
+80. FLAKE8 - E501
+   Arquivo: resync/api\dependencies.py:35
+   Severidade: HIGH
+   Mensagem: line too long (85 > 79 characters)
+
+81. FLAKE8 - E501
+   Arquivo: resync/api\dependencies.py:92
+   Severidade: HIGH
+   Mensagem: line too long (81 > 79 characters)
+
+82. FLAKE8 - E501
+   Arquivo: resync/api\endpoints.py:62
+   Severidade: HIGH
+   Mensagem: line too long (92 > 79 characters)
+
+83. FLAKE8 - E501
+   Arquivo: resync/api\endpoints.py:514
+   Severidade: HIGH
+   Mensagem: line too long (80 > 79 characters)
+
+84. FLAKE8 - E501
+   Arquivo: resync/api\endpoints.py:517
+   Severidade: HIGH
+   Mensagem: line too long (86 > 79 characters)
+
+85. FLAKE8 - E501
+   Arquivo: resync/api\endpoints.py:540
+   Severidade: HIGH
+   Mensagem: line too long (80 > 79 characters)
+
+86. FLAKE8 - E501
+   Arquivo: resync/api\endpoints.py:551
+   Severidade: HIGH
+   Mensagem: line too long (123 > 79 characters)
+
+87. FLAKE8 - E501
+   Arquivo: resync/api\endpoints.py:611
+   Severidade: HIGH
+   Mensagem: line too long (82 > 79 characters)
+
+88. FLAKE8 - E501
+   Arquivo: resync/api\endpoints.py:859
+   Severidade: HIGH
+   Mensagem: line too long (82 > 79 characters)
+
+89. FLAKE8 - E501
+   Arquivo: resync/api\endpoints.py:863
+   Severidade: HIGH
+   Mensagem: line too long (86 > 79 characters)
+
+90. FLAKE8 - E501
+   Arquivo: resync/api\endpoints.py:866
+   Severidade: HIGH
+   Mensagem: line too long (94 > 79 characters)
+
+91. FLAKE8 - E501
+   Arquivo: resync/api\endpoints.py:876
+   Severidade: HIGH
+   Mensagem: line too long (93 > 79 characters)
+
+92. FLAKE8 - E501
+   Arquivo: resync/api\endpoints.py:880
+   Severidade: HIGH
+   Mensagem: line too long (90 > 79 characters)
+
+93. FLAKE8 - E501
+   Arquivo: resync/api\endpoints.py:884
+   Severidade: HIGH
+   Mensagem: line too long (113 > 79 characters)
+
+94. FLAKE8 - E501
+   Arquivo: resync/api\endpoints.py:885
+   Severidade: HIGH
+   Mensagem: line too long (92 > 79 characters)
+
+95. FLAKE8 - E501
+   Arquivo: resync/api\endpoints.py:888
+   Severidade: HIGH
+   Mensagem: line too long (98 > 79 characters)
+
+96. FLAKE8 - E501
+   Arquivo: resync/api\endpoints.py:889
+   Severidade: HIGH
+   Mensagem: line too long (88 > 79 characters)
+
+97. FLAKE8 - E501
+   Arquivo: resync/api\endpoints.py:924
+   Severidade: HIGH
+   Mensagem: line too long (83 > 79 characters)
+
+98. FLAKE8 - E501
+   Arquivo: resync/api\endpoints.py:928
+   Severidade: HIGH
+   Mensagem: line too long (80 > 79 characters)
+
+99. FLAKE8 - E501
+   Arquivo: resync/api\endpoints.py:1233
+   Severidade: HIGH
+   Mensagem: line too long (132 > 79 characters)
+
+100. FLAKE8 - E501
+   Arquivo: resync/api\endpoints.py:1255
+   Severidade: HIGH
+   Mensagem: line too long (113 > 79 characters)

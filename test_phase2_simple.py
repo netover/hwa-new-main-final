@@ -30,7 +30,7 @@ def test_module_syntax() -> bool:
     all_valid = True
     for module_path in modules_to_test:
         try:
-            with open(module_path, "r", encoding="utf-8") as f:
+            with open(module_path, encoding="utf-8") as f:
                 code = f.read()
                 ast.parse(code)
             print(f"[OK] {module_path}")
@@ -58,7 +58,7 @@ def test_direct_imports() -> bool:
         spec = importlib.util.spec_from_file_location(
             "performance_optimizer", "resync/core/performance_optimizer.py"
         )
-        module = importlib.util.module_from_spec(spec)
+        importlib.util.module_from_spec(spec)
 
         # Don't execute the module, just check it can be loaded
         print("[OK] performance_optimizer.py can be loaded")
@@ -67,7 +67,7 @@ def test_direct_imports() -> bool:
         spec = importlib.util.spec_from_file_location(
             "resource_manager", "resync/core/resource_manager.py"
         )
-        module = importlib.util.module_from_spec(spec)
+        importlib.util.module_from_spec(spec)
         print("[OK] resource_manager.py can be loaded")
 
         # Test performance API module
@@ -100,7 +100,7 @@ def test_documentation() -> bool:
     all_exist = True
     for doc_path in docs_to_test:
         try:
-            with open(doc_path, "r", encoding="utf-8") as f:
+            with open(doc_path, encoding="utf-8") as f:
                 content = f.read()
                 lines = len(content.split("\n"))
             print(f"[OK] {doc_path} ({lines} lines)")
@@ -121,7 +121,7 @@ def test_configuration() -> bool:
     print("=" * 60)
 
     try:
-        with open("settings.toml", "r", encoding="utf-8") as f:
+        with open("settings.toml", encoding="utf-8") as f:
             content = f.read()
 
         required_settings = [
@@ -153,7 +153,7 @@ def test_main_integration() -> bool:
     print("=" * 60)
 
     try:
-        with open("resync/main.py", "r", encoding="utf-8") as f:
+        with open("resync/main.py", encoding="utf-8") as f:
             content = f.read()
 
         checks = [
@@ -249,11 +249,10 @@ def main() -> int:
     if passed == total:
         print("\n[SUCCESS] All tests passed! Phase 2 implementation is complete.")
         return 0
-    else:
-        print(
-            f"\n[WARNING] {total - passed} test(s) failed. Please review the errors above."
-        )
-        return 1
+    print(
+        f"\n[WARNING] {total - passed} test(s) failed. Please review the errors above."
+    )
+    return 1
 
 
 if __name__ == "__main__":

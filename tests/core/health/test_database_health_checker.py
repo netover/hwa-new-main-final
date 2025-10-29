@@ -9,8 +9,8 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from resync.core.health_models import ComponentType, HealthCheckConfig, HealthStatus
 from resync.core.health.health_checkers.database_health_checker import DatabaseHealthChecker
+from resync.core.health_models import ComponentType, HealthCheckConfig, HealthStatus
 
 
 class TestDatabaseHealthChecker:

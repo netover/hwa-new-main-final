@@ -4,10 +4,9 @@ import logging
 import re
 import socket
 from enum import Enum
-from typing import List, Union
 from urllib.parse import urlparse
 
-from pydantic import field_validator, BaseModel, ConfigDict, Field, validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, validator
 
 logger = logging.getLogger(__name__)
 
@@ -44,26 +43,27 @@ class CORSPolicy(BaseModel):
     )
 
     # Allowed origins configuration
-    allowed_origins: List[str] = Field(
+    allowed_origins: list[str] = Field(
         default=[],
         description="List of allowed origins. Use specific domains in production, wildcards only in development.",
     )
 
     # Allowed methods configuration
-    allowed_methods: List[str] = Field(
+    allowed_methods: list[str] = Field(
         default=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
         description="List of allowed HTTP methods.",
     )
 
     # Allowed headers configuration
-    allowed_headers: List[str] = Field(
+    allowed_headers: list[str] = Field(
         default=["Content-Type", "Authorization", "X-Requested-With"],
         description="List of allowed headers.",
     )
 
     # CORS behavior settings
     allow_credentials: bool = Field(
-        default=False, description="Whether to allow credentials in CORS requests."
+        default=False,
+        description="Whether to allow credentials in CORS requests.",
     )
 
     max_age: int = Field(
@@ -73,7 +73,8 @@ class CORSPolicy(BaseModel):
 
     # Security settings
     allow_all_origins: bool = Field(
-        default=False, description="Whether to allow all origins (development only)."
+        default=False,
+        description="Whether to allow all origins (development only).",
     )
 
     # Logging settings
@@ -83,7 +84,7 @@ class CORSPolicy(BaseModel):
     )
 
     # Dynamic validation settings
-    origin_regex_patterns: List[str] = Field(
+    origin_regex_patterns: list[str] = Field(
         default=[], description="Regex patterns for dynamic origin validation."
     )
 
@@ -95,16 +96,16 @@ class CORSPolicy(BaseModel):
             v = v.lower()
             if v in ["dev", "development"]:
                 return Environment.DEVELOPMENT
-            elif v in ["prod", "production"]:
+            if v in ["prod", "production"]:
                 return Environment.PRODUCTION
-            elif v in ["test", "testing"]:
+            if v in ["test", "testing"]:
                 return Environment.TEST
         return v
 
     # TODO[pydantic]: We couldn't refactor the `validator`, please replace it by `field_validator` manually.
     # Check https://docs.pydantic.dev/dev-v2/migration/#changes-to-validators for more information.
     @validator("allowed_origins", each_item=True)
-    def validate_origin(cls, v, values):
+    def validate_origin(self, v, values):
         """Validate each origin in the allowed_origins list."""
         if not v:
             return v
@@ -119,7 +120,7 @@ class CORSPolicy(BaseModel):
             )
 
         # Validate origin format
-        if v != "*" and not cls._is_valid_origin_format(v):
+        if v != "*" and not self._is_valid_origin_format(v):
             raise ValueError(
                 f"Invalid origin format: {v}. "
                 "Expected format: http(s)://domain.com or http(s)://domain.com:port"
@@ -130,7 +131,7 @@ class CORSPolicy(BaseModel):
     # TODO[pydantic]: We couldn't refactor the `validator`, please replace it by `field_validator` manually.
     # Check https://docs.pydantic.dev/dev-v2/migration/#changes-to-validators for more information.
     @validator("allowed_methods", each_item=True)
-    def validate_method(cls, v):
+    def validate_method(self, v):
         """Validate HTTP methods."""
         allowed_methods = {method.value for method in CORSMethods}
         if v not in allowed_methods:
@@ -147,15 +148,17 @@ class CORSPolicy(BaseModel):
         if v < 0:
             raise ValueError("max_age must be non-negative")
         if v > 86400 * 7:  # 7 days
-            raise ValueError("max_age should not exceed 7 days (604800 seconds)")
+            raise ValueError(
+                "max_age should not exceed 7 days (604800 seconds)"
+            )
         return v
 
     # TODO[pydantic]: We couldn't refactor the `validator`, please replace it by `field_validator` manually.
     # Check https://docs.pydantic.dev/dev-v2/migration/#changes-to-validators for more information.
     @validator("origin_regex_patterns", each_item=True)
-    def validate_regex_pattern(cls, v, values):
+    def validate_regex_pattern(self, v, values):
         """Validate regex patterns are compilable and not allowed in production."""
-        environment = values.get("environment")
+        values.get("environment")
 
         try:
             re.compile(v)
@@ -215,21 +218,18 @@ class CORSPolicy(BaseModel):
                 try:
                     socket.inet_pton(socket.AF_INET6, host.strip("[]"))
                     return True
-                except socket.error:
+                except OSError:
                     pass  # Not a valid IPv6, continue to other checks
 
             elif "." in host:  # Likely IPv4 or domain
                 try:
                     socket.inet_aton(host)  # Valid IPv4
                     return True
-                except socket.error:
+                except OSError:
                     # Not IPv4, check if it's a valid domain name
                     # Simple domain validation using regex
                     domain_pattern = r"^[a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?)*$"
-                    if re.match(domain_pattern, host):
-                        return True
-                    else:
-                        return False
+                    return bool(re.match(domain_pattern, host))
         return False
 
     def is_origin_allowed(self, origin: str) -> bool:
@@ -256,7 +256,9 @@ class CORSPolicy(BaseModel):
                 if re.match(pattern, origin):
                     return True
             except re.error:
-                logger.warning(f"Invalid regex pattern in CORS config: {pattern}")
+                logger.warning(
+                    f"Invalid regex pattern in CORS config: {pattern}"
+                )
                 continue
 
         return False
@@ -324,7 +326,7 @@ class CORSConfig(BaseModel):
         description="CORS policy for test environment",
     )
 
-    def get_policy(self, environment: Union[str, Environment]) -> CORSPolicy:
+    def get_policy(self, environment: str | Environment) -> CORSPolicy:
         """
         Get CORS policy for a specific environment.
 
@@ -339,15 +341,14 @@ class CORSConfig(BaseModel):
 
         if environment == Environment.DEVELOPMENT:
             return self.development
-        elif environment == Environment.PRODUCTION:
+        if environment == Environment.PRODUCTION:
             return self.production
-        elif environment == Environment.TEST:
+        if environment == Environment.TEST:
             return self.test
-        else:
-            raise ValueError(f"Unknown environment: {environment}")
+        raise ValueError(f"Unknown environment: {environment}")
 
     def update_policy(
-        self, environment: Union[str, Environment], policy: CORSPolicy
+        self, environment: str | Environment, policy: CORSPolicy
     ) -> None:
         """
         Update CORS policy for a specific environment.

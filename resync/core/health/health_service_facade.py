@@ -11,11 +11,10 @@ from __future__ import annotations
 import asyncio
 import time
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import structlog
-
-from resync.core.health_models import (
+from resync_new.models.health_models import (
     ComponentHealth,
     ComponentType,
     HealthCheckConfig,
@@ -52,7 +51,7 @@ class HealthServiceFacade:
     - HealthMonitoringSubject: Observer pattern coordination
     """
 
-    def __init__(self, config: Optional[HealthCheckConfig] = None):
+    def __init__(self, config: HealthCheckConfig | None = None):
         """
         Initialize the health service facade.
 
@@ -71,7 +70,7 @@ class HealthServiceFacade:
         self.monitoring_coordinator = HealthMonitoringCoordinator(self.config)
 
         # Initialize observers
-        self._default_observers: List[HealthMonitorObserver] = [
+        self._default_observers: list[HealthMonitorObserver] = [
             LoggingHealthObserver(),
             AlertingHealthObserver(),
             MetricsHealthObserver(),
@@ -96,7 +95,9 @@ class HealthServiceFacade:
                     await self.monitoring_subject.attach(observer)
 
                 # Initialize basic health check service
-                await self.service_manager.initialize_basic_service(self.config)
+                await self.service_manager.initialize_basic_service(
+                    self.config
+                )
 
                 self._initialized = True
                 logger.info("health_service_facade_components_initialized")
@@ -127,7 +128,8 @@ class HealthServiceFacade:
 
             except Exception as e:
                 logger.error(
-                    "health_service_facade_monitoring_start_failed", error=str(e)
+                    "health_service_facade_monitoring_start_failed",
+                    error=str(e),
                 )
                 raise
 
@@ -144,7 +146,8 @@ class HealthServiceFacade:
 
             except Exception as e:
                 logger.error(
-                    "health_service_facade_monitoring_stop_failed", error=str(e)
+                    "health_service_facade_monitoring_stop_failed",
+                    error=str(e),
                 )
                 raise
 
@@ -162,7 +165,8 @@ class HealthServiceFacade:
         correlation_id = f"facade_health_{int(start_time)}"
 
         logger.debug(
-            "facade_comprehensive_health_check_started", correlation_id=correlation_id
+            "facade_comprehensive_health_check_started",
+            correlation_id=correlation_id,
         )
 
         try:
@@ -177,7 +181,12 @@ class HealthServiceFacade:
             # Aggregate results
             all_components = {}
             overall_status = HealthStatus.HEALTHY
-            summary = {"healthy": 0, "degraded": 0, "unhealthy": 0, "unknown": 0}
+            summary = {
+                "healthy": 0,
+                "degraded": 0,
+                "unhealthy": 0,
+                "unknown": 0,
+            }
 
             for result in results:
                 all_components.update(result.components)
@@ -231,10 +240,12 @@ class HealthServiceFacade:
             return result
 
         except Exception as e:
-            logger.error("facade_comprehensive_health_check_failed", error=str(e))
+            logger.error(
+                "facade_comprehensive_health_check_failed", error=str(e)
+            )
 
             # Return error result
-            error_result = HealthCheckResult(
+            return HealthCheckResult(
                 overall_status=HealthStatus.UNKNOWN,
                 timestamp=datetime.now(),
                 correlation_id=correlation_id,
@@ -246,11 +257,9 @@ class HealthServiceFacade:
                 },
             )
 
-            return error_result
-
     async def get_component_health(
         self, component_name: str
-    ) -> Optional[ComponentHealth]:
+    ) -> ComponentHealth | None:
         """
         Get health status for a specific component.
 
@@ -280,7 +289,9 @@ class HealthServiceFacade:
 
             component_type = component_type_map.get(component_name)
             if not component_type:
-                logger.warning("unknown_component_type", component_name=component_name)
+                logger.warning(
+                    "unknown_component_type", component_name=component_name
+                )
                 return None
 
             # Get component health using extracted service
@@ -308,11 +319,15 @@ class HealthServiceFacade:
             await self.initialize()
 
         try:
-            logger.info("facade_component_recovery_started", component=component_name)
+            logger.info(
+                "facade_component_recovery_started", component=component_name
+            )
 
             # Use recovery manager for recovery operations
             if component_name == "database":
-                result = await self.recovery_manager.attempt_database_recovery()
+                result = (
+                    await self.recovery_manager.attempt_database_recovery()
+                )
             elif component_name == "cache_hierarchy":
                 result = await self.recovery_manager.attempt_cache_recovery()
             else:
@@ -339,8 +354,8 @@ class HealthServiceFacade:
             return False
 
     async def get_health_history(
-        self, hours: int = 24, max_entries: Optional[int] = None
-    ) -> List[HealthStatusHistory]:
+        self, hours: int = 24, max_entries: int | None = None
+    ) -> list[HealthStatusHistory]:
         """
         Get health status history.
 
@@ -363,7 +378,7 @@ class HealthServiceFacade:
         """Update health check configuration."""
         self.config_manager.update_config(**kwargs)
 
-    def get_service_status(self) -> Dict[str, Any]:
+    def get_service_status(self) -> dict[str, Any]:
         """Get status of all facade-managed services."""
         return {
             "initialized": self._initialized,
@@ -373,7 +388,7 @@ class HealthServiceFacade:
             "service_manager_status": self.service_manager.get_service_status(),
         }
 
-    def get_metrics_summary(self) -> Dict[str, Any]:
+    def get_metrics_summary(self) -> dict[str, Any]:
         """Get metrics summary from all observers."""
         # Find the metrics observer and get its summary
         for observer in self._default_observers:
@@ -401,7 +416,8 @@ class HealthServiceFacade:
                 await self.monitoring_subject.notify_check_completed(
                     component_name,
                     component_health,
-                    (time.time() * 1000) - (result.timestamp.timestamp() * 1000),
+                    (time.time() * 1000)
+                    - (result.timestamp.timestamp() * 1000),
                 )
 
         except Exception as e:
@@ -425,5 +441,7 @@ class HealthServiceFacade:
                 logger.info("health_service_facade_shutdown_completed")
 
             except Exception as e:
-                logger.error("health_service_facade_shutdown_failed", error=str(e))
+                logger.error(
+                    "health_service_facade_shutdown_failed", error=str(e)
+                )
                 raise

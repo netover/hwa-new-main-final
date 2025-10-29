@@ -8,12 +8,11 @@ for security and compliance purposes.
 import logging
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any
 from urllib.parse import urlparse
 
 from fastapi import Request
 from pydantic import BaseModel
-
 from resync.core.logger import log_with_correlation
 
 logger = logging.getLogger(__name__)
@@ -37,8 +36,10 @@ class CORSMonitor:
         self.requests = []
 
     def monitor_request(
-        self, request: Request, operation: CORSOperation = CORSOperation.REQUEST
-    ) -> Dict[str, Any]:
+        self,
+        request: Request,
+        operation: CORSOperation = CORSOperation.REQUEST,
+    ) -> dict[str, Any]:
         """
         Monitor an incoming request for CORS-related information.
 
@@ -51,8 +52,12 @@ class CORSMonitor:
         """
         origin = request.headers.get("origin")
         method = request.method
-        requested_headers = request.headers.get("access-control-request-headers")
-        access_control_method = request.headers.get("access-control-request-method")
+        requested_headers = request.headers.get(
+            "access-control-request-headers"
+        )
+        access_control_method = request.headers.get(
+            "access-control-request-method"
+        )
 
         # Log the origin for monitoring
         if origin:
@@ -111,7 +116,10 @@ class CORSMonitor:
                 "MockRequest",
                 (),
                 {
-                    "headers": {"origin": origin, "user-agent": "CORS-Monitor"},
+                    "headers": {
+                        "origin": origin,
+                        "user-agent": "CORS-Monitor",
+                    },
                     "url": type("URL", (), {"path": path})(),
                     "method": method,
                 },
@@ -133,7 +141,7 @@ class CORSMonitor:
             f"CORS violation: {origin} -> {path} ({method}). Details: {details}"
         )
 
-    def get_violations(self, limit: int = 100) -> List[Dict[str, Any]]:
+    def get_violations(self, limit: int = 100) -> list[dict[str, Any]]:
         """
         Get recent CORS violations.
 
@@ -145,7 +153,7 @@ class CORSMonitor:
         """
         return self.violations[-limit:]
 
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> dict[str, Any]:
         """
         Get CORS monitoring statistics.
 
@@ -186,13 +194,13 @@ class CORSLogEntry(BaseModel):
     timestamp: str
     origin: str
     method: str
-    requested_headers: Optional[str] = None
-    access_control_method: Optional[str] = None
+    requested_headers: str | None = None
+    access_control_method: str | None = None
     path: str
-    user_agent: Optional[str] = None
+    user_agent: str | None = None
     operation: str
     is_violation: bool = False
-    details: Optional[str] = ""
+    details: str | None = ""
 
 
 def monitor_cors() -> CORSMonitor:
@@ -210,7 +218,7 @@ class CORSMonitoringMiddleware:
     Middleware to monitor and log CORS-related activities.
     """
 
-    def __init__(self, app, allowed_origins: List[str] = None):
+    def __init__(self, app, allowed_origins: list[str] = None):
         self.app = app
         self.cors_monitor = monitor_cors()
         self.allowed_origins = set(allowed_origins or [])
@@ -226,7 +234,9 @@ class CORSMonitoringMiddleware:
                 # Check if this is a CORS preflight request
                 if request.method == "OPTIONS":
                     origin = request.headers.get("origin")
-                    access_method = request.headers.get("access-control-request-method")
+                    access_method = request.headers.get(
+                        "access-control-request-method"
+                    )
                     if origin:
                         # Log preflight request
                         self.cors_monitor.monitor_request(
@@ -267,7 +277,9 @@ class CORSMonitoringMiddleware:
                         request.url.path,
                         "Invalid origin format",
                         request.method,
-                        request.headers.get("access-control-request-headers", ""),
+                        request.headers.get(
+                            "access-control-request-headers", ""
+                        ),
                     )
             except Exception as e:
                 self.cors_monitor.log_violation(

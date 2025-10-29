@@ -31,8 +31,8 @@ import aiohttp
 from aiohttp import web
 import jwt
 
-from resync.core.structured_logger import get_logger
-from resync.core.circuit_breaker import (
+from resync.utils.simple_logger import get_logger
+from resync.core.monitoring.circuit_breaker import (
     adaptive_llm_api_breaker,
     adaptive_tws_api_breaker,
 )
@@ -136,10 +136,10 @@ class RateLimitRule:
     key_strategy: str = "ip"  # ip, user, api_key, custom
     exclude_paths: Set[str] = field(default_factory=set)
 
-    def get_key(self, request: web.Request) -> str:
+    def get_key(self, request: web.Request, gateway_instance) -> str:
         """Get rate limit key from request."""
         if self.key_strategy == "ip":
-            return self._get_client_ip(request)
+            return gateway_instance._get_client_ip(request)
         elif self.key_strategy == "user":
             return request.get("user_id", "anonymous")
         elif self.key_strategy == "api_key":
@@ -444,7 +444,7 @@ class APIGateway:
         if request.path in rule.exclude_paths:
             return {"allowed": True}
 
-        key = rule.get_key(request)
+        key = rule.get_key(request, self)
         current_time = time.time()
 
         # Get request counts for this key
@@ -568,31 +568,52 @@ class APIGateway:
         # Apply transformations (simplified)
         # In a real implementation, this would use the transformers registry
 
+        new_path = request.path
+
         # Strip prefix if configured
         if route_config.strip_prefix:
-            new_path = request.path
-            if route_config.path_pattern.startswith("/"):
-                prefix = (
-                    route_config.path_pattern.split("/")[1]
-                    if "/" in route_config.path_pattern[1:]
-                    else ""
-                )
-                if prefix and new_path.startswith(f"/{prefix}"):
-                    new_path = new_path[len(f"/{prefix}") :]
+            prefix = self._extract_prefix_from_pattern(route_config.path_pattern)
+            if prefix and new_path.startswith(prefix):
+                prefix_length = len(prefix)
+                new_path = new_path[prefix_length:]
+                # Ensure path starts with / after stripping
+                if new_path and not new_path.startswith("/"):
+                    new_path = "/" + new_path
+                elif not new_path:
+                    new_path = "/"
 
-            # Add new prefix if configured
-            if route_config.add_prefix:
-                new_path = f"/{route_config.add_prefix}{new_path}"
+        # Add new prefix if configured
+        if route_config.add_prefix:
+            # Remove leading / from add_prefix to avoid double slashes
+            clean_add_prefix = route_config.add_prefix.lstrip("/")
+            if clean_add_prefix:
+                new_path = f"/{clean_add_prefix}{new_path}"
 
-            # Create new URL
-            new_url = str(request.url).replace(request.path, new_path)
-            request = request.clone(url=new_url)
+        # Create new URL with updated path
+        if new_path != request.path:
+            # Update the request's rel_url with the new path
+            request.rel_url = request.rel_url.with_path(new_path)
 
         return request
 
-    def _get_circuit_breaker(self, service_name: str):
+    def _extract_prefix_from_pattern(self, path_pattern: str) -> str:
+        """Extract the prefix from a path pattern."""
+        if not path_pattern or not path_pattern.startswith("/"):
+            return ""
+        
+        # Split the pattern and extract the first segment after the leading slash
+        parts = path_pattern.split("/")
+        if len(parts) > 2:  # ['', 'prefix', ...]
+            prefix = f"/{parts[1]}"
+            return prefix
+        elif len(parts) == 2:  # ['', 'prefix']
+            prefix = f"/{parts[1]}"
+            return prefix
+        else:
+            return ""
+
+    def _get_circuit_breaker(self, service_name: str) -> Any:
         """Get circuit breaker for service."""
-        # Use existing circuit breakers based on service type
         if "llm" in service_name.lower():
             return adaptive_llm_api_breaker
         elif "tws" in service_name.lower():

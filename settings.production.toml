@@ -1,77 +1,86 @@
-# Production-specific overrides for Dynaconf
-# These values override the defaults in settings.toml for production environment
+# Production Environment Configuration
+# Optimized for 20 users, Xeon 4 cores, 16GB RAM
+# Connection pools sized for mixed workload with batch processing
 
 [default]
-APP_ENV = "production"
-# TWS Configuration for Production
-TWS_VERIFY_SSL = false  # As per project decision
+# ============================================================================
+# CONNECTION POOL OPTIMIZATIONS - PRODUCTION
+# ============================================================================
+# Database Connection Pool (Neo4j)
+db_pool_min_size = 2          # Optimized for 5-7 concurrent users
+db_pool_max_size = 8          # Handles peaks up to 15 users + batch processing
+db_pool_idle_timeout = 1200   # 20 minutes (production standard)
+db_pool_connect_timeout = 60  # 60 seconds for production reliability
+db_pool_health_check_interval = 60  # 1 minute health checks
 
-# Cache Hierarchy Settings for Production Scale
-CACHE_HIERARCHY_L1_MAX_SIZE = 10000  # Larger for high volume
-CACHE_HIERARCHY_L2_TTL = 900  # Longer for efficiency
-CACHE_HIERARCHY_L2_CLEANUP_INTERVAL = 120
-CACHE_HIERARCHY_NUM_SHARDS = 12  # More for 15 users
-CACHE_HIERARCHY_MAX_WORKERS = 6
+# Redis Connection Pool
+redis_pool_min_size = 2       # Baseline for caching operations
+redis_pool_max_size = 6       # Optimized for cache performance
+redis_pool_idle_timeout = 300 # 5 minutes (shorter than DB for cache)
+redis_pool_connect_timeout = 30 # 30 seconds
+redis_pool_health_check_interval = 60 # 1 minute
 
-# TWS Cache for Production
-TWS_CACHE_TTL = 120
+# HTTP Connection Pool (TWS)
+http_pool_min_size = 3        # For TWS API calls
+http_pool_max_size = 12       # Batch processing capacity
+http_pool_idle_timeout = 300  # 5 minutes
+http_pool_connect_timeout = 10 # 10 seconds for HTTP
+http_pool_health_check_interval = 60 # 1 minute
 
-# IA Auditor Scheduler for Production
-IA_AUDITOR_FREQUENCY_HOURS = 6  # Less frequent to avoid overload
-IA_AUDITOR_STARTUP_ENABLED = false
+# ============================================================================
+# PRODUCTION OPTIMIZATIONS
+# ============================================================================
+# Performance tuning for production
+environment = "production"
+log_level = "INFO"
+server_host = "0.0.0.0"       # Listen on all interfaces
+server_port = 8000
 
-# Production LLM Endpoint (uncomment if needed)
-# LLM_ENDPOINT = "https://api.openai.com/v1"
-# LLM_API_KEY = ""  # Must be set via environment variable
+# Security hardening
+admin_username = "admin"       # Change in production
+cors_allowed_origins = ["https://yourdomain.com"]
+tws_verify = true              # Enable SSL verification
+tws_ca_bundle = "/etc/ssl/certs/ca-certificates.crt"
 
-# Mem0 Settings for Production
-# MEM0_STORAGE_HOST = "your_prod_qdrant_host"
-# MEM0_STORAGE_PORT = 6333
+# Cache optimization
+cache_hierarchy_l1_max_size = 5000   # Smaller L1 for memory efficiency
+cache_hierarchy_l2_ttl = 600         # 10 minutes TTL
+enable_cache_swr = true              # Stale-while-revalidate
+enable_cache_mutex = true            # Prevent cache stampede
 
-# CORS Configuration for Production (strict security)
-CORS_ALLOWED_ORIGINS = []  # Must be explicitly set for production deployment
-CORS_ALLOW_CREDENTIALS = false  # More secure default for production
+# Rate limiting (stricter in production)
+rate_limit_public_per_minute = 60
+rate_limit_authenticated_per_minute = 600
+rate_limit_critical_per_minute = 30
 
-# CSP Configuration for Production (strict enforcement)
-CSP_REPORT_ONLY = false
-CSP_REPORT_URI = "https://your-csp-reporting-endpoint.com/csp-reports"
+# Monitoring and observability
+MIGRATION_ENABLE_METRICS = true
+MIGRATION_USE_NEW_CACHE = true
+MIGRATION_USE_NEW_TWS = true
+MIGRATION_USE_NEW_RATE_LIMIT = true
 
-# Error Response Configuration for Production
-ERROR_DETAIL_LEVEL = "basic"  # detailed, basic, minimal
-ERROR_INCLUDE_STACK_TRACE = false
-ERROR_INCLUDE_ERROR_DETAILS = false
-ERROR_CORRELATION_ID_HEADER = "X-Correlation-ID"
+# ============================================================================
+# RESOURCE LIMITS - PRODUCTION
+# ============================================================================
+# Memory bounds for production stability
+robust_cache_max_memory_mb = 256     # 256MB cache limit
+robust_cache_max_items = 50000       # 50K items limit
 
-# Connection Pool Configuration for Production Scale
-# Database Connection Pool Settings (optimized for 4M jobs/month)
-DB_POOL_MIN_SIZE = 10
-DB_POOL_MAX_SIZE = 50
-DB_POOL_TIMEOUT = 60
-DB_POOL_RETRY_ATTEMPTS = 5
-DB_POOL_RETRY_DELAY = 2
-DB_POOL_HEALTH_CHECK_INTERVAL = 30
-DB_POOL_IDLE_TIMEOUT = 600
+# Connection monitoring thresholds
+pool_utilization_warning_threshold = 0.8   # 80% utilization warning
+pool_utilization_critical_threshold = 0.9  # 90% utilization critical
+connection_wait_time_warning_ms = 100      # 100ms wait time warning
+connection_wait_time_critical_ms = 500     # 500ms wait time critical
 
-# Redis Connection Pool Settings (optimized for high throughput)
-REDIS_POOL_MIN_SIZE = 10
-REDIS_POOL_MAX_SIZE = 50
-REDIS_POOL_TIMEOUT = 60
-REDIS_POOL_RETRY_ATTEMPTS = 5
-REDIS_POOL_RETRY_DELAY = 2
-REDIS_POOL_HEALTH_CHECK_INTERVAL = 30
-REDIS_POOL_IDLE_TIMEOUT = 600
+# ============================================================================
+# BACKUP AND RECOVERY
+# ============================================================================
+# Database backup settings
+backup_enabled = true
+backup_interval_hours = 24
+backup_retention_days = 30
 
-# HTTP/TWS Connection Pool Settings (optimized for external API calls)
-TWS_CONNECT_TIMEOUT = 15
-TWS_READ_TIMEOUT = 60
-TWS_WRITE_TIMEOUT = 60
-TWS_POOL_TIMEOUT = 60
-TWS_MAX_CONNECTIONS = 200
-TWS_MAX_KEEPALIVE = 50
-TWS_POOL_RETRY_ATTEMPTS = 5
-TWS_POOL_RETRY_DELAY = 2
-
-# WebSocket Connection Pool Settings (optimized for real-time updates)
-WS_POOL_MAX_SIZE = 5000
-WS_POOL_CLEANUP_INTERVAL = 30
-WS_CONNECTION_TIMEOUT = 60
+# Health check settings
+health_check_interval_seconds = 30
+health_check_timeout_seconds = 10
+health_check_failure_threshold = 3

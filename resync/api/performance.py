@@ -7,14 +7,14 @@ Provides REST API endpoints for monitoring and optimizing system performance.
 from __future__ import annotations
 
 import logging
-from typing import Any, Dict
+from typing import Any
 
 from fastapi import APIRouter, HTTPException, status
 from fastapi.responses import JSONResponse
-
 from resync.core.performance_optimizer import get_performance_service
-from resync.core.pools.pool_manager import get_connection_pool_manager
 from resync.core.resource_manager import get_global_resource_pool
+
+from resync.core.pools.pool_manager import get_connection_pool_manager
 
 logger = logging.getLogger(__name__)
 
@@ -23,7 +23,7 @@ performance_router = APIRouter(prefix="/api/performance", tags=["performance"])
 
 
 @performance_router.get("/report")
-async def get_performance_report() -> Dict[str, Any]:
+async def get_performance_report() -> dict[str, Any]:
     """
     Get comprehensive system performance report.
 
@@ -48,7 +48,7 @@ async def get_performance_report() -> Dict[str, Any]:
 
 
 @performance_router.get("/cache/metrics")
-async def get_cache_metrics() -> Dict[str, Any]:
+async def get_cache_metrics() -> dict[str, Any]:
     """
     Get detailed cache performance metrics.
 
@@ -86,7 +86,7 @@ async def get_cache_metrics() -> Dict[str, Any]:
 
 
 @performance_router.get("/cache/recommendations")
-async def get_cache_recommendations() -> Dict[str, Any]:
+async def get_cache_recommendations() -> dict[str, Any]:
     """
     Get optimization recommendations for all caches.
 
@@ -103,7 +103,8 @@ async def get_cache_recommendations() -> Dict[str, Any]:
             )
 
         return JSONResponse(
-            status_code=status.HTTP_200_OK, content={"recommendations": recommendations}
+            status_code=status.HTTP_200_OK,
+            content={"recommendations": recommendations},
         )
     except Exception as e:
         logger.error(f"Error getting cache recommendations: {e}")
@@ -114,7 +115,7 @@ async def get_cache_recommendations() -> Dict[str, Any]:
 
 
 @performance_router.get("/pools/metrics")
-async def get_pool_metrics() -> Dict[str, Any]:
+async def get_pool_metrics() -> dict[str, Any]:
     """
     Get detailed connection pool metrics.
 
@@ -135,7 +136,7 @@ async def get_pool_metrics() -> Dict[str, Any]:
 
 
 @performance_router.get("/pools/recommendations")
-async def get_pool_recommendations() -> Dict[str, Any]:
+async def get_pool_recommendations() -> dict[str, Any]:
     """
     Get optimization recommendations for all connection pools.
 
@@ -147,7 +148,8 @@ async def get_pool_recommendations() -> Dict[str, Any]:
         recommendations = await pool_manager.get_optimization_recommendations()
 
         return JSONResponse(
-            status_code=status.HTTP_200_OK, content={"recommendations": recommendations}
+            status_code=status.HTTP_200_OK,
+            content={"recommendations": recommendations},
         )
     except Exception as e:
         logger.error(f"Error getting pool recommendations: {e}")
@@ -158,7 +160,7 @@ async def get_pool_recommendations() -> Dict[str, Any]:
 
 
 @performance_router.get("/resources/stats")
-async def get_resource_stats() -> Dict[str, Any]:
+async def get_resource_stats() -> dict[str, Any]:
     """
     Get resource usage statistics.
 
@@ -181,7 +183,9 @@ async def get_resource_stats() -> Dict[str, Any]:
 
 
 @performance_router.get("/resources/leaks")
-async def detect_resource_leaks(max_lifetime_seconds: int = 3600) -> Dict[str, Any]:
+async def detect_resource_leaks(
+    max_lifetime_seconds: int = 3600,
+) -> dict[str, Any]:
     """
     Detect potential resource leaks.
 
@@ -223,7 +227,7 @@ async def detect_resource_leaks(max_lifetime_seconds: int = 3600) -> Dict[str, A
 
 
 @performance_router.get("/health")
-async def get_performance_health() -> Dict[str, Any]:
+async def get_performance_health() -> dict[str, Any]:
     """
     Get overall performance health status.
 
@@ -238,9 +242,12 @@ async def get_performance_health() -> Dict[str, Any]:
         # Get cache health
         cache_health = "healthy"
         cache_issues = 0
-        for cache_name, monitor in performance_service.cache_monitors.items():
+        for _cache_name, monitor in performance_service.cache_monitors.items():
             metrics = await monitor.get_current_metrics()
-            if metrics.hit_rate < 0.5 or metrics.calculate_efficiency_score() < 50:
+            if (
+                metrics.hit_rate < 0.5
+                or metrics.calculate_efficiency_score() < 50
+            ):
                 cache_health = "degraded"
                 cache_issues += 1
 
@@ -248,7 +255,7 @@ async def get_performance_health() -> Dict[str, Any]:
         pool_health = "healthy"
         pool_issues = 0
         pool_stats = pool_manager.get_pool_stats()
-        for pool_name, stats in pool_stats.items():
+        for _pool_name, stats in pool_stats.items():
             if (
                 stats.get("connection_errors", 0) > 10
                 or stats.get("pool_exhaustions", 0) > 0

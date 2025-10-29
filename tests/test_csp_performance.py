@@ -1,7 +1,8 @@
 """Performance benchmarks for CSP validation optimization."""
 
-import time
 import json
+import time
+
 from resync.csp_validation import validate_csp_report
 
 

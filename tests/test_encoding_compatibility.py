@@ -1,7 +1,9 @@
 import io
 import logging
 from unittest.mock import patch
+
 import pytest
+
 from resync.core.encoding_utils import can_encode, symbol
 from resync.core.structured_logger import SafeEncodingFormatter
 

@@ -7,8 +7,9 @@ from __future__ import annotations
 
 import logging
 import time
+from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
-from typing import Any, AsyncIterator, Optional
+from typing import Any
 
 import httpx
 
@@ -28,7 +29,7 @@ class HTTPConnectionPool(ConnectionPool[httpx.AsyncClient]):
         super().__init__(config)
         self.base_url = base_url
         self.client_kwargs = client_kwargs
-        self._client: Optional[httpx.AsyncClient] = None
+        self._client: httpx.AsyncClient | None = None
 
     async def _setup_pool(self) -> None:
         """Setup HTTP connection pool using httpx."""
@@ -87,7 +88,9 @@ class HTTPConnectionPool(ConnectionPool[httpx.AsyncClient]):
         except Exception as e:
             await self.increment_stat("pool_misses")
             logger.error(f"Failed to get HTTP connection: {e}")
-            raise TWSConnectionError(f"Failed to acquire HTTP connection: {e}") from e
+            raise TWSConnectionError(
+                f"Failed to acquire HTTP connection: {e}"
+            ) from e
         finally:
             wait_time = time.time() - start_time
             await self.update_wait_time(wait_time)
@@ -101,4 +104,6 @@ class HTTPConnectionPool(ConnectionPool[httpx.AsyncClient]):
         """Close the HTTP connection pool."""
         if self._client:
             await self._client.aclose()
-            logger.info(f"HTTP connection pool '{self.config.pool_name}' closed")
+            logger.info(
+                f"HTTP connection pool '{self.config.pool_name}' closed"
+            )

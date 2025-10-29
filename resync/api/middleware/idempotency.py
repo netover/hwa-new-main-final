@@ -17,15 +17,14 @@ Date: October 2025
 """
 
 import json
-from typing import Callable, Dict, List, Optional, Set
+from collections.abc import Callable
 
 from fastapi import HTTPException, Request, Response
 from fastapi.responses import JSONResponse
-from starlette.middleware.base import BaseHTTPMiddleware
-
 from resync.core.context import get_correlation_id
 from resync.core.idempotency import IdempotencyManager
-from resync.core.structured_logger import get_logger
+from resync_new.utils.simple_logger import get_logger
+from starlette.middleware.base import BaseHTTPMiddleware
 
 logger = get_logger(__name__)
 
@@ -44,8 +43,8 @@ class IdempotencyMiddleware(BaseHTTPMiddleware):
         app: Callable,
         idempotency_manager: IdempotencyManager,
         idempotency_header: str = "Idempotency-Key",
-        exclude_paths: Optional[Set[str]] = None,
-        exclude_methods: Optional[Set[str]] = None,
+        exclude_paths: set[str] | None = None,
+        exclude_methods: set[str] | None = None,
     ):
         """
         Inicializa middleware de idempotency
@@ -76,7 +75,9 @@ class IdempotencyMiddleware(BaseHTTPMiddleware):
             exclude_methods=list(self.exclude_methods),
         )
 
-    async def dispatch(self, request: Request, call_next: Callable) -> Response:
+    async def dispatch(
+        self, request: Request, call_next: Callable
+    ) -> Response:
         """
         Processa requisição através do middleware
 
@@ -100,9 +101,8 @@ class IdempotencyMiddleware(BaseHTTPMiddleware):
                     status_code=400,
                     detail="Idempotency-Key header required for this operation",
                 )
-            else:
-                # Para endpoints opcionais, continua sem idempotency
-                return await call_next(request)
+            # Para endpoints opcionais, continua sem idempotency
+            return await call_next(request)
 
         correlation_id = get_correlation_id()
 
@@ -116,8 +116,10 @@ class IdempotencyMiddleware(BaseHTTPMiddleware):
 
         try:
             # Verificar se já existe resposta em cache
-            cached_response = await self.idempotency_manager.get_cached_response(
-                idempotency_key, await self._extract_request_data(request)
+            cached_response = (
+                await self.idempotency_manager.get_cached_response(
+                    idempotency_key, await self._extract_request_data(request)
+                )
             )
 
             if cached_response:
@@ -144,7 +146,9 @@ class IdempotencyMiddleware(BaseHTTPMiddleware):
                 )
 
             # Marcar como em processamento
-            marked = await self.idempotency_manager.mark_processing(idempotency_key)
+            marked = await self.idempotency_manager.mark_processing(
+                idempotency_key
+            )
             if not marked:
                 logger.error(
                     "Failed to mark operation as processing",
@@ -159,13 +163,17 @@ class IdempotencyMiddleware(BaseHTTPMiddleware):
 
                 # Cache da resposta se for bem-sucedida
                 if self._should_cache_response(response):
-                    await self._cache_response(idempotency_key, response, request)
+                    await self._cache_response(
+                        idempotency_key, response, request
+                    )
 
                 return response
 
             finally:
                 # Sempre limpar marca de processamento
-                await self.idempotency_manager.clear_processing(idempotency_key)
+                await self.idempotency_manager.clear_processing(
+                    idempotency_key
+                )
 
         except HTTPException:
             # Re-lançar exceções HTTP sem modificação
@@ -195,10 +203,7 @@ class IdempotencyMiddleware(BaseHTTPMiddleware):
             return False
 
         # Excluir métodos específicos
-        if request.method in self.exclude_methods:
-            return False
-
-        return True
+        return request.method not in self.exclude_methods
 
     def _requires_idempotency(self, request: Request) -> bool:
         """
@@ -216,7 +221,7 @@ class IdempotencyMiddleware(BaseHTTPMiddleware):
         # Métodos que modificam estado requerem idempotency
         return request.method in {"POST", "PUT", "PATCH", "DELETE"}
 
-    def _extract_idempotency_key(self, request: Request) -> Optional[str]:
+    def _extract_idempotency_key(self, request: Request) -> str | None:
         """
         Extrai chave de idempotência do header
 
@@ -228,7 +233,7 @@ class IdempotencyMiddleware(BaseHTTPMiddleware):
         """
         return request.headers.get(self.idempotency_header)
 
-    async def _extract_request_data(self, request: Request) -> Dict:
+    async def _extract_request_data(self, request: Request) -> dict:
         """
         Extrai dados relevantes da requisição para hash
 
@@ -338,7 +343,7 @@ class IdempotencyMiddleware(BaseHTTPMiddleware):
                 error=str(e),
             )
 
-    async def _extract_response_data(self, response: Response) -> Dict:
+    async def _extract_response_data(self, response: Response) -> dict:
         """
         Extrai dados da resposta para cache
 
@@ -355,24 +360,30 @@ class IdempotencyMiddleware(BaseHTTPMiddleware):
                     # Handle different types of response body
                     if isinstance(response.body, (bytes, bytearray)):
                         return json.loads(response.body.decode("utf-8"))
-                    elif isinstance(response.body, str):
+                    if isinstance(response.body, str):
                         return json.loads(response.body)
-                    elif hasattr(response.body, "decode"):
+                    if hasattr(response.body, "decode"):
                         return json.loads(response.body.decode("utf-8"))
-                    else:
-                        # Fallback for other types
-                        return json.loads(str(response.body))
-                except (json.JSONDecodeError, UnicodeDecodeError, AttributeError):
+                    # Fallback for other types
+                    return json.loads(str(response.body))
+                except (
+                    json.JSONDecodeError,
+                    UnicodeDecodeError,
+                    AttributeError,
+                ):
                     pass
 
             # Para outros tipos, retornar estrutura básica
-            return {"message": "Response cached", "status_code": response.status_code}
+            return {
+                "message": "Response cached",
+                "status_code": response.status_code,
+            }
 
         except Exception as e:
             logger.warning("Failed to extract response data", error=str(e))
             return {"cached": True, "status_code": response.status_code}
 
-    def _create_response_from_cache(self, cached: Dict) -> Response:
+    def _create_response_from_cache(self, cached: dict) -> Response:
         """
         Cria resposta HTTP a partir do cache
 
@@ -392,13 +403,12 @@ class IdempotencyMiddleware(BaseHTTPMiddleware):
                 status_code=cached["status_code"],
                 headers=headers,
             )
-        else:
-            # Para outros tipos, criar resposta genérica
-            return JSONResponse(
-                content={"result": cached["data"]},
-                status_code=cached["status_code"],
-                headers=headers,
-            )
+        # Para outros tipos, criar resposta genérica
+        return JSONResponse(
+            content={"result": cached["data"]},
+            status_code=cached["status_code"],
+            headers=headers,
+        )
 
 
 class IdempotencyConfig:
@@ -409,20 +419,24 @@ class IdempotencyConfig:
     def __init__(
         self,
         header_name: str = "Idempotency-Key",
-        exclude_paths: Optional[List[str]] = None,
-        exclude_methods: Optional[List[str]] = None,
+        exclude_paths: list[str] | None = None,
+        exclude_methods: list[str] | None = None,
         required_for_mutations: bool = True,
     ):
         self.header_name = header_name
         self.exclude_paths = set(
-            exclude_paths or ["/health", "/metrics", "/docs", "/redoc", "/openapi.json"]
+            exclude_paths
+            or ["/health", "/metrics", "/docs", "/redoc", "/openapi.json"]
         )
-        self.exclude_methods = set(exclude_methods or ["GET", "HEAD", "OPTIONS"])
+        self.exclude_methods = set(
+            exclude_methods or ["GET", "HEAD", "OPTIONS"]
+        )
         self.required_for_mutations = required_for_mutations
 
 
 def create_idempotency_middleware(
-    idempotency_manager: IdempotencyManager, config: Optional[IdempotencyConfig] = None
+    idempotency_manager: IdempotencyManager,
+    config: IdempotencyConfig | None = None,
 ) -> Callable:
     """
     Factory function para criar middleware de idempotency
@@ -436,7 +450,9 @@ def create_idempotency_middleware(
     """
     config = config or IdempotencyConfig()
 
-    async def idempotency_middleware(request: Request, call_next: Callable) -> Response:
+    async def idempotency_middleware(
+        request: Request, call_next: Callable
+    ) -> Response:
         middleware = IdempotencyMiddleware(
             app=None,  # Não usado quando aplicado como função
             idempotency_manager=idempotency_manager,
@@ -478,7 +494,5 @@ def validate_idempotency_key(key: str) -> bool:
     import re
 
     # UUID v4 pattern
-    uuid_pattern = (
-        r"^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
-    )
+    uuid_pattern = r"^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
     return bool(re.match(uuid_pattern, key, re.IGNORECASE))

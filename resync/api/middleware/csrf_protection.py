@@ -2,9 +2,8 @@ import hmac
 import secrets
 
 from fastapi import HTTPException, Request
+from resync_new.utils.simple_logger import get_logger
 from starlette.middleware.base import BaseHTTPMiddleware
-
-from resync.core.structured_logger import get_logger
 
 logger = get_logger(__name__)
 
@@ -52,7 +51,9 @@ class CSRFProtectionMiddleware(BaseHTTPMiddleware):
                     "user_agent": request.headers.get("user-agent"),
                 },
             )
-            raise HTTPException(status_code=403, detail="CSRF token validation failed")
+            raise HTTPException(
+                status_code=403, detail="CSRF token validation failed"
+            )
 
         response = await call_next(request)
 
@@ -73,12 +74,15 @@ class CSRFProtectionMiddleware(BaseHTTPMiddleware):
     def _generate_csrf_token(self) -> str:
         """Generate cryptographically secure CSRF token."""
         random_bytes = secrets.token_bytes(32)
-        signature = hmac.new(self.secret_key, random_bytes, digestmod="sha256").digest()
+        signature = hmac.new(
+            self.secret_key, random_bytes, digestmod="sha256"
+        ).digest()
 
-        token = (random_bytes + signature).hex()
-        return token
+        return (random_bytes + signature).hex()
 
-    def _validate_csrf_tokens(self, cookie_token: str, header_token: str) -> bool:
+    def _validate_csrf_tokens(
+        self, cookie_token: str, header_token: str
+    ) -> bool:
         """Validate CSRF tokens using constant-time comparison."""
         if cookie_token != header_token:
             return False
@@ -115,4 +119,9 @@ class CSRFProtectionMiddleware(BaseHTTPMiddleware):
 
     def _high_security_endpoints(self) -> list[str]:
         """Endpoints requiring token rotation."""
-        return ["/api/workflow/delete", "/api/admin/", "/api/settings/", "/api/secure/"]
+        return [
+            "/api/workflow/delete",
+            "/api/admin/",
+            "/api/settings/",
+            "/api/secure/",
+        ]

@@ -1,8 +1,9 @@
 """Validation middleware for automatic request validation."""
 
 import json
+from collections.abc import Callable
 from datetime import datetime
-from typing import Any, Callable, Dict, List, Optional, Type
+from typing import Any
 
 import structlog
 from fastapi import HTTPException, Request, Response
@@ -19,12 +20,12 @@ class ValidationMiddleware:
 
     def __init__(
         self,
-        validation_models: Optional[Dict[str, Type[BaseModel]]] = None,
+        validation_models: dict[str, type[BaseModel]] | None = None,
         strict_mode: bool = True,
         sanitize_input: bool = True,
         enable_logging: bool = True,
-        custom_validators: Optional[Dict[str, Callable]] = None,
-        error_handler: Optional[Callable] = None,
+        custom_validators: dict[str, Callable] | None = None,
+        error_handler: Callable | None = None,
     ):
         """
         Initialize validation middleware.
@@ -44,7 +45,9 @@ class ValidationMiddleware:
         self.custom_validators = custom_validators or {}
         self.error_handler = error_handler
 
-    async def __call__(self, request: Request, call_next: Callable) -> Response:
+    async def __call__(
+        self, request: Request, call_next: Callable
+    ) -> Response:
         """
         Process request through validation middleware.
 
@@ -66,7 +69,9 @@ class ValidationMiddleware:
                 return await call_next(request)
 
             # Extract and validate request data
-            validated_data = await self._validate_request(request, validation_model)
+            validated_data = await self._validate_request(
+                request, validation_model
+            )
             if validated_data is not None:
                 # Store validated data in request state for later use
                 request.state.validated_data = validated_data
@@ -86,7 +91,9 @@ class ValidationMiddleware:
             # Re-raise HTTP exceptions
             raise
         except Exception as e:
-            logger.error("validation_middleware_error", error=str(e), exc_info=True)
+            logger.error(
+                "validation_middleware_error", error=str(e), exc_info=True
+            )
             return await self._handle_internal_error(request, e)
 
     def _should_skip_validation(self, request: Request) -> bool:
@@ -112,12 +119,11 @@ class ValidationMiddleware:
             return True
 
         # Skip for OPTIONS requests (CORS preflight)
-        if request.method == "OPTIONS":
-            return True
+        return request.method == "OPTIONS"
 
-        return False
-
-    def _get_validation_model(self, request: Request) -> Optional[Type[BaseModel]]:
+    def _get_validation_model(
+        self, request: Request
+    ) -> type[BaseModel] | None:
         """
         Get validation model for the request endpoint.
 
@@ -158,7 +164,9 @@ class ValidationMiddleware:
         if len(pattern_parts) != len(path_parts):
             return False
 
-        for pattern_part, path_part in zip(pattern_parts, path_parts, strict=False):
+        for pattern_part, path_part in zip(
+            pattern_parts, path_parts, strict=False
+        ):
             if pattern_part.startswith("{") and pattern_part.endswith("}"):
                 continue  # Parameter placeholder
             if pattern_part != path_part:
@@ -167,8 +175,8 @@ class ValidationMiddleware:
         return True
 
     async def _validate_request(
-        self, request: Request, validation_model: Type[BaseModel]
-    ) -> Optional[Dict[str, Any]]:
+        self, request: Request, validation_model: type[BaseModel]
+    ) -> dict[str, Any] | None:
         """
         Validate request data against the validation model.
 
@@ -184,14 +192,13 @@ class ValidationMiddleware:
 
         if request.method in ["POST", "PUT", "PATCH"]:
             return await self._validate_body_data(request, validation_model)
-        elif request.method in ["GET", "DELETE"]:
+        if request.method in ["GET", "DELETE"]:
             return self._validate_query_params(request, validation_model)
-        else:
-            return None
+        return None
 
     async def _validate_body_data(
-        self, request: Request, validation_model: Type[BaseModel]
-    ) -> Optional[Dict[str, Any]]:
+        self, request: Request, validation_model: type[BaseModel]
+    ) -> dict[str, Any] | None:
         """
         Validate request body data.
 
@@ -219,7 +226,7 @@ class ValidationMiddleware:
             elif "multipart/form-data" in content_type:
                 form_data = await request.form()
                 files = await request.files()
-                data = {**dict(form_data), **{"files": files}}
+                data = {**dict(form_data), "files": files}
             else:
                 # Try to parse as JSON by default
                 try:
@@ -244,8 +251,8 @@ class ValidationMiddleware:
             raise ValidationError.from_exception_data("body", [str(e)])
 
     def _validate_query_params(
-        self, request: Request, validation_model: Type[BaseModel]
-    ) -> Optional[Dict[str, Any]]:
+        self, request: Request, validation_model: type[BaseModel]
+    ) -> dict[str, Any] | None:
         """
         Validate query parameters.
 
@@ -276,7 +283,9 @@ class ValidationMiddleware:
                     converted_params[key] = value
 
             # Apply custom validators if any
-            converted_params = self._apply_custom_validators(converted_params, request)
+            converted_params = self._apply_custom_validators(
+                converted_params, request
+            )
 
             # Validate with Pydantic model
             validated_model = validation_model(**converted_params)
@@ -292,8 +301,8 @@ class ValidationMiddleware:
             raise ValidationError.from_exception_data("query_params", [str(e)])
 
     def _apply_custom_validators(
-        self, data: Dict[str, Any], request: Request
-    ) -> Dict[str, Any]:
+        self, data: dict[str, Any], request: Request
+    ) -> dict[str, Any]:
         """
         Apply custom validators to the data.
 
@@ -318,7 +327,7 @@ class ValidationMiddleware:
         return data
 
     def _log_validation_success(
-        self, request: Request, validated_data: Optional[Dict[str, Any]]
+        self, request: Request, validated_data: dict[str, Any] | None
     ) -> None:
         """
         Log successful validation.
@@ -383,7 +392,9 @@ class ValidationMiddleware:
             try:
                 return await self.error_handler(request, error_response)
             except Exception as e:
-                logger.error(f"Custom error handler failed: {str(e)}", exc_info=True)
+                logger.error(
+                    f"Custom error handler failed: {str(e)}", exc_info=True
+                )
 
         # Return standard error response
         return JSONResponse(status_code=422, content=error_response.dict())
@@ -407,7 +418,10 @@ class ValidationMiddleware:
             error="Internal validation error",
             message="An internal error occurred during validation.",
             details=[
-                {"message": str(error), "severity": ValidationSeverity.ERROR.value}
+                {
+                    "message": str(error),
+                    "severity": ValidationSeverity.ERROR.value,
+                }
             ],
             severity=ValidationSeverity.ERROR,
             timestamp=datetime.utcnow(),
@@ -423,13 +437,13 @@ class ValidationConfig:
 
     def __init__(
         self,
-        validation_models: Optional[Dict[str, Type[BaseModel]]] = None,
+        validation_models: dict[str, type[BaseModel]] | None = None,
         strict_mode: bool = True,
         sanitize_input: bool = True,
         enable_logging: bool = True,
-        custom_validators: Optional[Dict[str, Callable]] = None,
-        error_handler: Optional[Callable] = None,
-        skip_paths: Optional[List[str]] = None,
+        custom_validators: dict[str, Callable] | None = None,
+        error_handler: Callable | None = None,
+        skip_paths: list[str] | None = None,
         rate_limit_validation: bool = False,
         max_validation_errors: int = 50,
     ):
@@ -458,7 +472,9 @@ class ValidationConfig:
         self.max_validation_errors = max_validation_errors
 
 
-def create_validation_middleware(config: ValidationConfig) -> ValidationMiddleware:
+def create_validation_middleware(
+    config: ValidationConfig,
+) -> ValidationMiddleware:
     """
     Create validation middleware from configuration.
 
@@ -479,7 +495,9 @@ def create_validation_middleware(config: ValidationConfig) -> ValidationMiddlewa
 
 
 # Common validation utilities
-def validate_json_body(request: Request, model: Type[BaseModel]) -> Dict[str, Any]:
+def validate_json_body(
+    request: Request, model: type[BaseModel]
+) -> dict[str, Any]:
     """
     Validate JSON request body against a Pydantic model.
 
@@ -495,10 +513,11 @@ def validate_json_body(request: Request, model: Type[BaseModel]) -> Dict[str, An
     """
     try:
         body = request.body()
-        if isinstance(body, bytes):
-            data = json.loads(body.decode("utf-8"))
-        else:
-            data = json.loads(body)
+        data = (
+            json.loads(body.decode("utf-8"))
+            if isinstance(body, bytes)
+            else json.loads(body)
+        )
 
         validated_model = model(**data)
         return validated_model.model_dump()
@@ -508,7 +527,9 @@ def validate_json_body(request: Request, model: Type[BaseModel]) -> Dict[str, An
         raise
 
 
-def validate_query_params(request: Request, model: Type[BaseModel]) -> Dict[str, Any]:
+def validate_query_params(
+    request: Request, model: type[BaseModel]
+) -> dict[str, Any]:
     """
     Validate query parameters against a Pydantic model.
 

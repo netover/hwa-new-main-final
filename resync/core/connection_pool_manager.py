@@ -14,7 +14,10 @@ import threading
 import time
 from collections import deque
 from dataclasses import dataclass, field
-from typing import Any, Dict, Optional
+from typing import Any, Deque
+
+from resync.core.smart_pooling import SmartConnectionPool, SmartPoolConfig
+from resync.utils.simple_logger import get_logger
 
 from resync.core.pools.base_pool import (
     ConnectionPool,
@@ -28,8 +31,6 @@ from resync.core.pools.pool_manager import (
     get_connection_pool_manager,
 )
 from resync.core.pools.redis_pool import RedisConnectionPool
-from resync.core.smart_pooling import SmartConnectionPool, SmartPoolConfig
-from resync.core.structured_logger import get_logger
 
 logger = get_logger(__name__)
 
@@ -57,9 +58,15 @@ class LoadMetrics:
     queue_depth: int = 0
 
     # Historical data (sliding window)
-    latency_history: Deque[float] = field(default_factory=lambda: deque(maxlen=1000))
-    request_history: Deque[float] = field(default_factory=lambda: deque(maxlen=100))
-    error_history: Deque[bool] = field(default_factory=lambda: deque(maxlen=1000))
+    latency_history: Deque[float] = field(
+        default_factory=lambda: deque(maxlen=1000)
+    )
+    request_history: Deque[float] = field(
+        default_factory=lambda: deque(maxlen=100)
+    )
+    error_history: Deque[bool] = field(
+        default_factory=lambda: deque(maxlen=1000)
+    )
 
     # Timestamps
     last_updated: float = 0.0
@@ -70,7 +77,9 @@ class LoadMetrics:
         self.request_history.append(requests_per_second)
         self.request_rate = requests_per_second
         self.avg_request_rate = (
-            statistics.mean(self.request_history) if self.request_history else 0.0
+            statistics.mean(self.request_history)
+            if self.request_history
+            else 0.0
         )
 
     def update_latency(self, latency_ms: float) -> None:
@@ -83,7 +92,9 @@ class LoadMetrics:
             self.avg_latency = statistics.mean(sorted_latencies)
             self.p95_latency = sorted_latencies[int(0.95 * n)]
             self.p99_latency = (
-                sorted_latencies[int(0.99 * n)] if n > 2 else sorted_latencies[-1]
+                sorted_latencies[int(0.99 * n)]
+                if n > 2
+                else sorted_latencies[-1]
             )
 
     def update_errors(self, is_error: bool) -> None:
@@ -112,7 +123,9 @@ class LoadMetrics:
         error_score = min(1.0, self.error_rate * 5.0)  # 20% error rate = 1.0
 
         # Queue score (exponential scaling)
-        queue_score = min(1.0, self.queue_depth / 50.0)  # 50 waiting requests = 1.0
+        queue_score = min(
+            1.0, self.queue_depth / 50.0
+        )  # 50 waiting requests = 1.0
 
         return (
             weights["latency"] * latency_score
@@ -132,7 +145,9 @@ class AutoScalingConfig:
 
     # Scaling factors
     scale_up_factor: float = 1.5  # Multiply connections by 1.5 when scaling up
-    scale_down_factor: float = 0.7  # Multiply connections by 0.7 when scaling down
+    scale_down_factor: float = (
+        0.7  # Multiply connections by 0.7 when scaling down
+    )
 
     # Connection limits
     min_connections: int = 5
@@ -154,7 +169,7 @@ class AutoScalingConfig:
 class AutoScalingManager:
     """Intelligent auto-scaling manager for connection pools."""
 
-    def __init__(self, config: Optional[AutoScalingConfig] = None):
+    def __init__(self, config: AutoScalingConfig | None = None):
         self.config = config or AutoScalingConfig()
         self.load_metrics = LoadMetrics()
         self.current_connections = 10  # Default starting point
@@ -169,7 +184,7 @@ class AutoScalingManager:
         self.predicted_load = 0.0
 
         # Threading for background monitoring
-        self._monitor_thread: Optional[threading.Thread] = None
+        self._monitor_thread: threading.Thread | None = None
         self._stop_monitoring = threading.Event()
         self._monitoring_active = False
 
@@ -243,7 +258,8 @@ class AutoScalingManager:
         # Check scale up conditions
         if (
             load_score > self.config.scale_up_threshold
-            and current_time - self.last_scale_up_time > self.config.scale_up_cooldown
+            and current_time - self.last_scale_up_time
+            > self.config.scale_up_cooldown
         ):
 
             asyncio.run(self._scale_up())
@@ -275,7 +291,9 @@ class AutoScalingManager:
             else:
                 new_connections = min(
                     self.config.max_connections,
-                    int(self.current_connections * self.config.scale_up_factor),
+                    int(
+                        self.current_connections * self.config.scale_up_factor
+                    ),
                 )
 
             if new_connections > self.current_connections:
@@ -300,7 +318,10 @@ class AutoScalingManager:
             else:
                 new_connections = max(
                     self.config.min_connections,
-                    int(self.current_connections * self.config.scale_down_factor),
+                    int(
+                        self.current_connections
+                        * self.config.scale_down_factor
+                    ),
                 )
 
             if new_connections < self.current_connections:
@@ -309,7 +330,9 @@ class AutoScalingManager:
         finally:
             self.scaling_in_progress = False
 
-    async def _apply_scaling(self, new_connection_count: int, direction: str) -> None:
+    async def _apply_scaling(
+        self, new_connection_count: int, direction: str
+    ) -> None:
         """Apply scaling changes to the actual pool."""
         # This would integrate with the actual connection pool
         # For now, just log and update state
@@ -338,7 +361,7 @@ class AutoScalingManager:
             trend = statistics.mean(self.load_trend) - self.load_trend[0]
             self.predicted_load = max(0.0, min(1.0, current_load + trend))
 
-    def get_scaling_metrics(self) -> Dict[str, Any]:
+    def get_scaling_metrics(self) -> dict[str, Any]:
         """Get comprehensive scaling metrics."""
         return {
             "current_connections": self.current_connections,
@@ -369,11 +392,11 @@ class AdvancedConnectionPoolManager:
 
     def __init__(self):
         """Initialize advanced connection pool manager."""
-        self.traditional_manager: Optional[ConnectionPoolManager] = None
-        self.smart_pool: Optional[SmartConnectionPool] = None
-        self.auto_scaler: Optional[AutoScalingManager] = None
+        self.traditional_manager: ConnectionPoolManager | None = None
+        self.smart_pool: SmartConnectionPool | None = None
+        self.auto_scaler: AutoScalingManager | None = None
         self._initialized = False
-        self._performance_metrics: Dict[str, Any] = {}
+        self._performance_metrics: dict[str, Any] = {}
 
     async def initialize(self) -> None:
         """Initialize the advanced connection pool manager."""
@@ -456,7 +479,7 @@ class AdvancedConnectionPoolManager:
                     finally:
                         await pool.release(connection)
 
-    def get_performance_metrics(self) -> Dict[str, Any]:
+    def get_performance_metrics(self) -> dict[str, Any]:
         """Get comprehensive performance metrics."""
         metrics = {
             "timestamp": time.time(),
@@ -479,7 +502,7 @@ class AdvancedConnectionPoolManager:
 
         return metrics
 
-    async def force_health_check(self) -> Dict[str, Any]:
+    async def force_health_check(self) -> dict[str, Any]:
         """Force health check across all pools."""
         results = {
             "smart_pool": {},
@@ -507,7 +530,7 @@ class AdvancedConnectionPoolManager:
 
 
 # Global advanced pool manager instance
-_advanced_pool_manager: Optional[AdvancedConnectionPoolManager] = None
+_advanced_pool_manager: AdvancedConnectionPoolManager | None = None
 
 
 def get_advanced_connection_pool_manager() -> AdvancedConnectionPoolManager:

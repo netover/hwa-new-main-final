@@ -8,22 +8,25 @@ It handles audit data retrieval with proper pagination, filtering, and access co
 # resync/api/audit.py
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from pydantic import BaseModel, Field, field_validator
-
-from resync.api.dependencies import get_idempotency_manager, require_idempotency_key
-from resync.core.fastapi_di import get_audit_queue, get_knowledge_graph
 from resync.core.idempotency.manager import IdempotencyManager
-from resync.core.interfaces import IAuditQueue, IKnowledgeGraph
 from resync.core.logger import log_audit_event
+from resync.core.fastapi_di import get_audit_queue, get_knowledge_graph
+from resync.utils.interfaces import IAuditQueue, IKnowledgeGraph
+
+from resync.api.dependencies import (
+    get_idempotency_manager,
+    require_idempotency_key,
+)
 
 # Module-level dependencies to avoid B008 errors
 audit_queue_dependency = Depends(get_audit_queue)
 knowledge_graph_dependency = Depends(get_knowledge_graph)
 
-router = APIRouter(prefix="/api/audit", tags=["audit"])
+router = APIRouter(prefix="/audit", tags=["audit"])
 
 
 class AuditAction(str, Enum):
@@ -43,17 +46,25 @@ class AuditRecordResponse(BaseModel):
     """Response model for audit records."""
 
     id: str = Field(..., description="Unique audit record ID")
-    timestamp: str = Field(..., description="ISO format timestamp of the audit event")
-    user_id: str = Field(..., description="ID of the user performing the action")
-    action: AuditAction = Field(..., description="Type of action being audited")
-    details: Dict[str, Any] = Field(
+    timestamp: str = Field(
+        ..., description="ISO format timestamp of the audit event"
+    )
+    user_id: str = Field(
+        ..., description="ID of the user performing the action"
+    )
+    action: AuditAction = Field(
+        ..., description="Type of action being audited"
+    )
+    details: dict[str, Any] = Field(
         ..., description="Additional details about the action"
     )
-    correlation_id: Optional[str] = Field(
+    correlation_id: str | None = Field(
         None, description="Correlation ID for tracking requests"
     )
-    ip_address: Optional[str] = Field(None, description="IP address of the requester")
-    user_agent: Optional[str] = Field(
+    ip_address: str | None = Field(
+        None, description="IP address of the requester"
+    )
+    user_agent: str | None = Field(
         None, description="User agent string of the requester"
     )
 
@@ -61,10 +72,10 @@ class AuditRecordResponse(BaseModel):
 def generate_audit_log(
     user_id: str,
     action: AuditAction,
-    details: Dict[str, Any],
-    correlation_id: Optional[str] = None,
-    ip_address: Optional[str] = None,
-    user_agent: Optional[str] = None,
+    details: dict[str, Any],
+    correlation_id: str | None = None,
+    ip_address: str | None = None,
+    user_agent: str | None = None,
 ) -> AuditRecordResponse:
     """
     Generate an audit log entry with proper structure.
@@ -108,6 +119,11 @@ def generate_audit_log(
 
 
 class ReviewAction(BaseModel):
+    """Model for audit review actions.
+    
+    Represents an action taken during audit review, either approving or rejecting
+    a memory entry based on compliance checks.
+    """
     memory_id: str
     action: str  # "approve" or "reject"
 
@@ -125,23 +141,25 @@ class ReviewAction(BaseModel):
         """
         valid_actions = {"approve", "reject"}
         if v.lower() not in valid_actions:
-            raise ValueError(f"Invalid action: {v}. Must be one of {valid_actions}")
+            raise ValueError(
+                f"Invalid action: {v}. Must be one of {valid_actions}"
+            )
         return v.lower()
 
 
-@router.get("/flags", response_model=List[Dict[str, Any]])
+@router.get("/flags", response_model=list[dict[str, Any]])
 def get_flagged_memories(
     request: Request,
     status: str = Query(
         "pending",
         description="Filter by audit status (pending, approved, rejected, all)",
     ),
-    query: Optional[str] = Query(
+    query: str | None = Query(
         None,
         description="Search query in user_query or agent_response",
     ),
     audit_queue: IAuditQueue = audit_queue_dependency,
-) -> List[Dict[str, Any]]:
+) -> list[dict[str, Any]]:
     """
     Retrieves memories from the audit queue based on status and search query.
     """
@@ -204,7 +222,7 @@ async def review_memory(
     review: ReviewAction,
     audit_queue: IAuditQueue = audit_queue_dependency,
     knowledge_graph: IKnowledgeGraph = knowledge_graph_dependency,
-) -> Dict[str, str]:
+) -> dict[str, str]:
     """
     Processes a human review action for a flagged memory, updating its status in the database.
     """
@@ -223,7 +241,9 @@ async def review_memory(
 
     if review.action == "approve":
         try:
-            if not audit_queue.update_audit_status_sync(review.memory_id, "approved"):
+            if not audit_queue.update_audit_status_sync(
+                review.memory_id, "approved"
+            ):
                 log_audit_event(
                     action="review_attempt_failed",
                     user_id=user_id,
@@ -234,7 +254,9 @@ async def review_memory(
                     },
                     correlation_id=correlation_id,
                 )
-                raise HTTPException(status_code=404, detail="Audit record not found.")
+                raise HTTPException(
+                    status_code=404, detail="Audit record not found."
+                )
 
             await knowledge_graph.add_observations(
                 review.memory_id, ["MANUALLY_APPROVED_BY_ADMIN"]
@@ -262,7 +284,9 @@ async def review_memory(
 
     elif review.action == "reject":
         try:
-            if not audit_queue.update_audit_status_sync(review.memory_id, "rejected"):
+            if not audit_queue.update_audit_status_sync(
+                review.memory_id, "rejected"
+            ):
                 log_audit_event(
                     action="review_attempt_failed",
                     user_id=user_id,
@@ -273,7 +297,9 @@ async def review_memory(
                     },
                     correlation_id=correlation_id,
                 )
-                raise HTTPException(status_code=404, detail="Audit record not found.")
+                raise HTTPException(
+                    status_code=404, detail="Audit record not found."
+                )
 
             await knowledge_graph.delete_memory(review.memory_id)
 
@@ -300,11 +326,13 @@ async def review_memory(
     raise HTTPException(status_code=400, detail="Invalid action")
 
 
-@router.get("/metrics", response_model=Dict[str, int])  # New endpoint for metrics
+@router.get(
+    "/metrics", response_model=dict[str, int]
+)  # New endpoint for metrics
 def get_audit_metrics(
     request: Request,
     audit_queue: IAuditQueue = audit_queue_dependency,
-) -> Dict[str, int]:
+) -> dict[str, int]:
     """
     Returns metrics for the audit queue (total pending, approved, rejected).
     """
@@ -345,14 +373,16 @@ def get_audit_metrics(
 
 
 # Additional audit endpoints for enhanced functionality
-@router.get("/logs", response_model=List[AuditRecordResponse])
+@router.get("/logs", response_model=list[AuditRecordResponse])
 def get_audit_logs(
     request: Request,
     limit: int = Query(100, description="Maximum number of logs to return"),
     offset: int = Query(0, description="Offset for pagination"),
-    action: Optional[AuditAction] = Query(None, description="Filter by action type"),
-    user_id: Optional[str] = Query(None, description="Filter by user ID"),
-) -> List[AuditRecordResponse]:
+    action: AuditAction | None = Query(
+        None, description="Filter by action type"
+    ),
+    user_id: str | None = Query(None, description="Filter by user ID"),
+) -> list[AuditRecordResponse]:
     """
     Retrieves audit logs with optional filtering and pagination.
     """
@@ -469,7 +499,9 @@ async def create_audit_log(
 
     # Execute with idempotency
     if not idempotency_key:
-        raise HTTPException(status_code=400, detail="Idempotency key is required")
+        raise HTTPException(
+            status_code=400, detail="Idempotency key is required"
+        )
 
     return await manager.execute_idempotent(
         key=idempotency_key,
@@ -489,20 +521,23 @@ class AuditLogger:
         record = {
             "action": action,
             "details": details or {},
-            "timestamp": "now"
+            "timestamp": "now",
         }
         self.records.append(record)
         return record
 
-    def generate_audit_log(self, user_id: str, action: AuditAction, details: dict = None):
+    def generate_audit_log(
+        self, user_id: str, action: AuditAction, details: dict = None
+    ):
         """Generate an audit log entry."""
         import uuid
+
         record = AuditRecordResponse(
             id=str(uuid.uuid4()),
             user_id=user_id,
             action=action,
             details=details or {},
-            timestamp="now"
+            timestamp="now",
         )
         self.records.append(record)
         return record

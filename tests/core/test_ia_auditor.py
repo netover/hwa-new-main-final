@@ -8,9 +8,9 @@ import pytest
 
 from resync.core.exceptions import DatabaseError, LLMError
 from resync.core.ia_auditor import (
+    _analyze_memories_concurrently,
     _cleanup_locks,
     _fetch_recent_memories,
-    _analyze_memories_concurrently,
     _process_analysis_results,
     analyze_and_flag_memories,
     analyze_memory,

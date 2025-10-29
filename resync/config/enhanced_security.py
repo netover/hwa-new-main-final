@@ -3,15 +3,17 @@ Enhanced security configuration for Resync application with production-ready set
 """
 
 import logging
-from typing import List, Optional
 
 from fastapi import FastAPI
+from resync.config.settings import settings
 from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.middleware.trustedhost import TrustedHostMiddleware
 from starlette.requests import Request
 from starlette.responses import Response
 
-from resync.api.validation.enhanced_security_fixed import SecurityHeadersMiddleware
-from resync.settings import settings
+from resync.api.validation.enhanced_security_fixed import (
+    SecurityHeadersMiddleware,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -33,10 +35,10 @@ class EnhancedSecurityMiddleware(BaseHTTPMiddleware):
         enable_content_type_options: bool = True,
         enable_frame_options: bool = True,
         strict_transport_security_max_age: int = 31536000,  # 1 year
-        content_security_policy: Optional[str] = None,
+        content_security_policy: str | None = None,
         referrer_policy: str = "strict-origin-when-cross-origin",
-        permissions_policy: Optional[str] = None,
-        feature_policy: Optional[str] = None,
+        permissions_policy: str | None = None,
+        feature_policy: str | None = None,
     ):
         """
         Initialize enhanced security middleware.
@@ -66,8 +68,12 @@ class EnhancedSecurityMiddleware(BaseHTTPMiddleware):
         self.enable_xss_protection = enable_xss_protection
         self.enable_content_type_options = enable_content_type_options
         self.enable_frame_options = enable_frame_options
-        self.strict_transport_security_max_age = strict_transport_security_max_age
-        self.content_security_policy = content_security_policy or self._default_csp()
+        self.strict_transport_security_max_age = (
+            strict_transport_security_max_age
+        )
+        self.content_security_policy = (
+            content_security_policy or self._default_csp()
+        )
         self.referrer_policy = referrer_policy
         self.permissions_policy = (
             permissions_policy or self._default_permissions_policy()
@@ -111,10 +117,9 @@ class EnhancedSecurityMiddleware(BaseHTTPMiddleware):
             return True
 
         # Skip for static files in production (handled by web server)
-        if settings.is_production and request.url.path.startswith("/static/"):
-            return True
-
-        return False
+        return bool(
+            settings.is_production and request.url.path.startswith("/static/")
+        )
 
     def _add_security_headers(self, response: Response) -> None:
         """
@@ -243,7 +248,7 @@ class EnhancedSecurityMiddleware(BaseHTTPMiddleware):
 
 def configure_enhanced_security(
     app: FastAPI,
-    security_middleware_config: Optional[dict] = None,
+    security_middleware_config: dict | None = None,
 ) -> None:
     """
     Configure enhanced security for the FastAPI application.
@@ -256,12 +261,38 @@ def configure_enhanced_security(
         security_middleware_config = {}
 
     # Add enhanced security middleware
-    app.add_middleware(EnhancedSecurityMiddleware, **security_middleware_config)
+    app.add_middleware(
+        EnhancedSecurityMiddleware, **security_middleware_config
+    )
 
     # Add security headers middleware
     app.add_middleware(SecurityHeadersMiddleware)
 
-    logger.info("Enhanced security middleware configured")
+    # Add TrustedHostMiddleware for production hardening
+    if hasattr(settings, 'allowed_hosts') and settings.allowed_hosts:
+        app.add_middleware(TrustedHostMiddleware, allowed_hosts=settings.allowed_hosts)
+        logger.info(f"TrustedHostMiddleware configured with hosts: {settings.allowed_hosts}")
+    else:
+        logger.warning("TrustedHostMiddleware not configured - allowed_hosts not set in settings")
+
+    # Add basic security headers middleware
+    @app.middleware("http")
+    async def security_headers_middleware(request: Request, call_next) -> Response:
+        """Add basic security headers to all responses."""
+        resp: Response = await call_next(request)
+
+        # OWASP recommended security headers
+        resp.headers.setdefault("X-Content-Type-Options", "nosniff")
+        resp.headers.setdefault("X-Frame-Options", "DENY")
+        resp.headers.setdefault("Referrer-Policy", "no-referrer")
+
+        # HSTS for HTTPS in production
+        if getattr(settings, 'environment', 'development') == "production":
+            resp.headers.setdefault("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload")
+
+        return resp
+
+    logger.info("Enhanced security middleware configured with TrustedHost and security headers")
     if settings.is_production:
         logger.info("Production security settings enabled")
     else:
@@ -314,7 +345,7 @@ SECURITY_HEADERS_CHECKLIST = [
 ]
 
 
-def validate_security_headers(response_headers: dict) -> List[str]:
+def validate_security_headers(response_headers: dict) -> list[str]:
     """
     Validate that all recommended security headers are present.
 

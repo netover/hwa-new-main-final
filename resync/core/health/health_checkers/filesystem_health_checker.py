@@ -8,15 +8,15 @@ from __future__ import annotations
 
 import time
 from datetime import datetime
-from typing import Any, Dict
+from typing import Any
 
 import structlog
-
-from resync.core.health_models import (
+from resync_new.models.health_models import (
     ComponentHealth,
     ComponentType,
     HealthStatus,
 )
+
 from .base_health_checker import BaseHealthChecker
 
 logger = structlog.get_logger(__name__)
@@ -57,7 +57,9 @@ class FileSystemHealthChecker(BaseHealthChecker):
                 message = f"Disk space critically low: {disk_usage_percent:.1f}% used"
             elif disk_usage_percent > 85:
                 status = HealthStatus.DEGRADED
-                message = f"Disk space getting low: {disk_usage_percent:.1f}% used"
+                message = (
+                    f"Disk space getting low: {disk_usage_percent:.1f}% used"
+                )
             else:
                 status = HealthStatus.HEALTHY
                 message = f"Disk space OK: {disk_usage_percent:.1f}% used"
@@ -96,7 +98,7 @@ class FileSystemHealthChecker(BaseHealthChecker):
         """Determine health status based on filesystem exception type."""
         return ComponentType.FILE_SYSTEM
 
-    def get_component_config(self) -> Dict[str, Any]:
+    def get_component_config(self) -> dict[str, Any]:
         """Get filesystem-specific configuration."""
         return {
             "timeout_seconds": self.config.timeout_seconds,

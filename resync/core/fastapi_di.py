@@ -7,19 +7,22 @@ that resolve services from the container.
 
 from __future__ import annotations
 
+import asyncio
 import inspect
+from collections.abc import Callable
 from functools import wraps
-from typing import Any, Callable, Type, TypeVar, get_type_hints
+from typing import Any, TypeVar, get_type_hints
 
 from fastapi import FastAPI, Request, Response
-from starlette.middleware.base import BaseHTTPMiddleware
-
 from resync.core.agent_manager import AgentManager
 from resync.core.audit_queue import AsyncAuditQueue
 from resync.core.connection_manager import ConnectionManager
 from resync.core.di_container import DIContainer, ServiceLifetime, container
 from resync.core.file_ingestor import create_file_ingestor
-from resync.core.interfaces import (
+from resync.core.knowledge_graph import AsyncKnowledgeGraph
+from resync.core.teams_integration import TeamsIntegration
+from resync_new.config.settings import settings
+from resync_new.utils.interfaces import (
     IAgentManager,
     IAuditQueue,
     IConnectionManager,
@@ -27,14 +30,13 @@ from resync.core.interfaces import (
     IKnowledgeGraph,
     ITWSClient,
 )
-from resync.core.knowledge_graph import AsyncKnowledgeGraph
 
 # --- Logging Setup ---
-from resync.core.structured_logger import get_logger
-from resync.core.teams_integration import TeamsIntegration, get_teams_integration
+from resync_new.utils.simple_logger import get_logger
+from starlette.middleware.base import BaseHTTPMiddleware
+
 from resync.services.mock_tws_service import MockTWSClient
 from resync.services.tws_service import OptimizedTWSClient
-from resync.settings import settings
 
 logger = get_logger(__name__)
 
@@ -52,16 +54,15 @@ def get_tws_client_factory():
     if settings.TWS_MOCK_MODE:
         logger.info("TWS_MOCK_MODE is enabled. Creating MockTWSClient.")
         return MockTWSClient()
-    else:
-        logger.info("Creating OptimizedTWSClient.")
-        return OptimizedTWSClient(
-            hostname=settings.TWS_HOST,
-            port=settings.TWS_PORT,
-            username=settings.TWS_USER,
-            password=settings.TWS_PASSWORD,
-            engine_name=settings.TWS_ENGINE_NAME,
-            engine_owner=settings.TWS_ENGINE_OWNER,
-        )
+    logger.info("Creating OptimizedTWSClient.")
+    return OptimizedTWSClient(
+        hostname=settings.TWS_HOST,
+        port=settings.TWS_PORT,
+        username=settings.TWS_USER,
+        password=settings.TWS_PASSWORD,
+        engine_name=settings.TWS_ENGINE_NAME,
+        engine_owner=settings.TWS_ENGINE_OWNER,
+    )
 
 
 def get_teams_integration_factory():
@@ -88,14 +89,19 @@ def configure_container(app_container: DIContainer = container) -> DIContainer:
     """
     try:
         # Register interfaces and implementations
-        app_container.register(IAgentManager, AgentManager, ServiceLifetime.SINGLETON)
+        # Lazy import to avoid circular dependency
+        app_container.register(
+            IAgentManager, AgentManager, ServiceLifetime.SINGLETON
+        )
         app_container.register(
             IConnectionManager, ConnectionManager, ServiceLifetime.SINGLETON
         )
         app_container.register(
             IKnowledgeGraph, AsyncKnowledgeGraph, ServiceLifetime.SINGLETON
         )
-        app_container.register(IAuditQueue, AsyncAuditQueue, ServiceLifetime.SINGLETON)
+        app_container.register(
+            IAuditQueue, AsyncAuditQueue, ServiceLifetime.SINGLETON
+        )
 
         # Register TWS client with factory
         app_container.register_factory(
@@ -104,7 +110,9 @@ def configure_container(app_container: DIContainer = container) -> DIContainer:
 
         # Register Teams integration with factory
         app_container.register_factory(
-            TeamsIntegration, get_teams_integration_factory, ServiceLifetime.SINGLETON
+            TeamsIntegration,
+            get_teams_integration_factory,
+            ServiceLifetime.SINGLETON,
         )
 
         # Register FileIngestor - depends on KnowledgeGraph
@@ -117,8 +125,7 @@ def configure_container(app_container: DIContainer = container) -> DIContainer:
             IFileIngestor, file_ingestor_factory, ServiceLifetime.SINGLETON
         )
 
-        # Register concrete types (for when the concrete type is requested directly)
-        app_container.register(AgentManager, AgentManager, ServiceLifetime.SINGLETON)
+        # Register concrete types (for when concrete type is requested directly)
         app_container.register(
             ConnectionManager, ConnectionManager, ServiceLifetime.SINGLETON
         )
@@ -129,7 +136,9 @@ def configure_container(app_container: DIContainer = container) -> DIContainer:
             AsyncAuditQueue, AsyncAuditQueue, ServiceLifetime.SINGLETON
         )
         app_container.register_factory(
-            OptimizedTWSClient, get_tws_client_factory, ServiceLifetime.SINGLETON
+            OptimizedTWSClient,
+            get_tws_client_factory,
+            ServiceLifetime.SINGLETON,
         )
 
         logger.info("DI container configured with all service registrations")
@@ -140,7 +149,7 @@ def configure_container(app_container: DIContainer = container) -> DIContainer:
     return app_container
 
 
-def get_service(service_type: Type[T]) -> Callable[[], T]:
+def get_service(service_type: type[T]) -> Callable[[], T]:
     """
     Create a FastAPI dependency that resolves a service from the container.
 
@@ -154,14 +163,14 @@ def get_service(service_type: Type[T]) -> Callable[[], T]:
     async def _get_service() -> T:
         try:
             return await container.get(service_type)
-        except KeyError:
+        except KeyError as exc:
             logger.error(
                 "service_not_registered_in_container",
                 service_type=service_type.__name__,
             )
             raise RuntimeError(
                 f"Required service {service_type.__name__} is not available in the DI container"
-            )
+            ) from exc
         except Exception as e:
             logger.error(
                 "error_resolving_service",
@@ -170,7 +179,7 @@ def get_service(service_type: Type[T]) -> Callable[[], T]:
             )
             raise RuntimeError(
                 f"Error resolving service {service_type.__name__}: {str(e)}"
-            )
+            ) from e
 
     # Set the return annotation for FastAPI to use
     _get_service.__annotations__ = {"return": service_type}
@@ -178,13 +187,39 @@ def get_service(service_type: Type[T]) -> Callable[[], T]:
 
 
 # Create specific dependencies for common services
-get_agent_manager = get_service(IAgentManager)
-get_connection_manager = get_service(IConnectionManager)
-get_knowledge_graph = get_service(IKnowledgeGraph)
-get_audit_queue = get_service(IAuditQueue)
-get_tws_client = get_service(ITWSClient)
-get_file_ingestor = get_service(IFileIngestor)
-get_teams_integration = get_service(TeamsIntegration)
+def get_agent_manager() -> IAgentManager:
+    """Get the agent manager from the container."""
+    return get_service(IAgentManager)()
+
+
+def get_connection_manager_dependency():
+    """Get the connection manager from the container."""
+    return get_service(IConnectionManager)()
+
+
+def get_knowledge_graph_dependency():
+    """Get the knowledge graph from the container."""
+    return get_service(IKnowledgeGraph)()
+
+
+def get_audit_queue_dependency():
+    """Get the audit queue from the container."""
+    return get_service(IAuditQueue)()
+
+
+def get_tws_client_dependency():
+    """Get the TWS client from the container."""
+    return get_service(ITWSClient)()
+
+
+def get_file_ingestor_dependency():
+    """Get the file ingestor from the container."""
+    return get_service(IFileIngestor)()
+
+
+def get_teams_integration_dependency():
+    """Get the teams integration from the container."""
+    return get_service(TeamsIntegration)()
 
 
 class DIMiddleware(BaseHTTPMiddleware):
@@ -193,7 +228,9 @@ class DIMiddleware(BaseHTTPMiddleware):
     available for each request.
     """
 
-    def __init__(self, app: FastAPI, container_instance: DIContainer = container):
+    def __init__(
+        self, app: FastAPI, container_instance: DIContainer = container
+    ):
         """
         Initialize the middleware with the application and container.
 
@@ -205,7 +242,9 @@ class DIMiddleware(BaseHTTPMiddleware):
         self.container = container_instance
         logger.info("DIMiddleware initialized")
 
-    async def dispatch(self, request: Request, call_next: Callable) -> Response:
+    async def dispatch(
+        self, request: Request, call_next: Callable
+    ) -> Response:
         """
         Process the request and attach the container to it.
 
@@ -295,16 +334,15 @@ def with_injection(func: Callable) -> Callable:
             return await func(*args, **kwargs)
 
         return async_wrapper
-    else:
 
-        @wraps(func)
-        def sync_wrapper(*args: Any, **kwargs: Any) -> Any:
-            # This is a synchronous function, so we need to run the async inject_dependencies
-            # function in an event loop.
-            async def run_injection():
-                await inject_dependencies(kwargs)
+    @wraps(func)
+    def sync_wrapper(*args: Any, **kwargs: Any) -> Any:
+        # This is a synchronous function, so we need to run the async inject_dependencies
+        # function in an event loop.
+        async def run_injection():
+            await inject_dependencies(kwargs)
 
-            asyncio.run(run_injection())
-            return func(*args, **kwargs)
+        asyncio.run(run_injection())
+        return func(*args, **kwargs)
 
-        return sync_wrapper
+    return sync_wrapper

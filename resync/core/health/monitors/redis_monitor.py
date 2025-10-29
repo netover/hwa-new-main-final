@@ -8,14 +8,17 @@ detailed health reporting.
 
 from __future__ import annotations
 
+import asyncio
 import time
 from datetime import datetime
-from typing import Optional
 
 import structlog
-
-from resync.core.health_models import ComponentHealth, ComponentType, HealthStatus
-from resync.settings import settings
+from resync.config.settings import settings
+from resync.models.health_models import (
+    ComponentHealth,
+    ComponentType,
+    HealthStatus,
+)
 
 logger = structlog.get_logger(__name__)
 
@@ -33,8 +36,8 @@ class RedisHealthMonitor:
 
     def __init__(self):
         """Initialize the Redis health monitor."""
-        self._last_check: Optional[datetime] = None
-        self._cached_result: Optional[ComponentHealth] = None
+        self._last_check: datetime | None = None
+        self._cached_result: ComponentHealth | None = None
 
     async def check_redis_health(self) -> ComponentHealth:
         """
@@ -58,7 +61,8 @@ class RedisHealthMonitor:
 
             # Test actual Redis connectivity
             import redis.asyncio as redis_async
-            from redis.exceptions import RedisError, TimeoutError as RedisTimeoutError
+            from redis.exceptions import RedisError
+            from redis.exceptions import TimeoutError as RedisTimeoutError
 
             try:
                 redis_client = redis_async.from_url(settings.REDIS_URL)
@@ -68,7 +72,9 @@ class RedisHealthMonitor:
 
                 # Test read/write operation
                 test_key = f"health_check_{int(time.time())}"
-                await redis_client.setex(test_key, 1, "test")  # Set with expiration
+                await redis_client.setex(
+                    test_key, 1, "test"
+                )  # Set with expiration
                 value = await redis_client.get(test_key)
 
                 if value != b"test":
@@ -88,7 +94,9 @@ class RedisHealthMonitor:
                     last_check=datetime.now(),
                     metadata={
                         "redis_version": redis_info.get("redis_version"),
-                        "connected_clients": redis_info.get("connected_clients"),
+                        "connected_clients": redis_info.get(
+                            "connected_clients"
+                        ),
                         "used_memory": redis_info.get("used_memory_human"),
                         "uptime_seconds": redis_info.get("uptime_in_seconds"),
                         "test_key_result": value.decode() if value else None,
@@ -120,7 +128,9 @@ class RedisHealthMonitor:
                 try:
                     await redis_client.close()
                 except Exception as e:
-                    logger.debug(f"Redis client close error during health check: {e}")
+                    logger.debug(
+                        f"Redis client close error during health check: {e}"
+                    )
 
         except Exception as e:
             response_time = (time.time() - start_time) * 1000
@@ -185,7 +195,7 @@ class RedisHealthMonitor:
             last_check=datetime.now(),
         )
 
-    def get_cached_health(self) -> Optional[ComponentHealth]:
+    def get_cached_health(self) -> ComponentHealth | None:
         """
         Get cached health result if available and recent.
 
@@ -197,9 +207,8 @@ class RedisHealthMonitor:
             age = datetime.now() - self._last_check
             if age.total_seconds() < 300:
                 return self._cached_result
-            else:
-                # Cache expired
-                self._cached_result = None
+            # Cache expired
+            self._cached_result = None
 
         return None
 

@@ -48,6 +48,7 @@ COPY ./templates ./templates
 # Expose the port the application will run on
 EXPOSE 8000
 
-# The command to run the application using Uvicorn
+# The command to run the application using Gunicorn+Uvicorn for production
 # It will be run by a container orchestration system (e.g., Docker Compose, Kubernetes)
-CMD ["uvicorn", "resync.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Use different configurations based on environment
+CMD ["sh", "-c", "if [ \"$RESYNC_ENV\" = \"production\" ]; then gunicorn --config python:config.gunicorn.production resync.main:app; elif [ \"$RESYNC_ENV\" = \"staging\" ]; then gunicorn --config python:config.gunicorn.staging resync.main:app; else gunicorn --config python:config.gunicorn.development --reload resync.main:app; fi"]

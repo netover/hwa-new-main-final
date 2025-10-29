@@ -3,7 +3,7 @@ from __future__ import annotations
 from re import match
 
 from passlib.context import CryptContext
-from pydantic import field_validator, BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field, field_validator
 
 # --- Enhanced Validation Rules ---
 password_hasher = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -17,7 +17,9 @@ class SensitiveFieldValidator:
         if not any(c.isdigit() for c in password):
             raise ValueError("Password must contain at least one digit")
         if not any(c.isupper() for c in password):
-            raise ValueError("Password must contain at least one uppercase letter")
+            raise ValueError(
+                "Password must contain at least one uppercase letter"
+            )
         if match(r"^\d+", password):
             raise ValueError("Password must not start with a digit")
         return password
@@ -38,7 +40,10 @@ class SensitiveFieldValidator:
 
 class EnhancedLoginRequest(BaseModel):
     username: str = Field(
-        ..., min_length=3, max_length=32, json_schema_extra={"example": "johndoe"}
+        ...,
+        min_length=3,
+        max_length=32,
+        json_schema_extra={"example": "johndoe"},
     )
     password: str = Field(
         ..., min_length=8, json_schema_extra={"example": "SecureP@ss123!"}
@@ -52,9 +57,14 @@ class EnhancedLoginRequest(BaseModel):
 
 class UserCreateWithValidation(BaseModel):
     username: str = Field(
-        ..., min_length=3, max_length=32, json_schema_extra={"example": "johndoe"}
+        ...,
+        min_length=3,
+        max_length=32,
+        json_schema_extra={"example": "johndoe"},
     )
-    email: EmailStr = Field(..., json_schema_extra={"example": "user@example.com"})
+    email: EmailStr = Field(
+        ..., json_schema_extra={"example": "user@example.com"}
+    )
     password: str = Field(
         ..., min_length=8, json_schema_extra={"example": "SecureP@ss123!"}
     )

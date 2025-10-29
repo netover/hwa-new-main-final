@@ -1,6 +1,7 @@
 import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
+
 from resync.api.middleware.csrf_protection import CSRFProtectionMiddleware
 
 
@@ -13,7 +14,7 @@ class TestCSRFProtection:
         app = FastAPI()
 
         # Configurar o middleware
-        middleware = CSRFProtectionMiddleware(app, secret_key="test_secret_key")
+        CSRFProtectionMiddleware(app, secret_key="test_secret_key")
         app.add_middleware(CSRFProtectionMiddleware, secret_key="test_secret_key")
 
         # Rota de teste
