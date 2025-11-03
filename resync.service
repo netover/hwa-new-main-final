@@ -1,0 +1,27 @@
+[Unit]
+Description=Resync AI Application Server
+After=network.target
+
+[Service]
+# Replace 'your_user' with the dedicated user you create for this application.
+# It's a security best practice not to run as root.
+User=your_user
+Group=your_user
+
+# Set the working directory to the root of your project.
+# Replace with the actual absolute path on your production server.
+WorkingDirectory=/path/to/your/hwa-new
+
+# Path to the gunicorn executable within the project's virtual environment.
+ExecStart=/path/to/your/hwa-new/.venv/bin/gunicorn -w 4 -k uvicorn.workers.UvicornWorker resync.main:app --bind 0.0.0.0:8000
+
+# Load environment variables from the .env file in the working directory.
+# This is crucial for loading secrets and configurations securely.
+EnvironmentFile=/path/to/your/hwa-new/.env
+
+# Restart policy: always restart the service if it fails.
+Restart=always
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target

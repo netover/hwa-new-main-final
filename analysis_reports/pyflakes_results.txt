@@ -1,0 +1,50 @@
+resync/api\auth.py:20:1: 'os' imported but unused
+resync/api\auth_secure.py:20:1: 'os' imported but unused
+resync/core\cache\chucknorris_optimizer.py:18:1: 'weakref' imported but unused
+resync/core\cache\chucknorris_optimizer.py:19:1: 'hashlib' imported but unused
+resync/core\health\__init__.py:194:5: '.circuit_breaker.CircuitBreaker' imported but unused
+resync/core\health\__init__.py:195:5: '.circuit_breaker_manager.CircuitBreakerManager' imported but unused
+resync/core\health\__init__.py:196:5: '.component_cache_manager.ComponentCacheManager' imported but unused
+resync/core\health\__init__.py:197:5: '.global_health_service_manager.GlobalHealthServiceManager' imported but unused
+resync/core\health\__init__.py:197:5: '.global_health_service_manager.get_current_global_health_service' imported but unused
+resync/core\health\__init__.py:197:5: '.global_health_service_manager.get_global_health_service' imported but unused
+resync/core\health\__init__.py:197:5: '.global_health_service_manager.is_global_health_service_initialized' imported but unused
+resync/core\health\__init__.py:197:5: '.global_health_service_manager.shutdown_global_health_service' imported but unused
+resync/core\health\__init__.py:204:5: '.health_alerting.HealthAlerting' imported but unused
+resync/core\health\__init__.py:205:5: '.health_check_retry.HealthCheckRetry' imported but unused
+resync/core\health\__init__.py:206:5: '.health_check_service.HealthCheckService' imported but unused
+resync/core\health\__init__.py:207:5: '.health_check_utils.HealthCheckUtils' imported but unused
+resync/core\health\__init__.py:208:5: '.health_config_manager.HealthCheckConfigurationManager' imported but unused
+resync/core\health\__init__.py:209:5: '.health_history_manager.HealthHistoryManager' imported but unused
+resync/core\health\__init__.py:210:5: '.health_monitoring_coordinator.HealthMonitoringCoordinator' imported but unused
+resync/core\health\__init__.py:211:5: '.health_service_manager.HealthServiceManager' imported but unused
+resync/core\health\__init__.py:212:5: '.health_service_orchestrator.HealthServiceOrchestrator' imported but unused
+resync/core\health\__init__.py:213:5: '.memory_manager.MemoryManager' imported but unused
+resync/core\health\__init__.py:214:5: '.memory_usage_tracker.MemoryUsageTracker' imported but unused
+resync/core\health\__init__.py:215:5: '.monitoring_aggregator.HealthMonitoringAggregator' imported but unused
+resync/core\health\__init__.py:216:5: '.performance_metrics_collector.PerformanceMetricsCollector' imported but unused
+resync/core\health\__init__.py:217:5: '.proactive_monitor.ProactiveHealthMonitor' imported but unused
+resync/core\health\__init__.py:218:5: '.recovery_manager.HealthRecoveryManager' imported but unused
+resync/core\monitoring\chucknorris_metrics.py:17:1: 'typing.Tuple' imported but unused
+resync/core\monitoring\chucknorris_metrics.py:20:1: 'weakref' imported but unused
+resync/core\monitoring\chucknorris_metrics.py:821:9: 'prometheus_client.generate_latest' imported but unused
+resync/core\monitoring\chucknorris_metrics.py:821:9: 'prometheus_client.CONTENT_TYPE_LATEST' imported but unused
+resync/core\monitoring\chucknorris_metrics.py:824:9: local variable 'cache_hit_ratio' is assigned to but never used
+resync/core\monitoring\chucknorris_metrics.py:830:9: local variable 'cache_misses' is assigned to but never used
+resync/core\monitoring\chucknorris_metrics.py:836:9: local variable 'cache_hits' is assigned to but never used
+resync/core\monitoring\chucknorris_metrics.py:844:9: local variable 'circuit_breaker_state' is assigned to but never used
+resync/core\monitoring\chucknorris_metrics.py:850:9: local variable 'circuit_breaker_failures' is assigned to but never used
+resync/core\monitoring\chucknorris_metrics.py:858:9: local variable 'request_duration' is assigned to but never used
+resync/core\monitoring\chucknorris_metrics.py:864:9: local variable 'api_request_duration' is assigned to but never used
+resync/core\monitoring\chucknorris_metrics.py:873:9: local variable 'error_rate' is assigned to but never used
+resync/core\monitoring\chucknorris_metrics.py:879:9: local variable 'total_requests' is assigned to but never used
+resync/core\pipeline\chucknorris_batch_processor.py:14:1: 'collections.defaultdict' imported but unused
+resync/core\pipeline\chucknorris_batch_processor.py:17:1: 'typing.Tuple' imported but unused
+resync/core\pipeline\chucknorris_batch_processor.py:17:1: 'typing.Union' imported but unused
+resync/core\pipeline\chucknorris_batch_processor.py:18:1: 'weakref' imported but unused
+resync/core\pools\chucknorris_pool_optimizer.py:14:1: 'collections.defaultdict' imported but unused
+resync/core\pools\chucknorris_pool_optimizer.py:17:1: 'typing.Set' imported but unused
+resync/core\pools\chucknorris_pool_optimizer.py:17:1: 'typing.Union' imported but unused
+resync/core\pools\chucknorris_pool_optimizer.py:18:1: 'weakref' imported but unused
+resync/core\resilience\chucknorris_circuit_breaker.py:19:1: 'math' imported but unused
+resync/core\resilience\chucknorris_circuit_breaker.py:379:9: local variable 'current_time' is assigned to but never used

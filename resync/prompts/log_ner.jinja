@@ -1,0 +1,28 @@
+{#
+    Template for extracting fields from TWS/HWA log entries.
+
+    The Promptify pipeline will substitute the ``text`` variable at
+    runtime.  The instructions below tell the language model to
+    return a JSON object containing specific keys.  If a value is
+    unknown it should be null.  Status values are constrained to
+    known states (SUCC, ABEND, RUNNING, HOLD) or null.  The model
+    should keep its answers concise.
+#}
+You are an expert scheduling analyst. Extract the following fields from the TWS/HWA log text.
+Return ONLY a valid JSON object with these keys:
+
+{
+  "job_id": string | null,
+  "workstation": string | null,
+  "status": "SUCC" | "ABEND" | "RUNNING" | "HOLD" | null,
+  "timestamp": string | null,
+  "root_cause": string | null
+}
+
+Rules:
+- If a field is unknown, return null.
+- "status" must be one of: SUCC, ABEND, RUNNING, HOLD (or null).
+- Keep messages short (<= 140 chars).
+
+Log:
+{{ text }}

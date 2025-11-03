@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resync - Detalhes do Job</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        .tab-nav {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 1rem;
+        }
+        .tab-nav button {
+            padding: 8px 16px;
+            border: none;
+            background-color: var(--secondary-color);
+            color: white;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .tab-nav button.active {
+            background-color: var(--primary-color);
+        }
+        .tab-pane {
+            display: none;
+        }
+        .tab-pane.active {
+            display: block;
+        }
+        pre.log-content {
+            background-color: #f9f9f9;
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            border: 1px solid var(--border-color);
+            text-align: left;
+        }
+        th {
+            background-color: var(--primary-color);
+            color: var(--light-text-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav style="margin-bottom: 1rem;">
+            <ul style="list-style: none; display: flex; gap: 1rem; padding: 0;">
+                <li><a href="/">Dashboard</a></li>
+                <li><a href="/reports">Relatórios</a></li>
+                <li><a href="/incidents">Incidentes</a></li>
+            </ul>
+        </nav>
+        <header>
+            <h1>Detalhes do Job</h1>
+        </header>
+        <main>
+            <section id="job-header" class="card">
+                <h2 id="job-name">Job {{ job_id }}</h2>
+                <p><strong>ID:</strong> <span id="job-id">{{ job_id }}</span></p>
+                <p><strong>Workstation:</strong> <span id="job-workstation">--</span></p>
+                <p><strong>Status:</strong> <span id="job-status">--</span></p>
+                <p><strong>Job Stream:</strong> <span id="job-stream">--</span></p>
+                <div style="margin-top: 1rem;">
+                    <button id="replay-job" class="btn-primary">Re-disparar (dry-run)</button>
+                    <!-- Additional action buttons could be added here -->
+                </div>
+            </section>
+            <section class="card">
+                <div class="tab-nav">
+                    <button data-tab="history" class="active">Histórico</button>
+                    <button data-tab="dependencies">Dependências</button>
+                    <button data-tab="log">Log</button>
+                    <button data-tab="resources">Recursos</button>
+                    <button data-tab="notes">Anotações</button>
+                </div>
+                <div id="tab-history" class="tab-pane active">
+                    <h3>Histórico de Execuções</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Início</th>
+                                <th>Duração (s)</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-body">
+                            <!-- Populado via JS -->
+                        </tbody>
+                    </table>
+                </div>
+                <div id="tab-dependencies" class="tab-pane">
+                    <h3>Dependências</h3>
+                    <ul id="dependencies-list">
+                        <!-- Populado via JS -->
+                    </ul>
+                </div>
+                    <div id="tab-log" class="tab-pane">
+                        <h3>Log do Job</h3>
+                        <pre id="job-log" class="log-content"></pre>
+                    </div>
+                    <div id="tab-resources" class="tab-pane">
+                        <h3>Requisitos de Recursos</h3>
+                        <table>
+                            <thead><tr><th>Recurso</th><th>Valor</th></tr></thead>
+                            <tbody id="resources-body"></tbody>
+                        </table>
+                    </div>
+                    <div id="tab-notes" class="tab-pane">
+                        <h3>Anotações</h3>
+                        <textarea id="notes-text" rows="4" style="width: 100%;"></textarea>
+                        <button id="save-note" class="btn-primary" style="margin-top: 0.5rem;">Salvar Anotação (local)</button>
+                        <div id="notes-list" style="margin-top: 1rem;"></div>
+                    </div>
+            </section>
+        </main>
+        <footer>
+            <p>Resync &copy; 2024 - Monitoramento inteligente.</p>
+        </footer>
+    </div>
+    <script nonce="{{ request.state.csp_nonce | default('') }}">
+        const jobId = "{{ job_id }}";
+        // Tab navigation
+        const tabButtons = document.querySelectorAll('.tab-nav button');
+        const tabPanes = document.querySelectorAll('.tab-pane');
+        tabButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                tabButtons.forEach(b => b.classList.remove('active'));
+                tabPanes.forEach(p => p.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById('tab-' + btn.getAttribute('data-tab')).classList.add('active');
+            });
+        });
+
+        async function loadJobDetails() {
+            try {
+                const resp = await fetch(`/api/v1/tws/jobs/${jobId}/details`);
+                if (!resp.ok) return;
+                const data = await resp.json();
+                document.getElementById('job-name').textContent = data.name || jobId;
+                document.getElementById('job-workstation').textContent = data.workstation || '--';
+                document.getElementById('job-status').textContent = data.status || '--';
+                document.getElementById('job-stream').textContent = data.job_stream || '--';
+                // Execution history
+                const histBody = document.getElementById('history-body');
+                histBody.innerHTML = '';
+                (data.execution_history || []).forEach(exec => {
+                    const tr = document.createElement('tr');
+                    // Compute duration seconds if not provided
+                    let durationSeconds = '';
+                    if (exec.duration_seconds) {
+                        durationSeconds = exec.duration_seconds;
+                    } else if (exec.duration) {
+                        // If duration string like '00:05:30', convert to seconds
+                        const parts = exec.duration.split(':');
+                        if (parts.length === 3) {
+                            const [hh, mm, ss] = parts.map(Number);
+                            durationSeconds = (hh * 3600 + mm * 60 + ss).toString();
+                        } else {
+                            durationSeconds = exec.duration;
+                        }
+                    } else if (exec.start_time && exec.end_time) {
+                        const start = new Date(exec.start_time);
+                        const end = new Date(exec.end_time);
+                        durationSeconds = Math.floor((end - start) / 1000).toString();
+                    }
+                    tr.innerHTML = `<td>${exec.start_time || ''}</td><td>${durationSeconds}</td><td>${exec.status || ''}</td>`;
+                    histBody.appendChild(tr);
+                });
+                // Resources
+                const resBody = document.getElementById('resources-body');
+                resBody.innerHTML = '';
+                const reqs = data.resource_requirements || {};
+                Object.keys(reqs).forEach(key => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `<td>${key}</td><td>${reqs[key]}</td>`;
+                    resBody.appendChild(tr);
+                });
+                // Dependencies list (quick preview)
+                const depList = document.getElementById('dependencies-list');
+                depList.innerHTML = '';
+                (data.dependencies || []).forEach(dep => {
+                    const li = document.createElement('li');
+                    li.textContent = dep;
+                    depList.appendChild(li);
+                });
+            } catch (err) {
+                console.error('Erro ao carregar detalhes do job:', err);
+            }
+        }
+
+        async function loadJobLog() {
+            try {
+                const resp = await fetch(`/api/v1/tws/jobs/${jobId}/log`);
+                const log = await resp.text();
+                document.getElementById('job-log').textContent = log || '(Sem log)';
+            } catch (err) {
+                console.error('Erro ao carregar log do job:', err);
+            }
+        }
+
+        // Action: replay job (dry-run)
+        document.getElementById('replay-job').addEventListener('click', async () => {
+            try {
+                const resp = await fetch(`/api/v1/tws/jobs/${jobId}/replay`, { method: 'POST' });
+                const data = await resp.json();
+                alert('Re-disparo solicitado (dry-run). Diferenças: ' + data.diff);
+            } catch (err) {
+                alert('Erro ao re-disparar job');
+            }
+        });
+
+        // Notes functionality (local storage for simplicity)
+        const notesKey = `job_notes_${jobId}`;
+        function loadNotes() {
+            const notesList = document.getElementById('notes-list');
+            notesList.innerHTML = '';
+            const notes = JSON.parse(localStorage.getItem(notesKey) || '[]');
+            notes.forEach((note, idx) => {
+                const div = document.createElement('div');
+                div.innerHTML = `<strong>${idx + 1}:</strong> ${note}`;
+                notesList.appendChild(div);
+            });
+        }
+        document.getElementById('save-note').addEventListener('click', () => {
+            const textArea = document.getElementById('notes-text');
+            const note = textArea.value.trim();
+            if (!note) return;
+            const notes = JSON.parse(localStorage.getItem(notesKey) || '[]');
+            notes.push(note);
+            localStorage.setItem(notesKey, JSON.stringify(notes));
+            textArea.value = '';
+            loadNotes();
+        });
+
+        // Load everything on page init
+        loadJobDetails();
+        loadJobLog();
+        loadNotes();
+    </script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+# Production Environment Configuration
+# Optimized for 20 users, Xeon 4 cores, 16GB RAM
+# Connection pools sized for mixed workload with batch processing
+
+[default]
+# ============================================================================
+# CONNECTION POOL OPTIMIZATIONS - PRODUCTION
+# ============================================================================
+# Database Connection Pool (Neo4j)
+db_pool_min_size = 2          # Optimized for 5-7 concurrent users
+db_pool_max_size = 8          # Handles peaks up to 15 users + batch processing
+db_pool_idle_timeout = 1200   # 20 minutes (production standard)
+db_pool_connect_timeout = 60  # 60 seconds for production reliability
+db_pool_health_check_interval = 60  # 1 minute health checks
+
+# Redis Connection Pool
+redis_pool_min_size = 2       # Baseline for caching operations
+redis_pool_max_size = 6       # Optimized for cache performance
+redis_pool_idle_timeout = 300 # 5 minutes (shorter than DB for cache)
+redis_pool_connect_timeout = 30 # 30 seconds
+redis_pool_health_check_interval = 60 # 1 minute
+
+# HTTP Connection Pool (TWS)
+http_pool_min_size = 3        # For TWS API calls
+http_pool_max_size = 12       # Batch processing capacity
+http_pool_idle_timeout = 300  # 5 minutes
+http_pool_connect_timeout = 10 # 10 seconds for HTTP
+http_pool_health_check_interval = 60 # 1 minute
+
+# ============================================================================
+# PRODUCTION OPTIMIZATIONS
+# ============================================================================
+# Performance tuning for production
+environment = "production"
+log_level = "INFO"
+server_host = "0.0.0.0"       # Listen on all interfaces
+server_port = 8000
+
+# Security hardening
+admin_username = "admin"       # Change in production
+cors_allowed_origins = ["https://yourdomain.com"]
+tws_verify = true              # Enable SSL verification
+tws_ca_bundle = "/etc/ssl/certs/ca-certificates.crt"
+
+# Cache optimization
+cache_hierarchy_l1_max_size = 5000   # Smaller L1 for memory efficiency
+cache_hierarchy_l2_ttl = 600         # 10 minutes TTL
+enable_cache_swr = true              # Stale-while-revalidate
+enable_cache_mutex = true            # Prevent cache stampede
+
+# Rate limiting (stricter in production)
+rate_limit_public_per_minute = 60
+rate_limit_authenticated_per_minute = 600
+rate_limit_critical_per_minute = 30
+
+# Monitoring and observability
+MIGRATION_ENABLE_METRICS = true
+MIGRATION_USE_NEW_CACHE = true
+MIGRATION_USE_NEW_TWS = true
+MIGRATION_USE_NEW_RATE_LIMIT = true
+
+# ============================================================================
+# RESOURCE LIMITS - PRODUCTION
+# ============================================================================
+# Memory bounds for production stability
+robust_cache_max_memory_mb = 256     # 256MB cache limit
+robust_cache_max_items = 50000       # 50K items limit
+
+# Connection monitoring thresholds
+pool_utilization_warning_threshold = 0.8   # 80% utilization warning
+pool_utilization_critical_threshold = 0.9  # 90% utilization critical
+connection_wait_time_warning_ms = 100      # 100ms wait time warning
+connection_wait_time_critical_ms = 500     # 500ms wait time critical
+
+# ============================================================================
+# BACKUP AND RECOVERY
+# ============================================================================
+# Database backup settings
+backup_enabled = true
+backup_interval_hours = 24
+backup_retention_days = 30
+
+# Health check settings
+health_check_interval_seconds = 30
+health_check_timeout_seconds = 10
+health_check_failure_threshold = 3

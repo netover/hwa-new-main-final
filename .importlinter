@@ -1,0 +1,28 @@
+[importlinter]
+root_package = resync
+
+[importlinter:contract:1]
+name = Core should not import API
+type = forbidden
+source_modules =
+    resync.core
+forbidden_modules =
+    resync.api
+
+[importlinter:contract:2]
+name = Services should not import API
+type = forbidden
+source_modules =
+    resync.services
+forbidden_modules =
+    resync.api
+
+[importlinter:contract:3]
+name = Models should not import Core, API, or Services
+type = forbidden
+source_modules =
+    resync.models
+forbidden_modules =
+    resync.core
+    resync.api
+    resync.services

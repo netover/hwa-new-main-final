@@ -1,0 +1,66 @@
+# requirements/base.txt - Core production dependencies with locked versions
+# FastAPI and web framework
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+
+# Data validation and serialization
+pydantic==2.5.3
+pydantic-settings==2.2.1
+
+# HTTP client
+httpx==0.25.2
+
+# Caching and storage
+redis==5.0.1
+
+# Configuration management
+dynaconf==3.2.4
+
+# Resilience patterns
+tenacity==8.2.3
+prometheus-client==0.20.0
+apscheduler==3.10.4
+pybreaker==1.1.0
+
+# Template engine
+jinja2==3.1.4
+
+# Security
+python-jose[cryptography]==3.5.0
+passlib[bcrypt]==1.7.4
+cryptography==42.0.0  # Updated to latest secure version
+
+# Performance
+orjson==3.9.10
+psutil==5.9.6
+
+# File operations
+aiofiles==23.2.1
+watchfiles==0.21.0
+
+# Database
+neo4j==5.14.0
+
+# AI/ML dependencies
+openai==1.50.0  # Updated to latest stable version
+litellm==1.40.0
+
+# Document processing
+pypdf==3.17.4
+python-docx==1.1.0
+openpyxl==3.1.2
+
+# Web features
+python-multipart==0.0.20
+
+# Async HTTP
+aiohttp==3.12.14
+
+# Environment
+python-dotenv==1.0.0
+
+# AI agent framework
+agno==0.1.0
+
+# Logging
+structlog==24.1.0

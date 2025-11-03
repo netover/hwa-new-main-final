@@ -1,0 +1,356 @@
+{
+  "dashboard": {
+    "id": null,
+    "title": "Resync System Overview",
+    "tags": ["resync", "overview"],
+    "style": "dark",
+    "timezone": "utc",
+    "refresh": "5s",
+    "schemaVersion": 27,
+    "version": 0,
+    "time": {
+      "from": "now-15m",
+      "to": "now"
+    },
+    "timepicker": {
+      "refresh_intervals": ["5s", "10s", "30s", "1m", "5m", "15m", "30m", "1h", "2h", "1d"]
+    },
+    "templating": {
+      "list": []
+    },
+    "annotations": {
+      "list": []
+    },
+    "links": [],
+    "panels": [
+      {
+        "id": 1,
+        "title": "System Health",
+        "type": "stat",
+        "gridPos": {
+          "x": 0,
+          "y": 0,
+          "w": 4,
+          "h": 4
+        },
+        "targets": [
+          {
+            "expr": "resync_system_correlation_ids_active",
+            "legendFormat": "Active Correlations"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "thresholds": {
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          }
+        },
+        "valueMappings": [],
+        "pluginVersion": "8.0.0"
+      },
+      {
+        "id": 2,
+        "title": "API Request Rate",
+        "type": "graph",
+        "gridPos": {
+          "x": 4,
+          "y": 0,
+          "w": 8,
+          "h": 4
+        },
+        "targets": [
+          {
+            "expr": "rate(resync_cache_sets[5m])",
+            "legendFormat": "Cache Operations/Sec"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "Operations/Second",
+            "show": true
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "title": "API Error Rate",
+        "type": "graph",
+        "gridPos": {
+          "x": 12,
+          "y": 0,
+          "w": 8,
+          "h": 4
+        },
+        "targets": [
+          {
+            "expr": "rate(resync_agent_creation_failures[5m])",
+            "legendFormat": "Agent Creation Failures/Sec"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "Errors/Second",
+            "show": true
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "title": "Cache Hit Ratio",
+        "type": "graph",
+        "gridPos": {
+          "x": 0,
+          "y": 4,
+          "w": 12,
+          "h": 6
+        },
+        "targets": [
+          {
+            "expr": "resync_cache_hits / (resync_cache_hits + resync_cache_misses)",
+            "legendFormat": "Cache Hit Ratio"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "Ratio",
+            "show": true
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "title": "System Resource Utilization",
+        "type": "graph",
+        "gridPos": {
+          "x": 12,
+          "y": 4,
+          "w": 12,
+          "h": 6
+        },
+        "targets": [
+          {
+            "expr": "resync_system_async_operations_active",
+            "legendFormat": "Active Async Operations"
+          },
+          {
+            "expr": "resync_system_correlation_ids_active",
+            "legendFormat": "Active Correlation IDs"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "Count",
+            "show": true
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "title": "TWS Status Requests",
+        "type": "singlestat",
+        "gridPos": {
+          "x": 0,
+          "y": 10,
+          "w": 6,
+          "h": 4
+        },
+        "targets": [
+          {
+            "expr": "resync_tws_status_requests_success",
+            "legendFormat": "Successful Requests"
+          }
+        ],
+        "valueName": "current",
+        "colorBackground": false,
+        "colorValue": true,
+        "colors": [
+          "#299c46",
+          "rgba(237, 129, 40, 0.89)",
+          "#d44a3a"
+        ]
+      },
+      {
+        "id": 7,
+        "title": "Active Agents",
+        "type": "singlestat",
+        "gridPos": {
+          "x": 6,
+          "y": 10,
+          "w": 6,
+          "h": 4
+        },
+        "targets": [
+          {
+            "expr": "resync_agent_active_count",
+            "legendFormat": "Active Agents"
+          }
+        ],
+        "valueName": "current",
+        "colorBackground": false,
+        "colorValue": true,
+        "colors": [
+          "#299c46",
+          "rgba(237, 129, 40, 0.89)",
+          "#d44a3a"
+        ]
+      },
+      {
+        "id": 8,
+        "title": "Audit Records",
+        "type": "graph",
+        "gridPos": {
+          "x": 12,
+          "y": 10,
+          "w": 12,
+          "h": 4
+        },
+        "targets": [
+          {
+            "expr": "resync_audit_records_created",
+            "legendFormat": "Created"
+          },
+          {
+            "expr": "resync_audit_records_approved",
+            "legendFormat": "Approved"
+          },
+          {
+            "expr": "resync_audit_records_rejected",
+            "legendFormat": "Rejected"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "Count",
+            "show": true
+          }
+        ]
+      },
+      {
+        "id": 9,
+        "title": "Agent Metrics",
+        "type": "graph",
+        "gridPos": {
+          "x": 0,
+          "y": 14,
+          "w": 12,
+          "h": 6
+        },
+        "targets": [
+          {
+            "expr": "resync_agent_initializations",
+            "legendFormat": "Total Initializations"
+          },
+          {
+            "expr": "resync_agent_mock_fallbacks",
+            "legendFormat": "Mock Fallbacks"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "Count",
+            "show": true
+          }
+        ]
+      },
+      {
+        "id": 10,
+        "title": "TWS Metrics",
+        "type": "graph",
+        "gridPos": {
+          "x": 12,
+          "y": 14,
+          "w": 12,
+          "h": 6
+        },
+        "targets": [
+          {
+            "expr": "resync_tws_workstations_total",
+            "legendFormat": "Total Workstations"
+          },
+          {
+            "expr": "resync_tws_jobs_total",
+            "legendFormat": "Total Jobs"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "Count",
+            "show": true
+          }
+        ]
+      },
+      {
+        "id": 11,
+        "title": "Cache Performance",
+        "type": "graph",
+        "gridPos": {
+          "x": 0,
+          "y": 20,
+          "w": 12,
+          "h": 6
+        },
+        "targets": [
+          {
+            "expr": "resync_cache_hits",
+            "legendFormat": "Cache Hits"
+          },
+          {
+            "expr": "resync_cache_misses",
+            "legendFormat": "Cache Misses"
+          },
+          {
+            "expr": "resync_cache_evictions",
+            "legendFormat": "Cache Evictions"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "Count",
+            "show": true
+          }
+        ]
+      },
+      {
+        "id": 12,
+        "title": "System Errors",
+        "type": "graph",
+        "gridPos": {
+          "x": 12,
+          "y": 20,
+          "w": 12,
+          "h": 6
+        },
+        "targets": [
+          {
+            "expr": "resync_tws_status_requests_failed",
+            "legendFormat": "TWS Status Request Failures"
+          },
+          {
+            "expr": "rate(resync_agent_creation_failures[5m])",
+            "legendFormat": "Agent Creation Failures Rate"
+          }
+        ],
+        "yAxes": [
+          {
+            "label": "Count",
+            "show": true
+          }
+        ]
+      }
+    ],
+    "refresh": "5s"
+  }
+}

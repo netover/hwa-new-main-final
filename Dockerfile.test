@@ -1,0 +1,36 @@
+# Dockerfile.test - Ambiente padronizado para testes
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Instalar uv
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
+
+# Configuração de locale para evitar encoding issues
+ENV LC_ALL=C.UTF-8
+ENV LANG=C.UTF-8
+ENV PYTHONUNBUFFERED=1
+
+# Instalar dependências de sistema necessárias
+RUN apt-get update && apt-get install -y \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
+# Setup de usuário não-root para segurança
+RUN groupadd -r testuser && useradd -r -g testuser testuser
+USER testuser
+
+# Configurar diretório de trabalho
+WORKDIR /home/testuser/app
+
+# Copiar arquivos de configuração primeiro (para cache de layer)
+COPY pyproject.toml uv.lock* ./
+
+# Instalar dependências com uv
+RUN uv sync --frozen --all-extras --dev
+
+# Copiar código fonte
+COPY . .
+
+# Comando padrão
+CMD ["uv", "run", "pytest", "--verbose"]

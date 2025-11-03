@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resync - TWS Dashboard</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <nav style="margin-bottom: 1rem;">
+            <ul style="list-style: none; display: flex; gap: 1rem; padding: 0;">
+                <li><a href="/">Dashboard</a></li>
+                <li><a href="/reports">Relatórios</a></li>
+                <li><a href="/incidents">Incidentes</a></li>
+            </ul>
+        </nav>
+        <header>
+            <h1>Resync</h1>
+            <p>Painel de Monitoramento em Tempo Real para HCL Workload Automation (TWS)</p>
+        </header>
+
+        <main>
+            <section id="dashboard" class="card">
+                <h2>Status do Ambiente</h2>
+                <div class="status-grid">
+                    <div class="status-item">
+                        <h3>Workstations</h3>
+                        <p id="workstations-total">--</p>
+                    </div>
+                    <div class="status-item">
+                        <h3>Jobs em Erro (ABEND)</h3>
+                        <p id="jobs-abend">--</p>
+                    </div>
+                    <div class="status-item">
+                        <h3>Jobs Concluídos (SUCC)</h3>
+                        <p id="jobs-succ">--</p>
+                    </div>
+                </div>
+                <div id="tws-connection-status" class="connection-status offline">
+                    Conexão com TWS: <span id="tws-status-text">Indisponível</span>
+                </div>
+            </section>
+
+            <section id="chat-interface" class="card">
+                <h2>Interagir com Agente</h2>
+                <div class="agent-selector">
+                    <label for="agent-select">Selecione um Agente:</label>
+                    <select id="agent-select">
+                        <option value="">Carregando...</option>
+                    </select>
+                </div>
+                <div id="chat-window">
+                    <div id="chat-messages">
+                        <!-- Mensagens do chat aparecerão aqui -->
+                    </div>
+                    <div class="chat-input">
+                        <input type="text" id="chat-input" placeholder="Digite sua mensagem..." disabled>
+                        <button id="send-button" disabled>Enviar</button>
+                    </div>
+                </div>
+                 <div id="websocket-status" class="connection-status offline">
+                    Conexão do Chat: <span id="ws-status-text">Desconectado</span>
+                </div>
+            </section>
+
+            <section id="rag-upload" class="card">
+                <h2>Ingestão de Documentos (RAG)</h2>
+                <p>Envie um documento (.pdf, .docx, .xlsx) para a base de conhecimento ou selecione um pacote pré-carregado.</p>
+                <div class="upload-area">
+                    <input type="file" id="file-input" accept=".pdf,.docx,.xlsx">
+                    <button id="upload-button">Enviar Documento</button>
+                </div>
+                <div id="upload-status"></div>
+                <hr>
+                <div class="package-area">
+                    <label for="package-select">Pacote de conhecimento:</label>
+                    <select id="package-select">
+                        <option value="">Carregando pacotes...</option>
+                    </select>
+                    <button id="ingest-button">Ingestar Pacote</button>
+                </div>
+                <div id="ingest-status"></div>
+            </section>
+        </main>
+
+        <footer>
+            <p>Resync &copy; 2024 - Uma solução de monitoramento inteligente.</p>
+        </footer>
+    </div>
+
+    {#
+        The nonce attribute is injected by the CSP middleware via
+        ``request.state.csp_nonce``.  Use Jinja's ``default`` filter to
+        gracefully handle cases where the request or nonce is not defined
+        (e.g. during tests) without emitting an invalid attribute value.
+    #}
+    <script src="/static/js/main.js"
+            nonce="{{ request.state.csp_nonce | default('') }}"></script>
+</body>
+</html>

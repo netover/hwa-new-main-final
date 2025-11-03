@@ -1,0 +1,13 @@
+###########################################
+# DEPRECATED shim - use requirements/*     #
+###########################################
+# This file remains only for backward compatibility.
+# It will be removed in a future release.
+#
+# Development install:
+#   pip install -r requirements/dev.txt
+# Production install:
+#   pip install -r requirements/prod.txt
+
+# Default to development stack for legacy callers
+-r requirements/dev.txt

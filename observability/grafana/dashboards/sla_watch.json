@@ -1,0 +1,36 @@
+{
+  "title": "SLA Watch",
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "panels": [
+    {
+      "type": "heatmap",
+      "title": "SLA Risk by Stream",
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "resync_sla_risk_score",
+          "legendFormat": "{{stream}}"
+        }
+      ],
+      "heatmap": {
+        "colorScheme": "warm"
+      },
+      "gridPos": { "x": 0, "y": 0, "w": 24, "h": 10 }
+    },
+    {
+      "type": "graph",
+      "title": "Average Queue Depth",
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "avg(resync_ws_queue_depth)",
+          "legendFormat": "avg queue depth"
+        }
+      ],
+      "gridPos": { "x": 0, "y": 10, "w": 24, "h": 8 }
+    }
+  ]
+}

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Status | Resync</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .health-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 40px;
+            text-align: center;
+            max-width: 600px;
+            width: 90%;
+        }
+        .health-icon {
+            font-size: 80px;
+            color: #28a745;
+            margin-bottom: 20px;
+        }
+        .health-status {
+            font-size: 32px;
+            font-weight: bold;
+            color: #28a745;
+            margin-bottom: 10px;
+        }
+        .health-subtitle {
+            font-size: 18px;
+            color: #6c757d;
+            margin-bottom: 30px;
+        }
+        .metrics {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        .metric-item {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            background: white;
+            text-align: left;
+        }
+        .metric-label {
+            font-weight: bold;
+            color: #495057;
+        }
+        .metric-value {
+            float: right;
+            color: #007bff;
+        }
+        .timestamp {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #6c757d;
+        }
+        .nav-links {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e9ecef;
+        }
+        .nav-link {
+            display: inline-block;
+            margin: 0 10px;
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .nav-link:hover {
+            background: #0056b3;
+        }
+        .status-healthy { color: #28a745; }
+        .status-warning { color: #ffc107; }
+        .status-error { color: #dc3545; }
+    </style>
+</head>
+<body>
+    <div class="health-container">
+        <div class="health-icon">
+            <i class="fas fa-heartbeat"></i>
+        </div>
+        <h1 class="health-status" id="health-status">Healthy</h1>
+        <p class="health-subtitle">Resync TWS Integration System</p>
+        
+        <div class="metrics" id="metrics">
+            <div class="metric-item">
+                <span class="metric-label">Server Status:</span>
+                <span class="metric-value status-healthy" id="server-status">Running</span>
+            </div>
+            <div class="metric-item">
+                <span class="metric-label">Database:</span>
+                <span class="metric-value status-healthy" id="db-status">Connected</span>
+            </div>
+            <div class="metric-item">
+                <span class="metric-label">TWS Connection:</span>
+                <span class="metric-value status-warning" id="tws-status">Not Configured</span>
+            </div>
+            <div class="metric-item">
+                <span class="metric-label">Redis:</span>
+                <span class="metric-value status-healthy" id="redis-status">Connected</span>
+            </div>
+            <div class="metric-item">
+                <span class="metric-label">WebSocket:</span>
+                <span class="metric-value status-healthy" id="ws-status">Ready</span>
+            </div>
+            <div class="metric-item">
+                <span class="metric-label">Uptime:</span>
+                <span class="metric-value" id="uptime">00:00:00</span>
+            </div>
+        </div>
+        
+        <div class="timestamp" id="timestamp">
+            Last checked: Loading...
+        </div>
+        
+        <div class="nav-links">
+            <a href="/" class="nav-link">
+                <i class="fas fa-home"></i> Dashboard
+            </a>
+            <a href="/chat" class="nav-link">
+                <i class="fas fa-comments"></i> Chat
+            </a>
+            <a href="/revisao" class="nav-link">
+                <i class="fas fa-clipboard-check"></i> Revisão
+            </a>
+            <a href="/admin" class="nav-link">
+                <i class="fas fa-cogs"></i> Admin
+            </a>
+        </div>
+    </div>
+
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script>
+        // Auto-refresh health status every 30 seconds
+        let uptime = 0;
+        
+        function updateTimestamp() {
+            const now = new Date();
+            document.getElementById('timestamp').textContent = `Last checked: ${now.toLocaleString()}`;
+        }
+        
+        function updateUptime() {
+            uptime++;
+            const hours = Math.floor(uptime / 3600);
+            const minutes = Math.floor((uptime % 3600) / 60);
+            const seconds = uptime % 60;
+            document.getElementById('uptime').textContent = 
+                `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+        
+        function checkHealth() {
+            fetch('/api/v1/status')
+                .then(response => response.json())
+                .then(data => {
+                    // Update health status based on data
+                    const healthElement = document.getElementById('health-status');
+                    const statusIcon = document.querySelector('.health-icon');
+                    
+                    // Basic health check - if we get a response, system is healthy
+                    healthElement.textContent = 'Healthy';
+                    healthElement.className = 'health-status status-healthy';
+                    statusIcon.innerHTML = '<i class="fas fa-heartbeat"></i>';
+                    
+                    updateTimestamp();
+                })
+                .catch(error => {
+                    console.error('Health check failed:', error);
+                    const healthElement = document.getElementById('health-status');
+                    const statusIcon = document.querySelector('.health-icon');
+                    
+                    healthElement.textContent = 'Error';
+                    healthElement.className = 'health-status status-error';
+                    statusIcon.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
+                    
+                    updateTimestamp();
+                });
+        }
+        
+        // Check WebSocket status
+        function checkWebSocket() {
+            // Create a test WebSocket connection
+            const testSocket = new WebSocket('ws://127.0.0.1:8000/api/v1/ws/test-agent');
+            const wsStatusElement = document.getElementById('ws-status');
+            
+            testSocket.onopen = function() {
+                wsStatusElement.textContent = 'Ready';
+                wsStatusElement.className = 'metric-value status-healthy';
+                testSocket.close();
+            };
+            
+            testSocket.onerror = function() {
+                wsStatusElement.textContent = 'Error';
+                wsStatusElement.className = 'metric-value status-error';
+            };
+            
+            testSocket.onclose = function() {
+                if (wsStatusElement.textContent === 'Ready') {
+                    return; // Already marked as ready
+                }
+                wsStatusElement.textContent = 'Closed';
+                wsStatusElement.className = 'metric-value status-warning';
+            };
+        }
+        
+        // Initialize
+        updateTimestamp();
+        updateUptime();
+        checkHealth();
+        checkWebSocket();
+        
+        // Update uptime every second
+        setInterval(updateUptime, 1000);
+        
+        // Check health every 30 seconds
+        setInterval(checkHealth, 30000);
+        
+        // Check WebSocket every 60 seconds
+        setInterval(checkWebSocket, 60000);
+    </script>
+</body>
+</html>

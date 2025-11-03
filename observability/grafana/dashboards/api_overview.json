@@ -1,0 +1,57 @@
+{
+  "title": "Resync API Overview",
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "panels": [
+    {
+      "type": "graph",
+      "title": "HTTP Request Rate",
+      "targets": [
+        {
+          "expr": "rate(resync_http_requests_total[5m])",
+          "legendFormat": "{{route}}"
+        }
+      ],
+      "datasource": "Prometheus",
+      "gridPos": { "x": 0, "y": 0, "w": 12, "h": 8 }
+    },
+    {
+      "type": "graph",
+      "title": "HTTP Error Rate",
+      "targets": [
+        {
+          "expr": "resync:http:error_rate:5m",
+          "legendFormat": "error rate"
+        }
+      ],
+      "datasource": "Prometheus",
+      "gridPos": { "x": 12, "y": 0, "w": 12, "h": 8 }
+    },
+    {
+      "type": "graph",
+      "title": "HTTP Latency p95",
+      "targets": [
+        {
+          "expr": "resync:http:p95_latency_seconds:5m",
+          "legendFormat": "{{route}}"
+        }
+      ],
+      "datasource": "Prometheus",
+      "gridPos": { "x": 0, "y": 8, "w": 12, "h": 8 }
+    },
+    {
+      "type": "graph",
+      "title": "On‑Time Job Percentage",
+      "targets": [
+        {
+          "expr": "resync:sla:on_time_pct:5m",
+          "legendFormat": "on time %"
+        }
+      ],
+      "datasource": "Prometheus",
+      "gridPos": { "x": 12, "y": 8, "w": 12, "h": 8 }
+    }
+  ]
+}

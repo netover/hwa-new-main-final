@@ -1,0 +1,100 @@
+resync\api\cache.py
+    F 319:0 invalidate_tws_cache - C (11)
+resync\api\circuit_breaker_metrics.py
+    F 278:0 _assess_system_risks - C (14)
+resync\api\connection_pool_monitoring.py
+    F 216:0 _calculate_health_score - C (14)
+    F 269:0 _generate_health_recommendations - C (13)
+resync\api\endpoints.py
+    F 581:0 validate_connection - C (11)
+resync\api\gateway.py
+    M 319:4 APIGateway.handle_request - C (16)
+    M 555:4 APIGateway._select_service_endpoint - C (13)
+    M 463:4 APIGateway._check_rate_limits - C (11)
+    M 796:4 APIGateway._cleanup_worker - C (11)
+resync\api\health.py
+    F 173:0 get_core_health - C (13)
+resync\api\health_simplified.py
+    F 257:0 get_detailed_health - D (23)
+    F 91:0 get_health_summary - C (20)
+    F 181:0 get_core_health - C (14)
+    F 374:0 readiness_probe - C (13)
+resync\api\performance.py
+    F 230:0 get_performance_health - C (12)
+resync\api\middleware\cors_config.py
+    M 170:4 CORSPolicy._is_valid_origin_format - C (13)
+resync\api\validation\auth.py
+    M 86:4 LoginRequest.validate_password_strength - C (13)
+    M 347:4 UserRegistrationRequest.validate_password - C (13)
+resync\api\validation\config.py
+    M 454:4 ValidationSettings._parse_key_value_config - C (11)
+resync\api\validation\enhanced_security_fixed.py
+    M 274:4 EnhancedSecurityValidator.validate_password_strength - C (15)
+    M 427:4 EnhancedSecurityValidator.validate_csrf_token - C (13)
+resync\api\validation\files.py
+    M 181:4 FileUploadRequest.validate_metadata - C (13)
+resync\api\validation\query_params.py
+    C 153:0 FilterParams - C (16)
+    M 174:4 FilterParams.validate_filters - C (15)
+resync\core\redis_init.py
+    M 99:4 RedisInitializer.initialize - C (13)
+resync\core\cache\chucknorris_optimizer.py
+    M 358:4 ChuckNorrisCacheOptimizer._detect_pattern - C (14)
+    M 500:4 ChuckNorrisCacheOptimizer.get_optimization_report - C (11)
+resync\core\cache\memory_manager.py
+    M 249:4 CacheMemoryManager.evict_to_fit - C (14)
+    M 132:4 CacheMemoryManager._check_memory_usage_bounds - C (12)
+resync\core\cache\persistence_manager.py
+    M 119:4 CachePersistenceManager.restore_from_snapshot - C (18)
+resync\core\cache\strategies.py
+    M 325:4 StandardCacheRollbackStrategy._validate_operations - C (12)
+resync\core\cache\unified_cache.py
+    M 550:4 UnifiedAsyncCache.delete - C (14)
+    M 373:4 UnifiedAsyncCache.get - C (13)
+resync\core\health\health_check_service.py
+    M 155:4 HealthCheckService.get_system_health - C (12)
+resync\core\health\health_check_utils.py
+    M 147:4 HealthCheckUtils.check_alerts - C (11)
+resync\core\health\health_service_consolidated.py
+    M 426:4 ConsolidatedHealthService._check_system_resources_health - C (14)
+resync\core\health\health_service_facade.py
+    M 154:4 HealthServiceFacade.perform_comprehensive_health_check - C (12)
+resync\core\health\health_service_orchestrator.py
+    M 209:4 HealthServiceOrchestrator._check_database_health - C (11)
+resync\core\health\health_service_simplified.py
+    M 215:4 SimplifiedHealthService.get_system_health - C (12)
+resync\core\health\monitoring_aggregator.py
+    M 301:4 HealthMonitoringAggregator._identify_critical_issues - C (13)
+    M 340:4 HealthMonitoringAggregator._generate_recommendations - C (13)
+resync\core\health\performance_metrics_collector.py
+    M 159:4 PerformanceMetricsCollector.get_performance_summary - C (14)
+resync\core\health\refactored_health_check_service.py
+    M 175:4 RefactoredHealthCheckService.get_system_health - C (12)
+resync\core\health\refactored_health_service_orchestrator.py
+    M 65:4 RefactoredHealthServiceOrchestrator.perform_comprehensive_health_check - C (11)
+resync\core\health\health_checkers\database_health_checker.py
+    M 38:4 DatabaseHealthChecker.check_health - C (11)
+resync\core\health\monitors\service_monitor.py
+    M 61:4 ServiceHealthMonitor.check_service_dependencies - C (14)
+resync\core\monitoring\chucknorris_metrics.py
+    M 676:4 ChuckNorrisMetricsCollector._aggregate_metrics - C (17)
+    M 484:4 ChuckNorrisMetricsCollector.get_metrics_summary - C (14)
+resync\core\pipeline\chucknorris_batch_processor.py
+    M 507:4 ChuckNorrisBatchProcessor._execute_batch - C (20)
+resync\core\pools\db_pool.py
+    M 283:4 DatabaseConnectionPool.get_connection - C (13)
+    F 81:0 execute_with_retry - C (11)
+resync\core\pools\pool_manager.py
+    M 90:4 ConnectionPoolManager.initialize - C (14)
+resync\core\resilience\chucknorris_circuit_breaker.py
+    M 415:4 ChuckNorrisCircuitBreaker._classify_failure - C (13)
+resync\services\tws_service.py
+    M 954:4 OptimizedTWSClient.get_job_status_batch - C (11)
+resync\utils\error_factories.py
+    C 61:0 ErrorFactory - C (14)
+    C 136:0 EnhancedResyncExceptionFactory - C (14)
+    M 65:4 ErrorFactory.create_error_response - C (13)
+    M 140:4 EnhancedResyncExceptionFactory.create_response - C (13)
+resync\utils\llm_factories.py
+    C 28:0 LLMFactory - D (21)
+    M 32:4 LLMFactory.call_llm - C (20)

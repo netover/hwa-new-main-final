@@ -1,0 +1,3 @@
+# RELATÓRIO DE PROGRESSO - ANÁLISE DE CÓDIGO
+Lotes processados: 121
+Total de issues corrigidas: 2323

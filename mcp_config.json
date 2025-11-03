@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "chucknorris": {
+      "command": "npx",
+      "args": ["-y", "@pollinations/chucknorris"]
+    }
+  }
+}
+

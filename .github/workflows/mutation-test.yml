@@ -1,0 +1,62 @@
+name: Mutation Testing  # Updated to fix deprecation error
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'resync/core/**'
+      - 'tests/**'
+      - 'scripts/mutation_test.py'
+      - 'requirements.txt'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'resync/core/**'
+      - 'tests/**'
+      - 'scripts/mutation_test.py'
+      - 'requirements.txt'
+
+jobs:
+  mutation-test:
+    runs-on: ubuntu-latest  # Linux environment for mutmut compatibility
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.13'
+
+    - name: Install Poetry
+      uses: snok/install-poetry@v1
+      with:
+        virtualenvs-create: true
+        virtualenvs-in-project: true
+        installer-parallel: true
+
+    - name: Load cached venv
+      id: cached-poetry-dependencies
+      uses: actions/cache@v3
+      with:
+        path: .venv
+        key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
+
+    - name: Install dependencies
+      run: poetry install --no-interaction --no-root
+
+    - name: Run unit and integration tests
+      run: |
+        poetry run pytest tests/ --tb=short -x
+
+    - name: Run mutation tests
+      run: |
+        poetry run python scripts/mutation_test.py
+
+    - name: Upload mutation results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: mutation-results
+        path: reports/mutation_results.json

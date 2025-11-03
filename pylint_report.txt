@@ -1,0 +1,564 @@
+************* Module analyze_dependencies
+d:\Python\GITHUB\hwa-new-main-final\analyze_dependencies.py:214:0: C0305: Trailing newlines (trailing-newlines)
+************* Module analyze_unused_files
+d:\Python\GITHUB\hwa-new-main-final\analyze_unused_files.py:207:0: C0305: Trailing newlines (trailing-newlines)
+************* Module cleanup_resync
+d:\Python\GITHUB\hwa-new-main-final\cleanup_resync.py:42:0: C0305: Trailing newlines (trailing-newlines)
+d:\Python\GITHUB\hwa-new-main-final\cleanup_resync.py:9:0: W0611: Unused import os (unused-import)
+************* Module fix_all_imports
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports.py:115:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports.py:118:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports.py:5:0: C0103: Constant name "teams_file" doesn't conform to UPPER_CASE naming style (invalid-name)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports.py:6:5: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports.py:12:5: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports.py:18:0: C0103: Constant name "write_ahead_file" doesn't conform to UPPER_CASE naming style (invalid-name)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports.py:19:0: C0103: Constant name "write_ahead_content" doesn't conform to UPPER_CASE naming style (invalid-name)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports.py:92:5: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports.py:98:0: C0103: Constant name "cache_init_file" doesn't conform to UPPER_CASE naming style (invalid-name)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports.py:99:5: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports.py:105:4: C0103: Constant name "get_cache_function" doesn't conform to UPPER_CASE naming style (invalid-name)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports.py:116:9: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports.py:130:7: W0718: Catching too general exception Exception (broad-exception-caught)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports.py:1:0: W0611: Unused import os (unused-import)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports.py:128:4: W0611: Unused resync.fastapi_app.main imported as m (unused-import)
+************* Module fix_all_imports_final
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports_final.py:20:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports_final.py:24:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports_final.py:27:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports_final.py:38:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports_final.py:42:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports_final.py:48:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports_final.py:54:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports_final.py:60:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports_final.py:64:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports_final.py:68:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports_final.py:71:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports_final.py:74:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports_final.py:80:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports_final.py:84:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports_final.py:90:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports_final.py:99:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports_final.py:107:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports_final.py:109:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports_final.py:117:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports_final.py:120:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports_final.py:123:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports_final.py:127:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports_final.py:130:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports_final.py:134:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports_final.py:138:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports_final.py:22:4: C0415: Import outside toplevel (importlib) (import-outside-toplevel)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports_final.py:23:4: W0104: Statement seems to have no effect (pointless-statement)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports_final.py:36:19: W0718: Catching too general exception Exception (broad-exception-caught)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports_final.py:34:20: E1101: Module 'importlib.util' has no 'invalidate_caches' member (no-member)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports_final.py:40:4: C0415: Import outside toplevel (gc) (import-outside-toplevel)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports_final.py:63:4: E0602: Undefined variable 'fix_resilience_references' (undefined-variable)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports_final.py:67:4: E0602: Undefined variable 'fix_wal_entry' (undefined-variable)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports_final.py:86:8: W0621: Redefining name 'sys' from outer scope (line 13) (redefined-outer-name)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports_final.py:110:11: W0718: Catching too general exception Exception (broad-exception-caught)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports_final.py:86:8: W0404: Reimport 'sys' (imported line 13) (reimported)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports_final.py:86:8: C0415: Import outside toplevel (sys) (import-outside-toplevel)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports_final.py:88:8: C0415: Import outside toplevel (resync.fastapi_app.main) (import-outside-toplevel)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports_final.py:104:19: W0718: Catching too general exception Exception (broad-exception-caught)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports_final.py:88:8: W0611: Unused resync.fastapi_app.main imported as m (unused-import)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports_final.py:14:0: W0611: Unused import subprocess (unused-import)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_imports_final.py:15:0: W0611: Unused import time (unused-import)
+************* Module fix_all_references
+d:\Python\GITHUB\hwa-new-main-final\fix_all_references.py:7:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_references.py:29:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_references.py:34:0: C0301: Line too long (110/100) (line-too-long)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_references.py:51:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_references.py:54:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_references.py:60:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_references.py:64:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_references.py:67:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_references.py:73:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_references.py:81:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_references.py:84:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_references.py:88:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_references.py:93:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_references.py:117:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_references.py:126:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_references.py:130:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_references.py:143:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_references.py:146:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_references.py:153:0: C0305: Trailing newlines (trailing-newlines)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_references.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_references.py:5:0: R0914: Too many local variables (16/15) (too-many-locals)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_references.py:82:23: W0718: Catching too general exception Exception (broad-exception-caught)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_references.py:56:4: R1702: Too many nested blocks (6/5) (too-many-nested-blocks)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_references.py:85:10: W1309: Using an f-string that does not have any interpolated variables (f-string-without-interpolation)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_references.py:9:4: W0612: Unused variable 'old_patterns' (unused-variable)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_references.py:56:14: W0612: Unused variable 'dirs' (unused-variable)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_references.py:65:20: W0612: Unused variable 'original_content' (unused-variable)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_references.py:132:8: W0621: Redefining name 'sys' from outer scope (line 3) (redefined-outer-name)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_references.py:137:11: W0718: Catching too general exception Exception (broad-exception-caught)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_references.py:132:8: W0404: Reimport 'sys' (imported line 3) (reimported)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_references.py:132:8: C0415: Import outside toplevel (sys) (import-outside-toplevel)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_references.py:134:8: C0415: Import outside toplevel (resync.fastapi_app.main) (import-outside-toplevel)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_references.py:134:8: W0611: Unused resync.fastapi_app.main imported as m (unused-import)
+d:\Python\GITHUB\hwa-new-main-final\fix_all_references.py:145:4: C0103: Constant name "has_fixes" doesn't conform to UPPER_CASE naming style (invalid-name)
+************* Module fix_final_imports
+d:\Python\GITHUB\hwa-new-main-final\fix_final_imports.py:25:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_final_imports.py:28:0: C0301: Line too long (107/100) (line-too-long)
+d:\Python\GITHUB\hwa-new-main-final\fix_final_imports.py:39:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_final_imports.py:46:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_final_imports.py:67:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_final_imports.py:70:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_final_imports.py:73:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_final_imports.py:76:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_final_imports.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+d:\Python\GITHUB\hwa-new-main-final\fix_final_imports.py:6:0: C0103: Constant name "resilience_dir" doesn't conform to UPPER_CASE naming style (invalid-name)
+d:\Python\GITHUB\hwa-new-main-final\fix_final_imports.py:7:0: C0103: Constant name "resiliance_dir" doesn't conform to UPPER_CASE naming style (invalid-name)
+d:\Python\GITHUB\hwa-new-main-final\fix_final_imports.py:19:14: W0612: Unused variable 'dirs' (unused-variable)
+d:\Python\GITHUB\hwa-new-main-final\fix_final_imports.py:61:11: W0718: Catching too general exception Exception (broad-exception-caught)
+d:\Python\GITHUB\hwa-new-main-final\fix_final_imports.py:56:8: C0415: Import outside toplevel (sys) (import-outside-toplevel)
+d:\Python\GITHUB\hwa-new-main-final\fix_final_imports.py:58:8: C0415: Import outside toplevel (resync.fastapi_app.main) (import-outside-toplevel)
+d:\Python\GITHUB\hwa-new-main-final\fix_final_imports.py:58:8: W0611: Unused resync.fastapi_app.main imported as m (unused-import)
+d:\Python\GITHUB\hwa-new-main-final\fix_final_imports.py:75:4: C0103: Constant name "success" doesn't conform to UPPER_CASE naming style (invalid-name)
+************* Module fix_imports
+d:\Python\GITHUB\hwa-new-main-final\fix_imports.py:10:77: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_imports.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+d:\Python\GITHUB\hwa-new-main-final\fix_imports.py:5:0: C0103: Constant name "teams_file" doesn't conform to UPPER_CASE naming style (invalid-name)
+d:\Python\GITHUB\hwa-new-main-final\fix_imports.py:6:5: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+d:\Python\GITHUB\hwa-new-main-final\fix_imports.py:13:5: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+d:\Python\GITHUB\hwa-new-main-final\fix_imports.py:19:0: C0103: Constant name "ws_manager_file" doesn't conform to UPPER_CASE naming style (invalid-name)
+d:\Python\GITHUB\hwa-new-main-final\fix_imports.py:20:0: C0103: Constant name "ws_content" doesn't conform to UPPER_CASE naming style (invalid-name)
+d:\Python\GITHUB\hwa-new-main-final\fix_imports.py:104:5: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+d:\Python\GITHUB\hwa-new-main-final\fix_imports.py:116:7: W0718: Catching too general exception Exception (broad-exception-caught)
+d:\Python\GITHUB\hwa-new-main-final\fix_imports.py:1:0: W0611: Unused import os (unused-import)
+d:\Python\GITHUB\hwa-new-main-final\fix_imports.py:2:0: W0611: Unused import re (unused-import)
+d:\Python\GITHUB\hwa-new-main-final\fix_imports.py:114:4: W0611: Unused resync.fastapi_app.main imported as m (unused-import)
+************* Module fix_migration_imports
+d:\Python\GITHUB\hwa-new-main-final\fix_migration_imports.py:15:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_migration_imports.py:22:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_migration_imports.py:28:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_migration_imports.py:45:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_migration_imports.py:50:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_migration_imports.py:56:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_migration_imports.py:59:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_migration_imports.py:64:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_migration_imports.py:83:0: C0305: Trailing newlines (trailing-newlines)
+d:\Python\GITHUB\hwa-new-main-final\fix_migration_imports.py:36:11: W0718: Catching too general exception Exception (broad-exception-caught)
+d:\Python\GITHUB\hwa-new-main-final\fix_migration_imports.py:6:0: W0611: Unused import os (unused-import)
+************* Module fix_teams_integration
+d:\Python\GITHUB\hwa-new-main-final\fix_teams_integration.py:7:77: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\fix_teams_integration.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+d:\Python\GITHUB\hwa-new-main-final\fix_teams_integration.py:2:0: C0103: Constant name "teams_file" doesn't conform to UPPER_CASE naming style (invalid-name)
+d:\Python\GITHUB\hwa-new-main-final\fix_teams_integration.py:3:5: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+d:\Python\GITHUB\hwa-new-main-final\fix_teams_integration.py:10:5: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+d:\Python\GITHUB\hwa-new-main-final\fix_teams_integration.py:22:7: W0718: Catching too general exception Exception (broad-exception-caught)
+d:\Python\GITHUB\hwa-new-main-final\fix_teams_integration.py:20:4: W0611: Unused resync.fastapi_app.main imported as m (unused-import)
+************* Module init_neo4j_vector_index
+d:\Python\GITHUB\hwa-new-main-final\init_neo4j_vector_index.py:26:0: C0301: Line too long (106/100) (line-too-long)
+d:\Python\GITHUB\hwa-new-main-final\init_neo4j_vector_index.py:59:0: C0305: Trailing newlines (trailing-newlines)
+d:\Python\GITHUB\hwa-new-main-final\init_neo4j_vector_index.py:48:11: W0718: Catching too general exception Exception (broad-exception-caught)
+************* Module locustfile
+d:\Python\GITHUB\hwa-new-main-final\locustfile.py:74:0: C0305: Trailing newlines (trailing-newlines)
+************* Module migrate_files
+d:\Python\GITHUB\hwa-new-main-final\migrate_files.py:15:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\migrate_files.py:19:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\migrate_files.py:23:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\migrate_files.py:35:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\migrate_files.py:39:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\migrate_files.py:46:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\migrate_files.py:65:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\migrate_files.py:76:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\migrate_files.py:81:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\migrate_files.py:87:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\migrate_files.py:91:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\migrate_files.py:94:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\migrate_files.py:98:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\migrate_files.py:108:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\migrate_files.py:124:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\migrate_files.py:127:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\migrate_files.py:131:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\migrate_files.py:141:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\migrate_files.py:160:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\migrate_files.py:168:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\migrate_files.py:172:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\migrate_files.py:176:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\migrate_files.py:180:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\migrate_files.py:184:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\migrate_files.py:189:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\migrate_files.py:203:0: C0305: Trailing newlines (trailing-newlines)
+d:\Python\GITHUB\hwa-new-main-final\migrate_files.py:26:11: W0718: Catching too general exception Exception (broad-exception-caught)
+d:\Python\GITHUB\hwa-new-main-final\migrate_files.py:48:11: W0718: Catching too general exception Exception (broad-exception-caught)
+d:\Python\GITHUB\hwa-new-main-final\migrate_files.py:190:4: R1705: Unnecessary "else" after "return", remove the "else" and de-indent the code inside it (no-else-return)
+d:\Python\GITHUB\hwa-new-main-final\migrate_files.py:198:4: R1722: Consider using 'sys.exit' instead (consider-using-sys-exit)
+d:\Python\GITHUB\hwa-new-main-final\migrate_files.py:6:0: W0611: Unused import os (unused-import)
+d:\Python\GITHUB\hwa-new-main-final\migrate_files.py:7:0: W0611: Unused import shutil (unused-import)
+************* Module replace_structure
+d:\Python\GITHUB\hwa-new-main-final\replace_structure.py:16:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\replace_structure.py:23:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\replace_structure.py:29:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\replace_structure.py:38:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\replace_structure.py:52:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\replace_structure.py:67:0: C0305: Trailing newlines (trailing-newlines)
+d:\Python\GITHUB\hwa-new-main-final\replace_structure.py:40:11: W0718: Catching too general exception Exception (broad-exception-caught)
+d:\Python\GITHUB\hwa-new-main-final\replace_structure.py:46:4: C0415: Import outside toplevel (datetime.datetime) (import-outside-toplevel)
+d:\Python\GITHUB\hwa-new-main-final\replace_structure.py:53:4: R1705: Unnecessary "else" after "return", remove the "else" and de-indent the code inside it (no-else-return)
+d:\Python\GITHUB\hwa-new-main-final\replace_structure.py:61:4: R1722: Consider using 'sys.exit' instead (consider-using-sys-exit)
+d:\Python\GITHUB\hwa-new-main-final\replace_structure.py:6:0: W0611: Unused import os (unused-import)
+************* Module resync_analyzer
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:34:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:46:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:50:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:55:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:60:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:67:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:70:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:77:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:80:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:93:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:95:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:100:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:105:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:107:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:112:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:116:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:120:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:122:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:123:0: C0301: Line too long (137/100) (line-too-long)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:126:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:132:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:142:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:145:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:149:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:152:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:159:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:162:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:165:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:168:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:171:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:175:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:177:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:181:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:184:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:190:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:199:0: C0301: Line too long (106/100) (line-too-long)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:200:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:202:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:203:0: C0301: Line too long (102/100) (line-too-long)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:206:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:209:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:215:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:220:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:222:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:223:0: C0301: Line too long (117/100) (line-too-long)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:226:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:228:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:242:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:251:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:253:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:254:0: C0301: Line too long (116/100) (line-too-long)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:257:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:285:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:289:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:293:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:295:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:299:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:328:49: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:329:0: C0301: Line too long (103/100) (line-too-long)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:332:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:335:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:337:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:343:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:346:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:349:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:354:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:358:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:360:0: C0301: Line too long (103/100) (line-too-long)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:362:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:365:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:370:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:380:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:383:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:388:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:393:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:398:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:402:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:407:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:412:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:421:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:448:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:455:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:461:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:467:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:473:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:479:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:485:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:491:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:493:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:503:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:507:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:514:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:519:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:530:0: C0305: Trailing newlines (trailing-newlines)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:32:0: R0902: Too many instance attributes (10/7) (too-many-instance-attributes)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:90:15: W0718: Catching too general exception Exception (broad-exception-caught)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:123:4: R0914: Too many local variables (19/15) (too-many-locals)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:340:14: W1309: Using an f-string that does not have any interpolated variables (f-string-without-interpolation)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:511:23: W0612: Unused variable 'module_path' (unused-variable)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:30:0: W0611: Unused Set imported from typing (unused-import)
+d:\Python\GITHUB\hwa-new-main-final\resync_analyzer.py:30:0: W0611: Unused Optional imported from typing (unused-import)
+************* Module test_app
+d:\Python\GITHUB\hwa-new-main-final\test_app.py:62:0: C0305: Trailing newlines (trailing-newlines)
+d:\Python\GITHUB\hwa-new-main-final\test_app.py:17:0: C0116: Missing function or method docstring (missing-function-docstring)
+d:\Python\GITHUB\hwa-new-main-final\test_app.py:29:0: C0116: Missing function or method docstring (missing-function-docstring)
+d:\Python\GITHUB\hwa-new-main-final\test_app.py:40:0: C0116: Missing function or method docstring (missing-function-docstring)
+************* Module test_migration
+d:\Python\GITHUB\hwa-new-main-final\test_migration.py:144:0: C0301: Line too long (101/100) (line-too-long)
+d:\Python\GITHUB\hwa-new-main-final\test_migration.py:158:0: C0305: Trailing newlines (trailing-newlines)
+d:\Python\GITHUB\hwa-new-main-final\test_migration.py:12:0: E0401: Unable to import 'resync.core.health.health_service' (import-error)
+d:\Python\GITHUB\hwa-new-main-final\test_migration.py:12:0: E0611: No name 'health_service' in module 'resync.core.health' (no-name-in-module)
+d:\Python\GITHUB\hwa-new-main-final\test_migration.py:20:11: W0718: Catching too general exception Exception (broad-exception-caught)
+d:\Python\GITHUB\hwa-new-main-final\test_migration.py:98:11: W0718: Catching too general exception Exception (broad-exception-caught)
+d:\Python\GITHUB\hwa-new-main-final\test_migration.py:116:11: W0718: Catching too general exception Exception (broad-exception-caught)
+d:\Python\GITHUB\hwa-new-main-final\test_migration.py:9:0: W0611: Unused Path imported from pathlib (unused-import)
+************* Module test_phase2_simple
+d:\Python\GITHUB\hwa-new-main-final\test_phase2_simple.py:264:0: C0305: Trailing newlines (trailing-newlines)
+d:\Python\GITHUB\hwa-new-main-final\test_phase2_simple.py:28:4: C0415: Import outside toplevel (ast) (import-outside-toplevel)
+d:\Python\GITHUB\hwa-new-main-final\test_phase2_simple.py:40:15: W0718: Catching too general exception Exception (broad-exception-caught)
+d:\Python\GITHUB\hwa-new-main-final\test_phase2_simple.py:80:11: W0718: Catching too general exception Exception (broad-exception-caught)
+d:\Python\GITHUB\hwa-new-main-final\test_phase2_simple.py:55:8: C0415: Import outside toplevel (importlib.util) (import-outside-toplevel)
+d:\Python\GITHUB\hwa-new-main-final\test_phase2_simple.py:82:8: C0415: Import outside toplevel (traceback) (import-outside-toplevel)
+d:\Python\GITHUB\hwa-new-main-final\test_phase2_simple.py:110:15: W0718: Catching too general exception Exception (broad-exception-caught)
+d:\Python\GITHUB\hwa-new-main-final\test_phase2_simple.py:144:11: W0718: Catching too general exception Exception (broad-exception-caught)
+d:\Python\GITHUB\hwa-new-main-final\test_phase2_simple.py:179:11: W0718: Catching too general exception Exception (broad-exception-caught)
+d:\Python\GITHUB\hwa-new-main-final\test_phase2_simple.py:259:4: C0103: Constant name "exit_code" doesn't conform to UPPER_CASE naming style (invalid-name)
+************* Module update_imports
+d:\Python\GITHUB\hwa-new-main-final\update_imports.py:15:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\update_imports.py:22:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\update_imports.py:36:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\update_imports.py:40:0: C0301: Line too long (114/100) (line-too-long)
+d:\Python\GITHUB\hwa-new-main-final\update_imports.py:41:0: C0301: Line too long (120/100) (line-too-long)
+d:\Python\GITHUB\hwa-new-main-final\update_imports.py:42:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\update_imports.py:46:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\update_imports.py:50:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\update_imports.py:55:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\update_imports.py:59:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\update_imports.py:68:0: C0305: Trailing newlines (trailing-newlines)
+d:\Python\GITHUB\hwa-new-main-final\update_imports.py:30:11: W0718: Catching too general exception Exception (broad-exception-caught)
+d:\Python\GITHUB\hwa-new-main-final\update_imports.py:6:0: W0611: Unused import os (unused-import)
+************* Module update_migration_imports
+d:\Python\GITHUB\hwa-new-main-final\update_migration_imports.py:15:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\update_migration_imports.py:22:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\update_migration_imports.py:28:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\update_migration_imports.py:45:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\update_migration_imports.py:50:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\update_migration_imports.py:56:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\update_migration_imports.py:59:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\update_migration_imports.py:64:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\update_migration_imports.py:74:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\update_migration_imports.py:77:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\update_migration_imports.py:80:0: C0303: Trailing whitespace (trailing-whitespace)
+d:\Python\GITHUB\hwa-new-main-final\update_migration_imports.py:89:0: C0305: Trailing newlines (trailing-newlines)
+d:\Python\GITHUB\hwa-new-main-final\update_migration_imports.py:36:11: W0718: Catching too general exception Exception (broad-exception-caught)
+d:\Python\GITHUB\hwa-new-main-final\update_migration_imports.py:6:0: W0611: Unused import os (unused-import)
+************* Module validate_connection_pool_optimization
+d:\Python\GITHUB\hwa-new-main-final\validate_connection_pool_optimization.py:67:0: C0301: Line too long (101/100) (line-too-long)
+d:\Python\GITHUB\hwa-new-main-final\validate_connection_pool_optimization.py:288:0: C0305: Trailing newlines (trailing-newlines)
+d:\Python\GITHUB\hwa-new-main-final\validate_connection_pool_optimization.py:18:0: C0413: Import "from resync.config.settings import settings" should be placed at the top of the module (wrong-import-position)
+d:\Python\GITHUB\hwa-new-main-final\validate_connection_pool_optimization.py:19:0: C0413: Import "from resync.core.connection_pool_manager import ConnectionPoolConfig, DatabaseConnectionPool" should be placed at the top of the module (wrong-import-position)
+d:\Python\GITHUB\hwa-new-main-final\validate_connection_pool_optimization.py:104:15: W0718: Catching too general exception Exception (broad-exception-caught)
+d:\Python\GITHUB\hwa-new-main-final\validate_connection_pool_optimization.py:150:15: W0718: Catching too general exception Exception (broad-exception-caught)
+d:\Python\GITHUB\hwa-new-main-final\validate_connection_pool_optimization.py:115:12: C0415: Import outside toplevel (redis.asyncio) (import-outside-toplevel)
+d:\Python\GITHUB\hwa-new-main-final\validate_connection_pool_optimization.py:151:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
+d:\Python\GITHUB\hwa-new-main-final\validate_connection_pool_optimization.py:182:15: W0718: Catching too general exception Exception (broad-exception-caught)
+d:\Python\GITHUB\hwa-new-main-final\validate_connection_pool_optimization.py:208:4: R0912: Too many branches (15/12) (too-many-branches)
+d:\Python\GITHUB\hwa-new-main-final\validate_connection_pool_optimization.py:208:4: R0915: Too many statements (51/50) (too-many-statements)
+************* Module validate_performance
+d:\Python\GITHUB\hwa-new-main-final\validate_performance.py:34:0: C0301: Line too long (127/100) (line-too-long)
+d:\Python\GITHUB\hwa-new-main-final\validate_performance.py:90:0: C0301: Line too long (116/100) (line-too-long)
+d:\Python\GITHUB\hwa-new-main-final\validate_performance.py:145:0: C0301: Line too long (109/100) (line-too-long)
+d:\Python\GITHUB\hwa-new-main-final\validate_performance.py:149:0: C0301: Line too long (112/100) (line-too-long)
+d:\Python\GITHUB\hwa-new-main-final\validate_performance.py:151:0: C0301: Line too long (106/100) (line-too-long)
+d:\Python\GITHUB\hwa-new-main-final\validate_performance.py:176:0: C0301: Line too long (121/100) (line-too-long)
+d:\Python\GITHUB\hwa-new-main-final\validate_performance.py:292:0: C0301: Line too long (120/100) (line-too-long)
+d:\Python\GITHUB\hwa-new-main-final\validate_performance.py:339:0: C0301: Line too long (101/100) (line-too-long)
+d:\Python\GITHUB\hwa-new-main-final\validate_performance.py:368:0: C0305: Trailing newlines (trailing-newlines)
+d:\Python\GITHUB\hwa-new-main-final\validate_performance.py:215:23: W0718: Catching too general exception Exception (broad-exception-caught)
+d:\Python\GITHUB\hwa-new-main-final\validate_performance.py:323:15: W0718: Catching too general exception Exception (broad-exception-caught)
+d:\Python\GITHUB\hwa-new-main-final\validate_performance.py:325:12: C0415: Import outside toplevel (traceback) (import-outside-toplevel)
+d:\Python\GITHUB\hwa-new-main-final\validate_performance.py:338:19: W0718: Catching too general exception Exception (broad-exception-caught)
+d:\Python\GITHUB\hwa-new-main-final\validate_performance.py:344:4: C0415: Import outside toplevel (argparse) (import-outside-toplevel)
+d:\Python\GITHUB\hwa-new-main-final\validate_performance.py:1:0: R0801: Similar lines in 2 files
+==fix_migration_imports:[11:65]
+==update_migration_imports:[11:65]
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+
+        # Substitui o import antigo pelo novo
+        updated_content = re.sub(
+            rf'from\s+{re.escape(old_import)}\s+',
+            f'from {new_import} ',
+            content
+        )
+
+        updated_content = re.sub(
+            rf'import\s+{re.escape(old_import)}',
+            f'import {new_import}',
+            updated_content
+        )
+
+        # Se houver mudanças, escreve no arquivo
+        if updated_content != content:
+            with open(file_path, 'w', encoding='utf-8') as f:
+                f.write(updated_content)
+            print(f"Atualizado: {file_path}")
+        else:
+            print(f"Sem mudanças necessárias em: {file_path}")
+    except Exception as e:
+        print(f"Erro ao atualizar {file_path}: {e}")
+
+def update_all_imports_in_directory(directory: Path):
+    """Atualiza todos os imports em um diretório"""
+    # Mapeamento de imports antigos para novos
+    import_mappings = [
+        # Configurações
+        ("resync.settings", "resync.config.settings"),
+
+        # Utilitários
+        ("resync.core.simple_logger", "resync.utils.simple_logger"),
+        ("resync.core.exceptions", "resync.utils.exceptions"),
+        ("resync.core.interfaces", "resync.utils.interfaces"),
+
+        # Componentes Core
+        ("resync.core.connection_pool_manager", "resync.core.connection_pool_manager"),
+        ("resync.core.metrics", "resync.core.monitoring.metrics"),
+        ("resync.core.fastapi_di", "resync.core.fastapi_di"),
+        ("resync.core.circuit_breaker", "resync.core.monitoring.circuit_breaker"),
+
+        # Cache
+        ("resync.core.cache", "resync.core.cache"),
+
+        # Modelos e Saúde
+        ("resync.core.health_models", "resync.models.health_models"),
+        ("resync.core.health", "resync.core.health"),
+    ]
+
+    # Atualizar imports em todos os arquivos Python (duplicate-code)
+d:\Python\GITHUB\hwa-new-main-final\validate_performance.py:1:0: R0801: Similar lines in 2 files
+==analyze_unused_files:[21:43]
+==resync_analyzer:[68:89]
+    return python_files
+
+
+def extract_imports(file_path: Path) -> List[str]:
+    """Extract all resync imports from a Python file."""
+    imports = []
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+
+        # Parse the AST
+        tree = ast.parse(content)
+
+        # Extract imports
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Import):
+                for alias in node.names:
+                    if alias.name.startswith('resync.'):
+                        imports.append(alias.name)
+            elif isinstance(node, ast.ImportFrom):
+                if node.module and node.module.startswith('resync.'):
+                    imports.append(node.module) (duplicate-code)
+d:\Python\GITHUB\hwa-new-main-final\validate_performance.py:1:0: R0801: Similar lines in 2 files
+==fix_migration_imports:[26:41]
+==update_imports:[20:34]
+        )
+
+        # Se houver mudanças, escreve no arquivo
+        if updated_content != content:
+            with open(file_path, 'w', encoding='utf-8') as f:
+                f.write(updated_content)
+            print(f"Atualizado: {file_path}")
+        else:
+            print(f"Sem mudanças necessárias em: {file_path}")
+    except Exception as e:
+        print(f"Erro ao atualizar {file_path}: {e}")
+
+def main():
+    """Função principal""" (duplicate-code)
+d:\Python\GITHUB\hwa-new-main-final\validate_performance.py:1:0: R0801: Similar lines in 2 files
+==analyze_unused_files:[125:138]
+==resync_analyzer:[182:195]
+        name_groups = {}
+
+        for file_path in python_files:
+            base_name = file_path.stem
+            if base_name not in name_groups:
+                name_groups[base_name] = []
+            name_groups[base_name].append(file_path)
+
+        # Encontra grupos com mais de um arquivo
+        duplicates = []
+        for base_name, files in name_groups.items():
+            if len(files) > 1:
+                # Verifica se estão em diretórios diferentes (duplicate-code)
+d:\Python\GITHUB\hwa-new-main-final\validate_performance.py:1:0: R0801: Similar lines in 2 files
+==fix_imports:[4:18]
+==fix_teams_integration:[1:15]
+teams_file = "resync/core/teams_integration.py"
+with open(teams_file, 'r') as f:
+    content = f.read()
+
+# Substituir SimpleTeamsIntegration(ITeamsIntegration) por SimpleTeamsIntegration(ITeamsIntegration)
+content = content.replace("class SimpleTeamsIntegration(ITeamsIntegration):",
+                        "class SimpleTeamsIntegration(ITeamsIntegration):")
+
+with open(teams_file, 'w') as f:
+    f.write(content)
+
+print("Corrigido o erro de digitação em teams_integration.py")
+
+# Testar a importação novamente (duplicate-code)
+d:\Python\GITHUB\hwa-new-main-final\validate_performance.py:1:0: R0801: Similar lines in 2 files
+==analyze_unused_files:[63:83]
+==resync_analyzer:[110:124]
+    module_parts = list(relative_path.parts)
+
+    # Remove .py extension
+    if module_parts[-1].endswith('.py'):
+        module_parts[-1] = module_parts[-1][:-3]
+
+    # Remove __init__ from module path
+    if module_parts[-1] == '__init__':
+        module_parts = module_parts[:-1]
+
+    return '.'.join(module_parts)
+
+
+def find_unused_files(
+    python_files: List[Path],
+    dependency_graph: Dict[Path, List[str]],
+    base_dir: Path
+) -> List[Tuple[Path, str, bool, bool]]:
+    """Find files that are not imported by any other file."""
+    # Create a set of imported modules (duplicate-code)
+d:\Python\GITHUB\hwa-new-main-final\validate_performance.py:1:0: R0801: Similar lines in 2 files
+==fix_migration_imports:[11:18]
+==update_imports:[11:18]
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+
+        # Substitui o import antigo pelo novo
+        updated_content = re.sub(
+            rf'from\s+{re.escape(old_import)}\s+', (duplicate-code)
+d:\Python\GITHUB\hwa-new-main-final\validate_performance.py:1:0: R0801: Similar lines in 2 files
+==analyze_unused_files:[83:89]
+==resync_analyzer:[133:139]
+    imported_modules = set()
+    for imports in dependency_graph.values():
+        for imp in imports:
+            # Extract the base module (resync.x.y.z -> resync.x.y)
+            parts = imp.split('.')
+            if len(parts) >= 2: (duplicate-code)
+
+------------------------------------------------------------------
+Your code has been rated at 7.52/10 (previous run: 7.81/10, -0.29)
+

@@ -1,0 +1,371 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.12', '3.13']
+    env:
+      PYTHONIOENCODING: utf-8
+    services:
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install Poetry
+      uses: snok/install-poetry@v1
+      with:
+        virtualenvs-create: true
+        virtualenvs-in-project: true
+        installer-parallel: true
+
+    - name: Load cached venv
+      id: cached-poetry-dependencies
+      uses: actions/cache@v3
+      with:
+        path: .venv
+        key: venv-${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('**/poetry.lock') }}
+
+    - name: Install dependencies
+      run: poetry install --no-interaction --no-root
+
+    - name: Run unit tests with coverage
+      run: |
+        poetry run pytest tests/ -v --tb=short --cov=resync/core --cov-report=xml
+
+    - name: Run encoding compatibility tests
+      run: |
+        poetry run pytest tests/test_encoding_compatibility.py -v --tb=short
+
+    - name: Run mutation tests with mutmut
+      run: |
+        poetry run mutmut run resync/ --no-progress-bar --fail-when-survivors
+
+    - name: Run integration tests
+      run: |
+        poetry run pytest tests/test_integration.py -v --tb=short
+
+    - name: Run audit lock tests
+      run: |
+        poetry run pytest tests/test_audit_lock.py -v --tb=short
+
+    - name: Run load tests (with 120s timeout)
+      run: |
+        poetry run pytest tests/load/test_audit_load.py::test_audit_load_test --timeout=120 -v --tb=short
+      continue-on-error: false
+
+    - name: Run async cache tests
+      run: |
+        poetry run pytest tests/test_async_cache.py -v --tb=short
+
+    - name: Generate coverage report
+      run: |
+        coverage report -m
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage.xml
+        fail_ci_if_error: false
+
+  lint:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.12', '3.13']
+    env:
+      PYTHONIOENCODING: utf-8
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install Poetry
+      uses: snok/install-poetry@v1
+      with:
+        virtualenvs-create: true
+        virtualenvs-in-project: true
+        installer-parallel: true
+
+    - name: Load cached venv
+      id: cached-poetry-dependencies
+      uses: actions/cache@v3
+      with:
+        path: .venv
+        key: venv-${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('**/poetry.lock') }}
+
+    - name: Install dependencies
+      run: poetry install --no-interaction --no-root
+
+    - name: Run Black formatter check
+      run: |
+        poetry run black --check --diff resync/ tests/ locustfile.py
+
+    - name: Run isort import sorting check
+      run: |
+        poetry run isort --check-only --diff resync/ tests/ locustfile.py
+
+    - name: Run Pyright type checking
+      run: |
+        poetry run pyright resync/ --pythonversion 3.12
+
+    - name: Run Ruff linting and formatting
+      run: |
+        poetry run ruff check resync/ tests/ locustfile.py
+        poetry run ruff format --check resync/ tests/ locustfile.py
+
+    - name: Run flake8 for additional style checks
+      run: |
+        poetry run flake8 resync/ tests/ --max-line-length=88 --extend-ignore=E203,W503
+
+    - name: Check for unused imports
+      run: |
+        poetry run autoflake --check --remove-all-unused-imports resync/ tests/
+
+    - name: Run Bandit security scan
+      run: |
+        poetry run bandit -r resync/ --quiet
+  security:
+    runs-on: ubuntu-latest
+    env:
+      PYTHONIOENCODING: utf-8
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.13'
+
+    - name: Install Poetry
+      uses: snok/install-poetry@v1
+      with:
+        virtualenvs-create: true
+        virtualenvs-in-project: true
+        installer-parallel: true
+
+    - name: Load cached venv
+      id: cached-poetry-dependencies
+      uses: actions/cache@v3
+      with:
+        path: .venv
+        key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
+
+    - name: Install dependencies
+      run: poetry install --no-interaction --no-root
+
+    - name: Run Bandit security scan
+      run: |
+        poetry run bandit -r resync/ -f json -o bandit-report.json || true
+        poetry run bandit -r resync/
+
+    - name: Run Safety dependency check
+      run: |
+        poetry run safety check --full-report
+      continue-on-error: true
+
+    - name: Check for outdated dependencies
+      run: |
+        poetry show --outdated || echo "No outdated dependencies found"
+      continue-on-error: true
+
+    - name: Install Semgrep
+      run: pip install semgrep
+
+    - name: Run Semgrep security scan
+      run: |
+        semgrep --config=p/r2c/python-config resync/ --quiet --severity=ERROR,WARNING
+      continue-on-error: true
+
+    - name: Run Trivy vulnerability scanner
+      run: |
+        docker run --rm -v $(pwd):/workspace aquasecurity/trivy:latest fs --format json --output /workspace/trivy-report.json /workspace/resync/
+      continue-on-error: true
+
+    - name: Upload Bandit report
+      uses: actions/upload-artifact@v4
+      with:
+        name: bandit-report
+        path: bandit-report.json
+
+    - name: Upload Trivy report
+      uses: actions/upload-artifact@v4
+      with:
+        name: trivy-report
+        path: trivy-report.json
+      continue-on-error: true
+
+  quality:
+    runs-on: ubuntu-latest
+    needs: [lint]
+    env:
+      PYTHONIOENCODING: utf-8
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.13'
+
+    - name: Install Poetry
+      uses: snok/install-poetry@v1
+      with:
+        virtualenvs-create: true
+        virtualenvs-in-project: true
+        installer-parallel: true
+
+    - name: Load cached venv
+      id: cached-poetry-dependencies
+      uses: actions/cache@v3
+      with:
+        path: .venv
+        key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
+
+    - name: Install dependencies
+      run: poetry install --no-interaction --no-root
+
+    - name: Check code complexity
+      run: |
+        poetry run radon cc resync/ -a -s --min B
+      continue-on-error: true
+
+    - name: Check maintainability index
+      run: |
+        poetry run radon mi resync/ -s
+      continue-on-error: true
+
+    - name: Check for TODO comments
+      run: |
+        echo "TODO comments found:"
+        grep -r "TODO\|FIXME\|XXX" resync/ || echo "No TODO comments found"
+
+    - name: Check for print statements
+      run: |
+        echo "Print statements found (should use logging instead):"
+        grep -r "^\s*print(" resync/ || echo "No print statements found"
+
+    - name: Check docstring coverage
+      run: |
+        poetry run interrogate resync/ --fail-under=80 --verbose
+      continue-on-error: true
+
+  load-test:
+    runs-on: ubuntu-latest
+    needs: [test, lint]
+    strategy:
+      matrix:
+        python-version: ['3.13']
+    env:
+      PYTHONIOENCODING: utf-8
+
+    services:
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install Poetry
+      uses: snok/install-poetry@v1
+      with:
+        virtualenvs-create: true
+        virtualenvs-in-project: true
+        installer-parallel: true
+
+    - name: Load cached venv
+      id: cached-poetry-dependencies
+      uses: actions/cache@v3
+      with:
+        path: .venv
+        key: venv-${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('**/poetry.lock') }}
+
+    - name: Install dependencies
+      run: poetry install --no-interaction --no-root
+
+    - name: Start application server
+      run: |
+        poetry run uvicorn resync.main:app --host 0.0.0.0 --port 8000 --reload &
+        sleep 10  # Wait for server to start
+
+    - name: Run Locust load tests
+      run: |
+        poetry run locust -f locustfile.py --headless -u 50 -r 10 --run-time 1m --html=locust-report.html --host=http://localhost:8000
+
+    - name: Upload Locust report
+      uses: actions/upload-artifact@v4
+      with:
+        name: locust-report
+        path: locust-report.html
+
+  docker:
+    runs-on: ubuntu-latest
+    needs: [test, lint]
+    env:
+      PYTHONIOENCODING: utf-8
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Build Docker image
+      run: |
+        docker build -t resync-app:latest .
+
+    - name: Test Docker image
+      run: |
+        docker run --rm resync-app:latest python -c "import resync; print('Docker build successful')"
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [test, lint, security, quality, docker, load-test]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    env:
+      PYTHONIOENCODING: utf-8
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Deploy to production
+      run: |
+        echo "Deploying to production..."
+        # Add your deployment commands here
+        # e.g., docker push, kubectl apply, etc.

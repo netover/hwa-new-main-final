@@ -1,0 +1,1572 @@
+resync/api\admin.py:30:80: E501 line too long (80 > 79 characters)
+resync/api\admin.py:93:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\admin.py:121:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\admin.py:140:80: E501 line too long (86 > 79 characters)
+resync/api\admin.py:187:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\admin.py:219:80: E501 line too long (88 > 79 characters)
+resync/api\admin.py:220:80: E501 line too long (80 > 79 characters)
+resync/api\audit.py:5:80: E501 line too long (86 > 79 characters)
+resync/api\audit.py:150:80: E501 line too long (80 > 79 characters)
+resync/api\audit.py:222:80: E501 line too long (94 > 79 characters)
+resync/api\audit.py:224:80: E501 line too long (81 > 79 characters)
+resync/api\audit.py:398:80: E501 line too long (81 > 79 characters)
+resync/api\audit.py:465:5: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\audit.py:481:80: E501 line too long (81 > 79 characters)
+resync/api\auth.py:20:1: F401 'os' imported but unused
+resync/api\auth.py:48:80: E501 line too long (83 > 79 characters)
+resync/api\auth.py:54:80: E501 line too long (94 > 79 characters)
+resync/api\auth.py:56:80: E501 line too long (97 > 79 characters)
+resync/api\auth.py:98:80: E501 line too long (90 > 79 characters)
+resync/api\auth.py:101:80: E501 line too long (81 > 79 characters)
+resync/api\auth.py:186:80: E501 line too long (93 > 79 characters)
+resync/api\auth_secure.py:20:1: F401 'os' imported but unused
+resync/api\auth_secure.py:48:80: E501 line too long (83 > 79 characters)
+resync/api\auth_secure.py:54:80: E501 line too long (94 > 79 characters)
+resync/api\auth_secure.py:56:80: E501 line too long (97 > 79 characters)
+resync/api\auth_secure.py:98:80: E501 line too long (90 > 79 characters)
+resync/api\auth_secure.py:101:80: E501 line too long (81 > 79 characters)
+resync/api\auth_secure.py:186:80: E501 line too long (93 > 79 characters)
+resync/api\cache.py:246:80: E501 line too long (90 > 79 characters)
+resync/api\cache.py:265:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\cache.py:269:80: E501 line too long (81 > 79 characters)
+resync/api\cache.py:285:80: E501 line too long (84 > 79 characters)
+resync/api\cache.py:289:80: E501 line too long (81 > 79 characters)
+resync/api\cache.py:294:80: E501 line too long (89 > 79 characters)
+resync/api\cache.py:323:80: E501 line too long (88 > 79 characters)
+resync/api\cache.py:340:80: E501 line too long (91 > 79 characters)
+resync/api\cache.py:351:80: E501 line too long (94 > 79 characters)
+resync/api\cache.py:390:80: E501 line too long (92 > 79 characters)
+resync/api\chat.py:80:80: E501 line too long (80 > 79 characters)
+resync/api\chat.py:89:80: E501 line too long (82 > 79 characters)
+resync/api\chat.py:119:80: E501 line too long (80 > 79 characters)
+resync/api\chat.py:121:80: E501 line too long (90 > 79 characters)
+resync/api\chat.py:165:80: E501 line too long (80 > 79 characters)
+resync/api\chat.py:176:80: E501 line too long (86 > 79 characters)
+resync/api\circuit_breaker_metrics.py:26:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\circuit_breaker_metrics.py:48:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\circuit_breaker_metrics.py:53:80: E501 line too long (92 > 79 characters)
+resync/api\circuit_breaker_metrics.py:56:80: E501 line too long (92 > 79 characters)
+resync/api\circuit_breaker_metrics.py:65:80: E501 line too long (86 > 79 characters)
+resync/api\circuit_breaker_metrics.py:71:80: E501 line too long (92 > 79 characters)
+resync/api\circuit_breaker_metrics.py:74:80: E501 line too long (92 > 79 characters)
+resync/api\circuit_breaker_metrics.py:83:80: E501 line too long (86 > 79 characters)
+resync/api\circuit_breaker_metrics.py:125:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\circuit_breaker_metrics.py:251:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\circuit_breaker_metrics.py:278:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\circuit_breaker_metrics.py:313:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\circuit_breaker_metrics.py:385:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\connection_pool_monitoring.py:280:80: E501 line too long (118 > 79 characters)
+resync/api\connection_pool_monitoring.py:284:80: E501 line too long (116 > 79 characters)
+resync/api\connection_pool_monitoring.py:292:80: E501 line too long (116 > 79 characters)
+resync/api\connection_pool_monitoring.py:296:80: E501 line too long (111 > 79 characters)
+resync/api\connection_pool_monitoring.py:303:80: E501 line too long (97 > 79 characters)
+resync/api\connection_pool_monitoring.py:310:80: E501 line too long (101 > 79 characters)
+resync/api\cors_monitoring.py:3:80: E501 line too long (85 > 79 characters)
+resync/api\cors_monitoring.py:4:80: E501 line too long (83 > 79 characters)
+resync/api\cors_monitoring.py:30:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\cors_monitoring.py:43:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\cors_monitoring.py:60:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\cors_monitoring.py:88:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\cors_monitoring.py:115:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\dependencies.py:4:80: E501 line too long (85 > 79 characters)
+resync/api\dependencies.py:35:80: E501 line too long (85 > 79 characters)
+resync/api\dependencies.py:51:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\dependencies.py:65:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\dependencies.py:92:80: E501 line too long (81 > 79 characters)
+resync/api\dependencies.py:109:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\dependencies.py:141:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\dependencies.py:179:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\dependencies.py:198:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\endpoints.py:62:80: E501 line too long (92 > 79 characters)
+resync/api\endpoints.py:136:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\endpoints.py:169:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\endpoints.py:175:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\endpoints.py:514:80: E501 line too long (80 > 79 characters)
+resync/api\endpoints.py:517:80: E501 line too long (86 > 79 characters)
+resync/api\endpoints.py:540:80: E501 line too long (80 > 79 characters)
+resync/api\endpoints.py:551:80: E501 line too long (123 > 79 characters)
+resync/api\endpoints.py:611:80: E501 line too long (82 > 79 characters)
+resync/api\endpoints.py:663:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\endpoints.py:672:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\endpoints.py:691:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\endpoints.py:698:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\endpoints.py:709:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\endpoints.py:720:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\endpoints.py:732:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\endpoints.py:743:23: ASYNC240 Avoid using os.path, prefer using trio.Path objects.
+resync/api\endpoints.py:780:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\endpoints.py:859:80: E501 line too long (82 > 79 characters)
+resync/api\endpoints.py:863:80: E501 line too long (86 > 79 characters)
+resync/api\endpoints.py:866:80: E501 line too long (94 > 79 characters)
+resync/api\endpoints.py:876:80: E501 line too long (93 > 79 characters)
+resync/api\endpoints.py:880:80: E501 line too long (90 > 79 characters)
+resync/api\endpoints.py:884:80: E501 line too long (113 > 79 characters)
+resync/api\endpoints.py:885:80: E501 line too long (92 > 79 characters)
+resync/api\endpoints.py:888:80: E501 line too long (98 > 79 characters)
+resync/api\endpoints.py:889:80: E501 line too long (88 > 79 characters)
+resync/api\endpoints.py:924:80: E501 line too long (83 > 79 characters)
+resync/api\endpoints.py:928:80: E501 line too long (80 > 79 characters)
+resync/api\endpoints.py:987:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\endpoints.py:994:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\endpoints.py:1008:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\endpoints.py:1022:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\endpoints.py:1061:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\endpoints.py:1077:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\endpoints.py:1096:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\endpoints.py:1108:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\endpoints.py:1131:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\endpoints.py:1233:80: E501 line too long (132 > 79 characters)
+resync/api\endpoints.py:1255:80: E501 line too long (113 > 79 characters)
+resync/api\exception_handlers.py:40:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\exception_handlers.py:65:80: E501 line too long (82 > 79 characters)
+resync/api\exception_handlers.py:90:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\exception_handlers.py:148:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\exception_handlers.py:204:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\exception_handlers.py:271:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\exception_handlers.py:306:80: E501 line too long (117 > 79 characters)
+resync/api\gateway.py:4:80: E501 line too long (90 > 79 characters)
+resync/api\gateway.py:99:80: E501 line too long (93 > 79 characters)
+resync/api\gateway.py:233:80: E501 line too long (90 > 79 characters)
+resync/api\gateway.py:624:58: E203 whitespace before ':'
+resync/api\health.py:104:80: E501 line too long (80 > 79 characters)
+resync/api\health.py:111:80: E501 line too long (89 > 79 characters)
+resync/api\health.py:114:80: E501 line too long (87 > 79 characters)
+resync/api\health.py:122:80: E501 line too long (94 > 79 characters)
+resync/api\health.py:127:80: E501 line too long (91 > 79 characters)
+resync/api\health.py:178:80: E501 line too long (83 > 79 characters)
+resync/api\health.py:193:80: E501 line too long (96 > 79 characters)
+resync/api\health.py:398:80: E501 line too long (81 > 79 characters)
+resync/api\health.py:510:80: E501 line too long (80 > 79 characters)
+resync/api\health.py:596:80: E501 line too long (89 > 79 characters)
+resync/api\health.py:601:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\health_simplified.py:4:80: E501 line too long (86 > 79 characters)
+resync/api\health_simplified.py:94:80: E501 line too long (80 > 79 characters)
+resync/api\health_simplified.py:101:80: E501 line too long (89 > 79 characters)
+resync/api\health_simplified.py:104:80: E501 line too long (87 > 79 characters)
+resync/api\health_simplified.py:186:80: E501 line too long (83 > 79 characters)
+resync/api\health_simplified.py:216:80: E501 line too long (96 > 79 characters)
+resync/api\health_simplified.py:321:80: E501 line too long (82 > 79 characters)
+resync/api\health_simplified.py:358:80: E501 line too long (80 > 79 characters)
+resync/api\health_simplified.py:451:80: E501 line too long (81 > 79 characters)
+resync/api\health_simplified.py:523:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\middleware\cors_config.py:48:80: E501 line too long (114 > 79 characters)
+resync/api\middleware\cors_config.py:105:80: E501 line too long (108 > 79 characters)
+resync/api\middleware\cors_config.py:106:80: E501 line too long (99 > 79 characters)
+resync/api\middleware\cors_config.py:126:80: E501 line too long (84 > 79 characters)
+resync/api\middleware\cors_config.py:131:80: E501 line too long (108 > 79 characters)
+resync/api\middleware\cors_config.py:132:80: E501 line too long (99 > 79 characters)
+resync/api\middleware\cors_config.py:156:80: E501 line too long (108 > 79 characters)
+resync/api\middleware\cors_config.py:157:80: E501 line too long (99 > 79 characters)
+resync/api\middleware\cors_config.py:160:80: E501 line too long (83 > 79 characters)
+resync/api\middleware\cors_config.py:231:80: E501 line too long (135 > 79 characters)
+resync/api\middleware\cors_config.py:291:80: E501 line too long (84 > 79 characters)
+resync/api\middleware\cors_config.py:313:80: E501 line too long (85 > 79 characters)
+resync/api\middleware\cors_middleware.py:131:80: E501 line too long (84 > 79 characters)
+resync/api\middleware\cors_middleware.py:162:80: E501 line too long (86 > 79 characters)
+resync/api\middleware\cors_middleware.py:230:80: E501 line too long (89 > 79 characters)
+resync/api\middleware\cors_middleware.py:299:80: E501 line too long (82 > 79 characters)
+resync/api\middleware\cors_monitoring.py:141:80: E501 line too long (80 > 79 characters)
+resync/api\middleware\cors_monitoring.py:247:80: E501 line too long (89 > 79 characters)
+resync/api\middleware\cors_monitoring.py:262:80: E501 line too long (118 > 79 characters)
+resync/api\middleware\csp_middleware.py:19:80: E501 line too long (83 > 79 characters)
+resync/api\middleware\csp_middleware.py:193:80: E501 line too long (94 > 79 characters)
+resync/api\middleware\csp_middleware.py:194:80: E501 line too long (93 > 79 characters)
+resync/api\middleware\csp_middleware.py:195:80: E501 line too long (95 > 79 characters)
+resync/api\middleware\endpoint_utils.py:120:80: E501 line too long (100 > 79 characters)
+resync/api\middleware\error_handler.py:26:80: E501 line too long (92 > 79 characters)
+resync/api\middleware\error_handler.py:39:80: E501 line too long (93 > 79 characters)
+resync/api\middleware\error_handler.py:47:80: E501 line too long (110 > 79 characters)
+resync/api\middleware\error_handler.py:137:80: E501 line too long (82 > 79 characters)
+resync/api\middleware\error_handler.py:157:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\middleware\error_handler.py:181:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\middleware\error_handler.py:200:80: E501 line too long (97 > 79 characters)
+resync/api\middleware\error_handler.py:254:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\middleware\idempotency.py:102:80: E501 line too long (80 > 79 characters)
+resync/api\middleware\idempotency.py:174:17: ASYNC102 await inside try/finally on line 160 must have shielded cancel scope with a timeout.
+resync/api\middleware\idempotency.py:497:80: E501 line too long (91 > 79 characters)
+resync/api\operations.py:325:80: E501 line too long (80 > 79 characters)
+resync/api\operations.py:327:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\operations.py:372:80: E501 line too long (82 > 79 characters)
+resync/api\performance.py:68:80: E501 line too long (86 > 79 characters)
+resync/api\performance.py:74:80: E501 line too long (82 > 79 characters)
+resync/api\performance.py:163:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\performance.py:193:80: E501 line too long (80 > 79 characters)
+resync/api\performance.py:290:80: E501 line too long (80 > 79 characters)
+resync/api\rag_upload.py:4:80: E501 line too long (82 > 79 characters)
+resync/api\rag_upload.py:79:80: E501 line too long (86 > 79 characters)
+resync/api\rag_upload.py:104:9: ASYNC102 await inside try/finally on line 51 must have shielded cancel scope with a timeout.
+resync/api\rfc_examples.py:134:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\rfc_examples.py:212:80: E501 line too long (99 > 79 characters)
+resync/api\rfc_examples.py:213:80: E501 line too long (102 > 79 characters)
+resync/api\rfc_examples.py:233:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\rfc_examples.py:311:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\rfc_examples.py:379:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\rfc_examples.py:402:80: E501 line too long (83 > 79 characters)
+resync/api\rfc_examples.py:404:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\rfc_examples.py:423:80: E501 line too long (90 > 79 characters)
+resync/api\rfc_examples.py:425:80: E501 line too long (87 > 79 characters)
+resync/api\rfc_examples.py:454:80: E501 line too long (80 > 79 characters)
+resync/api\utils\stream_handler.py:4:80: E501 line too long (80 > 79 characters)
+resync/api\utils\stream_handler.py:18:80: E501 line too long (89 > 79 characters)
+resync/api\validation\__init__.py:1:80: E501 line too long (83 > 79 characters)
+resync/api\validation\__init__.py:188:80: E501 line too long (96 > 79 characters)
+resync/api\validation\agents.py:233:80: E501 line too long (82 > 79 characters)
+resync/api\validation\auth.py:172:80: E501 line too long (108 > 79 characters)
+resync/api\validation\auth.py:173:80: E501 line too long (99 > 79 characters)
+resync/api\validation\auth.py:185:80: E501 line too long (108 > 79 characters)
+resync/api\validation\auth.py:186:80: E501 line too long (99 > 79 characters)
+resync/api\validation\auth.py:197:80: E501 line too long (108 > 79 characters)
+resync/api\validation\auth.py:198:80: E501 line too long (99 > 79 characters)
+resync/api\validation\auth.py:254:80: E501 line too long (108 > 79 characters)
+resync/api\validation\auth.py:255:80: E501 line too long (99 > 79 characters)
+resync/api\validation\chat.py:150:80: E501 line too long (80 > 79 characters)
+resync/api\validation\chat.py:356:80: E501 line too long (108 > 79 characters)
+resync/api\validation\chat.py:357:80: E501 line too long (99 > 79 characters)
+resync/api\validation\common.py:239:80: E501 line too long (82 > 79 characters)
+resync/api\validation\common.py:310:80: E501 line too long (114 > 79 characters)
+resync/api\validation\config.py:132:80: E501 line too long (80 > 79 characters)
+resync/api\validation\config.py:205:80: E501 line too long (87 > 79 characters)
+resync/api\validation\config.py:448:80: E501 line too long (84 > 79 characters)
+resync/api\validation\enhanced_security_fixed.py:1:80: E501 line too long (87 > 79 characters)
+resync/api\validation\enhanced_security_fixed.py:63:80: E501 line too long (98 > 79 characters)
+resync/api\validation\enhanced_security_fixed.py:254:80: E501 line too long (81 > 79 characters)
+resync/api\validation\enhanced_security_fixed.py:309:80: E501 line too long (81 > 79 characters)
+resync/api\validation\enhanced_security_fixed.py:321:80: E501 line too long (101 > 79 characters)
+resync/api\validation\enhanced_security_fixed.py:362:80: E501 line too long (90 > 79 characters)
+resync/api\validation\enhanced_security_fixed.py:438:80: E501 line too long (86 > 79 characters)
+resync/api\validation\enhanced_security_fixed.py:639:80: E501 line too long (89 > 79 characters)
+resync/api\validation\enhanced_security_fixed.py:696:80: E501 line too long (97 > 79 characters)
+resync/api\validation\enhanced_security_fixed.py:755:80: E501 line too long (101 > 79 characters)
+resync/api\validation\enhanced_security_fixed.py:825:80: E501 line too long (80 > 79 characters)
+resync/api\validation\enhanced_security_fixed.py:829:80: E501 line too long (81 > 79 characters)
+resync/api\validation\enhanced_security_fixed.py:838:80: E501 line too long (82 > 79 characters)
+resync/api\validation\enhanced_security_fixed.py:844:80: E501 line too long (87 > 79 characters)
+resync/api\validation\enhanced_security_fixed.py:855:80: E501 line too long (84 > 79 characters)
+resync/api\validation\enhanced_security_fixed.py:858:80: E501 line too long (81 > 79 characters)
+resync/api\validation\enhanced_security_fixed.py:914:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/api\validation\files.py:160:80: E501 line too long (94 > 79 characters)
+resync/api\validation\files.py:198:80: E501 line too long (84 > 79 characters)
+resync/api\validation\files.py:235:80: E501 line too long (86 > 79 characters)
+resync/api\validation\files.py:242:80: E501 line too long (94 > 79 characters)
+resync/api\validation\files.py:399:80: E501 line too long (84 > 79 characters)
+resync/api\validation\files.py:510:80: E501 line too long (89 > 79 characters)
+resync/api\validation\files.py:608:80: E501 line too long (83 > 79 characters)
+resync/api\validation\middleware.py:35:80: E501 line too long (85 > 79 characters)
+resync/api\validation\middleware.py:190:80: E501 line too long (80 > 79 characters)
+resync/api\validation\middleware.py:373:80: E501 line too long (81 > 79 characters)
+resync/api\validation\middleware.py:462:80: E501 line too long (80 > 79 characters)
+resync/api\validation\query_params.py:127:80: E501 line too long (88 > 79 characters)
+resync/api\validation\query_params.py:183:80: E501 line too long (81 > 79 characters)
+resync/api\validation\query_params.py:209:80: E501 line too long (83 > 79 characters)
+resync/api\validation\query_params.py:477:80: E501 line too long (108 > 79 characters)
+resync/api\validation\query_params.py:478:80: E501 line too long (99 > 79 characters)
+resync/api\validation\query_params.py:511:80: E501 line too long (90 > 79 characters)
+resync/config\cors.py:72:80: E501 line too long (95 > 79 characters)
+resync/config\cors.py:104:80: E501 line too long (88 > 79 characters)
+resync/config\csp.py:47:80: E501 line too long (85 > 79 characters)
+resync/config\csp.py:60:80: E501 line too long (86 > 79 characters)
+resync/config\enhanced_security.py:2:80: E501 line too long (86 > 79 characters)
+resync/config\enhanced_security.py:230:80: E501 line too long (83 > 79 characters)
+resync/config\enhanced_security.py:231:80: E501 line too long (83 > 79 characters)
+resync/config\enhanced_security.py:242:80: E501 line too long (82 > 79 characters)
+resync/config\enhanced_security.py:243:80: E501 line too long (86 > 79 characters)
+resync/config\enhanced_security.py:244:80: E501 line too long (83 > 79 characters)
+resync/config\enhanced_security.py:273:80: E501 line too long (87 > 79 characters)
+resync/config\enhanced_security.py:274:80: E501 line too long (93 > 79 characters)
+resync/config\enhanced_security.py:276:80: E501 line too long (98 > 79 characters)
+resync/config\enhanced_security.py:280:80: E501 line too long (83 > 79 characters)
+resync/config\enhanced_security.py:291:80: E501 line too long (112 > 79 characters)
+resync/config\enhanced_security.py:295:80: E501 line too long (96 > 79 characters)
+resync/config\security.py:26:80: E501 line too long (85 > 79 characters)
+resync/config\security.py:28:80: E501 line too long (105 > 79 characters)
+resync/config\security.py:35:80: E501 line too long (81 > 79 characters)
+resync/config\settings.py:70:80: E501 line too long (82 > 79 characters)
+resync/config\settings.py:123:80: E501 line too long (80 > 79 characters)
+resync/config\settings.py:129:80: E501 line too long (83 > 79 characters)
+resync/config\settings.py:212:80: E501 line too long (90 > 79 characters)
+resync/config\settings.py:320:80: E501 line too long (84 > 79 characters)
+resync/config\settings.py:377:80: E501 line too long (81 > 79 characters)
+resync/config\settings.py:385:80: E501 line too long (87 > 79 characters)
+resync/config\settings.py:430:80: E501 line too long (91 > 79 characters)
+resync/config\settings.py:436:80: E501 line too long (84 > 79 characters)
+resync/config\settings.py:447:80: E501 line too long (81 > 79 characters)
+resync/config\settings.py:454:80: E501 line too long (81 > 79 characters)
+resync/config\settings_types.py:19:80: E501 line too long (81 > 79 characters)
+resync/config\settings_validators.py:36:80: E501 line too long (82 > 79 characters)
+resync/config\settings_validators.py:98:80: E501 line too long (82 > 79 characters)
+resync/config\settings_validators.py:191:80: E501 line too long (87 > 79 characters)
+resync/config\settings_validators.py:204:80: E501 line too long (83 > 79 characters)
+resync/config\settings_validators.py:228:80: E501 line too long (83 > 79 characters)
+resync/core\cache\base_cache.py:4:80: E501 line too long (97 > 79 characters)
+resync/core\cache\base_cache.py:5:80: E501 line too long (81 > 79 characters)
+resync/core\cache\base_cache.py:59:80: E501 line too long (81 > 79 characters)
+resync/core\cache\base_cache.py:67:80: E501 line too long (83 > 79 characters)
+resync/core\cache\cache_factory.py:4:80: E501 line too long (84 > 79 characters)
+resync/core\cache\cache_factory.py:26:80: E501 line too long (82 > 79 characters)
+resync/core\cache\cache_factory.py:30:80: E501 line too long (87 > 79 characters)
+resync/core\cache\cache_factory.py:56:80: E501 line too long (93 > 79 characters)
+resync/core\cache\cache_factory.py:144:80: E501 line too long (83 > 79 characters)
+resync/core\cache\cache_factory.py:179:80: E501 line too long (80 > 79 characters)
+resync/core\cache\cache_factory.py:311:80: E501 line too long (85 > 79 characters)
+resync/core\cache\cache_factory.py:332:80: E501 line too long (88 > 79 characters)
+resync/core\cache\cache_factory.py:345:80: E501 line too long (89 > 79 characters)
+resync/core\cache\cache_factory.py:361:80: E501 line too long (80 > 79 characters)
+resync/core\cache\cache_factory.py:368:80: E501 line too long (87 > 79 characters)
+resync/core\cache\cache_factory.py:374:80: E501 line too long (85 > 79 characters)
+resync/core\cache\chucknorris_optimizer.py:18:1: F401 'weakref' imported but unused
+resync/core\cache\chucknorris_optimizer.py:19:1: F401 'hashlib' imported but unused
+resync/core\cache\chucknorris_optimizer.py:55:80: E501 line too long (84 > 79 characters)
+resync/core\cache\chucknorris_optimizer.py:56:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:63:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:69:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:74:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:79:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:87:80: E501 line too long (83 > 79 characters)
+resync/core\cache\chucknorris_optimizer.py:88:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:96:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:99:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:103:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:105:80: E501 line too long (81 > 79 characters)
+resync/core\cache\chucknorris_optimizer.py:107:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:109:80: E501 line too long (80 > 79 characters)
+resync/core\cache\chucknorris_optimizer.py:113:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:118:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:129:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:133:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:138:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:140:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:143:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:147:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:149:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:154:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:156:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:162:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:167:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:172:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:174:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:175:76: W291 trailing whitespace
+resync/core\cache\chucknorris_optimizer.py:176:27: E128 continuation line under-indented for visual indent
+resync/core\cache\chucknorris_optimizer.py:180:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:183:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:190:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:195:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:199:80: E501 line too long (86 > 79 characters)
+resync/core\cache\chucknorris_optimizer.py:200:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:205:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:209:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:211:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:216:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:218:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:242:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:245:80: E501 line too long (89 > 79 characters)
+resync/core\cache\chucknorris_optimizer.py:246:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:248:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:253:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:257:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:259:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:263:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:265:80: E501 line too long (101 > 79 characters)
+resync/core\cache\chucknorris_optimizer.py:269:80: E501 line too long (105 > 79 characters)
+resync/core\cache\chucknorris_optimizer.py:270:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:272:80: E501 line too long (85 > 79 characters)
+resync/core\cache\chucknorris_optimizer.py:274:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:276:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:281:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:291:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:293:80: E501 line too long (80 > 79 characters)
+resync/core\cache\chucknorris_optimizer.py:297:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:304:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:308:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:313:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:317:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:323:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:326:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:329:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:335:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:338:80: E501 line too long (92 > 79 characters)
+resync/core\cache\chucknorris_optimizer.py:339:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:343:80: E501 line too long (83 > 79 characters)
+resync/core\cache\chucknorris_optimizer.py:345:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:347:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:351:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:355:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:357:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:358:80: E501 line too long (81 > 79 characters)
+resync/core\cache\chucknorris_optimizer.py:362:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:364:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:368:80: E501 line too long (106 > 79 characters)
+resync/core\cache\chucknorris_optimizer.py:371:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:377:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:383:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:386:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:388:80: E501 line too long (83 > 79 characters)
+resync/core\cache\chucknorris_optimizer.py:392:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:401:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:405:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:407:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:413:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:415:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:426:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:431:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:438:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:442:80: E501 line too long (109 > 79 characters)
+resync/core\cache\chucknorris_optimizer.py:443:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:446:80: E501 line too long (89 > 79 characters)
+resync/core\cache\chucknorris_optimizer.py:448:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:451:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:456:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:461:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:464:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:467:80: E501 line too long (91 > 79 characters)
+resync/core\cache\chucknorris_optimizer.py:470:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:478:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:487:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:492:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:499:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:504:67: W291 trailing whitespace
+resync/core\cache\chucknorris_optimizer.py:505:27: E128 continuation line under-indented for visual indent
+resync/core\cache\chucknorris_optimizer.py:506:68: W291 trailing whitespace
+resync/core\cache\chucknorris_optimizer.py:507:27: E128 continuation line under-indented for visual indent
+resync/core\cache\chucknorris_optimizer.py:508:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:512:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:515:80: E501 line too long (82 > 79 characters)
+resync/core\cache\chucknorris_optimizer.py:516:80: E501 line too long (86 > 79 characters)
+resync/core\cache\chucknorris_optimizer.py:520:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:527:80: E501 line too long (104 > 79 characters)
+resync/core\cache\chucknorris_optimizer.py:531:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:532:80: E501 line too long (80 > 79 characters)
+resync/core\cache\chucknorris_optimizer.py:536:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:539:1: W293 blank line contains whitespace
+resync/core\cache\chucknorris_optimizer.py:551:1: W293 blank line contains whitespace
+resync/core\cache\memory_manager.py:4:80: E501 line too long (85 > 79 characters)
+resync/core\cache\memory_manager.py:34:80: E501 line too long (82 > 79 characters)
+resync/core\cache\memory_manager.py:117:80: E501 line too long (81 > 79 characters)
+resync/core\cache\memory_manager.py:181:80: E501 line too long (82 > 79 characters)
+resync/core\cache\memory_manager.py:183:80: E501 line too long (114 > 79 characters)
+resync/core\cache\memory_manager.py:185:80: E501 line too long (80 > 79 characters)
+resync/core\cache\memory_manager.py:204:80: E501 line too long (83 > 79 characters)
+resync/core\cache\memory_manager.py:207:80: E501 line too long (121 > 79 characters)
+resync/core\cache\memory_manager.py:209:80: E501 line too long (84 > 79 characters)
+resync/core\cache\memory_manager.py:229:80: E501 line too long (80 > 79 characters)
+resync/core\cache\memory_manager.py:231:80: E501 line too long (90 > 79 characters)
+resync/core\cache\memory_manager.py:295:80: E501 line too long (80 > 79 characters)
+resync/core\cache\memory_manager.py:297:80: E501 line too long (85 > 79 characters)
+resync/core\cache\memory_manager.py:305:80: E501 line too long (87 > 79 characters)
+resync/core\cache\memory_manager.py:349:80: E501 line too long (96 > 79 characters)
+resync/core\cache\persistence_manager.py:4:80: E501 line too long (86 > 79 characters)
+resync/core\cache\persistence_manager.py:5:80: E501 line too long (87 > 79 characters)
+resync/core\cache\persistence_manager.py:61:80: E501 line too long (80 > 79 characters)
+resync/core\cache\persistence_manager.py:62:80: E501 line too long (81 > 79 characters)
+resync/core\cache\persistence_manager.py:108:80: E501 line too long (86 > 79 characters)
+resync/core\cache\persistence_manager.py:185:80: E501 line too long (80 > 79 characters)
+resync/core\cache\persistence_manager.py:255:80: E501 line too long (82 > 79 characters)
+resync/core\cache\persistence_manager.py:337:80: E501 line too long (80 > 79 characters)
+resync/core\cache\strategies.py:4:80: E501 line too long (82 > 79 characters)
+resync/core\cache\strategies.py:5:80: E501 line too long (80 > 79 characters)
+resync/core\cache\strategies.py:56:80: E501 line too long (94 > 79 characters)
+resync/core\cache\strategies.py:70:80: E501 line too long (82 > 79 characters)
+resync/core\cache\strategies.py:155:80: E501 line too long (98 > 79 characters)
+resync/core\cache\strategies.py:265:80: E501 line too long (85 > 79 characters)
+resync/core\cache\strategies.py:415:80: E501 line too long (85 > 79 characters)
+resync/core\cache\strategies.py:493:80: E501 line too long (84 > 79 characters)
+resync/core\cache\transaction_manager.py:74:80: E501 line too long (82 > 79 characters)
+resync/core\cache\transaction_manager.py:88:80: E501 line too long (169 > 79 characters)
+resync/core\cache\transaction_manager.py:111:80: E501 line too long (91 > 79 characters)
+resync/core\cache\transaction_manager.py:147:80: E501 line too long (81 > 79 characters)
+resync/core\cache\transaction_manager.py:211:80: E501 line too long (83 > 79 characters)
+resync/core\cache\unified_cache.py:4:80: E501 line too long (99 > 79 characters)
+resync/core\cache\unified_cache.py:5:80: E501 line too long (95 > 79 characters)
+resync/core\cache\unified_cache.py:223:80: E501 line too long (84 > 79 characters)
+resync/core\cache\unified_cache.py:286:80: E501 line too long (80 > 79 characters)
+resync/core\cache\unified_cache.py:341:80: E501 line too long (110 > 79 characters)
+resync/core\cache\unified_cache.py:362:80: E501 line too long (99 > 79 characters)
+resync/core\cache\unified_cache.py:505:80: E501 line too long (93 > 79 characters)
+resync/core\cache\unified_cache.py:569:80: E501 line too long (91 > 79 characters)
+resync/core\cache\unified_cache.py:645:80: E501 line too long (83 > 79 characters)
+resync/core\cache\unified_cache.py:647:80: E501 line too long (85 > 79 characters)
+resync/core\connection_pool_manager.py:4:80: E501 line too long (82 > 79 characters)
+resync/core\connection_pool_manager.py:5:80: E501 line too long (83 > 79 characters)
+resync/core\connection_pool_manager.py:470:17: ASYNC119 Yield in contextmanager in async generator might not trigger cleanup. Use `@asynccontextmanager` or refactor.
+resync/core\exceptions.py:3:80: E501 line too long (89 > 79 characters)
+resync/core\exceptions.py:714:80: E501 line too long (80 > 79 characters)
+resync/core\exceptions.py:864:80: E501 line too long (80 > 79 characters)
+resync/core\fastapi_di.py:4:80: E501 line too long (84 > 79 characters)
+resync/core\fastapi_di.py:128:80: E501 line too long (80 > 79 characters)
+resync/core\fastapi_di.py:172:80: E501 line too long (96 > 79 characters)
+resync/core\fastapi_di.py:283:80: E501 line too long (80 > 79 characters)
+resync/core\fastapi_di.py:340:80: E501 line too long (89 > 79 characters)
+resync/core\health\__init__.py:28:80: E501 line too long (81 > 79 characters)
+resync/core\health\__init__.py:121:80: E501 line too long (84 > 79 characters)
+resync/core\health\__init__.py:208:80: E501 line too long (84 > 79 characters)
+resync/core\health\__init__.py:210:80: E501 line too long (88 > 79 characters)
+resync/core\health\__init__.py:212:80: E501 line too long (84 > 79 characters)
+resync/core\health\__init__.py:216:80: E501 line too long (88 > 79 characters)
+resync/core\health\circuit_breaker.py:84:80: E501 line too long (89 > 79 characters)
+resync/core\health\circuit_breaker_manager.py:101:13: ASYNC120 checkpoint inside except on line 99 will discard the active exception if cancelled.
+resync/core\health\component_cache_manager.py:280:80: E501 line too long (81 > 79 characters)
+resync/core\health\component_cache_manager.py:378:80: E501 line too long (84 > 79 characters)
+resync/core\health\enhanced_health_config_manager.py:25:80: E501 line too long (84 > 79 characters)
+resync/core\health\global_health_service_manager.py:24:80: E501 line too long (82 > 79 characters)
+resync/core\health\global_health_service_manager.py:36:80: E501 line too long (85 > 79 characters)
+resync/core\health\health_alerting.py:69:80: E501 line too long (99 > 79 characters)
+resync/core\health\health_alerting.py:104:76: E203 whitespace before ':'
+resync/core\health\health_alerting.py:313:80: E501 line too long (89 > 79 characters)
+resync/core\health\health_check_retry.py:4:80: E501 line too long (81 > 79 characters)
+resync/core\health\health_check_retry.py:25:80: E501 line too long (82 > 79 characters)
+resync/core\health\health_check_service.py:33:80: E501 line too long (84 > 79 characters)
+resync/core\health\health_check_service.py:61:80: E501 line too long (87 > 79 characters)
+resync/core\health\health_check_service.py:99:80: E501 line too long (93 > 79 characters)
+resync/core\health\health_check_utils.py:187:80: E501 line too long (99 > 79 characters)
+resync/core\health\health_check_utils.py:199:80: E501 line too long (81 > 79 characters)
+resync/core\health\health_checkers\__init__.py:4:80: E501 line too long (87 > 79 characters)
+resync/core\health\health_checkers\connection_pools_health_checker.py:71:80: E501 line too long (83 > 79 characters)
+resync/core\health\health_checkers\connection_pools_health_checker.py:98:80: E501 line too long (99 > 79 characters)
+resync/core\health\health_checkers\connection_pools_health_checker.py:99:80: E501 line too long (93 > 79 characters)
+resync/core\health\health_checkers\connection_pools_health_checker.py:104:80: E501 line too long (93 > 79 characters)
+resync/core\health\health_checkers\connection_pools_health_checker.py:155:80: E501 line too long (94 > 79 characters)
+resync/core\health\health_checkers\database_health_checker.py:86:80: E501 line too long (80 > 79 characters)
+resync/core\health\health_checkers\database_health_checker.py:99:80: E501 line too long (83 > 79 characters)
+resync/core\health\health_checkers\database_health_checker.py:120:80: E501 line too long (143 > 79 characters)
+resync/core\health\health_checkers\database_health_checker.py:123:80: E501 line too long (137 > 79 characters)
+resync/core\health\health_checkers\database_health_checker.py:182:80: E501 line too long (94 > 79 characters)
+resync/core\health\health_checkers\filesystem_health_checker.py:4:80: E501 line too long (82 > 79 characters)
+resync/core\health\health_checkers\filesystem_health_checker.py:57:80: E501 line too long (86 > 79 characters)
+resync/core\health\health_checkers\health_checker_factory.py:4:80: E501 line too long (82 > 79 characters)
+resync/core\health\health_checkers\health_checker_factory.py:27:80: E501 line too long (84 > 79 characters)
+resync/core\health\health_checkers\health_checker_factory.py:85:80: E501 line too long (82 > 79 characters)
+resync/core\health\health_checkers\memory_health_checker.py:57:80: E501 line too long (86 > 79 characters)
+resync/core\health\health_checkers\redis_health_checker.py:118:21: ASYNC102 await inside try/finally on line 65 must have shielded cancel scope with a timeout.
+resync/core\health\health_checkers\tws_monitor_health_checker.py:4:80: E501 line too long (90 > 79 characters)
+resync/core\health\health_checkers\websocket_pool_health_checker.py:59:80: E501 line too long (100 > 79 characters)
+resync/core\health\health_config_manager.py:244:80: E501 line too long (81 > 79 characters)
+resync/core\health\health_config_manager.py:314:40: E203 whitespace before ':'
+resync/core\health\health_history_manager.py:50:80: E501 line too long (82 > 79 characters)
+resync/core\health\health_history_manager.py:51:80: E501 line too long (81 > 79 characters)
+resync/core\health\health_history_manager.py:52:80: E501 line too long (82 > 79 characters)
+resync/core\health\health_history_manager.py:85:9: ASYNC300 asyncio.create_task() called without saving the result
+resync/core\health\health_history_manager.py:89:13: ASYNC300 asyncio.create_task() called without saving the result
+resync/core\health\health_history_manager.py:106:80: E501 line too long (89 > 79 characters)
+resync/core\health\health_history_manager.py:175:80: E501 line too long (91 > 79 characters)
+resync/core\health\health_metrics_simplified.py:4:80: E501 line too long (87 > 79 characters)
+resync/core\health\health_metrics_simplified.py:49:80: E501 line too long (87 > 79 characters)
+resync/core\health\health_monitoring_coordinator.py:4:80: E501 line too long (87 > 79 characters)
+resync/core\health\health_monitoring_coordinator.py:5:80: E501 line too long (90 > 79 characters)
+resync/core\health\health_monitoring_coordinator.py:23:80: E501 line too long (80 > 79 characters)
+resync/core\health\health_monitoring_observer.py:343:43: E203 whitespace before ':'
+resync/core\health\health_monitoring_observer.py:363:43: E203 whitespace before ':'
+resync/core\health\health_monitoring_observer.py:382:43: E203 whitespace before ':'
+resync/core\health\health_service_consolidated.py:4:80: E501 line too long (81 > 79 characters)
+resync/core\health\health_service_consolidated.py:5:80: E501 line too long (81 > 79 characters)
+resync/core\health\health_service_consolidated.py:84:80: E501 line too long (86 > 79 characters)
+resync/core\health\health_service_consolidated.py:150:80: E501 line too long (84 > 79 characters)
+resync/core\health\health_service_consolidated.py:507:80: E501 line too long (94 > 79 characters)
+resync/core\health\health_service_facade.py:388:80: E501 line too long (80 > 79 characters)
+resync/core\health\health_service_facade.py:409:80: E501 line too long (82 > 79 characters)
+resync/core\health\health_service_facade.py:415:80: E501 line too long (92 > 79 characters)
+resync/core\health\health_service_manager.py:4:80: E501 line too long (81 > 79 characters)
+resync/core\health\health_service_manager.py:89:80: E501 line too long (87 > 79 characters)
+resync/core\health\health_service_manager.py:119:80: E501 line too long (88 > 79 characters)
+resync/core\health\health_service_manager.py:133:80: E501 line too long (82 > 79 characters)
+resync/core\health\health_service_manager_simplified.py:4:80: E501 line too long (89 > 79 characters)
+resync/core\health\health_service_manager_simplified.py:5:80: E501 line too long (87 > 79 characters)
+resync/core\health\health_service_manager_simplified.py:55:80: E501 line too long (89 > 79 characters)
+resync/core\health\health_service_manager_simplified.py:89:80: E501 line too long (81 > 79 characters)
+resync/core\health\health_service_manager_simplified.py:127:80: E501 line too long (82 > 79 characters)
+resync/core\health\health_service_manager_simplified.py:183:80: E501 line too long (81 > 79 characters)
+resync/core\health\health_service_manager_simplified.py:189:80: E501 line too long (85 > 79 characters)
+resync/core\health\health_service_orchestrator.py:29:80: E501 line too long (94 > 79 characters)
+resync/core\health\health_service_orchestrator.py:87:80: E501 line too long (80 > 79 characters)
+resync/core\health\health_service_orchestrator.py:145:80: E501 line too long (89 > 79 characters)
+resync/core\health\health_service_orchestrator.py:152:80: E501 line too long (89 > 79 characters)
+resync/core\health\health_service_orchestrator.py:252:80: E501 line too long (80 > 79 characters)
+resync/core\health\health_service_orchestrator.py:265:80: E501 line too long (83 > 79 characters)
+resync/core\health\health_service_orchestrator.py:286:80: E501 line too long (143 > 79 characters)
+resync/core\health\health_service_orchestrator.py:289:80: E501 line too long (137 > 79 characters)
+resync/core\health\health_service_orchestrator.py:507:80: E501 line too long (86 > 79 characters)
+resync/core\health\health_service_orchestrator.py:559:80: E501 line too long (86 > 79 characters)
+resync/core\health\health_service_orchestrator.py:724:80: E501 line too long (83 > 79 characters)
+resync/core\health\health_service_orchestrator.py:751:80: E501 line too long (99 > 79 characters)
+resync/core\health\health_service_orchestrator.py:752:80: E501 line too long (93 > 79 characters)
+resync/core\health\health_service_orchestrator.py:757:80: E501 line too long (93 > 79 characters)
+resync/core\health\health_service_orchestrator.py:899:80: E501 line too long (99 > 79 characters)
+resync/core\health\health_service_simplified.py:4:80: E501 line too long (87 > 79 characters)
+resync/core\health\health_service_simplified.py:5:80: E501 line too long (86 > 79 characters)
+resync/core\health\health_service_simplified.py:91:80: E501 line too long (84 > 79 characters)
+resync/core\health\health_service_simplified.py:136:80: E501 line too long (93 > 79 characters)
+resync/core\health\health_service_simplified.py:311:80: E501 line too long (87 > 79 characters)
+resync/core\health\health_service_simplified.py:351:80: E501 line too long (95 > 79 characters)
+resync/core\health\health_service_simplified.py:371:80: E501 line too long (93 > 79 characters)
+resync/core\health\health_service_simplified.py:399:80: E501 line too long (81 > 79 characters)
+resync/core\health\health_service_simplified.py:508:80: E501 line too long (100 > 79 characters)
+resync/core\health\health_service_simplified.py:559:80: E501 line too long (100 > 79 characters)
+resync/core\health\health_service_simplified.py:671:80: E501 line too long (100 > 79 characters)
+resync/core\health\memory_manager.py:106:17: ASYNC300 asyncio.create_task() called without saving the result
+resync/core\health\memory_manager.py:317:80: E501 line too long (83 > 79 characters)
+resync/core\health\memory_manager.py:364:80: E501 line too long (82 > 79 characters)
+resync/core\health\memory_manager.py:461:80: E501 line too long (85 > 79 characters)
+resync/core\health\memory_usage_tracker.py:131:77: E203 whitespace before ':'
+resync/core\health\memory_usage_tracker.py:439:80: E501 line too long (88 > 79 characters)
+resync/core\health\monitoring_aggregator.py:88:80: E501 line too long (99 > 79 characters)
+resync/core\health\monitoring_aggregator.py:90:80: E501 line too long (92 > 79 characters)
+resync/core\health\monitoring_aggregator.py:91:80: E501 line too long (91 > 79 characters)
+resync/core\health\monitoring_aggregator.py:92:80: E501 line too long (80 > 79 characters)
+resync/core\health\monitoring_aggregator.py:100:80: E501 line too long (82 > 79 characters)
+resync/core\health\monitoring_aggregator.py:120:80: E501 line too long (90 > 79 characters)
+resync/core\health\monitoring_aggregator.py:163:80: E501 line too long (88 > 79 characters)
+resync/core\health\monitoring_aggregator.py:198:80: E501 line too long (101 > 79 characters)
+resync/core\health\monitoring_aggregator.py:321:80: E501 line too long (85 > 79 characters)
+resync/core\health\monitoring_aggregator.py:353:80: E501 line too long (85 > 79 characters)
+resync/core\health\monitoring_aggregator.py:357:80: E501 line too long (97 > 79 characters)
+resync/core\health\monitoring_aggregator.py:361:80: E501 line too long (82 > 79 characters)
+resync/core\health\monitoring_aggregator.py:371:80: E501 line too long (89 > 79 characters)
+resync/core\health\monitoring_aggregator.py:382:80: E501 line too long (100 > 79 characters)
+resync/core\health\monitors\connection_monitor.py:71:80: E501 line too long (83 > 79 characters)
+resync/core\health\monitors\connection_monitor.py:97:80: E501 line too long (99 > 79 characters)
+resync/core\health\monitors\connection_monitor.py:98:80: E501 line too long (93 > 79 characters)
+resync/core\health\monitors\connection_monitor.py:103:80: E501 line too long (93 > 79 characters)
+resync/core\health\monitors\connection_monitor.py:162:80: E501 line too long (108 > 79 characters)
+resync/core\health\monitors\connection_monitor.py:163:80: E501 line too long (90 > 79 characters)
+resync/core\health\monitors\connection_monitor.py:166:80: E501 line too long (96 > 79 characters)
+resync/core\health\monitors\connection_monitor.py:167:80: E501 line too long (95 > 79 characters)
+resync/core\health\monitors\connection_monitor.py:172:80: E501 line too long (86 > 79 characters)
+resync/core\health\monitors\connection_monitor.py:173:80: E501 line too long (85 > 79 characters)
+resync/core\health\monitors\connection_monitor.py:183:80: E501 line too long (88 > 79 characters)
+resync/core\health\monitors\connection_monitor.py:228:80: E501 line too long (86 > 79 characters)
+resync/core\health\monitors\database_monitor.py:90:80: E501 line too long (81 > 79 characters)
+resync/core\health\monitors\database_monitor.py:186:80: E501 line too long (104 > 79 characters)
+resync/core\health\monitors\database_monitor.py:189:80: E501 line too long (100 > 79 characters)
+resync/core\health\monitors\database_monitor.py:192:80: E501 line too long (101 > 79 characters)
+resync/core\health\monitors\database_monitor.py:264:80: E501 line too long (82 > 79 characters)
+resync/core\health\monitors\database_monitor.py:322:80: E501 line too long (90 > 79 characters)
+resync/core\health\monitors\database_monitor.py:324:80: E501 line too long (85 > 79 characters)
+resync/core\health\monitors\database_monitor.py:331:80: E501 line too long (95 > 79 characters)
+resync/core\health\monitors\database_monitor.py:336:80: E501 line too long (89 > 79 characters)
+resync/core\health\monitors\database_monitor.py:371:40: E203 whitespace before ':'
+resync/core\health\monitors\filesystem_monitor.py:121:80: E501 line too long (83 > 79 characters)
+resync/core\health\monitors\filesystem_monitor.py:439:80: E501 line too long (84 > 79 characters)
+resync/core\health\monitors\filesystem_monitor.py:500:40: E203 whitespace before ':'
+resync/core\health\monitors\service_monitor.py:51:80: E501 line too long (82 > 79 characters)
+resync/core\health\monitors\service_monitor.py:75:80: E501 line too long (84 > 79 characters)
+resync/core\health\monitors\service_monitor.py:88:80: E501 line too long (93 > 79 characters)
+resync/core\health\monitors\service_monitor.py:180:80: E501 line too long (101 > 79 characters)
+resync/core\health\monitors\system_monitor.py:58:80: E501 line too long (86 > 79 characters)
+resync/core\health\performance_metrics_collector.py:95:80: E501 line too long (84 > 79 characters)
+resync/core\health\performance_metrics_collector.py:221:80: E501 line too long (82 > 79 characters)
+resync/core\health\performance_metrics_collector.py:226:80: E501 line too long (86 > 79 characters)
+resync/core\health\proactive_monitor.py:40:80: E501 line too long (85 > 79 characters)
+resync/core\health\proactive_monitor.py:122:80: E501 line too long (100 > 79 characters)
+resync/core\health\proactive_monitor.py:123:80: E501 line too long (82 > 79 characters)
+resync/core\health\proactive_monitor.py:272:80: E501 line too long (107 > 79 characters)
+resync/core\health\proactive_monitor.py:273:80: E501 line too long (80 > 79 characters)
+resync/core\health\proactive_monitor.py:286:80: E501 line too long (83 > 79 characters)
+resync/core\health\proactive_monitor.py:306:80: E501 line too long (82 > 79 characters)
+resync/core\health\proactive_monitor.py:307:80: E501 line too long (80 > 79 characters)
+resync/core\health\proactive_monitor.py:348:80: E501 line too long (90 > 79 characters)
+resync/core\health\proactive_monitor.py:354:80: E501 line too long (85 > 79 characters)
+resync/core\health\proactive_monitor.py:355:80: E501 line too long (86 > 79 characters)
+resync/core\health\proactive_monitor.py:388:43: E203 whitespace before ':'
+resync/core\health\recovery_manager.py:30:80: E501 line too long (80 > 79 characters)
+resync/core\health\recovery_manager.py:519:46: E203 whitespace before ':'
+resync/core\health\refactored_health_check_service.py:61:80: E501 line too long (84 > 79 characters)
+resync/core\health\refactored_health_check_service.py:77:80: E501 line too long (98 > 79 characters)
+resync/core\health\refactored_health_check_service.py:115:80: E501 line too long (104 > 79 characters)
+resync/core\health\refactored_health_check_service.py:253:80: E501 line too long (85 > 79 characters)
+resync/core\health\refactored_health_check_service.py:258:80: E501 line too long (93 > 79 characters)
+resync/core\health\refactored_health_service_orchestrator.py:32:80: E501 line too long (87 > 79 characters)
+resync/core\health\refactored_health_service_orchestrator.py:108:80: E501 line too long (80 > 79 characters)
+resync/core\health\refactored_health_service_orchestrator.py:148:80: E501 line too long (81 > 79 characters)
+resync/core\health\refactored_health_service_orchestrator.py:172:80: E501 line too long (89 > 79 characters)
+resync/core\health\refactored_health_service_orchestrator.py:279:80: E501 line too long (95 > 79 characters)
+resync/core\health\refactored_health_service_orchestrator.py:283:80: E501 line too long (99 > 79 characters)
+resync/core\health\refactored_health_service_orchestrator.py:338:80: E501 line too long (85 > 79 characters)
+resync/core\health\refactored_health_service_orchestrator.py:343:80: E501 line too long (93 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:17:1: F401 'typing.Tuple' imported but unused
+resync/core\monitoring\chucknorris_metrics.py:20:1: F401 'weakref' imported but unused
+resync/core\monitoring\chucknorris_metrics.py:68:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:74:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:79:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:84:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:90:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:94:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:105:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:114:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:115:80: E501 line too long (82 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:118:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:120:80: E501 line too long (120 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:125:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:128:80: E501 line too long (92 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:130:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:134:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:138:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:145:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:148:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:150:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:155:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:157:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:160:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:162:80: E501 line too long (81 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:163:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:165:80: E501 line too long (83 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:166:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:169:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:173:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:175:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:180:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:182:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:190:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:196:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:199:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:201:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:202:80: E501 line too long (97 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:205:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:212:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:214:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:215:80: E501 line too long (91 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:218:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:225:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:227:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:228:80: E501 line too long (95 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:231:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:238:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:240:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:241:80: E501 line too long (94 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:244:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:251:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:253:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:254:80: E501 line too long (90 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:258:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:259:80: E501 line too long (114 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:264:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:266:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:272:80: E501 line too long (102 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:273:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:274:80: E501 line too long (115 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:279:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:281:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:287:80: E501 line too long (102 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:288:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:289:80: E501 line too long (154 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:291:80: E501 line too long (122 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:294:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:298:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:301:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:307:80: E501 line too long (103 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:310:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:311:80: E501 line too long (136 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:313:80: E501 line too long (104 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:316:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:318:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:323:80: E501 line too long (109 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:326:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:327:80: E501 line too long (139 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:329:80: E501 line too long (97 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:332:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:335:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:338:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:344:80: E501 line too long (91 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:347:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:348:80: E501 line too long (120 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:353:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:356:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:358:80: E501 line too long (105 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:363:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:364:80: E501 line too long (85 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:365:80: E501 line too long (85 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:366:80: E501 line too long (85 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:367:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:368:80: E501 line too long (125 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:375:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:378:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:383:80: E501 line too long (86 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:385:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:388:80: E501 line too long (118 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:389:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:395:80: E501 line too long (114 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:398:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:399:80: E501 line too long (94 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:400:21: E128 continuation line under-indented for visual indent
+resync/core\monitoring\chucknorris_metrics.py:408:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:410:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:414:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:415:80: E501 line too long (82 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:416:25: E128 continuation line under-indented for visual indent
+resync/core\monitoring\chucknorris_metrics.py:417:25: E128 continuation line under-indented for visual indent
+resync/core\monitoring\chucknorris_metrics.py:428:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:439:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:448:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:452:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:462:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:470:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:471:80: E501 line too long (84 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:472:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:474:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:481:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:483:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:493:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:497:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:501:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:517:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:533:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:537:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:552:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:554:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:555:80: E501 line too long (96 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:559:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:561:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:562:80: E501 line too long (92 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:565:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:567:80: E501 line too long (80 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:568:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:570:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:574:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:578:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:583:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:585:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:589:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:591:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:594:80: E501 line too long (92 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:595:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:597:17: ASYNC300 asyncio.create_task() called without saving the result
+resync/core\monitoring\chucknorris_metrics.py:601:80: E501 line too long (142 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:605:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:606:80: E501 line too long (86 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:610:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:614:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:619:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:622:80: E501 line too long (85 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:623:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:625:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:630:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:633:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:636:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:638:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:649:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:655:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:659:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:664:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:675:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:679:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:683:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:690:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:693:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:696:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:699:80: E501 line too long (96 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:704:80: E501 line too long (96 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:706:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:707:80: E501 line too long (83 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:709:80: E501 line too long (102 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:715:80: E501 line too long (100 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:717:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:720:80: E501 line too long (102 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:726:80: E501 line too long (100 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:728:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:731:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:733:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:735:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:746:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:751:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:755:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:760:80: E501 line too long (84 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:762:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:765:80: E501 line too long (94 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:766:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:773:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:784:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:789:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:792:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:795:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:800:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:807:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:809:80: E501 line too long (81 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:810:18: ASYNC230 Sync call open in async function,  use a library such as aiofiles or anyio.
+resync/core\monitoring\chucknorris_metrics.py:812:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:814:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:817:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:821:9: F401 'prometheus_client.generate_latest' imported but unused
+resync/core\monitoring\chucknorris_metrics.py:821:9: F401 'prometheus_client.CONTENT_TYPE_LATEST' imported but unused
+resync/core\monitoring\chucknorris_metrics.py:821:80: E501 line too long (120 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:822:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:824:9: F841 local variable 'cache_hit_ratio' is assigned to but never used
+resync/core\monitoring\chucknorris_metrics.py:830:9: F841 local variable 'cache_misses' is assigned to but never used
+resync/core\monitoring\chucknorris_metrics.py:836:9: F841 local variable 'cache_hits' is assigned to but never used
+resync/core\monitoring\chucknorris_metrics.py:842:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:844:9: F841 local variable 'circuit_breaker_state' is assigned to but never used
+resync/core\monitoring\chucknorris_metrics.py:850:9: F841 local variable 'circuit_breaker_failures' is assigned to but never used
+resync/core\monitoring\chucknorris_metrics.py:856:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:858:9: F841 local variable 'request_duration' is assigned to but never used
+resync/core\monitoring\chucknorris_metrics.py:864:9: F841 local variable 'api_request_duration' is assigned to but never used
+resync/core\monitoring\chucknorris_metrics.py:868:80: E501 line too long (91 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:871:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:873:9: F841 local variable 'error_rate' is assigned to but never used
+resync/core\monitoring\chucknorris_metrics.py:879:9: F841 local variable 'total_requests' is assigned to but never used
+resync/core\monitoring\chucknorris_metrics.py:885:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:886:80: E501 line too long (91 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:887:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:892:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:922:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:923:80: E501 line too long (81 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:924:18: ASYNC230 Sync call open in async function,  use a library such as aiofiles or anyio.
+resync/core\monitoring\chucknorris_metrics.py:926:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:928:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:931:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:946:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:947:80: E501 line too long (112 > 79 characters)
+resync/core\monitoring\chucknorris_metrics.py:952:1: W293 blank line contains whitespace
+resync/core\monitoring\chucknorris_metrics.py:956:1: W293 blank line contains whitespace
+resync/core\monitoring\metrics.py:1:80: E501 line too long (97 > 79 characters)
+resync/core\monitoring\metrics.py:11:80: E501 line too long (105 > 79 characters)
+resync/core\monitoring\metrics.py:16:80: E501 line too long (98 > 79 characters)
+resync/core\monitoring\metrics.py:49:80: E501 line too long (85 > 79 characters)
+resync/core\monitoring\metrics.py:94:80: E501 line too long (91 > 79 characters)
+resync/core\monitoring\metrics.py:141:80: E501 line too long (86 > 79 characters)
+resync/core\monitoring\metrics.py:297:80: E501 line too long (86 > 79 characters)
+resync/core\monitoring\metrics.py:347:80: E501 line too long (90 > 79 characters)
+resync/core\monitoring\metrics.py:423:80: E501 line too long (96 > 79 characters)
+resync/core\monitoring\metrics.py:541:80: E501 line too long (86 > 79 characters)
+resync/core\monitoring\metrics.py:576:80: E501 line too long (91 > 79 characters)
+resync/core\monitoring\metrics.py:637:80: E501 line too long (89 > 79 characters)
+resync/core\monitoring\metrics.py:651:80: E501 line too long (86 > 79 characters)
+resync/core\monitoring\metrics.py:732:80: E501 line too long (88 > 79 characters)
+resync/core\monitoring\metrics.py:733:80: E501 line too long (85 > 79 characters)
+resync/core\pipeline\chucknorris_batch_processor.py:14:1: F401 'collections.defaultdict' imported but unused
+resync/core\pipeline\chucknorris_batch_processor.py:17:1: F401 'typing.Tuple' imported but unused
+resync/core\pipeline\chucknorris_batch_processor.py:17:1: F401 'typing.Union' imported but unused
+resync/core\pipeline\chucknorris_batch_processor.py:18:1: F401 'weakref' imported but unused
+resync/core\pipeline\chucknorris_batch_processor.py:49:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:55:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:60:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:94:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:100:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:104:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:109:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:113:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:118:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:124:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:133:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:142:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:143:80: E501 line too long (106 > 79 characters)
+resync/core\pipeline\chucknorris_batch_processor.py:147:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:154:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:159:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:162:80: E501 line too long (83 > 79 characters)
+resync/core\pipeline\chucknorris_batch_processor.py:164:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:173:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:176:80: E501 line too long (84 > 79 characters)
+resync/core\pipeline\chucknorris_batch_processor.py:177:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:182:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:184:80: E501 line too long (85 > 79 characters)
+resync/core\pipeline\chucknorris_batch_processor.py:186:80: E501 line too long (85 > 79 characters)
+resync/core\pipeline\chucknorris_batch_processor.py:187:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:189:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:194:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:196:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:199:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:202:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:205:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:207:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:212:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:214:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:220:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:225:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:230:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:232:80: E501 line too long (83 > 79 characters)
+resync/core\pipeline\chucknorris_batch_processor.py:233:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:235:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:236:80: E501 line too long (85 > 79 characters)
+resync/core\pipeline\chucknorris_batch_processor.py:237:20: ASYNC109 Async function definition with a `timeout` parameter - use `asyncio.[fail/move_on]_[after/at]` instead.
+resync/core\pipeline\chucknorris_batch_processor.py:237:20: E128 continuation line under-indented for visual indent
+resync/core\pipeline\chucknorris_batch_processor.py:238:20: E128 continuation line under-indented for visual indent
+resync/core\pipeline\chucknorris_batch_processor.py:247:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:252:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:254:80: E501 line too long (109 > 79 characters)
+resync/core\pipeline\chucknorris_batch_processor.py:256:80: E501 line too long (88 > 79 characters)
+resync/core\pipeline\chucknorris_batch_processor.py:257:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:259:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:260:80: E501 line too long (107 > 79 characters)
+resync/core\pipeline\chucknorris_batch_processor.py:264:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:265:80: E501 line too long (97 > 79 characters)
+resync/core\pipeline\chucknorris_batch_processor.py:268:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:269:80: E501 line too long (91 > 79 characters)
+resync/core\pipeline\chucknorris_batch_processor.py:272:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:273:80: E501 line too long (97 > 79 characters)
+resync/core\pipeline\chucknorris_batch_processor.py:276:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:281:80: E501 line too long (95 > 79 characters)
+resync/core\pipeline\chucknorris_batch_processor.py:283:80: E501 line too long (112 > 79 characters)
+resync/core\pipeline\chucknorris_batch_processor.py:285:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:288:80: E501 line too long (100 > 79 characters)
+resync/core\pipeline\chucknorris_batch_processor.py:289:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:293:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:295:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:302:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:314:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:321:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:328:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:334:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:349:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:353:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:355:80: E501 line too long (83 > 79 characters)
+resync/core\pipeline\chucknorris_batch_processor.py:357:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:358:80: E501 line too long (83 > 79 characters)
+resync/core\pipeline\chucknorris_batch_processor.py:364:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:366:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:371:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:373:62: W291 trailing whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:375:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:380:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:382:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:390:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:392:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:396:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:402:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:404:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:409:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:415:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:417:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:422:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:430:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:437:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:439:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:443:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:450:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:452:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:457:80: E501 line too long (87 > 79 characters)
+resync/core\pipeline\chucknorris_batch_processor.py:464:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:471:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:473:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:478:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:481:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:485:80: E501 line too long (88 > 79 characters)
+resync/core\pipeline\chucknorris_batch_processor.py:493:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:501:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:506:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:507:80: E501 line too long (88 > 79 characters)
+resync/core\pipeline\chucknorris_batch_processor.py:510:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:518:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:522:80: E501 line too long (91 > 79 characters)
+resync/core\pipeline\chucknorris_batch_processor.py:524:80: E501 line too long (85 > 79 characters)
+resync/core\pipeline\chucknorris_batch_processor.py:525:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:536:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:540:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:547:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:558:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:562:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:565:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:572:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:582:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:587:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:588:80: E501 line too long (105 > 79 characters)
+resync/core\pipeline\chucknorris_batch_processor.py:593:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:595:80: E501 line too long (88 > 79 characters)
+resync/core\pipeline\chucknorris_batch_processor.py:596:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:606:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:612:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:623:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:634:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:639:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:641:80: E501 line too long (93 > 79 characters)
+resync/core\pipeline\chucknorris_batch_processor.py:643:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:647:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:650:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:666:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:672:1: W293 blank line contains whitespace
+resync/core\pipeline\chucknorris_batch_processor.py:676:80: E501 line too long (113 > 79 characters)
+resync/core\pools\base_pool.py:96:80: E501 line too long (88 > 79 characters)
+resync/core\pools\base_pool.py:123:80: E501 line too long (81 > 79 characters)
+resync/core\pools\base_pool.py:137:80: E501 line too long (83 > 79 characters)
+resync/core\pools\base_pool.py:154:80: E501 line too long (98 > 79 characters)
+resync/core\pools\chucknorris_pool_optimizer.py:14:1: F401 'collections.defaultdict' imported but unused
+resync/core\pools\chucknorris_pool_optimizer.py:17:1: F401 'typing.Set' imported but unused
+resync/core\pools\chucknorris_pool_optimizer.py:17:1: F401 'typing.Union' imported but unused
+resync/core\pools\chucknorris_pool_optimizer.py:18:1: F401 'weakref' imported but unused
+resync/core\pools\chucknorris_pool_optimizer.py:53:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:58:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:63:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:68:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:82:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:90:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:94:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:98:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:110:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:117:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:123:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:128:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:134:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:145:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:153:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:154:80: E501 line too long (84 > 79 characters)
+resync/core\pools\chucknorris_pool_optimizer.py:157:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:161:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:165:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:171:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:176:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:178:80: E501 line too long (85 > 79 characters)
+resync/core\pools\chucknorris_pool_optimizer.py:181:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:185:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:187:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:192:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:194:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:198:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:200:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:205:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:207:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:213:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:218:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:220:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:221:80: E501 line too long (93 > 79 characters)
+resync/core\pools\chucknorris_pool_optimizer.py:225:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:229:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:235:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:237:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:241:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:244:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:245:80: E501 line too long (86 > 79 characters)
+resync/core\pools\chucknorris_pool_optimizer.py:247:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:248:80: E501 line too long (80 > 79 characters)
+resync/core\pools\chucknorris_pool_optimizer.py:252:80: E501 line too long (90 > 79 characters)
+resync/core\pools\chucknorris_pool_optimizer.py:254:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:257:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:261:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:265:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:267:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:268:80: E501 line too long (80 > 79 characters)
+resync/core\pools\chucknorris_pool_optimizer.py:268:81: W291 trailing whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:269:31: E128 continuation line under-indented for visual indent
+resync/core\pools\chucknorris_pool_optimizer.py:275:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:277:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:281:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:289:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:293:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:296:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:299:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:302:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:305:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:311:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:313:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:322:80: E501 line too long (84 > 79 characters)
+resync/core\pools\chucknorris_pool_optimizer.py:323:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:325:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:328:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:329:80: E501 line too long (90 > 79 characters)
+resync/core\pools\chucknorris_pool_optimizer.py:330:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:341:80: E501 line too long (90 > 79 characters)
+resync/core\pools\chucknorris_pool_optimizer.py:343:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:347:80: E501 line too long (85 > 79 characters)
+resync/core\pools\chucknorris_pool_optimizer.py:354:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:357:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:360:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:362:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:363:80: E501 line too long (87 > 79 characters)
+resync/core\pools\chucknorris_pool_optimizer.py:367:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:370:80: E501 line too long (84 > 79 characters)
+resync/core\pools\chucknorris_pool_optimizer.py:371:80: E501 line too long (83 > 79 characters)
+resync/core\pools\chucknorris_pool_optimizer.py:373:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:376:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:387:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:392:80: E501 line too long (96 > 79 characters)
+resync/core\pools\chucknorris_pool_optimizer.py:393:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:394:80: E501 line too long (84 > 79 characters)
+resync/core\pools\chucknorris_pool_optimizer.py:404:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:407:80: E501 line too long (80 > 79 characters)
+resync/core\pools\chucknorris_pool_optimizer.py:408:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:413:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:415:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:426:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:432:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:436:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:444:80: E501 line too long (93 > 79 characters)
+resync/core\pools\chucknorris_pool_optimizer.py:445:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:446:80: E501 line too long (86 > 79 characters)
+resync/core\pools\chucknorris_pool_optimizer.py:447:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:449:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:451:80: E501 line too long (81 > 79 characters)
+resync/core\pools\chucknorris_pool_optimizer.py:453:80: E501 line too long (96 > 79 characters)
+resync/core\pools\chucknorris_pool_optimizer.py:455:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:466:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:472:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:473:80: E501 line too long (81 > 79 characters)
+resync/core\pools\chucknorris_pool_optimizer.py:478:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:483:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:490:51: W291 trailing whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:496:80: E501 line too long (94 > 79 characters)
+resync/core\pools\chucknorris_pool_optimizer.py:499:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:505:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:509:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:520:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:525:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:527:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:532:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:540:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:548:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:552:80: E501 line too long (96 > 79 characters)
+resync/core\pools\chucknorris_pool_optimizer.py:553:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:562:80: E501 line too long (93 > 79 characters)
+resync/core\pools\chucknorris_pool_optimizer.py:566:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:570:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:571:80: E501 line too long (96 > 79 characters)
+resync/core\pools\chucknorris_pool_optimizer.py:572:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:576:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:580:80: E501 line too long (92 > 79 characters)
+resync/core\pools\chucknorris_pool_optimizer.py:589:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:591:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:595:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:601:80: E501 line too long (83 > 79 characters)
+resync/core\pools\chucknorris_pool_optimizer.py:602:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:606:80: E501 line too long (82 > 79 characters)
+resync/core\pools\chucknorris_pool_optimizer.py:607:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:614:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:617:80: E501 line too long (84 > 79 characters)
+resync/core\pools\chucknorris_pool_optimizer.py:619:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:623:80: E501 line too long (114 > 79 characters)
+resync/core\pools\chucknorris_pool_optimizer.py:624:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:626:80: E501 line too long (120 > 79 characters)
+resync/core\pools\chucknorris_pool_optimizer.py:627:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:632:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:644:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:648:1: W293 blank line contains whitespace
+resync/core\pools\chucknorris_pool_optimizer.py:656:80: E501 line too long (100 > 79 characters)
+resync/core\pools\connection_pool_monitor.py:62:80: E501 line too long (81 > 79 characters)
+resync/core\pools\connection_pool_monitor.py:269:80: E501 line too long (83 > 79 characters)
+resync/core\pools\connection_pool_monitor.py:300:80: E501 line too long (81 > 79 characters)
+resync/core\pools\connection_pool_monitor.py:356:80: E501 line too long (131 > 79 characters)
+resync/core\pools\connection_pool_monitor.py:358:80: E501 line too long (138 > 79 characters)
+resync/core\pools\connection_pool_monitor.py:360:80: E501 line too long (127 > 79 characters)
+resync/core\pools\db_pool.py:6:80: E501 line too long (82 > 79 characters)
+resync/core\pools\db_pool.py:166:80: E501 line too long (83 > 79 characters)
+resync/core\pools\db_pool.py:175:80: E501 line too long (90 > 79 characters)
+resync/core\pools\db_pool.py:192:80: E501 line too long (81 > 79 characters)
+resync/core\pools\db_pool.py:202:80: E501 line too long (82 > 79 characters)
+resync/core\pools\db_pool.py:212:80: E501 line too long (87 > 79 characters)
+resync/core\pools\db_pool.py:215:80: E501 line too long (82 > 79 characters)
+resync/core\pools\db_pool.py:218:80: E501 line too long (87 > 79 characters)
+resync/core\pools\db_pool.py:230:80: E501 line too long (85 > 79 characters)
+resync/core\pools\db_pool.py:231:80: E501 line too long (86 > 79 characters)
+resync/core\pools\db_pool.py:249:80: E501 line too long (90 > 79 characters)
+resync/core\pools\db_pool.py:285:80: E501 line too long (84 > 79 characters)
+resync/core\pools\db_pool.py:287:80: E501 line too long (93 > 79 characters)
+resync/core\pools\db_pool.py:290:80: E501 line too long (81 > 79 characters)
+resync/core\pools\db_pool.py:316:80: E501 line too long (85 > 79 characters)
+resync/core\pools\db_pool.py:328:21: ASYNC120 checkpoint inside except on line 327 will discard the active exception if cancelled.
+resync/core\pools\db_pool.py:329:21: ASYNC120 checkpoint inside except on line 327 will discard the active exception if cancelled.
+resync/core\pools\db_pool.py:332:25: ASYNC120 checkpoint inside except on line 327 will discard the active exception if cancelled.
+resync/core\pools\db_pool.py:347:21: ASYNC120 checkpoint inside except on line 342 will discard the active exception if cancelled.
+resync/core\pools\db_pool.py:348:80: E501 line too long (89 > 79 characters)
+resync/core\pools\db_pool.py:351:25: ASYNC120 checkpoint inside except on line 342 will discard the active exception if cancelled.
+resync/core\pools\db_pool.py:365:13: ASYNC120 checkpoint inside except on line 363 will discard the active exception if cancelled.
+resync/core\pools\db_pool.py:366:13: ASYNC120 checkpoint inside except on line 363 will discard the active exception if cancelled.
+resync/core\pools\db_pool.py:377:80: E501 line too long (81 > 79 characters)
+resync/core\pools\db_pool.py:382:13: ASYNC120 checkpoint inside except on line 381 will discard the active exception if cancelled.
+resync/core\pools\db_pool.py:399:80: E501 line too long (89 > 79 characters)
+resync/core\pools\http_pool.py:62:80: E501 line too long (140 > 79 characters)
+resync/core\pools\http_pool.py:89:13: ASYNC120 checkpoint inside except on line 88 will discard the active exception if cancelled.
+resync/core\pools\http_pool.py:96:13: ASYNC102 await inside try/finally on line 78 must have shielded cancel scope with a timeout.
+resync/core\pools\http_pool.py:100:80: E501 line too long (96 > 79 characters)
+resync/core\pools\pool_manager.py:123:80: E501 line too long (85 > 79 characters)
+resync/core\pools\pool_manager.py:148:80: E501 line too long (88 > 79 characters)
+resync/core\pools\pool_manager.py:175:80: E501 line too long (87 > 79 characters)
+resync/core\rate_limiter.py:4:80: E501 line too long (91 > 79 characters)
+resync/core\rate_limiter.py:59:80: E501 line too long (82 > 79 characters)
+resync/core\rate_limiter.py:93:80: E501 line too long (95 > 79 characters)
+resync/core\rate_limiter.py:102:80: E501 line too long (99 > 79 characters)
+resync/core\rate_limiter.py:158:80: E501 line too long (82 > 79 characters)
+resync/core\redis_init.py:39:80: E501 line too long (92 > 79 characters)
+resync/core\redis_init.py:146:80: E501 line too long (81 > 79 characters)
+resync/core\redis_init.py:229:80: E501 line too long (83 > 79 characters)
+resync/core\redis_init.py:257:80: E501 line too long (95 > 79 characters)
+resync/core\redis_init.py:300:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/core\resilience\chucknorris_circuit_breaker.py:19:1: F401 'math' imported but unused
+resync/core\resilience\chucknorris_circuit_breaker.py:61:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:63:80: E501 line too long (92 > 79 characters)
+resync/core\resilience\chucknorris_circuit_breaker.py:64:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:70:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:72:80: E501 line too long (81 > 79 characters)
+resync/core\resilience\chucknorris_circuit_breaker.py:74:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:84:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:90:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:97:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:102:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:106:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:111:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:122:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:130:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:131:80: E501 line too long (82 > 79 characters)
+resync/core\resilience\chucknorris_circuit_breaker.py:134:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:139:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:141:80: E501 line too long (100 > 79 characters)
+resync/core\resilience\chucknorris_circuit_breaker.py:143:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:148:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:150:80: E501 line too long (108 > 79 characters)
+resync/core\resilience\chucknorris_circuit_breaker.py:152:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:156:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:158:80: E501 line too long (92 > 79 characters)
+resync/core\resilience\chucknorris_circuit_breaker.py:160:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:162:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:167:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:169:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:172:80: E501 line too long (87 > 79 characters)
+resync/core\resilience\chucknorris_circuit_breaker.py:173:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:175:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:180:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:182:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:188:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:190:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:194:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:197:80: E501 line too long (95 > 79 characters)
+resync/core\resilience\chucknorris_circuit_breaker.py:198:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:205:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:209:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:211:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:216:13: ASYNC120 checkpoint inside except on line 212 will discard the active exception if cancelled.
+resync/core\resilience\chucknorris_circuit_breaker.py:217:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:220:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:225:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:230:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:236:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:237:80: E501 line too long (104 > 79 characters)
+resync/core\resilience\chucknorris_circuit_breaker.py:240:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:241:80: E501 line too long (85 > 79 characters)
+resync/core\resilience\chucknorris_circuit_breaker.py:244:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:251:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:253:80: E501 line too long (95 > 79 characters)
+resync/core\resilience\chucknorris_circuit_breaker.py:255:80: E501 line too long (95 > 79 characters)
+resync/core\resilience\chucknorris_circuit_breaker.py:256:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:258:80: E501 line too long (96 > 79 characters)
+resync/core\resilience\chucknorris_circuit_breaker.py:260:80: E501 line too long (95 > 79 characters)
+resync/core\resilience\chucknorris_circuit_breaker.py:261:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:263:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:267:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:270:80: E501 line too long (82 > 79 characters)
+resync/core\resilience\chucknorris_circuit_breaker.py:272:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:279:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:282:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:285:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:310:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:314:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:319:80: E501 line too long (84 > 79 characters)
+resync/core\resilience\chucknorris_circuit_breaker.py:320:80: E501 line too long (83 > 79 characters)
+resync/core\resilience\chucknorris_circuit_breaker.py:325:80: E501 line too long (113 > 79 characters)
+resync/core\resilience\chucknorris_circuit_breaker.py:332:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:334:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:342:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:345:80: E501 line too long (110 > 79 characters)
+resync/core\resilience\chucknorris_circuit_breaker.py:346:80: E501 line too long (84 > 79 characters)
+resync/core\resilience\chucknorris_circuit_breaker.py:349:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:350:80: E501 line too long (113 > 79 characters)
+resync/core\resilience\chucknorris_circuit_breaker.py:359:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:366:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:373:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:376:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:379:9: F841 local variable 'current_time' is assigned to but never used
+resync/core\resilience\chucknorris_circuit_breaker.py:380:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:384:80: E501 line too long (89 > 79 characters)
+resync/core\resilience\chucknorris_circuit_breaker.py:385:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:388:80: E501 line too long (85 > 79 characters)
+resync/core\resilience\chucknorris_circuit_breaker.py:390:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:394:80: E501 line too long (90 > 79 characters)
+resync/core\resilience\chucknorris_circuit_breaker.py:395:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:396:80: E501 line too long (80 > 79 characters)
+resync/core\resilience\chucknorris_circuit_breaker.py:400:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:405:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:412:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:413:80: E501 line too long (116 > 79 characters)
+resync/core\resilience\chucknorris_circuit_breaker.py:414:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:419:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:426:80: E501 line too long (81 > 79 characters)
+resync/core\resilience\chucknorris_circuit_breaker.py:434:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:437:80: E501 line too long (90 > 79 characters)
+resync/core\resilience\chucknorris_circuit_breaker.py:439:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:441:80: E501 line too long (92 > 79 characters)
+resync/core\resilience\chucknorris_circuit_breaker.py:442:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:444:80: E501 line too long (92 > 79 characters)
+resync/core\resilience\chucknorris_circuit_breaker.py:446:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:448:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:453:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:456:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:458:80: E501 line too long (87 > 79 characters)
+resync/core\resilience\chucknorris_circuit_breaker.py:461:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:464:80: E501 line too long (87 > 79 characters)
+resync/core\resilience\chucknorris_circuit_breaker.py:466:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:468:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:471:80: E501 line too long (80 > 79 characters)
+resync/core\resilience\chucknorris_circuit_breaker.py:473:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:476:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:480:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:485:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:488:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:494:80: E501 line too long (92 > 79 characters)
+resync/core\resilience\chucknorris_circuit_breaker.py:495:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:499:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:502:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:513:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:518:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:520:80: E501 line too long (80 > 79 characters)
+resync/core\resilience\chucknorris_circuit_breaker.py:521:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:524:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:528:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:531:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:536:80: E501 line too long (89 > 79 characters)
+resync/core\resilience\chucknorris_circuit_breaker.py:542:80: E501 line too long (89 > 79 characters)
+resync/core\resilience\chucknorris_circuit_breaker.py:547:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:552:1: W293 blank line contains whitespace
+resync/core\resilience\chucknorris_circuit_breaker.py:556:80: E501 line too long (98 > 79 characters)
+resync/fastapi_app\main.py:62:1: E302 expected 2 blank lines, found 1
+resync/fastapi_app\main.py:63:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/fastapi_app\main.py:72:1: E302 expected 2 blank lines, found 1
+resync/fastapi_app\main.py:73:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/fastapi_app\main.py:77:1: E302 expected 2 blank lines, found 1
+resync/fastapi_app\main.py:78:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/fastapi_app\main.py:90:1: E302 expected 2 blank lines, found 1
+resync/fastapi_app\main.py:91:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/fastapi_app\main.py:101:1: E302 expected 2 blank lines, found 1
+resync/fastapi_app\main.py:102:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/fastapi_app\main.py:106:1: E302 expected 2 blank lines, found 1
+resync/fastapi_app\main.py:107:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/fastapi_app\main.py:111:1: E302 expected 2 blank lines, found 1
+resync/fastapi_app\main.py:112:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/fastapi_app\main.py:116:1: E302 expected 2 blank lines, found 1
+resync/fastapi_app\main.py:132:1: E302 expected 2 blank lines, found 1
+resync/fastapi_app\main.py:133:1: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/models\error_models.py:84:80: E501 line too long (85 > 79 characters)
+resync/models\error_models.py:108:80: E501 line too long (83 > 79 characters)
+resync/models\error_models.py:161:80: E501 line too long (81 > 79 characters)
+resync/models\error_models.py:190:80: E501 line too long (102 > 79 characters)
+resync/models\error_models.py:232:80: E501 line too long (87 > 79 characters)
+resync/models\error_models.py:253:80: E501 line too long (85 > 79 characters)
+resync/models\error_models.py:265:80: E501 line too long (102 > 79 characters)
+resync/models\error_models.py:275:80: E501 line too long (100 > 79 characters)
+resync/models\error_models.py:305:80: E501 line too long (105 > 79 characters)
+resync/models\error_models.py:314:80: E501 line too long (94 > 79 characters)
+resync/models\error_models.py:323:80: E501 line too long (87 > 79 characters)
+resync/models\error_models.py:350:80: E501 line too long (93 > 79 characters)
+resync/models\error_models.py:389:80: E501 line too long (93 > 79 characters)
+resync/models\error_models.py:410:80: E501 line too long (91 > 79 characters)
+resync/models\error_models.py:419:80: E501 line too long (109 > 79 characters)
+resync/models\error_models.py:453:80: E501 line too long (83 > 79 characters)
+resync/models\error_models.py:459:80: E501 line too long (120 > 79 characters)
+resync/models\error_models.py:492:80: E501 line too long (80 > 79 characters)
+resync/models\error_models.py:495:80: E501 line too long (109 > 79 characters)
+resync/models\error_models.py:503:80: E501 line too long (89 > 79 characters)
+resync/models\error_models.py:513:80: E501 line too long (109 > 79 characters)
+resync/models\tws.py:15:80: E501 line too long (86 > 79 characters)
+resync/models\tws.py:193:80: E501 line too long (83 > 79 characters)
+resync/models\validation.py:33:80: E501 line too long (80 > 79 characters)
+resync/models\validation.py:348:80: E501 line too long (88 > 79 characters)
+resync/models\validation.py:371:80: E501 line too long (86 > 79 characters)
+resync/models\validation.py:372:80: E501 line too long (80 > 79 characters)
+resync/services\http_client_factory.py:93:1: E305 expected 2 blank lines after class or function definition, found 1
+resync/services\llm_service.py:53:80: E501 line too long (84 > 79 characters)
+resync/services\llm_service.py:62:80: E501 line too long (80 > 79 characters)
+resync/services\llm_service.py:115:80: E501 line too long (92 > 79 characters)
+resync/services\llm_service.py:144:80: E501 line too long (84 > 79 characters)
+resync/services\llm_service.py:162:80: E501 line too long (84 > 79 characters)
+resync/services\llm_service.py:181:80: E501 line too long (88 > 79 characters)
+resync/services\llm_service.py:201:80: E501 line too long (95 > 79 characters)
+resync/services\llm_service.py:202:80: E501 line too long (81 > 79 characters)
+resync/services\llm_service.py:305:80: E501 line too long (83 > 79 characters)
+resync/services\llm_service.py:353:80: E501 line too long (87 > 79 characters)
+resync/services\llm_service.py:454:80: E501 line too long (84 > 79 characters)
+resync/services\llm_service.py:455:80: E501 line too long (86 > 79 characters)
+resync/services\llm_service.py:462:80: E501 line too long (87 > 79 characters)
+resync/services\llm_service.py:528:80: E501 line too long (81 > 79 characters)
+resync/services\llm_service.py:530:80: E501 line too long (91 > 79 characters)
+resync/services\llm_service.py:621:80: E501 line too long (83 > 79 characters)
+resync/services\llm_service.py:640:80: E501 line too long (85 > 79 characters)
+resync/services\mock_tws_service.py:65:80: E501 line too long (86 > 79 characters)
+resync/services\mock_tws_service.py:115:80: E501 line too long (86 > 79 characters)
+resync/services\mock_tws_service.py:240:80: E501 line too long (80 > 79 characters)
+resync/services\mock_tws_service.py:375:80: E501 line too long (112 > 79 characters)
+resync/services\mock_tws_service.py:510:5: E303 too many blank lines (2)
+resync/services\mock_tws_service.py:566:80: E501 line too long (82 > 79 characters)
+resync/services\rag_client.py:4:80: E501 line too long (82 > 79 characters)
+resync/services\tws_service.py:3:80: E501 line too long (82 > 79 characters)
+resync/services\tws_service.py:54:80: E501 line too long (87 > 79 characters)
+resync/services\tws_service.py:55:80: E501 line too long (86 > 79 characters)
+resync/services\tws_service.py:72:80: E501 line too long (83 > 79 characters)
+resync/services\tws_service.py:109:80: E501 line too long (82 > 79 characters)
+resync/services\tws_service.py:143:80: E501 line too long (87 > 79 characters)
+resync/services\tws_service.py:228:80: E501 line too long (87 > 79 characters)
+resync/services\tws_service.py:231:80: E501 line too long (89 > 79 characters)
+resync/services\tws_service.py:309:80: E501 line too long (97 > 79 characters)
+resync/services\tws_service.py:346:80: E501 line too long (99 > 79 characters)
+resync/services\tws_service.py:377:80: E501 line too long (85 > 79 characters)
+resync/services\tws_service.py:470:80: E501 line too long (108 > 79 characters)
+resync/services\tws_service.py:544:80: E501 line too long (118 > 79 characters)
+resync/services\tws_service.py:622:80: E501 line too long (112 > 79 characters)
+resync/services\tws_service.py:730:80: E501 line too long (121 > 79 characters)
+resync/services\tws_service.py:774:80: E501 line too long (94 > 79 characters)
+resync/services\tws_service.py:840:80: E501 line too long (106 > 79 characters)
+resync/services\tws_service.py:908:80: E501 line too long (87 > 79 characters)
+resync/services\tws_service.py:971:80: E501 line too long (83 > 79 characters)
+resync/services\tws_service.py:995:80: E501 line too long (124 > 79 characters)
+resync/services\tws_service.py:1002:80: E501 line too long (86 > 79 characters)
+resync/services\tws_service.py:1005:80: E501 line too long (107 > 79 characters)
+resync/services\tws_service.py:1053:80: E501 line too long (108 > 79 characters)
+resync/services\tws_service.py:1099:80: E501 line too long (84 > 79 characters)
+resync/services\tws_service.py:1138:80: E501 line too long (83 > 79 characters)
+resync/services\tws_service.py:1142:80: E501 line too long (91 > 79 characters)
+resync/services\tws_service.py:1149:80: E501 line too long (82 > 79 characters)
+resync/services\tws_service.py:1159:80: E501 line too long (85 > 79 characters)
+resync/services\tws_service.py:1161:80: E501 line too long (85 > 79 characters)
+resync/services\tws_service.py:1180:80: E501 line too long (85 > 79 characters)
+resync/services\tws_service.py:1216:80: E501 line too long (84 > 79 characters)
+resync/utils\common_error_handlers.py:147:29: ASYNC120 checkpoint inside except on line 141 will discard the active exception if cancelled.
+resync/utils\error_factories.py:4:80: E501 line too long (84 > 79 characters)
+resync/utils\error_factories.py:5:80: E501 line too long (93 > 79 characters)
+resync/utils\error_factories.py:70:80: E501 line too long (90 > 79 characters)
+resync/utils\error_factories.py:85:80: E501 line too long (85 > 79 characters)
+resync/utils\error_factories.py:96:80: E501 line too long (82 > 79 characters)
+resync/utils\error_factories.py:146:80: E501 line too long (85 > 79 characters)
+resync/utils\error_factories.py:164:80: E501 line too long (87 > 79 characters)
+resync/utils\error_utils.py:255:80: E501 line too long (86 > 79 characters)
+resync/utils\error_utils.py:331:80: E501 line too long (114 > 79 characters)
+resync/utils\error_utils.py:385:80: E501 line too long (81 > 79 characters)
+resync/utils\error_utils.py:439:5: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/utils\error_utils.py:456:5: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/utils\error_utils.py:495:5: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/utils\error_utils.py:509:5: ASYNC124 Async function with no `await` could be sync. Async functions are more expensive to call.
+resync/utils\error_utils.py:529:80: E501 line too long (93 > 79 characters)
+resync/utils\exceptions.py:3:80: E501 line too long (89 > 79 characters)
+resync/utils\exceptions.py:714:80: E501 line too long (80 > 79 characters)
+resync/utils\exceptions.py:864:80: E501 line too long (80 > 79 characters)
+resync/utils\interfaces.py:17:80: E501 line too long (86 > 79 characters)
+resync/utils\interfaces.py:21:80: E501 line too long (86 > 79 characters)
+resync/utils\interfaces.py:47:80: E501 line too long (81 > 79 characters)
+resync/utils\interfaces.py:53:80: E501 line too long (81 > 79 characters)
+resync/utils\interfaces.py:101:80: E501 line too long (87 > 79 characters)
+resync/utils\interfaces.py:105:80: E501 line too long (87 > 79 characters)
+resync/utils\interfaces.py:155:80: E501 line too long (85 > 79 characters)
+resync/utils\interfaces.py:161:80: E501 line too long (85 > 79 characters)
+resync/utils\interfaces.py:165:80: E501 line too long (87 > 79 characters)
+resync/utils\interfaces.py:169:80: E501 line too long (87 > 79 characters)
+resync/utils\json_commands.py:4:80: E501 line too long (84 > 79 characters)
+resync/utils\json_commands.py:61:80: E501 line too long (82 > 79 characters)
+resync/utils\json_commands.py:71:46: E203 whitespace before ':'
+resync/utils\json_commands.py:113:80: E501 line too long (92 > 79 characters)
+resync/utils\llm.py:48:80: E501 line too long (92 > 79 characters)
+resync/utils\llm_factories.py:4:80: E501 line too long (90 > 79 characters)
+resync/utils\llm_factories.py:29:80: E501 line too long (91 > 79 characters)
+resync/utils\llm_factories.py:61:80: E501 line too long (84 > 79 characters)
+resync/utils\llm_factories.py:63:80: E501 line too long (108 > 79 characters)
+resync/utils\resource_managers.py:2:80: E501 line too long (80 > 79 characters)
+resync/utils\resource_managers.py:4:80: E501 line too long (87 > 79 characters)
+resync/utils\resource_managers.py:181:80: E501 line too long (93 > 79 characters)
+resync/utils\resource_managers.py:182:31: E221 multiple spaces before operator
+resync/utils\resource_managers.py:182:80: E501 line too long (97 > 79 characters)
+resync/utils\resource_managers.py:183:17: E731 do not assign a lambda expression, use a def
+resync/utils\resource_managers.py:183:80: E501 line too long (123 > 79 characters)
+resync/utils\resource_managers.py:187:80: E501 line too long (81 > 79 characters)
+resync/utils\resource_managers.py:349:9: ASYNC120 checkpoint inside except on line 348 will discard the active exception if cancelled.
+resync/utils\simple_logger.py:4:80: E501 line too long (80 > 79 characters)
+resync/utils\simple_logger.py:199:80: E501 line too long (80 > 79 characters)
+resync/utils\test_agent_manager.py:53:80: E501 line too long (88 > 79 characters)
+resync/utils\test_agent_manager.py:64:80: E501 line too long (85 > 79 characters)
+resync/utils\test_json_parser.py:9:80: E501 line too long (86 > 79 characters)
+resync/utils\test_llm.py:50:80: E501 line too long (83 > 79 characters)
+resync/utils\test_llm.py:73:80: E501 line too long (81 > 79 characters)
+resync/utils\test_llm.py:84:80: E501 line too long (83 > 79 characters)
+resync/utils\test_llm.py:87:80: E501 line too long (82 > 79 characters)
+resync/utils\test_llm.py:107:80: E501 line too long (81 > 79 characters)
+resync/utils\test_tws_tools.py:52:80: E501 line too long (80 > 79 characters)
+resync/utils\test_tws_tools.py:66:80: E501 line too long (84 > 79 characters)
+resync/utils\validation.py:175:80: E501 line too long (90 > 79 characters)
+resync/utils\validation.py:201:80: E501 line too long (101 > 79 characters)
+resync/utils\validation.py:251:80: E501 line too long (81 > 79 characters)

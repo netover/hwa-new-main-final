@@ -1,0 +1,24 @@
+groups:
+  - name: resync-recording
+    rules:
+      # Pre-aggregate p95 latency per HTTP route
+      - record: resync:http:p95_latency_seconds:5m
+        expr: |
+          histogram_quantile(
+            0.95,
+            sum by (route, le) (rate(resync_http_request_latency_seconds_bucket[5m]))
+          )
+      # Compute error rate over 5 minute window
+      - record: resync:http:error_rate:5m
+        expr: |
+          sum(rate(resync_http_errors_total[5m]))
+            /
+          sum(rate(resync_http_requests_total[5m]))
+      # Calculate SLA on-time percentage (per stream) over 5 min window
+      - record: resync:sla:on_time_pct:5m
+        expr: |
+          100 * (
+            sum(increase(resync_jobs_on_time_total[5m]))
+              /
+            clamp_min(sum(increase(resync_jobs_on_time_total[5m]) + increase(resync_jobs_late_total[5m])), 1)
+          )

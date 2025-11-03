@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resync - Relatórios</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        .report-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+        .report-card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            padding: 1rem;
+        }
+        .report-card h3 {
+            margin-top: 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table th, table td {
+            padding: 0.5rem;
+            border-bottom: 1px solid #eee;
+        }
+        table th {
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav style="margin-bottom: 1rem;">
+            <ul style="list-style: none; display: flex; gap: 1rem; padding: 0;">
+                <li><a href="/">Dashboard</a></li>
+                <li><a href="/reports">Relatórios</a></li>
+                <li><a href="/incidents">Incidentes</a></li>
+            </ul>
+        </nav>
+        <header>
+            <h1>Relatórios</h1>
+            <p>Visão consolidada de operações, confiabilidade, SLA e performance.</p>
+        </header>
+        <main>
+            <div class="report-grid">
+                <div class="report-card" id="operations-report">
+                    <h3>Operações</h3>
+                    <p>Total de Jobs: <span id="ops-total">--</span></p>
+                    <p>Executados: <span id="ops-executed">--</span></p>
+                    <p>Pendentes: <span id="ops-pending">--</span></p>
+                    <p>Falhos: <span id="ops-failed">--</span></p>
+                    <h4>Top Flows com Falhas</h4>
+                    <table id="ops-top-flows-table">
+                        <thead>
+                            <tr><th>Fluxo</th><th>Falhas</th></tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                    <h4>Backlog por Workstation</h4>
+                    <table id="ops-backlog-table">
+                        <thead>
+                            <tr><th>Workstation</th><th>Backlog</th></tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="report-card" id="reliability-report">
+                    <h3>Confiabilidade</h3>
+                    <p>MTTA (min): <span id="rel-mtta">--</span></p>
+                    <p>MTTR (min): <span id="rel-mttr">--</span></p>
+                    <h4>Flaky Jobs</h4>
+                    <table id="rel-flaky-table">
+                        <thead><tr><th>Job</th><th>Taxa de Falha</th></tr></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="report-card" id="sla-report">
+                    <h3>SLA</h3>
+                    <p>SLAs Definidos: <span id="sla-defined">--</span></p>
+                    <p>SLAs Cumpridos: <span id="sla-met">--</span></p>
+                    <p>Drift Médio (min): <span id="sla-drift-mean">--</span></p>
+                    <p>Drift p95 (min): <span id="sla-drift-p95">--</span></p>
+                    <h4>Mapa de Risco (por hora)</h4>
+                    <table id="sla-risk-table">
+                        <thead><tr><th>Hora</th><th>Falhas</th></tr></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="report-card" id="perf-report">
+                    <h3>Performance</h3>
+                    <p>Latência Média API (ms): <span id="perf-latency">--</span></p>
+                    <p>Erros API: <span id="perf-errors">--</span></p>
+                    <h4>Utilização de Recursos</h4>
+                    <table id="perf-util-table">
+                        <thead><tr><th>Recurso</th><th>Usado</th><th>Total</th><th>%</th></tr></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+        <footer>
+            <p>Relatórios Resync &copy; 2024</p>
+        </footer>
+    </div>
+    <script nonce="{{ request.state.csp_nonce | default('') }}">
+    document.addEventListener('DOMContentLoaded', () => {
+        // Fetch all reports concurrently
+        Promise.all([
+            fetch('/api/v1/reports/operations'),
+            fetch('/api/v1/reports/reliability'),
+            fetch('/api/v1/reports/sla'),
+            fetch('/api/v1/reports/perf'),
+        ]).then(async ([opsResp, relResp, slaResp, perfResp]) => {
+            const ops = await opsResp.json();
+            const rel = await relResp.json();
+            const sla = await slaResp.json();
+            const perf = await perfResp.json();
+            // Operations
+            document.getElementById('ops-total').textContent = ops.total_jobs;
+            document.getElementById('ops-executed').textContent = ops.executed;
+            document.getElementById('ops-pending').textContent = ops.pending;
+            document.getElementById('ops-failed').textContent = ops.failed;
+            // Top flows
+            const topBody = document.querySelector('#ops-top-flows-table tbody');
+            topBody.innerHTML = '';
+            (ops.top_failed_flows || []).forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td>${item.job_stream}</td><td>${item.failures}</td>`;
+                topBody.appendChild(row);
+            });
+            // Backlog
+            const backlogBody = document.querySelector('#ops-backlog-table tbody');
+            backlogBody.innerHTML = '';
+            Object.entries(ops.backlog || {}).forEach(([ws, count]) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td>${ws}</td><td>${count}</td>`;
+                backlogBody.appendChild(row);
+            });
+            // Reliability
+            document.getElementById('rel-mtta').textContent = rel.mtta_minutes;
+            document.getElementById('rel-mttr').textContent = rel.mttr_minutes;
+            const flakyBody = document.querySelector('#rel-flaky-table tbody');
+            flakyBody.innerHTML = '';
+            (rel.flaky_jobs || []).forEach(item => {
+                const row = document.createElement('tr');
+                const rate = (item.failure_rate * 100).toFixed(1) + '%';
+                row.innerHTML = `<td>${item.job || item.job_name || item.job_stream || ''}</td><td>${rate}</td>`;
+                flakyBody.appendChild(row);
+            });
+            // SLA
+            document.getElementById('sla-defined').textContent = sla.slas_defined;
+            document.getElementById('sla-met').textContent = sla.slas_met;
+            document.getElementById('sla-drift-mean').textContent = sla.drift_mean_minutes;
+            document.getElementById('sla-drift-p95').textContent = sla.drift_p95_minutes;
+            const riskBody = document.querySelector('#sla-risk-table tbody');
+            riskBody.innerHTML = '';
+            Object.entries(sla.risk_map || {}).forEach(([hour, count]) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td>${hour}</td><td>${count}</td>`;
+                riskBody.appendChild(row);
+            });
+            // Performance
+            document.getElementById('perf-latency').textContent = perf.api_avg_latency_ms.toFixed(2);
+            document.getElementById('perf-errors').textContent = perf.api_error_count;
+            const utilBody = document.querySelector('#perf-util-table tbody');
+            utilBody.innerHTML = '';
+            Object.entries(perf.resource_utilisation || {}).forEach(([res, data]) => {
+                const row = document.createElement('tr');
+                const pct = data.utilization_percentage !== null && data.utilization_percentage !== undefined ? data.utilization_percentage.toFixed(1) + '%' : '--';
+                row.innerHTML = `<td>${res}</td><td>${data.used ?? '--'}</td><td>${data.total ?? '--'}</td><td>${pct}</td>`;
+                utilBody.appendChild(row);
+            });
+        }).catch(err => {
+            console.error('Erro ao carregar relatórios:', err);
+        });
+    });
+    </script>
+</body>
+</html>

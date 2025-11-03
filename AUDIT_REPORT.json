@@ -1,0 +1,1619 @@
+{
+  "files": [
+    {
+      "file": "resync\\main.py",
+      "loc": 272,
+      "sloc": 177,
+      "functions": 1,
+      "classes": 1,
+      "imports": 47,
+      "complexities": [],
+      "type_hint_coverage": 0.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\settings.py",
+      "loc": 223,
+      "sloc": 152,
+      "functions": 7,
+      "classes": 3,
+      "imports": 8,
+      "complexities": [],
+      "type_hint_coverage": 28.57,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\test_agents.py",
+      "loc": 102,
+      "sloc": 69,
+      "functions": 4,
+      "classes": 0,
+      "imports": 6,
+      "complexities": [],
+      "type_hint_coverage": 0.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\__init__.py",
+      "loc": 1,
+      "sloc": 0,
+      "functions": 0,
+      "classes": 0,
+      "imports": 0,
+      "complexities": [],
+      "type_hint_coverage": 0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\api\\admin.py",
+      "loc": 357,
+      "sloc": 284,
+      "functions": 0,
+      "classes": 3,
+      "imports": 15,
+      "complexities": [],
+      "type_hint_coverage": 0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\api\\agents.py",
+      "loc": 46,
+      "sloc": 33,
+      "functions": 0,
+      "classes": 0,
+      "imports": 8,
+      "complexities": [],
+      "type_hint_coverage": 0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\api\\audit.py",
+      "loc": 433,
+      "sloc": 351,
+      "functions": 8,
+      "classes": 4,
+      "imports": 11,
+      "complexities": [],
+      "type_hint_coverage": 87.5,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\api\\auth.py",
+      "loc": 88,
+      "sloc": 65,
+      "functions": 3,
+      "classes": 0,
+      "imports": 8,
+      "complexities": [],
+      "type_hint_coverage": 66.67,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\api\\cache.py",
+      "loc": 426,
+      "sloc": 329,
+      "functions": 10,
+      "classes": 4,
+      "imports": 13,
+      "complexities": [],
+      "type_hint_coverage": 100.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\api\\chat.py",
+      "loc": 367,
+      "sloc": 289,
+      "functions": 1,
+      "classes": 0,
+      "imports": 12,
+      "complexities": [],
+      "type_hint_coverage": 100.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\api\\cors_monitoring.py",
+      "loc": 218,
+      "sloc": 165,
+      "functions": 0,
+      "classes": 3,
+      "imports": 13,
+      "complexities": [],
+      "type_hint_coverage": 0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\api\\endpoints.py",
+      "loc": 668,
+      "sloc": 525,
+      "functions": 5,
+      "classes": 10,
+      "imports": 27,
+      "complexities": [],
+      "type_hint_coverage": 80.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\api\\health.py",
+      "loc": 447,
+      "sloc": 364,
+      "functions": 0,
+      "classes": 4,
+      "imports": 8,
+      "complexities": [],
+      "type_hint_coverage": 0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\api\\models.py",
+      "loc": 90,
+      "sloc": 55,
+      "functions": 0,
+      "classes": 13,
+      "imports": 5,
+      "complexities": [],
+      "type_hint_coverage": 0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\api\\performance.py",
+      "loc": 293,
+      "sloc": 240,
+      "functions": 0,
+      "classes": 0,
+      "imports": 8,
+      "complexities": [],
+      "type_hint_coverage": 0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\api\\rag_upload.py",
+      "loc": 84,
+      "sloc": 59,
+      "functions": 0,
+      "classes": 0,
+      "imports": 9,
+      "complexities": [],
+      "type_hint_coverage": 0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\api\\__init__.py",
+      "loc": 1,
+      "sloc": 0,
+      "functions": 0,
+      "classes": 0,
+      "imports": 0,
+      "complexities": [],
+      "type_hint_coverage": 0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\api_gateway\\container.py",
+      "loc": 157,
+      "sloc": 112,
+      "functions": 9,
+      "classes": 2,
+      "imports": 7,
+      "complexities": [],
+      "type_hint_coverage": 88.89,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\api_gateway\\core.py",
+      "loc": 235,
+      "sloc": 172,
+      "functions": 3,
+      "classes": 6,
+      "imports": 10,
+      "complexities": [],
+      "type_hint_coverage": 66.67,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\api_gateway\\services.py",
+      "loc": 295,
+      "sloc": 226,
+      "functions": 6,
+      "classes": 7,
+      "imports": 8,
+      "complexities": [],
+      "type_hint_coverage": 100.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\api_gateway\\__init__.py",
+      "loc": 7,
+      "sloc": 6,
+      "functions": 0,
+      "classes": 0,
+      "imports": 0,
+      "complexities": [],
+      "type_hint_coverage": 0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\config\\cors.py",
+      "loc": 122,
+      "sloc": 93,
+      "functions": 3,
+      "classes": 0,
+      "imports": 7,
+      "complexities": [],
+      "type_hint_coverage": 100.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\config\\csp.py",
+      "loc": 60,
+      "sloc": 40,
+      "functions": 1,
+      "classes": 1,
+      "imports": 9,
+      "complexities": [],
+      "type_hint_coverage": 100.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\config\\security.py",
+      "loc": 46,
+      "sloc": 28,
+      "functions": 1,
+      "classes": 1,
+      "imports": 6,
+      "complexities": [],
+      "type_hint_coverage": 100.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\agent_manager.py",
+      "loc": 714,
+      "sloc": 594,
+      "functions": 6,
+      "classes": 4,
+      "imports": 17,
+      "complexities": [],
+      "type_hint_coverage": 83.33,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\app_context.py",
+      "loc": 32,
+      "sloc": 22,
+      "functions": 4,
+      "classes": 1,
+      "imports": 2,
+      "complexities": [],
+      "type_hint_coverage": 100.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\async_cache.py",
+      "loc": 1482,
+      "sloc": 1213,
+      "functions": 17,
+      "classes": 2,
+      "imports": 12,
+      "complexities": [],
+      "type_hint_coverage": 100.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\audit_db.py",
+      "loc": 332,
+      "sloc": 275,
+      "functions": 9,
+      "classes": 0,
+      "imports": 6,
+      "complexities": [],
+      "type_hint_coverage": 100.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\audit_lock.py",
+      "loc": 352,
+      "sloc": 272,
+      "functions": 4,
+      "classes": 2,
+      "imports": 8,
+      "complexities": [],
+      "type_hint_coverage": 100.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\audit_log.py",
+      "loc": 273,
+      "sloc": 223,
+      "functions": 9,
+      "classes": 2,
+      "imports": 10,
+      "complexities": [],
+      "type_hint_coverage": 66.67,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\audit_queue.py",
+      "loc": 755,
+      "sloc": 590,
+      "functions": 9,
+      "classes": 2,
+      "imports": 22,
+      "complexities": [],
+      "type_hint_coverage": 100.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\cache_hierarchy.py",
+      "loc": 280,
+      "sloc": 234,
+      "functions": 10,
+      "classes": 3,
+      "imports": 10,
+      "complexities": [],
+      "type_hint_coverage": 100.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\chaos_engineering.py",
+      "loc": 1072,
+      "sloc": 857,
+      "functions": 9,
+      "classes": 4,
+      "imports": 20,
+      "complexities": [],
+      "type_hint_coverage": 55.56,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\circuit_breaker.py",
+      "loc": 217,
+      "sloc": 174,
+      "functions": 3,
+      "classes": 5,
+      "imports": 7,
+      "complexities": [],
+      "type_hint_coverage": 100.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\config_watcher.py",
+      "loc": 45,
+      "sloc": 30,
+      "functions": 0,
+      "classes": 0,
+      "imports": 7,
+      "complexities": [],
+      "type_hint_coverage": 0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\connection_manager.py",
+      "loc": 187,
+      "sloc": 145,
+      "functions": 2,
+      "classes": 1,
+      "imports": 5,
+      "complexities": [],
+      "type_hint_coverage": 100.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\connection_pool_manager.py",
+      "loc": 23,
+      "sloc": 20,
+      "functions": 0,
+      "classes": 0,
+      "imports": 5,
+      "complexities": [],
+      "type_hint_coverage": 0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\container.py",
+      "loc": 57,
+      "sloc": 39,
+      "functions": 2,
+      "classes": 0,
+      "imports": 7,
+      "complexities": [],
+      "type_hint_coverage": 50.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\csp_jinja_extension.py",
+      "loc": 71,
+      "sloc": 46,
+      "functions": 4,
+      "classes": 1,
+      "imports": 4,
+      "complexities": [],
+      "type_hint_coverage": 75.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\csp_template_response.py",
+      "loc": 100,
+      "sloc": 80,
+      "functions": 2,
+      "classes": 1,
+      "imports": 3,
+      "complexities": [],
+      "type_hint_coverage": 100.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\dependencies.py",
+      "loc": 45,
+      "sloc": 32,
+      "functions": 0,
+      "classes": 0,
+      "imports": 7,
+      "complexities": [],
+      "type_hint_coverage": 0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\di_container.py",
+      "loc": 535,
+      "sloc": 404,
+      "functions": 10,
+      "classes": 5,
+      "imports": 6,
+      "complexities": [],
+      "type_hint_coverage": 90.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\encryption_service.py",
+      "loc": 83,
+      "sloc": 56,
+      "functions": 5,
+      "classes": 1,
+      "imports": 5,
+      "complexities": [],
+      "type_hint_coverage": 100.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\enhanced_async_cache.py",
+      "loc": 401,
+      "sloc": 300,
+      "functions": 9,
+      "classes": 5,
+      "imports": 8,
+      "complexities": [],
+      "type_hint_coverage": 100.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\exceptions.py",
+      "loc": 112,
+      "sloc": 60,
+      "functions": 1,
+      "classes": 25,
+      "imports": 0,
+      "complexities": [],
+      "type_hint_coverage": 100.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\exceptions_enhanced.py",
+      "loc": 432,
+      "sloc": 312,
+      "functions": 67,
+      "classes": 22,
+      "imports": 3,
+      "complexities": [],
+      "type_hint_coverage": 100.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\fastapi_di.py",
+      "loc": 282,
+      "sloc": 211,
+      "functions": 11,
+      "classes": 1,
+      "imports": 17,
+      "complexities": [],
+      "type_hint_coverage": 72.73,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\file_ingestor.py",
+      "loc": 644,
+      "sloc": 518,
+      "functions": 13,
+      "classes": 1,
+      "imports": 17,
+      "complexities": [],
+      "type_hint_coverage": 100.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\header_parser.py",
+      "loc": 79,
+      "sloc": 62,
+      "functions": 5,
+      "classes": 2,
+      "imports": 2,
+      "complexities": [],
+      "type_hint_coverage": 100.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\health_config.py",
+      "loc": 68,
+      "sloc": 49,
+      "functions": 1,
+      "classes": 2,
+      "imports": 3,
+      "complexities": [],
+      "type_hint_coverage": 100.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\health_models.py",
+      "loc": 130,
+      "sloc": 109,
+      "functions": 3,
+      "classes": 7,
+      "imports": 5,
+      "complexities": [],
+      "type_hint_coverage": 100.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\health_service.py",
+      "loc": 1254,
+      "sloc": 960,
+      "functions": 9,
+      "classes": 2,
+      "imports": 18,
+      "complexities": [],
+      "type_hint_coverage": 100.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\health_service_complete.py",
+      "loc": 709,
+      "sloc": 578,
+      "functions": 6,
+      "classes": 1,
+      "imports": 16,
+      "complexities": [],
+      "type_hint_coverage": 100.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\ia_auditor.py",
+      "loc": 272,
+      "sloc": 216,
+      "functions": 0,
+      "classes": 0,
+      "imports": 11,
+      "complexities": [],
+      "type_hint_coverage": 0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\interfaces.py",
+      "loc": 189,
+      "sloc": 143,
+      "functions": 1,
+      "classes": 6,
+      "imports": 3,
+      "complexities": [],
+      "type_hint_coverage": 100.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\knowledge_graph.py",
+      "loc": 305,
+      "sloc": 264,
+      "functions": 1,
+      "classes": 1,
+      "imports": 6,
+      "complexities": [],
+      "type_hint_coverage": 0.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\lifecycle.py",
+      "loc": 195,
+      "sloc": 133,
+      "functions": 3,
+      "classes": 1,
+      "imports": 9,
+      "complexities": [],
+      "type_hint_coverage": 66.67,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\litellm_init.py",
+      "loc": 91,
+      "sloc": 64,
+      "functions": 3,
+      "classes": 0,
+      "imports": 7,
+      "complexities": [],
+      "type_hint_coverage": 0.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\llm_monitor.py",
+      "loc": 255,
+      "sloc": 191,
+      "functions": 5,
+      "classes": 4,
+      "imports": 9,
+      "complexities": [],
+      "type_hint_coverage": 80.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\llm_optimizer.py",
+      "loc": 329,
+      "sloc": 244,
+      "functions": 4,
+      "classes": 1,
+      "imports": 14,
+      "complexities": [],
+      "type_hint_coverage": 75.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\llm_wrapper.py",
+      "loc": 70,
+      "sloc": 53,
+      "functions": 2,
+      "classes": 1,
+      "imports": 5,
+      "complexities": [],
+      "type_hint_coverage": 50.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\logger.py",
+      "loc": 193,
+      "sloc": 149,
+      "functions": 4,
+      "classes": 0,
+      "imports": 10,
+      "complexities": [],
+      "type_hint_coverage": 75.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\metrics.py",
+      "loc": 273,
+      "sloc": 212,
+      "functions": 16,
+      "classes": 4,
+      "imports": 7,
+      "complexities": [],
+      "type_hint_coverage": 100.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\performance_optimizer.py",
+      "loc": 517,
+      "sloc": 397,
+      "functions": 10,
+      "classes": 6,
+      "imports": 9,
+      "complexities": [],
+      "type_hint_coverage": 80.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\rag_watcher.py",
+      "loc": 36,
+      "sloc": 22,
+      "functions": 0,
+      "classes": 0,
+      "imports": 7,
+      "complexities": [],
+      "type_hint_coverage": 0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\rate_limiter.py",
+      "loc": 195,
+      "sloc": 130,
+      "functions": 11,
+      "classes": 1,
+      "imports": 9,
+      "complexities": [],
+      "type_hint_coverage": 81.82,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\resilience.py",
+      "loc": 183,
+      "sloc": 151,
+      "functions": 11,
+      "classes": 2,
+      "imports": 9,
+      "complexities": [],
+      "type_hint_coverage": 45.45,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\resource_manager.py",
+      "loc": 445,
+      "sloc": 351,
+      "functions": 15,
+      "classes": 7,
+      "imports": 8,
+      "complexities": [],
+      "type_hint_coverage": 80.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\retry.py",
+      "loc": 228,
+      "sloc": 193,
+      "functions": 5,
+      "classes": 0,
+      "imports": 4,
+      "complexities": [],
+      "type_hint_coverage": 100.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\security.py",
+      "loc": 174,
+      "sloc": 127,
+      "functions": 5,
+      "classes": 1,
+      "imports": 4,
+      "complexities": [],
+      "type_hint_coverage": 100.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\stress_testing.py",
+      "loc": 656,
+      "sloc": 494,
+      "functions": 3,
+      "classes": 3,
+      "imports": 15,
+      "complexities": [],
+      "type_hint_coverage": 66.67,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\teams_integration.py",
+      "loc": 362,
+      "sloc": 281,
+      "functions": 3,
+      "classes": 3,
+      "imports": 8,
+      "complexities": [],
+      "type_hint_coverage": 100.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\tws_monitor.py",
+      "loc": 507,
+      "sloc": 383,
+      "functions": 5,
+      "classes": 4,
+      "imports": 11,
+      "complexities": [],
+      "type_hint_coverage": 100.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\websocket_pool_manager.py",
+      "loc": 524,
+      "sloc": 395,
+      "functions": 7,
+      "classes": 3,
+      "imports": 10,
+      "complexities": [],
+      "type_hint_coverage": 71.43,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\__init__.py",
+      "loc": 670,
+      "sloc": 518,
+      "functions": 27,
+      "classes": 4,
+      "imports": 16,
+      "complexities": [],
+      "type_hint_coverage": 81.48,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\cqrs\\base.py",
+      "loc": 93,
+      "sloc": 71,
+      "functions": 0,
+      "classes": 6,
+      "imports": 4,
+      "complexities": [],
+      "type_hint_coverage": 0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\cqrs\\commands.py",
+      "loc": 72,
+      "sloc": 56,
+      "functions": 0,
+      "classes": 8,
+      "imports": 4,
+      "complexities": [],
+      "type_hint_coverage": 0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\cqrs\\command_handlers.py",
+      "loc": 193,
+      "sloc": 156,
+      "functions": 8,
+      "classes": 8,
+      "imports": 6,
+      "complexities": [],
+      "type_hint_coverage": 100.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\cqrs\\dispatcher.py",
+      "loc": 135,
+      "sloc": 117,
+      "functions": 4,
+      "classes": 1,
+      "imports": 6,
+      "complexities": [],
+      "type_hint_coverage": 50.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\cqrs\\queries.py",
+      "loc": 88,
+      "sloc": 68,
+      "functions": 0,
+      "classes": 10,
+      "imports": 4,
+      "complexities": [],
+      "type_hint_coverage": 0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\cqrs\\query_handlers.py",
+      "loc": 337,
+      "sloc": 255,
+      "functions": 10,
+      "classes": 10,
+      "imports": 6,
+      "complexities": [],
+      "type_hint_coverage": 100.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\cqrs\\__init__.py",
+      "loc": 6,
+      "sloc": 5,
+      "functions": 0,
+      "classes": 0,
+      "imports": 0,
+      "complexities": [],
+      "type_hint_coverage": 0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\models\\error_models.py",
+      "loc": 288,
+      "sloc": 246,
+      "functions": 12,
+      "classes": 12,
+      "imports": 5,
+      "complexities": [],
+      "type_hint_coverage": 100.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\models\\tws.py",
+      "loc": 50,
+      "sloc": 35,
+      "functions": 0,
+      "classes": 4,
+      "imports": 3,
+      "complexities": [],
+      "type_hint_coverage": 0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\models\\validation.py",
+      "loc": 376,
+      "sloc": 303,
+      "functions": 16,
+      "classes": 4,
+      "imports": 5,
+      "complexities": [],
+      "type_hint_coverage": 100.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\models\\__init__.py",
+      "loc": 1,
+      "sloc": 0,
+      "functions": 0,
+      "classes": 0,
+      "imports": 0,
+      "complexities": [],
+      "type_hint_coverage": 0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\security\\oauth2.py",
+      "loc": 90,
+      "sloc": 62,
+      "functions": 4,
+      "classes": 2,
+      "imports": 9,
+      "complexities": [],
+      "type_hint_coverage": 100.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\services\\mock_tws_service.py",
+      "loc": 349,
+      "sloc": 278,
+      "functions": 2,
+      "classes": 1,
+      "imports": 7,
+      "complexities": [],
+      "type_hint_coverage": 100.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\services\\tws_service.py",
+      "loc": 376,
+      "sloc": 302,
+      "functions": 1,
+      "classes": 1,
+      "imports": 13,
+      "complexities": [],
+      "type_hint_coverage": 100.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\services\\__init__.py",
+      "loc": 1,
+      "sloc": 0,
+      "functions": 0,
+      "classes": 0,
+      "imports": 0,
+      "complexities": [],
+      "type_hint_coverage": 0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\tool_definitions\\tws_tools.py",
+      "loc": 127,
+      "sloc": 96,
+      "functions": 0,
+      "classes": 4,
+      "imports": 6,
+      "complexities": [],
+      "type_hint_coverage": 0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\tool_definitions\\__init__.py",
+      "loc": 1,
+      "sloc": 0,
+      "functions": 0,
+      "classes": 0,
+      "imports": 0,
+      "complexities": [],
+      "type_hint_coverage": 0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\pools\\base_pool.py",
+      "loc": 141,
+      "sloc": 109,
+      "functions": 2,
+      "classes": 3,
+      "imports": 10,
+      "complexities": [],
+      "type_hint_coverage": 100.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\pools\\db_pool.py",
+      "loc": 108,
+      "sloc": 83,
+      "functions": 1,
+      "classes": 1,
+      "imports": 15,
+      "complexities": [],
+      "type_hint_coverage": 100.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\pools\\http_pool.py",
+      "loc": 105,
+      "sloc": 78,
+      "functions": 1,
+      "classes": 1,
+      "imports": 10,
+      "complexities": [],
+      "type_hint_coverage": 100.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\pools\\pool_manager.py",
+      "loc": 410,
+      "sloc": 331,
+      "functions": 4,
+      "classes": 2,
+      "imports": 29,
+      "complexities": [],
+      "type_hint_coverage": 25.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\pools\\redis_pool.py",
+      "loc": 113,
+      "sloc": 86,
+      "functions": 1,
+      "classes": 1,
+      "imports": 13,
+      "complexities": [],
+      "type_hint_coverage": 100.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\utils\\async_iterator_mock.py",
+      "loc": 1,
+      "sloc": 0,
+      "functions": 0,
+      "classes": 0,
+      "imports": 0,
+      "complexities": [],
+      "type_hint_coverage": 0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\utils\\common_error_handlers.py",
+      "loc": 173,
+      "sloc": 147,
+      "functions": 15,
+      "classes": 0,
+      "imports": 10,
+      "complexities": [],
+      "type_hint_coverage": 66.67,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\utils\\error_utils.py",
+      "loc": 551,
+      "sloc": 451,
+      "functions": 22,
+      "classes": 1,
+      "imports": 18,
+      "complexities": [],
+      "type_hint_coverage": 90.91,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\utils\\json_parser.py",
+      "loc": 47,
+      "sloc": 34,
+      "functions": 1,
+      "classes": 0,
+      "imports": 5,
+      "complexities": [],
+      "type_hint_coverage": 100.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\utils\\llm.py",
+      "loc": 130,
+      "sloc": 105,
+      "functions": 0,
+      "classes": 0,
+      "imports": 8,
+      "complexities": [],
+      "type_hint_coverage": 0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\utils\\test_agent_manager.py",
+      "loc": 72,
+      "sloc": 52,
+      "functions": 1,
+      "classes": 0,
+      "imports": 5,
+      "complexities": [],
+      "type_hint_coverage": 0.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\utils\\test_ia_auditor.py",
+      "loc": 95,
+      "sloc": 60,
+      "functions": 1,
+      "classes": 0,
+      "imports": 4,
+      "complexities": [],
+      "type_hint_coverage": 0.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\utils\\test_json_parser.py",
+      "loc": 40,
+      "sloc": 30,
+      "functions": 4,
+      "classes": 0,
+      "imports": 3,
+      "complexities": [],
+      "type_hint_coverage": 0.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\utils\\test_llm.py",
+      "loc": 75,
+      "sloc": 43,
+      "functions": 0,
+      "classes": 0,
+      "imports": 5,
+      "complexities": [],
+      "type_hint_coverage": 0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\utils\\test_tws_tools.py",
+      "loc": 79,
+      "sloc": 53,
+      "functions": 1,
+      "classes": 0,
+      "imports": 4,
+      "complexities": [],
+      "type_hint_coverage": 0.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\core\\utils\\__init__.py",
+      "loc": 1,
+      "sloc": 0,
+      "functions": 0,
+      "classes": 0,
+      "imports": 0,
+      "complexities": [],
+      "type_hint_coverage": 0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\api\\middleware\\cors_config.py",
+      "loc": 362,
+      "sloc": 272,
+      "functions": 10,
+      "classes": 5,
+      "imports": 8,
+      "complexities": [],
+      "type_hint_coverage": 50.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\api\\middleware\\cors_middleware.py",
+      "loc": 358,
+      "sloc": 275,
+      "functions": 9,
+      "classes": 1,
+      "imports": 10,
+      "complexities": [],
+      "type_hint_coverage": 100.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\api\\middleware\\cors_monitoring.py",
+      "loc": 261,
+      "sloc": 203,
+      "functions": 9,
+      "classes": 4,
+      "imports": 9,
+      "complexities": [],
+      "type_hint_coverage": 88.89,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\api\\middleware\\csp_middleware.py",
+      "loc": 210,
+      "sloc": 137,
+      "functions": 5,
+      "classes": 1,
+      "imports": 8,
+      "complexities": [],
+      "type_hint_coverage": 100.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\api\\middleware\\endpoint_utils.py",
+      "loc": 138,
+      "sloc": 100,
+      "functions": 6,
+      "classes": 0,
+      "imports": 7,
+      "complexities": [],
+      "type_hint_coverage": 83.33,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\api\\middleware\\error_handler.py",
+      "loc": 230,
+      "sloc": 156,
+      "functions": 7,
+      "classes": 2,
+      "imports": 12,
+      "complexities": [],
+      "type_hint_coverage": 71.43,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\api\\middleware\\oauth2_middleware.py",
+      "loc": 35,
+      "sloc": 20,
+      "functions": 0,
+      "classes": 0,
+      "imports": 6,
+      "complexities": [],
+      "type_hint_coverage": 0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\api\\middleware\\__init__.py",
+      "loc": 1,
+      "sloc": 0,
+      "functions": 0,
+      "classes": 0,
+      "imports": 0,
+      "complexities": [],
+      "type_hint_coverage": 0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\api\\security\\models.py",
+      "loc": 49,
+      "sloc": 33,
+      "functions": 1,
+      "classes": 5,
+      "imports": 4,
+      "complexities": [],
+      "type_hint_coverage": 100.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\api\\security\\validations.py",
+      "loc": 72,
+      "sloc": 55,
+      "functions": 5,
+      "classes": 4,
+      "imports": 4,
+      "complexities": [],
+      "type_hint_coverage": 40.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\api\\validation\\agents.py",
+      "loc": 492,
+      "sloc": 380,
+      "functions": 11,
+      "classes": 13,
+      "imports": 5,
+      "complexities": [],
+      "type_hint_coverage": 0.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\api\\validation\\auth.py",
+      "loc": 522,
+      "sloc": 398,
+      "functions": 12,
+      "classes": 19,
+      "imports": 5,
+      "complexities": [],
+      "type_hint_coverage": 0.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\api\\validation\\chat.py",
+      "loc": 493,
+      "sloc": 377,
+      "functions": 9,
+      "classes": 14,
+      "imports": 6,
+      "complexities": [],
+      "type_hint_coverage": 0.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\api\\validation\\common.py",
+      "loc": 406,
+      "sloc": 289,
+      "functions": 13,
+      "classes": 10,
+      "imports": 8,
+      "complexities": [],
+      "type_hint_coverage": 92.31,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\api\\validation\\config.py",
+      "loc": 631,
+      "sloc": 488,
+      "functions": 18,
+      "classes": 13,
+      "imports": 8,
+      "complexities": [],
+      "type_hint_coverage": 83.33,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\api\\validation\\files.py",
+      "loc": 657,
+      "sloc": 494,
+      "functions": 20,
+      "classes": 14,
+      "imports": 10,
+      "complexities": [],
+      "type_hint_coverage": 0.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\api\\validation\\middleware.py",
+      "loc": 556,
+      "sloc": 423,
+      "functions": 11,
+      "classes": 2,
+      "imports": 8,
+      "complexities": [],
+      "type_hint_coverage": 100.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\api\\validation\\monitoring.py",
+      "loc": 662,
+      "sloc": 508,
+      "functions": 17,
+      "classes": 18,
+      "imports": 7,
+      "complexities": [],
+      "type_hint_coverage": 0.0,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\api\\validation\\query_params.py",
+      "loc": 558,
+      "sloc": 419,
+      "functions": 15,
+      "classes": 22,
+      "imports": 8,
+      "complexities": [],
+      "type_hint_coverage": 13.33,
+      "high_complexity": []
+    },
+    {
+      "file": "resync\\api\\validation\\__init__.py",
+      "loc": 198,
+      "sloc": 176,
+      "functions": 0,
+      "classes": 0,
+      "imports": 9,
+      "complexities": [],
+      "type_hint_coverage": 0,
+      "high_complexity": []
+    }
+  ],
+  "summary": {
+    "total_files": 128,
+    "total_loc": 34088,
+    "total_sloc": 26325,
+    "total_functions": 722,
+    "total_classes": 443,
+    "high_complexity_functions": [],
+    "files_without_type_hints": [
+      {
+        "file": "resync\\main.py",
+        "coverage": 0.0
+      },
+      {
+        "file": "resync\\settings.py",
+        "coverage": 28.57
+      },
+      {
+        "file": "resync\\test_agents.py",
+        "coverage": 0.0
+      },
+      {
+        "file": "resync\\__init__.py",
+        "coverage": 0
+      },
+      {
+        "file": "resync\\api\\admin.py",
+        "coverage": 0
+      },
+      {
+        "file": "resync\\api\\agents.py",
+        "coverage": 0
+      },
+      {
+        "file": "resync\\api\\cors_monitoring.py",
+        "coverage": 0
+      },
+      {
+        "file": "resync\\api\\health.py",
+        "coverage": 0
+      },
+      {
+        "file": "resync\\api\\models.py",
+        "coverage": 0
+      },
+      {
+        "file": "resync\\api\\performance.py",
+        "coverage": 0
+      },
+      {
+        "file": "resync\\api\\rag_upload.py",
+        "coverage": 0
+      },
+      {
+        "file": "resync\\api\\__init__.py",
+        "coverage": 0
+      },
+      {
+        "file": "resync\\api_gateway\\__init__.py",
+        "coverage": 0
+      },
+      {
+        "file": "resync\\core\\config_watcher.py",
+        "coverage": 0
+      },
+      {
+        "file": "resync\\core\\connection_pool_manager.py",
+        "coverage": 0
+      },
+      {
+        "file": "resync\\core\\dependencies.py",
+        "coverage": 0
+      },
+      {
+        "file": "resync\\core\\ia_auditor.py",
+        "coverage": 0
+      },
+      {
+        "file": "resync\\core\\knowledge_graph.py",
+        "coverage": 0.0
+      },
+      {
+        "file": "resync\\core\\litellm_init.py",
+        "coverage": 0.0
+      },
+      {
+        "file": "resync\\core\\rag_watcher.py",
+        "coverage": 0
+      },
+      {
+        "file": "resync\\core\\resilience.py",
+        "coverage": 45.45
+      },
+      {
+        "file": "resync\\cqrs\\base.py",
+        "coverage": 0
+      },
+      {
+        "file": "resync\\cqrs\\commands.py",
+        "coverage": 0
+      },
+      {
+        "file": "resync\\cqrs\\queries.py",
+        "coverage": 0
+      },
+      {
+        "file": "resync\\cqrs\\__init__.py",
+        "coverage": 0
+      },
+      {
+        "file": "resync\\models\\tws.py",
+        "coverage": 0
+      },
+      {
+        "file": "resync\\models\\__init__.py",
+        "coverage": 0
+      },
+      {
+        "file": "resync\\services\\__init__.py",
+        "coverage": 0
+      },
+      {
+        "file": "resync\\tool_definitions\\tws_tools.py",
+        "coverage": 0
+      },
+      {
+        "file": "resync\\tool_definitions\\__init__.py",
+        "coverage": 0
+      },
+      {
+        "file": "resync\\core\\pools\\pool_manager.py",
+        "coverage": 25.0
+      },
+      {
+        "file": "resync\\core\\utils\\async_iterator_mock.py",
+        "coverage": 0
+      },
+      {
+        "file": "resync\\core\\utils\\llm.py",
+        "coverage": 0
+      },
+      {
+        "file": "resync\\core\\utils\\test_agent_manager.py",
+        "coverage": 0.0
+      },
+      {
+        "file": "resync\\core\\utils\\test_ia_auditor.py",
+        "coverage": 0.0
+      },
+      {
+        "file": "resync\\core\\utils\\test_json_parser.py",
+        "coverage": 0.0
+      },
+      {
+        "file": "resync\\core\\utils\\test_llm.py",
+        "coverage": 0
+      },
+      {
+        "file": "resync\\core\\utils\\test_tws_tools.py",
+        "coverage": 0.0
+      },
+      {
+        "file": "resync\\core\\utils\\__init__.py",
+        "coverage": 0
+      },
+      {
+        "file": "resync\\api\\middleware\\oauth2_middleware.py",
+        "coverage": 0
+      },
+      {
+        "file": "resync\\api\\middleware\\__init__.py",
+        "coverage": 0
+      },
+      {
+        "file": "resync\\api\\security\\validations.py",
+        "coverage": 40.0
+      },
+      {
+        "file": "resync\\api\\validation\\agents.py",
+        "coverage": 0.0
+      },
+      {
+        "file": "resync\\api\\validation\\auth.py",
+        "coverage": 0.0
+      },
+      {
+        "file": "resync\\api\\validation\\chat.py",
+        "coverage": 0.0
+      },
+      {
+        "file": "resync\\api\\validation\\files.py",
+        "coverage": 0.0
+      },
+      {
+        "file": "resync\\api\\validation\\monitoring.py",
+        "coverage": 0.0
+      },
+      {
+        "file": "resync\\api\\validation\\query_params.py",
+        "coverage": 13.33
+      },
+      {
+        "file": "resync\\api\\validation\\__init__.py",
+        "coverage": 0
+      }
+    ],
+    "avg_type_hint_coverage": 56.41
+  }
+}

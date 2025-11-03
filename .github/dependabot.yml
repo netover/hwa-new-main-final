@@ -1,0 +1,49 @@
+version: 2
+updates:
+  # Enable version updates for Python dependencies
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 10
+    reviewers:
+      - "your-username"  # Replace with actual maintainer
+    assignees:
+      - "your-username"  # Replace with actual maintainer
+    commit-message:
+      prefix: "deps"
+      include: "scope"
+
+  # Poetry dependencies
+  - package-ecosystem: "poetry"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 10
+    reviewers:
+      - "your-username"  # Replace with actual maintainer
+    assignees:
+      - "your-username"  # Replace with actual maintainer
+    commit-message:
+      prefix: "deps"
+      include: "scope"
+
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "your-username"  # Replace with actual maintainer
+    assignees:
+      - "your-username"  # Replace with actual maintainer
+    commit-message:
+      prefix: "ci"
+      include: "scope"

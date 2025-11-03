@@ -1,0 +1,136 @@
+# RELATÓRIO CONSOLIDADO DE ANÁLISE DE CÓDIGO
+Total de Issues: 4789
+
+## RESUMO POR SEVERIDADE
+- CRITICAL: 27
+- HIGH: 1917
+- MEDIUM: 1750
+- LOW: 1095
+
+## RESUMO POR FERRAMENTA
+- flake8: 1472 issues
+- pylint: 2379 issues
+- mypy: 931 issues
+- bandit: 7 issues
+
+## TOP 20 ISSUES MAIS CRÍTICAS
+
+### 1. FLAKE8 - F401
+**Arquivo:** resync/api\auth.py:20
+**Severidade:** CRITICAL
+**Categoria:** fatal
+**Mensagem:** 'os' imported but unused
+
+### 2. FLAKE8 - F401
+**Arquivo:** resync/api\auth_secure.py:20
+**Severidade:** CRITICAL
+**Categoria:** fatal
+**Mensagem:** 'os' imported but unused
+
+### 3. FLAKE8 - F401
+**Arquivo:** resync/core\cache\chucknorris_optimizer.py:18
+**Severidade:** CRITICAL
+**Categoria:** fatal
+**Mensagem:** 'weakref' imported but unused
+
+### 4. FLAKE8 - F401
+**Arquivo:** resync/core\cache\chucknorris_optimizer.py:19
+**Severidade:** CRITICAL
+**Categoria:** fatal
+**Mensagem:** 'hashlib' imported but unused
+
+### 5. FLAKE8 - F401
+**Arquivo:** resync/core\monitoring\chucknorris_metrics.py:17
+**Severidade:** CRITICAL
+**Categoria:** fatal
+**Mensagem:** 'typing.Tuple' imported but unused
+
+### 6. FLAKE8 - F401
+**Arquivo:** resync/core\monitoring\chucknorris_metrics.py:20
+**Severidade:** CRITICAL
+**Categoria:** fatal
+**Mensagem:** 'weakref' imported but unused
+
+### 7. FLAKE8 - F401
+**Arquivo:** resync/core\monitoring\chucknorris_metrics.py:821
+**Severidade:** CRITICAL
+**Categoria:** fatal
+**Mensagem:** 'prometheus_client.generate_latest' imported but unused
+
+### 8. FLAKE8 - F401
+**Arquivo:** resync/core\monitoring\chucknorris_metrics.py:821
+**Severidade:** CRITICAL
+**Categoria:** fatal
+**Mensagem:** 'prometheus_client.CONTENT_TYPE_LATEST' imported but unused
+
+### 9. FLAKE8 - F841
+**Arquivo:** resync/core\monitoring\chucknorris_metrics.py:824
+**Severidade:** CRITICAL
+**Categoria:** fatal
+**Mensagem:** local variable 'cache_hit_ratio' is assigned to but never used
+
+### 10. FLAKE8 - F841
+**Arquivo:** resync/core\monitoring\chucknorris_metrics.py:830
+**Severidade:** CRITICAL
+**Categoria:** fatal
+**Mensagem:** local variable 'cache_misses' is assigned to but never used
+
+### 11. FLAKE8 - F841
+**Arquivo:** resync/core\monitoring\chucknorris_metrics.py:836
+**Severidade:** CRITICAL
+**Categoria:** fatal
+**Mensagem:** local variable 'cache_hits' is assigned to but never used
+
+### 12. FLAKE8 - F841
+**Arquivo:** resync/core\monitoring\chucknorris_metrics.py:844
+**Severidade:** CRITICAL
+**Categoria:** fatal
+**Mensagem:** local variable 'circuit_breaker_state' is assigned to but never used
+
+### 13. FLAKE8 - F841
+**Arquivo:** resync/core\monitoring\chucknorris_metrics.py:850
+**Severidade:** CRITICAL
+**Categoria:** fatal
+**Mensagem:** local variable 'circuit_breaker_failures' is assigned to but never used
+
+### 14. FLAKE8 - F841
+**Arquivo:** resync/core\monitoring\chucknorris_metrics.py:858
+**Severidade:** CRITICAL
+**Categoria:** fatal
+**Mensagem:** local variable 'request_duration' is assigned to but never used
+
+### 15. FLAKE8 - F841
+**Arquivo:** resync/core\monitoring\chucknorris_metrics.py:864
+**Severidade:** CRITICAL
+**Categoria:** fatal
+**Mensagem:** local variable 'api_request_duration' is assigned to but never used
+
+### 16. FLAKE8 - F841
+**Arquivo:** resync/core\monitoring\chucknorris_metrics.py:873
+**Severidade:** CRITICAL
+**Categoria:** fatal
+**Mensagem:** local variable 'error_rate' is assigned to but never used
+
+### 17. FLAKE8 - F841
+**Arquivo:** resync/core\monitoring\chucknorris_metrics.py:879
+**Severidade:** CRITICAL
+**Categoria:** fatal
+**Mensagem:** local variable 'total_requests' is assigned to but never used
+
+### 18. FLAKE8 - F401
+**Arquivo:** resync/core\pipeline\chucknorris_batch_processor.py:14
+**Severidade:** CRITICAL
+**Categoria:** fatal
+**Mensagem:** 'collections.defaultdict' imported but unused
+
+### 19. FLAKE8 - F401
+**Arquivo:** resync/core\pipeline\chucknorris_batch_processor.py:17
+**Severidade:** CRITICAL
+**Categoria:** fatal
+**Mensagem:** 'typing.Tuple' imported but unused
+
+### 20. FLAKE8 - F401
+**Arquivo:** resync/core\pipeline\chucknorris_batch_processor.py:17
+**Severidade:** CRITICAL
+**Categoria:** fatal
+**Mensagem:** 'typing.Union' imported but unused

@@ -1,0 +1,951 @@
+resync\utils\exceptions.py:1091: note: "__init__" of "CacheError" defined here
+resync\utils\exceptions.py:1131: error: Unexpected keyword argument "error_code" for "__init__" of "CacheError"
+resync\utils\exceptions.py:1131: error: Unexpected keyword argument "status_code" for "__init__" of "CacheError"
+resync\utils\exceptions.py:1131: error: Unexpected keyword argument "severity" for "__init__" of "CacheError"
+resync\models\health_models.py:187: error: Function is missing a return type annotation
+resync\models\health_models.py:187: note: Use "-> None" if function does not return a value
+resync\core\exceptions.py:1091: note: "__init__" of "CacheError" defined here
+resync\core\exceptions.py:1131: error: Unexpected keyword argument "error_code" for "__init__" of "CacheError"
+resync\core\exceptions.py:1131: error: Unexpected keyword argument "status_code" for "__init__" of "CacheError"
+resync\core\exceptions.py:1131: error: Unexpected keyword argument "severity" for "__init__" of "CacheError"
+resync\core\health\monitoring_aggregator.py:178: error: Item "None" of "HealthReport | None" has no attribute "component_health"
+resync\core\health\monitoring_aggregator.py:286: error: Unexpected keyword argument "average_response_time" for "ComponentHealthSummary"; did you mean "average_response_time_ms"?
+resync\core\health\monitoring_aggregator.py:367: error: "ComponentHealthSummary" has no attribute "average_response_time"; maybe "average_response_time_ms"?
+resync\core\health\monitoring_aggregator.py:368: error: "ComponentHealthSummary" has no attribute "average_response_time"; maybe "average_response_time_ms"?
+resync\core\health\health_check_service.py:23: error: Function is missing a return type annotation
+resync\core\health\health_check_service.py:23: note: Use "-> None" if function does not return a value
+resync\core\health\monitors\filesystem_monitor.py:37: error: Function is missing a return type annotation
+resync\core\health\monitors\filesystem_monitor.py:37: note: Use "-> None" if function does not return a value
+resync\core\health\monitors\filesystem_monitor.py:67: error: Incompatible types in assignment (expression has type "None", variable has type "list[str]")
+resync\core\health\monitors\filesystem_monitor.py:72: error: Function is missing a return type annotation
+resync\core\health\monitors\filesystem_monitor.py:72: note: Use "-> None" if function does not return a value
+resync\core\health\monitors\filesystem_monitor.py:104: error: Incompatible types in assignment (expression has type "None", variable has type "list[str]")
+resync\core\health\monitors\filesystem_monitor.py:109: error: Function is missing a return type annotation
+resync\core\health\monitors\filesystem_monitor.py:109: note: Use "-> None" if function does not return a value
+resync\core\health\monitors\filesystem_monitor.py:177: error: Module has no attribute "statvfs"
+resync\core\health\monitors\database_monitor.py:49: error: Function is missing a return type annotation
+resync\core\health\monitors\database_monitor.py:49: note: Use "-> None" if function does not return a value
+resync\core\health\monitors\database_monitor.py:66: error: Incompatible types in assignment (expression has type "None", variable has type "list[str]")
+resync\core\health\monitors\database_monitor.py:80: error: Function is missing a return type annotation
+resync\core\health\monitors\database_monitor.py:80: note: Use "-> None" if function does not return a value
+resync\core\health\monitors\database_monitor.py:97: error: Function is missing a type annotation
+resync\core\monitoring\metrics.py:413: error: Function is missing a type annotation
+resync\core\monitoring\metrics.py:421: error: Function is missing a type annotation
+resync\core\monitoring\metrics.py:639: error: Function is missing a type annotation
+resync\core\monitoring\metrics.py:663: error: Function is missing a type annotation
+resync\core\monitoring\metrics.py:676: error: Function is missing a type annotation
+resync\core\monitoring\metrics.py:703: error: Function is missing a type annotation
+resync\core\cache\transaction_manager.py:130: error: Unexpected keyword argument "transaction_id" for "debug" of "Logger"
+C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\mypy\typeshed\stdlib\logging\__init__.pyi:131: note: "debug" of "Logger" defined here
+resync\core\cache\transaction_manager.py:130: error: Unexpected keyword argument "key" for "debug" of "Logger"
+resync\core\cache\transaction_manager.py:130: error: Unexpected keyword argument "total_active" for "debug" of "Logger"
+resync\core\cache\transaction_manager.py:186: error: Unexpected keyword argument "transaction_id" for "info" of "Logger"
+C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\mypy\typeshed\stdlib\logging\__init__.pyi:140: note: "info" of "Logger" defined here
+resync\core\cache\transaction_manager.py:186: error: Unexpected keyword argument "key" for "info" of "Logger"
+resync\core\cache\transaction_manager.py:186: error: Unexpected keyword argument "operation_count" for "info" of "Logger"
+resync\core\cache\transaction_manager.py:196: error: Unexpected keyword argument "transaction_id" for "error" of "Logger"
+C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\mypy\typeshed\stdlib\logging\__init__.pyi:168: note: "error" of "Logger" defined here
+resync\core\cache\transaction_manager.py:196: error: Unexpected keyword argument "error" for "error" of "Logger"
+resync\core\cache\transaction_manager.py:250: error: Unexpected keyword argument "transaction_id" for "info" of "Logger"
+resync\core\cache\transaction_manager.py:250: error: Unexpected keyword argument "key" for "info" of "Logger"
+resync\core\cache\transaction_manager.py:250: error: Unexpected keyword argument "operation_count" for "info" of "Logger"
+resync\core\cache\transaction_manager.py:260: error: Unexpected keyword argument "transaction_id" for "error" of "Logger"
+resync\core\cache\transaction_manager.py:260: error: Unexpected keyword argument "error" for "error" of "Logger"
+resync\core\cache\transaction_manager.py:345: error: Unexpected keyword argument "transaction_id" for "debug" of "Logger"
+resync\core\cache\transaction_manager.py:345: error: Unexpected keyword argument "key" for "debug" of "Logger"
+resync\core\cache\transaction_manager.py:345: error: Unexpected keyword argument "age_seconds" for "debug" of "Logger"
+resync\core\cache\transaction_manager.py:353: error: Unexpected keyword argument "count" for "info" of "Logger"
+resync\core\cache\transaction_manager.py:353: error: Unexpected keyword argument "remaining_active" for "info" of "Logger"
+resync\core\cache\transaction_manager.py:369: error: Value expression in dictionary comprehension has incompatible type "dict[str, Any] | None"; expected type "dict[str, Any]"
+resync\core\cache\transaction_manager.py:384: error: Unexpected keyword argument "count" for "warning" of "Logger"
+C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\mypy\typeshed\stdlib\logging\__init__.pyi:149: note: "warning" of "Logger" defined here
+resync\utils\simple_logger.py:24: error: Function is missing a return type annotation
+resync\utils\simple_logger.py:57: error: Function is missing a type annotation for one or more arguments
+resync\utils\simple_logger.py:61: error: Function is missing a type annotation for one or more arguments
+resync\utils\simple_logger.py:65: error: Function is missing a type annotation for one or more arguments
+resync\utils\simple_logger.py:69: error: Function is missing a type annotation for one or more arguments
+resync\utils\simple_logger.py:73: error: Function is missing a type annotation for one or more arguments
+resync\utils\simple_logger.py:77: error: Function is missing a type annotation for one or more arguments
+resync\utils\simple_logger.py:238: error: Function is missing a type annotation for one or more arguments
+resync\utils\simple_logger.py:242: error: Function is missing a type annotation for one or more arguments
+resync\utils\simple_logger.py:246: error: Function is missing a type annotation for one or more arguments
+resync\utils\simple_logger.py:250: error: Function is missing a type annotation for one or more arguments
+resync\utils\simple_logger.py:254: error: Function is missing a type annotation for one or more arguments
+resync\utils\simple_logger.py:258: error: Function is missing a type annotation for one or more arguments
+resync\utils\simple_logger.py:283: error: Function is missing a type annotation for one or more arguments
+resync\utils\simple_logger.py:307: error: Function is missing a type annotation for one or more arguments
+resync\utils\simple_logger.py:325: error: Function is missing a type annotation for one or more arguments
+resync\utils\simple_logger.py:345: error: Function is missing a type annotation for one or more arguments
+resync\utils\simple_logger.py:360: error: Function is missing a type annotation for one or more arguments
+resync\core\health\health_metrics_simplified.py:32: error: Function is missing a return type annotation
+resync\core\health\health_metrics_simplified.py:32: note: Use "-> None" if function does not return a value
+resync\core\health\health_metrics_simplified.py:102: error: Incompatible return value type (got "bytes", expected "str")
+resync\utils\executors.py:14: error: Function is missing a return type annotation
+resync\utils\executors.py:21: error: Function is missing a return type annotation
+resync\utils\executors.py:21: note: Use "-> None" if function does not return a value
+resync\utils\executors.py:43: error: Function is missing a return type annotation
+resync\utils\executors.py:47: error: Function is missing a return type annotation
+resync\utils\executors.py:51: error: Function is missing a return type annotation
+resync\utils\executors.py:55: error: Function is missing a return type annotation
+resync\utils\executors.py:55: note: Use "-> None" if function does not return a value
+resync\utils\executors.py:61: error: Function is missing a type annotation
+resync\utils\common_error_handlers.py:35: error: Function is missing a type annotation
+resync\utils\common_error_handlers.py:61: error: Function is missing a type annotation
+resync\utils\common_error_handlers.py:89: error: Function is missing a type annotation
+resync\utils\common_error_handlers.py:129: error: Function is missing a type annotation
+resync\utils\common_error_handlers.py:160: error: Function is missing a type annotation
+resync\utils\common_error_handlers.py:204: error: Function is missing a type annotation
+resync\core\resilience\chucknorris_circuit_breaker.py:151: error: Need type annotation for "prediction_accuracy"
+resync\core\resilience\chucknorris_circuit_breaker.py:191: error: Function is missing a type annotation for one or more arguments
+resync\core\pools\base_pool.py:103: error: Argument 1 to "asynccontextmanager" has incompatible type "Callable[[ConnectionPool[T]], Coroutine[Any, Any, AsyncIterator[T]]]"; expected "Callable[[ConnectionPool[T]], AsyncIterator[Never]]"
+resync\core\pools\base_pool.py:149: error: Argument 2 to "replace" of "ConnectionPoolStats" has incompatible type "**dict[str, Any | int]"; expected "str"
+resync\core\pools\base_pool.py:149: error: Argument 2 to "replace" of "ConnectionPoolStats" has incompatible type "**dict[str, Any | int]"; expected "datetime | None"
+resync\core\pipeline\chucknorris_batch_processor.py:168: error: Need type annotation for "adaptive_adjustments"
+resync\core\pipeline\chucknorris_batch_processor.py:352: error: Need type annotation for "batch_items" (hint: "batch_items: list[<type>] = ...")
+resync\core\pipeline\chucknorris_batch_processor.py:370: error: Need type annotation for "batch_items" (hint: "batch_items: list[<type>] = ...")
+resync\core\pipeline\chucknorris_batch_processor.py:395: error: Need type annotation for "batch_items" (hint: "batch_items: list[<type>] = ...")
+resync\core\pipeline\chucknorris_batch_processor.py:431: error: Need type annotation for "batch_items" (hint: "batch_items: list[<type>] = ...")
+resync\core\pipeline\chucknorris_batch_processor.py:542: error: Incompatible types in assignment (expression has type "Callable[[BatchResult], None]", variable has type "Callable[[str, list[BatchItem]], None]")
+resync\core\pipeline\chucknorris_batch_processor.py:544: error: Too few arguments
+resync\core\pipeline\chucknorris_batch_processor.py:544: error: Argument 1 has incompatible type "BatchResult"; expected "str"
+resync\core\pipeline\chucknorris_batch_processor.py:567: error: Incompatible types in assignment (expression has type "Callable[[Exception, list[BatchItem]], None]", variable has type "Callable[[str, list[BatchItem]], None]")
+resync\core\pipeline\chucknorris_batch_processor.py:569: error: Argument 1 has incompatible type "Exception"; expected "str"
+resync\core\monitoring\chucknorris_metrics.py:300: error: Argument 2 to "increment" of "ChuckNorrisMetricsCollector" has incompatible type "dict[str, str]"; expected "int"
+resync\core\monitoring\chucknorris_metrics.py:304: error: Value of type "Coroutine[Any, Any, Alert]" must be used
+resync\core\monitoring\chucknorris_metrics.py:304: note: Are you missing an await?
+resync\core\monitoring\chucknorris_metrics.py:317: error: Argument 2 to "increment" of "ChuckNorrisMetricsCollector" has incompatible type "dict[str, str]"; expected "int"
+resync\core\monitoring\chucknorris_metrics.py:320: error: Value of type "Coroutine[Any, Any, Alert]" must be used
+resync\core\monitoring\chucknorris_metrics.py:320: note: Are you missing an await?
+resync\core\monitoring\chucknorris_metrics.py:341: error: Value of type "Coroutine[Any, Any, Alert]" must be used
+resync\core\monitoring\chucknorris_metrics.py:341: note: Are you missing an await?
+resync\core\monitoring\chucknorris_metrics.py:377: error: Argument 2 to "increment" of "ChuckNorrisMetricsCollector" has incompatible type "dict[str, str]"; expected "int"
+resync\core\monitoring\chucknorris_metrics.py:392: error: Value of type "Coroutine[Any, Any, Alert]" must be used
+resync\core\monitoring\chucknorris_metrics.py:392: note: Are you missing an await?
+resync\core\monitoring\chucknorris_metrics.py:507: error: Unsupported target for indexed assignment ("object")
+resync\core\monitoring\chucknorris_metrics.py:523: error: Unsupported target for indexed assignment ("object")
+resync\core\monitoring\chucknorris_metrics.py:953: error: Function is missing a type annotation
+resync\core\monitoring\chucknorris_metrics.py:957: error: Function is missing a type annotation
+resync\core\cache\memory_manager.py:169: error: Incompatible types in assignment (expression has type "float", variable has type "int")
+resync\core\cache\memory_manager.py:175: error: Incompatible types in assignment (expression has type "float", variable has type "int")
+resync\core\cache\memory_manager.py:320: error: Function is missing a return type annotation
+resync\core\cache\memory_manager.py:464: error: Function is missing a type annotation
+resync\core\cache\chucknorris_optimizer.py:506: error: Generator has incompatible item type "int"; expected "bool"
+resync\core\cache\chucknorris_optimizer.py:507: error: "ChuckNorrisConfig" has no attribute "cold_threshold"; maybe "cold_key_threshold"?
+resync\core\cache\chucknorris_optimizer.py:509: error: Need type annotation for "pattern_distribution"
+resync\utils\json_commands.py:47: error: Incompatible return value type (got "None", expected "dict[str, Any]")
+resync\utils\json_commands.py:84: error: Unexpected keyword argument "error" for "warning" of "Logger"
+C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\mypy\typeshed\stdlib\logging\__init__.pyi:149: note: "warning" of "Logger" defined here
+resync\utils\json_commands.py:84: error: Unexpected keyword argument "json_length" for "warning" of "Logger"
+resync\utils\json_commands.py:99: error: Unsupported right operand type for in ("None")
+resync\utils\json_commands.py:109: error: "None" has no attribute "__iter__" (not iterable)
+resync\core\pools\db_pool.py:75: error: Item "None" of "Any | None" has no attribute "__name__"
+resync\core\pools\db_pool.py:93: error: Argument 1 to "execute" of "AsyncSession" has incompatible type "Executable | str"; expected "Executable"
+resync\core\pools\db_pool.py:98: error: Argument 1 to "execute" of "AsyncSession" has incompatible type "Executable | str"; expected "Executable"
+resync\core\pools\db_pool.py:145: error: Item "None" of "AsyncEngine | None" has no attribute "sync_engine"
+resync\core\pools\db_pool.py:146: error: Function is missing a type annotation
+resync\core\pools\db_pool.py:172: error: Incompatible types in assignment (expression has type "Callable[..., Any]", variable has type "None")
+resync\core\pools\db_pool.py:266: error: Item "None" of "AsyncEngine | None" has no attribute "begin"
+resync\core\pools\db_pool.py:283: error: Return type "_AsyncGeneratorContextManager[AsyncSession, None]" of "get_connection" incompatible with return type "_AsyncGeneratorContextManager[Never, None]" in supertype "resync.core.pools.base_pool.ConnectionPool"
+resync\core\monitoring\circuit_breaker.py:29: error: Function is missing a type annotation
+resync\core\monitoring\circuit_breaker.py:34: error: No overload variant of "__sub__" of "datetime" matches argument type "None"
+resync\core\monitoring\circuit_breaker.py:34: note: Possible overload variants:
+resync\core\monitoring\circuit_breaker.py:34: note:     def __sub__(self, datetime, /) -> timedelta
+resync\core\monitoring\circuit_breaker.py:34: note:     def __sub__(self, timedelta, /) -> datetime
+resync\core\monitoring\circuit_breaker.py:52: error: Incompatible types in assignment (expression has type "datetime", variable has type "None")
+resync\core\health\proactive_monitor.py:33: error: Function is missing a return type annotation
+resync\core\health\proactive_monitor.py:33: note: Use "-> None" if function does not return a value
+resync\core\health\proactive_monitor.py:101: error: "object" has no attribute "append"
+resync\core\health\proactive_monitor.py:102: error: Unsupported target for indexed assignment ("object")
+resync\core\health\proactive_monitor.py:105: error: "object" has no attribute "append"
+resync\core\health\proactive_monitor.py:118: error: "object" has no attribute "append"
+resync\core\health\proactive_monitor.py:128: error: "object" has no attribute "append"
+resync\core\health\proactive_monitor.py:139: error: "object" has no attribute "append"
+resync\core\health\proactive_monitor.py:148: error: Unsupported target for indexed assignment ("object")
+resync\core\health\proactive_monitor.py:155: error: Argument 1 to "len" has incompatible type "object"; expected "Sized"
+resync\core\health\proactive_monitor.py:156: error: Argument 1 to "len" has incompatible type "object"; expected "Sized"
+resync\core\health\performance_metrics_collector.py:32: error: Function is missing a return type annotation
+resync\core\health\performance_metrics_collector.py:32: note: Use "-> None" if function does not return a value
+resync\core\health\memory_usage_tracker.py:121: error: "dict[str, Any]" has no attribute "collections"
+resync\core\health\memory_usage_tracker.py:122: error: "dict[str, Any]" has no attribute "collections"
+resync\core\health\memory_usage_tracker.py:123: error: "dict[str, Any]" has no attribute "collections"
+resync\core\health\memory_usage_tracker.py:432: error: "Collection[str]" has no attribute "append"
+resync\core\health\memory_usage_tracker.py:438: error: "Collection[str]" has no attribute "append"
+resync\core\health\memory_usage_tracker.py:442: error: "Collection[str]" has no attribute "append"
+resync\core\health\memory_usage_tracker.py:447: error: "Collection[str]" has no attribute "append"
+resync\core\health\memory_manager.py:87: error: Dict entry 0 has incompatible type "str": "datetime"; expected "str": "float"
+resync\core\health\memory_manager.py:189: error: Function "builtins.any" is not valid as a type
+resync\core\health\memory_manager.py:189: note: Perhaps you meant "typing.Any" instead of "any"?
+resync\core\health\memory_manager.py:234: error: Unsupported operand types for >= ("float" and "datetime")
+resync\core\health\memory_manager.py:246: error: Function "builtins.any" is not valid as a type
+resync\core\health\memory_manager.py:246: note: Perhaps you meant "typing.Any" instead of "any"?
+resync\core\health\memory_manager.py:276: error: Function is missing a type annotation for one or more arguments
+resync\core\health\memory_manager.py:356: error: Function is missing a type annotation for one or more arguments
+resync\core\health\memory_manager.py:358: error: Function "builtins.any" is not valid as a type
+resync\core\health\memory_manager.py:358: note: Perhaps you meant "typing.Any" instead of "any"?
+resync\core\health\memory_manager.py:431: error: Function "builtins.any" is not valid as a type
+resync\core\health\memory_manager.py:431: note: Perhaps you meant "typing.Any" instead of "any"?
+resync\core\health\memory_manager.py:537: error: Dict entry 6 has incompatible type "str": "str"; expected "str": "float"
+resync\core\health\health_service_simplified.py:53: error: Function is missing a return type annotation
+resync\core\health\health_service_simplified.py:53: note: Use "-> None" if function does not return a value
+resync\core\health\health_service_manager.py:34: error: Function is missing a return type annotation
+resync\core\health\health_service_manager.py:34: note: Use "-> None" if function does not return a value
+resync\core\health\health_monitoring_observer.py:64: error: Function is missing a return type annotation
+resync\core\health\health_monitoring_observer.py:64: note: Use "-> None" if function does not return a value
+resync\core\health\health_monitoring_observer.py:249: error: Function is missing a return type annotation
+resync\core\health\health_monitoring_observer.py:249: note: Use "-> None" if function does not return a value
+resync\core\health\health_monitoring_observer.py:320: error: Function is missing a return type annotation
+resync\core\health\health_monitoring_observer.py:320: note: Use "-> None" if function does not return a value
+resync\core\health\health_monitoring_coordinator.py:39: error: Function is missing a type annotation for one or more arguments
+resync\core\health\health_monitoring_coordinator.py:67: error: Function is missing a type annotation for one or more arguments
+resync\core\health\health_config_manager.py:57: error: Function is missing a type annotation for one or more arguments
+resync\core\health\health_config_manager.py:204: error: Incompatible types in assignment (expression has type "float", target has type "int")
+resync\core\health\health_config_manager.py:208: error: Incompatible types in assignment (expression has type "str", target has type "int")
+resync\core\health\health_check_retry.py:101: error: Function is missing a type annotation for one or more arguments
+resync\core\health\health_alerting.py:37: error: Function "builtins.any" is not valid as a type
+resync\core\health\health_alerting.py:37: note: Perhaps you meant "typing.Any" instead of "any"?
+resync\core\health\health_alerting.py:108: error: Function "builtins.any" is not valid as a type
+resync\core\health\health_alerting.py:108: note: Perhaps you meant "typing.Any" instead of "any"?
+resync\core\health\health_alerting.py:136: error: Function "builtins.any" is not valid as a type
+resync\core\health\health_alerting.py:136: note: Perhaps you meant "typing.Any" instead of "any"?
+resync\core\health\health_alerting.py:174: error: Function is missing a return type annotation
+resync\core\health\health_alerting.py:174: note: Use "-> None" if function does not return a value
+resync\core\health\health_alerting.py:176: error: Function "builtins.any" is not valid as a type
+resync\core\health\health_alerting.py:176: note: Perhaps you meant "typing.Any" instead of "any"?
+resync\core\health\health_alerting.py:216: error: Function "builtins.any" is not valid as a type
+resync\core\health\health_alerting.py:216: note: Perhaps you meant "typing.Any" instead of "any"?
+resync\core\health\health_alerting.py:275: error: Function "builtins.any" is not valid as a type
+resync\core\health\health_alerting.py:275: note: Perhaps you meant "typing.Any" instead of "any"?
+resync\core\health\health_alerting.py:296: error: Function "builtins.any" is not valid as a type
+resync\core\health\health_alerting.py:296: note: Perhaps you meant "typing.Any" instead of "any"?
+resync\core\health\health_alerting.py:311: error: any? has no attribute "upper"
+resync\core\health\health_alerting.py:313: error: Value of type any? is not indexable
+resync\core\health\health_alerting.py:314: error: Value of type any? is not indexable
+resync\core\health\health_alerting.py:315: error: Value of type any? is not indexable
+resync\core\health\health_alerting.py:316: error: Value of type any? is not indexable
+resync\core\health\health_alerting.py:322: error: any? has no attribute "__iter__" (not iterable)
+resync\core\health\health_alerting.py:355: error: Function is missing a return type annotation
+resync\core\health\health_alerting.py:355: note: Use "-> None" if function does not return a value
+resync\core\health\health_alerting.py:357: error: Function "builtins.any" is not valid as a type
+resync\core\health\health_alerting.py:357: note: Perhaps you meant "typing.Any" instead of "any"?
+resync\core\health\health_alerting.py:361: error: Function "builtins.any" is not valid as a type
+resync\core\health\health_alerting.py:361: note: Perhaps you meant "typing.Any" instead of "any"?
+resync\core\health\health_alerting.py:362: error: Function "builtins.any" is not valid as a type
+resync\core\health\health_alerting.py:362: note: Perhaps you meant "typing.Any" instead of "any"?
+resync\core\health\health_alerting.py:380: error: Need type annotation for "all_components" (hint: "all_components: dict[<type>, <type>] = ...")
+resync\core\health\health_alerting.py:436: error: Function "builtins.any" is not valid as a type
+resync\core\health\health_alerting.py:436: note: Perhaps you meant "typing.Any" instead of "any"?
+resync\core\health\health_alerting.py:448: error: Function "builtins.any" is not valid as a type
+resync\core\health\health_alerting.py:448: note: Perhaps you meant "typing.Any" instead of "any"?
+resync\core\health\global_health_service_manager.py:27: error: Function is missing a return type annotation
+resync\core\health\global_health_service_manager.py:27: note: Use "-> None" if function does not return a value
+resync\core\health\global_health_service_manager.py:32: error: Function is missing a type annotation for one or more arguments
+resync\core\health\global_health_service_manager.py:105: error: Function is missing a type annotation for one or more arguments
+resync\core\health\component_cache_manager.py:223: error: Function "builtins.any" is not valid as a type
+resync\core\health\component_cache_manager.py:223: note: Perhaps you meant "typing.Any" instead of "any"?
+resync\core\health\component_cache_manager.py:319: error: Function is missing a return type annotation
+resync\core\health\component_cache_manager.py:319: note: Use "-> None" if function does not return a value
+resync\core\health\component_cache_manager.py:364: error: Function "builtins.any" is not valid as a type
+resync\core\health\component_cache_manager.py:364: note: Perhaps you meant "typing.Any" instead of "any"?
+resync\core\health\circuit_breaker_manager.py:30: error: Function is missing a return type annotation
+resync\core\health\circuit_breaker_manager.py:30: note: Use "-> None" if function does not return a value
+resync\core\health\circuit_breaker_manager.py:65: error: Function is missing a type annotation for one or more arguments
+resync\core\health\circuit_breaker_manager.py:290: error: Unsupported operand types for + ("object" and "int")
+resync\core\health\circuit_breaker_manager.py:292: error: Unsupported operand types for + ("object" and "int")
+resync\core\health\circuit_breaker_manager.py:294: error: Unsupported operand types for + ("object" and "int")
+resync\core\health\circuit_breaker_manager.py:296: error: Unsupported operand types for + ("object" and "int")
+resync\core\health\circuit_breaker.py:53: error: Function is missing a type annotation for one or more arguments
+resync\core\health\monitors\tws_monitor.py:35: error: Function is missing a return type annotation
+resync\core\health\monitors\tws_monitor.py:35: note: Use "-> None" if function does not return a value
+resync\core\health\monitors\tws_monitor.py:156: error: No overload variant of "__sub__" of "datetime" matches argument type "None"
+resync\core\health\monitors\tws_monitor.py:156: note: Possible overload variants:
+resync\core\health\monitors\tws_monitor.py:156: note:     def __sub__(self, datetime, /) -> timedelta
+resync\core\health\monitors\tws_monitor.py:156: note:     def __sub__(self, timedelta, /) -> datetime
+resync\core\health\monitors\tws_monitor.py:156: note: Right operand is of type "datetime | None"
+resync\core\health\monitors\system_monitor.py:36: error: Function is missing a return type annotation
+resync\core\health\monitors\system_monitor.py:36: note: Use "-> None" if function does not return a value
+resync\core\health\monitors\system_monitor.py:217: error: No overload variant of "__sub__" of "datetime" matches argument type "None"
+resync\core\health\monitors\system_monitor.py:217: note: Possible overload variants:
+resync\core\health\monitors\system_monitor.py:217: note:     def __sub__(self, datetime, /) -> timedelta
+resync\core\health\monitors\system_monitor.py:217: note:     def __sub__(self, timedelta, /) -> datetime
+resync\core\health\monitors\system_monitor.py:217: note: Right operand is of type "datetime | None"
+resync\core\health\monitors\service_monitor.py:55: error: Function is missing a return type annotation
+resync\core\health\monitors\service_monitor.py:55: note: Use "-> None" if function does not return a value
+resync\core\health\monitors\connection_monitor.py:36: error: Function is missing a return type annotation
+resync\core\health\monitors\connection_monitor.py:36: note: Use "-> None" if function does not return a value
+resync\core\health\monitors\connection_monitor.py:235: error: No overload variant of "__sub__" of "datetime" matches argument type "None"
+resync\core\health\monitors\connection_monitor.py:235: note: Possible overload variants:
+resync\core\health\monitors\connection_monitor.py:235: note:     def __sub__(self, datetime, /) -> timedelta
+resync\core\health\monitors\connection_monitor.py:235: note:     def __sub__(self, timedelta, /) -> datetime
+resync\core\health\monitors\connection_monitor.py:235: note: Right operand is of type "datetime | None"
+resync\core\health\monitors\cache_monitor.py:37: error: Function is missing a return type annotation
+resync\core\health\monitors\cache_monitor.py:37: note: Use "-> None" if function does not return a value
+resync\core\health\monitors\cache_monitor.py:168: error: No overload variant of "__sub__" of "datetime" matches argument type "None"
+resync\core\health\monitors\cache_monitor.py:168: note: Possible overload variants:
+resync\core\health\monitors\cache_monitor.py:168: note:     def __sub__(self, datetime, /) -> timedelta
+resync\core\health\monitors\cache_monitor.py:168: note:     def __sub__(self, timedelta, /) -> datetime
+resync\core\health\monitors\cache_monitor.py:168: note: Right operand is of type "datetime | None"
+resync\core\cache\unified_cache.py:49: error: Name "LRUCache" already defined (possibly by an import)
+resync\core\cache\unified_cache.py:52: error: Function is missing a type annotation
+resync\core\cache\unified_cache.py:57: error: Function is missing a type annotation
+resync\core\cache\unified_cache.py:65: error: Function is missing a type annotation
+resync\core\cache\unified_cache.py:80: error: Function is missing a type annotation
+resync\core\cache\unified_cache.py:85: error: Function is missing a type annotation
+resync\core\cache\unified_cache.py:88: error: Function is missing a type annotation
+resync\core\cache\unified_cache.py:91: error: Function is missing a return type annotation
+resync\core\cache\unified_cache.py:91: note: Use "-> None" if function does not return a value
+resync\core\cache\unified_cache.py:279: error: Function is missing a return type annotation
+resync\core\cache\unified_cache.py:279: note: Use "-> None" if function does not return a value
+resync\core\cache\unified_cache.py:282: error: Need type annotation for "l1_cache"
+resync\core\cache\unified_cache.py:287: error: Need type annotation for "l2_cache"
+resync\core\cache\unified_cache.py:287: error: "UnifiedCacheConfig" has no attribute "l2_max_size"; maybe "l1_max_size"?
+resync\core\cache\unified_cache.py:289: error: Incompatible types in assignment (expression has type "None", variable has type "LRUCache[Any, Any]")
+resync\core\cache\unified_cache.py:295: error: Function is missing a return type annotation
+resync\core\cache\unified_cache.py:295: note: Use "-> None" if function does not return a value
+resync\core\cache\unified_cache.py:466: error: Incompatible types in "await" (actual type "Any | None", expected type "Awaitable[Any]")
+resync\core\cache\unified_cache.py:476: error: Return type "Coroutine[Any, Any, bool]" of "set" incompatible with return type "bool" in supertype "resync.core.cache.base_cache.BaseCache"
+resync\core\cache\unified_cache.py:550: error: Return type "Coroutine[Any, Any, bool]" of "delete" incompatible with return type "bool" in supertype "resync.core.cache.base_cache.BaseCache"
+resync\core\cache\unified_cache.py:609: error: Return type "Coroutine[Any, Any, None]" of "clear" incompatible with return type "None" in supertype "resync.core.cache.base_cache.BaseCache"
+resync\core\cache\unified_cache.py:737: error: "CacheEntry" has no attribute "last_accessed"
+resync\core\cache\unified_cache.py:785: error: Incompatible types in assignment (expression has type "float", variable has type "int")
+resync\core\cache\unified_cache.py:785: error: Argument 1 to "estimate_cache_memory_usage" of "CacheMemoryManager" has incompatible type "list[LRUCache[str, CacheEntry]]"; expected "list[dict[str, CacheEntry]]"
+resync\core\cache\unified_cache.py:818: error: Function is missing a type annotation for one or more arguments
+resync\core\cache\strategies.py:102: error: Unexpected keyword argument "key" for "error" of "Logger"
+C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\mypy\typeshed\stdlib\logging\__init__.pyi:168: note: "error" of "Logger" defined here
+resync\core\cache\strategies.py:160: error: Function is missing a type annotation for one or more arguments
+resync\core\cache\strategies.py:174: error: Argument 1 to "check_memory_bounds" of "CacheMemoryManager" has incompatible type "list[dict[str, resync.core.cache.strategies.CacheEntry]]"; expected "list[dict[str, resync.core.cache.memory_manager.CacheEntry]]"
+resync\core\cache\strategies.py:217: error: Function is missing a type annotation for one or more arguments
+resync\core\cache\strategies.py:386: error: Function is missing a type annotation for one or more arguments
+resync\core\cache\strategies.py:594: error: Function is missing a return type annotation
+resync\core\cache\strategies.py:602: error: Function is missing a type annotation for one or more arguments
+resync\core\redis_init.py:37: error: Cannot assign to a type
+resync\core\redis_init.py:37: error: Incompatible types in assignment (expression has type "type[Exception]", variable has type "type[RedisError]")
+resync\core\redis_init.py:37: error: Incompatible types in assignment (expression has type "type[Exception]", variable has type "type[BusyLoadingError]")
+resync\core\redis_init.py:37: error: Incompatible types in assignment (expression has type "type[Exception]", variable has type "type[AuthenticationError]")
+resync\core\redis_init.py:37: error: Incompatible types in assignment (expression has type "type[Exception]", variable has type "type[ConnectionError]")
+resync\core\redis_init.py:38: error: Cannot assign to a type
+resync\core\redis_init.py:88: error: Function is missing a return type annotation
+resync\core\redis_init.py:88: note: Use "-> None" if function does not return a value
+resync\core\health\health_service_manager_simplified.py:31: error: Function is missing a return type annotation
+resync\core\health\health_service_manager_simplified.py:31: note: Use "-> None" if function does not return a value
+resync\core\health\health_service_manager_simplified.py:129: error: No binding for nonlocal "_health_service_manager" found
+resync\core\health\health_service_manager_simplified.py:130: error: Name "_health_service_manager" is not defined
+resync\core\health\health_service_manager_simplified.py:131: error: Name "_health_service_manager" is not defined
+resync\core\health\health_service_manager_simplified.py:135: error: Name "_health_service_manager" is not defined
+resync\core\health\health_service_manager_simplified.py:137: error: Name "_health_service_manager" is not defined
+resync\core\health\health_service_manager_simplified.py:140: error: Name "_health_service_manager" is not defined
+resync\core\health\health_service_manager_simplified.py:172: error: No binding for nonlocal "_health_service_manager" found
+resync\core\health\health_service_manager_simplified.py:174: error: Name "_health_service_manager" is not defined
+resync\core\health\health_service_manager_simplified.py:176: error: Name "_health_service_manager" is not defined
+resync\core\health\health_service_manager_simplified.py:177: error: Name "_health_service_manager" is not defined
+resync\core\health\health_service_consolidated.py:49: error: Function is missing a type annotation
+resync\core\health\health_service_consolidated.py:54: error: No overload variant of "__sub__" of "datetime" matches argument type "None"
+resync\core\health\health_service_consolidated.py:54: note: Possible overload variants:
+resync\core\health\health_service_consolidated.py:54: note:     def __sub__(self, datetime, /) -> timedelta
+resync\core\health\health_service_consolidated.py:54: note:     def __sub__(self, timedelta, /) -> datetime
+resync\core\health\health_service_consolidated.py:72: error: Incompatible types in assignment (expression has type "datetime", variable has type "None")
+resync\core\health\health_service_consolidated.py:363: error: "type[UnifiedAsyncCache[T]]" has no attribute "get_instance"
+resync\core\health\health_service_consolidated.py:397: error: "type[UnifiedAsyncCache[T]]" has no attribute "get_instance"
+resync\core\health\health_service_consolidated.py:607: error: Incompatible return value type (got "SimplifiedHealthMetrics", expected "dict[str, Any]")
+resync\core\health\monitors\redis_monitor.py:37: error: Function is missing a return type annotation
+resync\core\health\monitors\redis_monitor.py:37: note: Use "-> None" if function does not return a value
+resync\core\health\monitors\redis_monitor.py:207: error: No overload variant of "__sub__" of "datetime" matches argument type "None"
+resync\core\health\monitors\redis_monitor.py:207: note: Possible overload variants:
+resync\core\health\monitors\redis_monitor.py:207: note:     def __sub__(self, datetime, /) -> timedelta
+resync\core\health\monitors\redis_monitor.py:207: note:     def __sub__(self, timedelta, /) -> datetime
+resync\core\health\monitors\redis_monitor.py:207: note: Right operand is of type "datetime | None"
+resync\core\cache\cache_factory.py:35: error: Function is missing a type annotation for one or more arguments
+resync\core\cache\cache_factory.py:69: error: Incompatible types in assignment (expression has type "StampedeProtectionLevel", variable has type "str")
+resync\core\cache\cache_factory.py:80: error: Argument "stampede_protection_level" to "UnifiedCacheConfig" has incompatible type "str"; expected "StampedeProtectionLevel"
+resync\core\cache\cache_factory.py:88: error: Function is missing a type annotation for one or more arguments
+resync\core\cache\cache_factory.py:123: error: Function is missing a type annotation for one or more arguments
+resync\core\cache\cache_factory.py:160: error: Function is missing a type annotation for one or more arguments
+resync\core\cache\cache_factory.py:193: error: Function is missing a type annotation for one or more arguments
+resync\core\cache\cache_factory.py:225: error: Function is missing a type annotation for one or more arguments
+resync\core\pools\redis_pool.py:17: error: Incompatible types in assignment (expression has type "None", variable has type Module)
+resync\core\pools\redis_pool.py:18: error: Cannot assign to a type
+resync\core\pools\redis_pool.py:18: error: Incompatible types in assignment (expression has type "None", variable has type "type[Redis[str]]")
+resync\core\pools\redis_pool.py:19: error: Cannot assign to a type
+resync\core\pools\redis_pool.py:19: error: Incompatible types in assignment (expression has type "None", variable has type "type[ConnectionError]")
+resync\core\pools\redis_pool.py:20: error: Cannot assign to a type
+resync\core\pools\redis_pool.py:20: error: Incompatible types in assignment (expression has type "None", variable has type "type[RedisError]")
+resync\core\pools\redis_pool.py:35: error: Function is missing a return type annotation
+resync\core\pools\redis_pool.py:45: error: Incompatible types in assignment (expression has type "Redis[Any]", variable has type "None")
+resync\core\pools\redis_pool.py:53: error: Incompatible types in assignment (expression has type "Redis[Any]", variable has type "None")
+resync\core\cache\__init__.py:30: error: Function is missing a type annotation
+resync\core\cache\__init__.py:36: error: Function is missing a return type annotation
+resync\core\cache\__init__.py:36: error: Function is missing a type annotation for one or more arguments
+resync\core\cache\__init__.py:40: error: Function is missing a return type annotation
+resync\core\cache\__init__.py:40: error: Function is missing a type annotation for one or more arguments
+resync\core\cache\__init__.py:48: error: Function is missing a return type annotation
+resync\api\gateway.py:145: error: "RateLimitRule" has no attribute "_get_client_ip"
+resync\api\gateway.py:632: error: Unexpected keyword argument "url" for "clone" of "Request"
+C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\aiohttp\web_request.py:862: note: "clone" of "Request" defined here
+resync\api\gateway.py:636: error: Function is missing a return type annotation
+resync\utils\test_tws_tools.py:21: error: Function is missing a return type annotation
+resync\utils\test_tws_tools.py:30: error: Function is missing a type annotation
+resync\utils\test_tws_tools.py:48: error: Function is missing a type annotation
+resync\utils\test_tws_tools.py:66: error: Function is missing a type annotation
+resync\utils\test_json_parser.py:7: error: Function is missing a return type annotation
+resync\utils\test_json_parser.py:7: note: Use "-> None" if function does not return a value
+resync\utils\test_json_parser.py:15: error: Function is missing a return type annotation
+resync\utils\test_json_parser.py:15: note: Use "-> None" if function does not return a value
+resync\utils\test_json_parser.py:24: error: Function is missing a return type annotation
+resync\utils\test_json_parser.py:24: note: Use "-> None" if function does not return a value
+resync\utils\test_json_parser.py:33: error: Function is missing a return type annotation
+resync\utils\test_json_parser.py:33: note: Use "-> None" if function does not return a value
+resync\utils\test_ia_auditor.py:13: error: Function is missing a return type annotation
+resync\utils\test_ia_auditor.py:28: error: Function is missing a type annotation
+resync\utils\test_ia_auditor.py:49: error: Function is missing a type annotation
+resync\utils\test_ia_auditor.py:71: error: Function is missing a type annotation
+resync\utils\test_ia_auditor.py:93: error: Function is missing a type annotation
+resync\utils\test_agent_manager.py:14: error: Function is missing a return type annotation
+resync\utils\test_agent_manager.py:21: error: Function is missing a type annotation
+resync\utils\test_agent_manager.py:32: error: Function is missing a type annotation
+resync\utils\test_agent_manager.py:45: error: Function is missing a type annotation
+resync\utils\test_agent_manager.py:61: error: Function is missing a type annotation
+resync\core\health\enhanced_health_config_manager.py:185: error: Unsupported target for indexed assignment ("Collection[str]")
+resync\core\health\enhanced_health_config_manager.py:198: error: Need type annotation for "recommendations"
+resync\utils\resource_managers.py:131: error: Function is missing a type annotation for one or more arguments
+resync\utils\resource_managers.py:174: error: Function is missing a return type annotation
+resync\utils\resource_managers.py:192: error: Incompatible types in "await" (actual type "AsyncClient | Any", expected type "Awaitable[Any]")
+resync\utils\resource_managers.py:229: error: Need type annotation for "resource"
+resync\utils\resource_managers.py:241: error: Incompatible return value type (got "T@__init__", expected "T@_get_resource")
+resync\utils\resource_managers.py:251: error: Incompatible return value type (got "T@__init__", expected "T@_get_resource")
+resync\utils\resource_managers.py:256: error: Incompatible return value type (got "T@__init__", expected "T@_get_resource")
+resync\utils\resource_managers.py:259: error: Incompatible return value type (got "T@__init__", expected "T@_get_resource")
+resync\utils\resource_managers.py:264: error: Argument 1 to "health_check" of "ResourceManager" has incompatible type "T@_return_resource"; expected "T@__init__"
+resync\utils\resource_managers.py:265: error: Argument 1 to "put" of "Queue" has incompatible type "T@_return_resource"; expected "T@__init__ | None"
+resync\utils\resource_managers.py:268: error: Argument 1 to "release" of "ResourceManager" has incompatible type "T@_return_resource"; expected "T@__init__"
+resync\utils\resource_managers.py:313: error: Function is missing a type annotation
+resync\utils\resource_managers.py:316: error: Function is missing a return type annotation
+resync\utils\resource_managers.py:319: error: Function is missing a type annotation
+resync\utils\resource_managers.py:322: error: Function is missing a type annotation
+resync\utils\resource_managers.py:336: error: Function is missing a type annotation for one or more arguments
+resync\services\http_client_factory.py:96: error: Function is missing a type annotation for one or more arguments
+resync\core\pools\http_pool.py:71: error: Return type "_AsyncGeneratorContextManager[AsyncClient, None]" of "get_connection" incompatible with return type "_AsyncGeneratorContextManager[Never, None]" in supertype "resync.core.pools.base_pool.ConnectionPool"
+resync\core\pools\pool_manager.py:151: error: Too many arguments for "RedisPool"
+resync\core\pools\pool_manager.py:151: error: Argument 1 to "RedisPool" has incompatible type "ConnectionPoolConfig"; expected "str | None"
+resync\core\pools\pool_manager.py:152: error: "RedisPool" has no attribute "initialize"
+resync\core\pools\pool_manager.py:153: error: Incompatible types in assignment (expression has type "RedisPool", target has type "ConnectionPool[Any]")
+resync\core\connection_pool_manager.py:183: error: Need type annotation for "load_trend"
+resync\core\connection_pool_manager.py:393: error: Function is missing a return type annotation
+resync\core\connection_pool_manager.py:393: note: Use "-> None" if function does not return a value
+resync\core\connection_pool_manager.py:476: error: "ConnectionPool[Any]" has no attribute "acquire"
+resync\core\connection_pool_manager.py:480: error: "ConnectionPool[Any]" has no attribute "release"
+resync\core\connection_pool_manager.py:493: error: Unsupported target for indexed assignment ("object")
+resync\core\connection_pool_manager.py:493: error: "ConnectionPool[Any]" has no attribute "get_stats"; maybe "get_stats_copy"?
+resync\core\connection_pool_manager.py:507: error: Need type annotation for "results"
+resync\core\connection_pool_manager.py:518: error: "ConnectionPool[Any]" has no attribute "get_stats"; maybe "get_stats_copy"?
+resync\core\pools\connection_pool_monitor.py:70: error: Function is missing a return type annotation
+resync\core\pools\connection_pool_monitor.py:70: note: Use "-> None" if function does not return a value
+resync\core\pools\connection_pool_monitor.py:146: error: Incompatible types in assignment (expression has type "float", variable has type "int")
+resync\core\pools\connection_pool_monitor.py:157: error: Incompatible types in assignment (expression has type "float", variable has type "int")
+resync\core\health\recovery_manager.py:35: error: Function is missing a return type annotation
+resync\core\health\recovery_manager.py:35: note: Use "-> None" if function does not return a value
+resync\core\health\recovery_manager.py:98: error: "Coroutine[Any, Any, ConnectionPoolManager]" has no attribute "reset_pool"
+resync\core\health\recovery_manager.py:361: error: "Coroutine[Any, Any, ConnectionPoolManager]" has no attribute "acquire_connection"
+resync\core\health\recovery_manager.py:588: error: Incompatible types in assignment (expression has type "float", target has type "int")
+resync\core\health\health_service_facade.py:377: error: Function is missing a type annotation for one or more arguments
+resync\services\rag_client.py:11: error: Module "resync.core.resilience" has no attribute "CircuitBreakerManager"
+resync\services\rag_client.py:11: error: Module "resync.core.resilience" has no attribute "retry_with_backoff_async"
+resync\services\rag_client.py:49: error: Function is missing a return type annotation
+resync\services\rag_client.py:49: note: Use "-> None" if function does not return a value
+resync\services\rag_client.py:87: error: Function is missing a return type annotation
+resync\services\rag_client.py:93: error: Function is missing a return type annotation
+resync\services\rag_client.py:125: error: Function is missing a return type annotation
+resync\services\rag_client.py:130: error: Function is missing a return type annotation
+resync\config\settings_validators.py:222: error: "str" has no attribute "get_secret_value"
+resync\config\settings_validators.py:226: error: "str" has no attribute "get_secret_value"
+resync\config\settings_validators.py:236: error: "str" has no attribute "get_secret_value"
+resync\api\validation\config.py:169: error: Function is missing a type annotation
+resync\api\validation\config.py:190: error: Function is missing a type annotation
+resync\api\validation\config.py:215: error: Function is missing a type annotation
+resync\api\validation\config.py:466: error: Incompatible types in assignment (expression has type "bool", variable has type "str")
+resync\api\validation\config.py:468: error: Incompatible types in assignment (expression has type "int", variable has type "str")
+resync\api\validation\config.py:470: error: Incompatible types in assignment (expression has type "float", variable has type "str")
+resync\api\validation\config.py:473: error: Incompatible types in assignment (expression has type "list[str]", variable has type "str")
+resync\api\validation\config.py:499: error: Item "None" of "ValidationConfigModel | None" has no attribute "model_dump"
+resync\api\validation\config.py:501: error: Function is missing a type annotation for one or more arguments
+resync\api\validation\common.py:87: error: Function is missing a type annotation
+resync\api\validation\common.py:94: error: Name "StringConstraints" already defined (possibly by an import)
+resync\api\validation\common.py:437: error: "type" has no attribute "__iter__" (not iterable)
+resync\api\validation\common.py:439: error: "type" has no attribute "__iter__" (not iterable)
+resync\api\security\validations.py:29: error: "type[str]" has no attribute "validate"
+resync\api\security\validations.py:54: error: Function is missing a type annotation
+resync\api\security\validations.py:74: error: Function is missing a type annotation
+resync\api\security\validations.py:87: error: Function is missing a type annotation
+resync\api\security\models.py:18: error: Function is missing a type annotation for one or more arguments
+resync\api\models\links.py:327: error: Unexpected keyword argument "links" for "HATEOASResponse"; did you mean "_links"?
+resync\api\middleware\cors_config.py:93: error: Function is missing a type annotation
+resync\api\middleware\cors_config.py:108: error: Function is missing a type annotation
+resync\api\middleware\cors_config.py:134: error: Function is missing a type annotation
+resync\api\middleware\cors_config.py:146: error: Function is missing a type annotation
+resync\api\middleware\cors_config.py:159: error: Function is missing a type annotation
+resync\services\tws_service.py:20: error: Module "resync.core.resilience" has no attribute "CircuitBreakerError"
+resync\services\tws_service.py:20: error: Module "resync.core.resilience" has no attribute "CircuitBreakerManager"
+resync\services\tws_service.py:20: error: Module "resync.core.resilience" has no attribute "retry_with_backoff_async"
+resync\services\tws_service.py:149: error: Argument "auth" to "create_async_http_client" has incompatible type "tuple[str, str]"; expected "BasicAuth | None"
+resync\services\tws_service.py:166: error: Function is missing a return type annotation
+resync\services\tws_service.py:171: error: Function is missing a return type annotation
+resync\services\tws_service.py:240: error: Function is missing a return type annotation
+resync\services\tws_service.py:245: error: Function is missing a return type annotation
+resync\services\tws_service.py:280: error: Function is missing a return type annotation
+resync\services\tws_service.py:284: error: Function is missing a return type annotation
+resync\services\tws_service.py:311: error: Function is missing a return type annotation
+resync\services\tws_service.py:319: error: Function is missing a return type annotation
+resync\services\tws_service.py:348: error: Function is missing a return type annotation
+resync\services\tws_service.py:356: error: Function is missing a return type annotation
+resync\services\tws_service.py:385: error: Function is missing a return type annotation
+resync\services\tws_service.py:396: error: Function is missing a return type annotation
+resync\services\tws_service.py:428: error: Incompatible types in assignment (expression has type "list[WorkstationStatus] | Exception | BaseException", variable has type "list[WorkstationStatus] | Exception")
+resync\services\tws_service.py:428: error: Incompatible types in assignment (expression has type "list[JobStatus] | Exception | BaseException", variable has type "list[JobStatus] | Exception")
+resync\services\tws_service.py:428: error: Incompatible types in assignment (expression has type "list[CriticalJob] | Exception | BaseException", variable has type "list[CriticalJob] | Exception")
+resync\services\tws_service.py:460: error: Incompatible return value type (got "dict[Any, Any] | JobDetails", expected "JobDetails")
+resync\services\tws_service.py:472: error: Function is missing a return type annotation
+resync\services\tws_service.py:491: error: Incompatible types in assignment (expression has type "list[Never]", variable has type "DependencyTree")
+resync\services\tws_service.py:510: error: Function is missing a return type annotation
+resync\services\tws_service.py:546: error: Function is missing a return type annotation
+resync\services\tws_service.py:577: error: Argument "start_time" to "JobExecution" has incompatible type "Any | None"; expected "datetime"
+resync\services\tws_service.py:592: error: Function is missing a return type annotation
+resync\services\tws_service.py:624: error: Function is missing a return type annotation
+resync\services\tws_service.py:633: error: Function is missing a return type annotation
+resync\services\tws_service.py:664: error: Function is missing a return type annotation
+resync\services\tws_service.py:689: error: Argument "creation_date" to "PlanDetails" has incompatible type "Any | None"; expected "datetime"
+resync\services\tws_service.py:696: error: Function is missing a return type annotation
+resync\services\tws_service.py:732: error: Function is missing a return type annotation
+resync\services\tws_service.py:745: error: Function is missing a return type annotation
+resync\services\tws_service.py:776: error: Function is missing a return type annotation
+resync\services\tws_service.py:811: error: Function is missing a return type annotation
+resync\services\tws_service.py:842: error: Function is missing a return type annotation
+resync\services\tws_service.py:859: error: Argument "timestamp" to "Event" has incompatible type "Any | None"; expected "datetime"
+resync\services\tws_service.py:879: error: Function is missing a return type annotation
+resync\services\tws_service.py:910: error: Function is missing a return type annotation
+resync\services\tws_service.py:922: error: Argument "timestamp" to "PerformanceData" has incompatible type "Any | None"; expected "datetime"
+resync\services\tws_service.py:936: error: Function is missing a return type annotation
+resync\services\tws_service.py:1058: error: Function is missing a return type annotation
+resync\services\tws_service.py:1062: error: Function is missing a return type annotation
+resync\services\tws_service.py:1180: error: Trying to read deleted variable "e"
+resync\services\mock_tws_service.py:462: error: Argument 1 to "Event" has incompatible type "**dict[str, object]"; expected "str"
+resync\services\mock_tws_service.py:462: error: Argument 1 to "Event" has incompatible type "**dict[str, object]"; expected "datetime"
+resync\services\mock_tws_service.py:462: error: Argument 1 to "Event" has incompatible type "**dict[str, object]"; expected "str | None"
+resync\services\mock_tws_service.py:566: error: Dict entry 1 has incompatible type "str": "str"; expected "str": "bool"
+resync\services\mock_tws_service.py:567: error: Dict entry 2 has incompatible type "str": "str"; expected "str": "bool"
+resync\services\mock_tws_service.py:568: error: Dict entry 3 has incompatible type "str": "int"; expected "str": "bool"
+resync\services\mock_tws_service.py:572: error: Dict entry 1 has incompatible type "str": "str"; expected "str": "bool"
+resync\services\mock_tws_service.py:573: error: Dict entry 2 has incompatible type "str": "str"; expected "str": "bool"
+resync\services\mock_tws_service.py:574: error: Dict entry 3 has incompatible type "str": "int"; expected "str": "bool"
+resync\services\llm_service.py:70: error: Function is missing a type annotation
+resync\services\llm_service.py:74: error: Function is missing a type annotation
+resync\services\llm_service.py:96: error: Unsupported operand types for - ("float" and "None")
+resync\services\llm_service.py:98: error: Function is missing a return type annotation
+resync\services\llm_service.py:98: note: Use "-> None" if function does not return a value
+resync\services\llm_service.py:105: error: Function is missing a return type annotation
+resync\services\llm_service.py:105: note: Use "-> None" if function does not return a value
+resync\services\llm_service.py:110: error: Incompatible types in assignment (expression has type "float", variable has type "None")
+resync\services\llm_service.py:284: error: Function is missing a return type annotation
+resync\services\llm_service.py:302: error: Argument "messages" to "create" of "AsyncCompletions" has incompatible type "list[dict[str, str]]"; expected "Iterable[ChatCompletionDeveloperMessageParam | ChatCompletionSystemMessageParam | ChatCompletionUserMessageParam | ChatCompletionAssistantMessageParam | ChatCompletionToolMessageParam | ChatCompletionFunctionMessageParam]"
+resync\services\llm_service.py:310: error: Item "AsyncStream[ChatCompletionChunk]" of "ChatCompletion | AsyncStream[ChatCompletionChunk]" has no attribute "choices"
+resync\services\llm_service.py:393: error: Argument "messages" to "create" of "AsyncCompletions" has incompatible type "list[dict[str, str]]"; expected "Iterable[ChatCompletionDeveloperMessageParam | ChatCompletionSystemMessageParam | ChatCompletionUserMessageParam | ChatCompletionAssistantMessageParam | ChatCompletionToolMessageParam | ChatCompletionFunctionMessageParam]"
+resync\services\llm_service.py:401: error: Item "ChatCompletion" of "ChatCompletion | AsyncStream[ChatCompletionChunk]" has no attribute "__aiter__" (not async iterable)
+resync\services\llm_service.py:404: error: Incompatible types in "yield" (actual type "Any | str | None", expected type "str")
+resync\services\llm_service.py:404: note: Error code "misc" not covered by "type: ignore" comment
+resync\services\llm_service.py:638: error: Value of type "Coroutine[Any, Any, None]" must be used
+resync\services\llm_service.py:638: note: Are you missing an await?
+resync\api\validation\query_params.py:70: error: Function is missing a type annotation
+resync\api\validation\query_params.py:116: error: Function is missing a type annotation
+resync\api\validation\query_params.py:139: error: Function is missing a type annotation
+resync\api\validation\query_params.py:174: error: Function is missing a type annotation
+resync\api\validation\query_params.py:239: error: Function is missing a type annotation
+resync\api\validation\query_params.py:254: error: Function is missing a type annotation
+resync\api\validation\query_params.py:287: error: Function is missing a type annotation
+resync\api\validation\query_params.py:298: error: Name "StringConstraints.AGENT_ID" is not defined
+resync\api\validation\query_params.py:314: error: Name "StringConstraints.MODEL_NAME" is not defined
+resync\api\validation\query_params.py:337: error: Function is missing a type annotation
+resync\api\validation\query_params.py:345: error: Function is missing a type annotation
+resync\api\validation\query_params.py:394: error: Function is missing a type annotation
+resync\api\validation\query_params.py:423: error: Name "StringConstraints.SAFE_TEXT" is not defined
+resync\api\validation\query_params.py:427: error: Name "StringConstraints.AGENT_ID" is not defined
+resync\api\validation\query_params.py:441: error: Function is missing a type annotation
+resync\api\validation\query_params.py:465: error: Name "StringConstraints.SAFE_TEXT" is not defined
+resync\api\validation\query_params.py:480: error: Function is missing a type annotation
+resync\api\validation\query_params.py:489: error: Function is missing a type annotation
+resync\api\validation\monitoring.py:100: error: Function is missing a type annotation
+resync\api\validation\monitoring.py:156: error: Function is missing a type annotation
+resync\api\validation\monitoring.py:174: error: Function is missing a type annotation
+resync\api\validation\monitoring.py:188: error: Function is missing a type annotation
+resync\api\validation\monitoring.py:209: error: Function is missing a type annotation
+resync\api\validation\monitoring.py:274: error: Function is missing a type annotation
+resync\api\validation\monitoring.py:286: error: Function is missing a type annotation
+resync\api\validation\monitoring.py:296: error: Function is missing a type annotation
+resync\api\validation\monitoring.py:308: error: Function is missing a type annotation
+resync\api\validation\monitoring.py:327: error: Function is missing a type annotation
+resync\api\validation\monitoring.py:390: error: Function is missing a type annotation
+resync\api\validation\monitoring.py:401: error: Function is missing a type annotation
+resync\api\validation\monitoring.py:443: error: Function is missing a type annotation
+resync\api\validation\monitoring.py:499: error: Function is missing a type annotation
+resync\api\validation\monitoring.py:514: error: Function is missing a type annotation
+resync\api\validation\monitoring.py:561: error: Function is missing a type annotation
+resync\api\validation\monitoring.py:575: error: Function is missing a type annotation
+resync\api\validation\files.py:53: error: Name "CommonStringConstraints.FILENAME" is not defined
+resync\api\validation\files.py:99: error: Function is missing a type annotation
+resync\api\validation\files.py:121: error: Function is missing a type annotation
+resync\api\validation\files.py:156: error: Function is missing a type annotation
+resync\api\validation\files.py:170: error: Function is missing a type annotation
+resync\api\validation\files.py:181: error: Function is missing a type annotation
+resync\api\validation\files.py:222: error: Function is missing a type annotation
+resync\api\validation\files.py:250: error: Name "CommonStringConstraints.SAFE_TEXT" is not defined
+resync\api\validation\files.py:274: error: Name "CommonStringConstraints.FILENAME" is not defined
+resync\api\validation\files.py:292: error: Function is missing a type annotation
+resync\api\validation\files.py:301: error: Function is missing a type annotation
+resync\api\validation\files.py:310: error: Function is missing a type annotation
+resync\api\validation\files.py:327: error: Name "CommonStringConstraints.FILENAME" is not defined
+resync\api\validation\files.py:356: error: Function is missing a type annotation
+resync\api\validation\files.py:372: error: Function is missing a type annotation
+resync\api\validation\files.py:384: error: Function is missing a type annotation
+resync\api\validation\files.py:405: error: Function is missing a type annotation
+resync\api\validation\files.py:451: error: Function is missing a type annotation
+resync\api\validation\files.py:481: error: Function is missing a type annotation
+resync\api\validation\files.py:495: error: Function is missing a type annotation
+resync\api\validation\files.py:541: error: Name "CommonStringConstraints.MODEL_NAME" is not defined
+resync\api\validation\files.py:557: error: Function is missing a type annotation
+resync\api\validation\files.py:569: error: Function is missing a type annotation
+resync\api\validation\files.py:581: error: Function is missing a type annotation
+resync\api\validation\files.py:588: error: Function is missing a type annotation
+resync\api\validation\files.py:599: error: Function is missing a type annotation
+resync\api\validation\enhanced_security_fixed.py:242: error: Function is missing a type annotation for one or more arguments
+resync\api\validation\enhanced_security_fixed.py:296: error: Missing named argument "sanitized_value" for "InputValidationResult"
+resync\api\validation\enhanced_security_fixed.py:306: error: Missing named argument "sanitized_value" for "InputValidationResult"
+resync\api\validation\enhanced_security_fixed.py:319: error: Missing named argument "sanitized_value" for "InputValidationResult"
+resync\api\validation\enhanced_security_fixed.py:335: error: Missing named argument "sanitized_value" for "InputValidationResult"
+resync\api\validation\enhanced_security_fixed.py:360: error: Missing named argument "sanitized_value" for "InputValidationResult"
+resync\api\validation\enhanced_security_fixed.py:371: error: Missing named argument "error_message" for "InputValidationResult"
+resync\api\validation\enhanced_security_fixed.py:371: error: Missing named argument "threat_detected" for "InputValidationResult"
+resync\api\validation\enhanced_security_fixed.py:396: error: Missing named argument "sanitized_value" for "InputValidationResult"
+resync\api\validation\enhanced_security_fixed.py:396: error: Missing named argument "threat_detected" for "InputValidationResult"
+resync\api\validation\enhanced_security_fixed.py:404: error: Missing named argument "sanitized_value" for "InputValidationResult"
+resync\api\validation\enhanced_security_fixed.py:415: error: Missing named argument "sanitized_value" for "InputValidationResult"
+resync\api\validation\enhanced_security_fixed.py:415: error: Missing named argument "threat_detected" for "InputValidationResult"
+resync\api\validation\enhanced_security_fixed.py:423: error: Missing named argument "error_message" for "InputValidationResult"
+resync\api\validation\enhanced_security_fixed.py:423: error: Missing named argument "threat_detected" for "InputValidationResult"
+resync\api\validation\enhanced_security_fixed.py:462: error: Missing named argument "sanitized_value" for "InputValidationResult"
+resync\api\validation\enhanced_security_fixed.py:476: error: Missing named argument "sanitized_value" for "InputValidationResult"
+resync\api\validation\enhanced_security_fixed.py:484: error: Missing named argument "sanitized_value" for "InputValidationResult"
+resync\api\validation\enhanced_security_fixed.py:494: error: Missing named argument "sanitized_value" for "InputValidationResult"
+resync\api\validation\enhanced_security_fixed.py:501: error: Missing named argument "sanitized_value" for "InputValidationResult"
+resync\api\validation\enhanced_security_fixed.py:508: error: Missing named argument "sanitized_value" for "InputValidationResult"
+resync\api\validation\enhanced_security_fixed.py:508: error: Missing named argument "error_message" for "InputValidationResult"
+resync\api\validation\enhanced_security_fixed.py:508: error: Missing named argument "threat_detected" for "InputValidationResult"
+resync\api\validation\enhanced_security_fixed.py:575: error: Missing named argument "sanitized_value" for "InputValidationResult"
+resync\api\validation\enhanced_security_fixed.py:575: error: Missing named argument "threat_detected" for "InputValidationResult"
+resync\api\validation\enhanced_security_fixed.py:593: error: Missing named argument "error_message" for "InputValidationResult"
+resync\api\validation\enhanced_security_fixed.py:593: error: Missing named argument "threat_detected" for "InputValidationResult"
+resync\api\validation\enhanced_security_fixed.py:620: error: Missing named argument "sanitized_value" for "InputValidationResult"
+resync\api\validation\enhanced_security_fixed.py:637: error: Missing named argument "sanitized_value" for "InputValidationResult"
+resync\api\validation\enhanced_security_fixed.py:637: error: Missing named argument "threat_detected" for "InputValidationResult"
+resync\api\validation\enhanced_security_fixed.py:646: error: Missing named argument "sanitized_value" for "InputValidationResult"
+resync\api\validation\enhanced_security_fixed.py:666: error: Missing named argument "error_message" for "InputValidationResult"
+resync\api\validation\enhanced_security_fixed.py:666: error: Missing named argument "threat_detected" for "InputValidationResult"
+resync\api\validation\enhanced_security_fixed.py:683: error: Invalid index type "int" for "dict[str, ThreatType | None]"; expected type "str"
+resync\api\validation\enhanced_security_fixed.py:713: error: Invalid index type "int" for "dict[str, ThreatType | None]"; expected type "str"
+resync\api\validation\enhanced_security_fixed.py:986: error: Function is missing a type annotation
+resync\api\validation\enhanced_security_fixed.py:989: error: Function is missing a type annotation
+resync\api\validation\enhanced_security_fixed.py:990: error: Function is missing a type annotation
+resync\api\validation\chat.py:64: error: Name "StringConstraints.SAFE_TEXT" is not defined
+resync\api\validation\chat.py:68: error: Name "StringConstraints.SAFE_TEXT" is not defined
+resync\api\validation\chat.py:74: error: Name "StringConstraints.AGENT_ID" is not defined
+resync\api\validation\chat.py:107: error: Function is missing a type annotation
+resync\api\validation\chat.py:127: error: Function is missing a type annotation
+resync\api\validation\chat.py:135: error: Function is missing a type annotation
+resync\api\validation\chat.py:167: error: Name "StringConstraints.SAFE_TEXT" is not defined
+resync\api\validation\chat.py:183: error: Name "StringConstraints.AGENT_ID" is not defined
+resync\api\validation\chat.py:187: error: Name "StringConstraints.AGENT_ID" is not defined
+resync\api\validation\chat.py:217: error: Function is missing a type annotation
+resync\api\validation\chat.py:236: error: Function is missing a type annotation
+resync\api\validation\chat.py:249: error: Name "StringConstraints.AGENT_ID" is not defined
+resync\api\validation\chat.py:253: error: Name "StringConstraints.SAFE_TEXT" is not defined
+resync\api\validation\chat.py:257: error: Name "StringConstraints.AGENT_ID" is not defined
+resync\api\validation\chat.py:297: error: Name "StringConstraints.AGENT_ID" is not defined
+resync\api\validation\chat.py:301: error: Name "StringConstraints.SAFE_TEXT" is not defined
+resync\api\validation\chat.py:305: error: Name "StringConstraints.AGENT_ID" is not defined
+resync\api\validation\chat.py:359: error: Function is missing a type annotation
+resync\api\validation\chat.py:368: error: Function is missing a type annotation
+resync\api\validation\chat.py:389: error: Name "StringConstraints.SAFE_TEXT" is not defined
+resync\api\validation\chat.py:403: error: Function is missing a type annotation
+resync\api\validation\chat.py:428: error: Name "StringConstraints.AGENT_ID" is not defined
+resync\api\validation\chat.py:452: error: Function is missing a type annotation
+resync\api\validation\auth.py:78: error: Function is missing a type annotation
+resync\api\validation\auth.py:86: error: Function is missing a type annotation
+resync\api\validation\auth.py:175: error: Function is missing a type annotation
+resync\api\validation\auth.py:188: error: Function is missing a type annotation
+resync\api\validation\auth.py:200: error: Function is missing a type annotation
+resync\api\validation\auth.py:237: error: Function is missing a type annotation
+resync\api\validation\auth.py:257: error: Function is missing a type annotation
+resync\api\validation\auth.py:307: error: Function is missing a type annotation
+resync\api\validation\auth.py:330: error: Function is missing a type annotation
+resync\api\validation\auth.py:347: error: Function is missing a type annotation
+resync\api\validation\auth.py:455: error: Function is missing a type annotation
+resync\api\validation\auth.py:463: error: Function is missing a type annotation
+resync\api\validation\agents.py:52: error: Name "StringConstraints.AGENT_ID" is not defined
+resync\api\validation\agents.py:71: error: Name "StringConstraints.ROLE_TEXT" is not defined
+resync\api\validation\agents.py:77: error: Name "StringConstraints.ROLE_TEXT" is not defined
+resync\api\validation\agents.py:85: error: Name "StringConstraints.ROLE_TEXT" is not defined
+resync\api\validation\agents.py:93: error: Name "StringConstraints.TOOL_NAME" is not defined
+resync\api\validation\agents.py:100: error: Name "StringConstraints.MODEL_NAME" is not defined
+resync\api\validation\agents.py:216: error: Function is missing a type annotation
+resync\api\validation\agents.py:247: error: Function is missing a type annotation
+resync\api\validation\agents.py:275: error: Name "StringConstraints.ROLE_TEXT" is not defined
+resync\api\validation\agents.py:279: error: Name "StringConstraints.ROLE_TEXT" is not defined
+resync\api\validation\agents.py:283: error: Name "StringConstraints.ROLE_TEXT" is not defined
+resync\api\validation\agents.py:287: error: Name "StringConstraints.TOOL_NAME" is not defined
+resync\api\validation\agents.py:291: error: Name "StringConstraints.MODEL_NAME" is not defined
+resync\api\validation\agents.py:341: error: Function is missing a type annotation
+resync\api\validation\agents.py:349: error: Function is missing a type annotation
+resync\api\validation\agents.py:366: error: Function is missing a type annotation
+resync\api\validation\agents.py:385: error: Name "StringConstraints.AGENT_ID" is not defined
+resync\api\validation\agents.py:426: error: Function is missing a type annotation
+resync\api\validation\agents.py:439: error: Name "StringConstraints.AGENT_ID" is not defined
+resync\api\validation\agents.py:462: error: Function is missing a type annotation
+resync\services\tws_client_factory.py:32: error: Function "builtins.any" is not valid as a type
+resync\services\tws_client_factory.py:32: note: Perhaps you meant "typing.Any" instead of "any"?
+resync\services\tws_client_factory.py:89: error: Function "builtins.any" is not valid as a type
+resync\services\tws_client_factory.py:89: note: Perhaps you meant "typing.Any" instead of "any"?
+resync\services\tws_client_factory.py:97: error: Function "builtins.any" is not valid as a type
+resync\services\tws_client_factory.py:97: note: Perhaps you meant "typing.Any" instead of "any"?
+resync\services\tws_client_factory.py:117: error: Argument "engine_name" to "OptimizedTWSClient" has incompatible type "str | None"; expected "str"
+resync\services\tws_client_factory.py:118: error: Argument "engine_owner" to "OptimizedTWSClient" has incompatible type "str | None"; expected "str"
+resync\services\tws_client_factory.py:145: error: "OptimizedTWSClient" has no attribute "execute_command"
+resync\services\tws_client_factory.py:147: error: Function "builtins.any" is not valid as a type
+resync\services\tws_client_factory.py:147: note: Perhaps you meant "typing.Any" instead of "any"?
+resync\services\tws_client_factory.py:161: error: Need type annotation for "executed_commands" (hint: "executed_commands: list[<type>] = ...")
+resync\services\tws_client_factory.py:162: error: Need type annotation for "job_statuses" (hint: "job_statuses: dict[<type>, <type>] = ...")
+resync\services\tws_client_factory.py:175: error: Function "builtins.any" is not valid as a type
+resync\services\tws_client_factory.py:175: note: Perhaps you meant "typing.Any" instead of "any"?
+resync\services\tws_client_factory.py:188: error: Function "builtins.any" is not valid as a type
+resync\services\tws_client_factory.py:188: note: Perhaps you meant "typing.Any" instead of "any"?
+resync\services\tws_client_factory.py:232: error: Function "builtins.any" is not valid as a type
+resync\services\tws_client_factory.py:232: note: Perhaps you meant "typing.Any" instead of "any"?
+resync\services\tws_client_factory.py:235: error: any? has no attribute "TWS_HOST"
+resync\services\tws_client_factory.py:236: error: any? has no attribute "TWS_PORT"
+resync\services\tws_client_factory.py:237: error: any? has no attribute "TWS_USER"
+resync\services\tws_client_factory.py:238: error: any? has no attribute "TWS_PASSWORD"
+resync\services\tws_client_factory.py:265: error: Function "builtins.any" is not valid as a type
+resync\services\tws_client_factory.py:265: note: Perhaps you meant "typing.Any" instead of "any"?
+resync\config\settings.py:208: error: Incompatible types in assignment (expression has type "str", variable has type "SecretStr")
+resync\utils\validation.py:64: error: Function is missing a return type annotation
+resync\utils\validation.py:72: error: Function is missing a return type annotation
+resync\utils\validation.py:116: error: Function is missing a return type annotation
+resync\utils\validation.py:140: error: Function is missing a return type annotation
+resync\utils\validation.py:169: error: Function is missing a return type annotation
+resync\utils\validation.py:195: error: Function is missing a return type annotation
+resync\utils\validation.py:237: error: Unexpected keyword argument "errors" for "ValidationError"
+C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\mypy\typeshed\stdlib\builtins.pyi:1953: note: "ValidationError" defined here
+resync\utils\validation.py:237: error: Unexpected keyword argument "model" for "ValidationError"
+resync\utils\validation.py:240: error: Function is missing a return type annotation
+resync\utils\validation.py:250: error: Function is missing a return type annotation
+resync\utils\error_factories.py:40: error: Function is missing a return type annotation
+resync\utils\error_factories.py:47: error: Function is missing a return type annotation
+resync\utils\error_factories.py:54: error: Function is missing a return type annotation
+resync\utils\error_factories.py:107: error: Argument 3 to "create_response" of "EnhancedResyncExceptionFactory" has incompatible type "Any | bool | str"; expected "bool"
+resync\utils\error_factories.py:113: error: Argument 3 to "create_response" of "TWSConnectionExceptionFactory" has incompatible type "Any | bool | str"; expected "bool"
+resync\utils\error_factories.py:117: error: Argument 3 to "create_response" of "LLMExceptionFactory" has incompatible type "Any | bool | str"; expected "bool"
+resync\utils\error_factories.py:121: error: Argument 3 to "create_response" of "DatabaseExceptionFactory" has incompatible type "Any | bool | str"; expected "bool"
+resync\utils\error_factories.py:125: error: Argument 3 to "create_response" of "NotFoundExceptionHandler" has incompatible type "Any | bool | str"; expected "bool"
+resync\utils\error_factories.py:129: error: Argument 3 to "create_response" of "BaseResyncExceptionFactory" has incompatible type "Any | bool | str"; expected "bool"
+resync\utils\error_factories.py:132: error: Argument 3 to "create_response" of "UnknownExceptionFactory" has incompatible type "Any | bool | str"; expected "bool"
+resync\utils\error_factories.py:140: error: Function is missing a type annotation for one or more arguments
+resync\utils\error_factories.py:222: error: Function is missing a type annotation for one or more arguments
+resync\utils\error_factories.py:235: error: Function is missing a type annotation for one or more arguments
+resync\utils\error_factories.py:248: error: Function is missing a type annotation for one or more arguments
+resync\utils\error_factories.py:261: error: Function is missing a type annotation for one or more arguments
+resync\utils\error_factories.py:276: error: Function is missing a type annotation for one or more arguments
+resync\utils\error_factories.py:292: error: Function is missing a type annotation for one or more arguments
+resync\utils\error_factories.py:304: error: Function is missing a type annotation for one or more arguments
+resync\fastapi_app\main.py:63: error: Function is missing a return type annotation
+resync\fastapi_app\main.py:73: error: Function is missing a return type annotation
+resync\fastapi_app\main.py:78: error: Function is missing a return type annotation
+resync\fastapi_app\main.py:91: error: Function is missing a return type annotation
+resync\fastapi_app\main.py:102: error: Function is missing a return type annotation
+resync\fastapi_app\main.py:107: error: Function is missing a return type annotation
+resync\fastapi_app\main.py:112: error: Function is missing a return type annotation
+resync\fastapi_app\main.py:117: error: Function is missing a return type annotation
+resync\fastapi_app\main.py:133: error: Function is missing a return type annotation
+resync\core\rate_limiter.py:19: error: Function is missing a return type annotation
+resync\core\rate_limiter.py:19: note: Use "-> None" if function does not return a value
+resync\core\rate_limiter.py:128: error: Function is missing a type annotation
+resync\core\rate_limiter.py:130: error: Function is missing a type annotation
+resync\core\rate_limiter.py:147: error: Function is missing a type annotation
+resync\core\rate_limiter.py:149: error: Function is missing a type annotation
+resync\core\fastapi_di.py:47: error: Function is missing a return type annotation
+resync\core\fastapi_di.py:68: error: Function is missing a return type annotation
+resync\core\fastapi_di.py:120: error: Function is missing a return type annotation
+resync\core\fastapi_di.py:186: error: Incompatible return value type (got "Callable[[], Coroutine[Any, Any, T]]", expected "Callable[[], T]")
+resync\core\fastapi_di.py:195: error: Function is missing a return type annotation
+resync\core\fastapi_di.py:200: error: Function is missing a return type annotation
+resync\core\fastapi_di.py:205: error: Function is missing a return type annotation
+resync\core\fastapi_di.py:210: error: Function is missing a return type annotation
+resync\core\fastapi_di.py:215: error: Function is missing a return type annotation
+resync\core\fastapi_di.py:220: error: Function is missing a return type annotation
+resync\core\fastapi_di.py:292: error: Argument 1 to "add_middleware" of "Starlette" has incompatible type "type[DIMiddleware]"; expected "_MiddlewareFactory[[Any]]"
+resync\core\fastapi_di.py:292: note: Following member(s) of "DIMiddleware" have conflicts:
+resync\core\fastapi_di.py:292: note:     Expected:
+resync\core\fastapi_di.py:292: note:         def __call__(Callable[[MutableMapping[str, Any], Callable[[], Awaitable[MutableMapping[str, Any]]], Callable[[MutableMapping[str, Any]], Awaitable[None]]], Awaitable[None]], /, container_instance: Any) -> Callable[[MutableMapping[str, Any], Callable[[], Awaitable[MutableMapping[str, Any]]], Callable[[MutableMapping[str, Any]], Awaitable[None]]], Awaitable[None]]
+resync\core\fastapi_di.py:292: note:     Got:
+resync\core\fastapi_di.py:292: note:         def __init__(app: FastAPI, container_instance: Any = ...) -> DIMiddleware
+resync\core\fastapi_di.py:292: note: "_MiddlewareFactory[[Any]].__call__" has type "Callable[[Callable[[MutableMapping[str, Any], Callable[[], Awaitable[MutableMapping[str, Any]]], Callable[[MutableMapping[str, Any]], Awaitable[None]]], Awaitable[None]], Arg(Any, 'container_instance')], Callable[[MutableMapping[str, Any], Callable[[], Awaitable[MutableMapping[str, Any]]], Callable[[MutableMapping[str, Any]], Awaitable[None]]], Awaitable[None]]]"
+resync\core\fastapi_di.py:342: error: Function is missing a return type annotation
+resync\core\fastapi_di.py:342: note: Use "-> None" if function does not return a value
+resync\config\enhanced_security.py:83: error: Function is missing a type annotation for one or more arguments
+resync\config\enhanced_security.py:265: error: Argument 1 to "add_middleware" of "Starlette" has incompatible type "type[EnhancedSecurityMiddleware]"; expected "_MiddlewareFactory[[KwArg(Any)]]"
+resync\config\enhanced_security.py:265: note: Following member(s) of "EnhancedSecurityMiddleware" have conflicts:
+resync\config\enhanced_security.py:265: note:     Expected:
+resync\config\enhanced_security.py:265: note:         def __call__(Callable[[MutableMapping[str, Any], Callable[[], Awaitable[MutableMapping[str, Any]]], Callable[[MutableMapping[str, Any]], Awaitable[None]]], Awaitable[None]], /, **Any) -> Callable[[MutableMapping[str, Any], Callable[[], Awaitable[MutableMapping[str, Any]]], Callable[[MutableMapping[str, Any]], Awaitable[None]]], Awaitable[None]]
+resync\config\enhanced_security.py:265: note:     Got:
+resync\config\enhanced_security.py:265: note:         def __init__(app: FastAPI, enable_hsts: bool = ..., enable_csp: bool = ..., enable_referrer_policy: bool = ..., enable_permissions_policy: bool = ..., enable_feature_policy: bool = ..., enable_xss_protection: bool = ..., enable_content_type_options: bool = ..., enable_frame_options: bool = ..., strict_transport_security_max_age: int = ..., content_security_policy: str | None = ..., referrer_policy: str = ..., permissions_policy: str | None = ..., feature_policy: str | None = ...) -> EnhancedSecurityMiddleware
+resync\config\enhanced_security.py:265: note: "_MiddlewareFactory[[KwArg(Any)]].__call__" has type "Callable[[Callable[[MutableMapping[str, Any], Callable[[], Awaitable[MutableMapping[str, Any]]], Callable[[MutableMapping[str, Any]], Awaitable[None]]], Awaitable[None]], KwArg(Any)], Callable[[MutableMapping[str, Any], Callable[[], Awaitable[MutableMapping[str, Any]]], Callable[[MutableMapping[str, Any]], Awaitable[None]]], Awaitable[None]]]"
+resync\config\enhanced_security.py:280: error: Function is missing a type annotation for one or more arguments
+resync\api\rfc_examples.py:134: error: Function is missing a return type annotation
+resync\api\rfc_examples.py:183: error: Unexpected keyword argument "base_path" for "create_paginated_response"
+resync\api\models\responses.py:202: note: "create_paginated_response" defined here
+resync\api\rfc_examples.py:183: error: Unexpected keyword argument "query_params" for "create_paginated_response"
+resync\api\rfc_examples.py:233: error: Function is missing a return type annotation
+resync\api\rfc_examples.py:311: error: Function is missing a return type annotation
+resync\api\rfc_examples.py:379: error: Function is missing a return type annotation
+resync\api\rfc_examples.py:404: error: Function is missing a return type annotation
+resync\api\rag_upload.py:43: error: Function is missing a return type annotation
+resync\api\performance.py:41: error: Incompatible return value type (got "JSONResponse", expected "dict[str, Any]")
+resync\api\performance.py:77: error: Incompatible return value type (got "JSONResponse", expected "dict[str, Any]")
+resync\api\performance.py:105: error: Incompatible return value type (got "JSONResponse", expected "dict[str, Any]")
+resync\api\performance.py:127: error: "ConnectionPoolManager" has no attribute "get_performance_report"
+resync\api\performance.py:129: error: Incompatible return value type (got "JSONResponse", expected "dict[str, Any]")
+resync\api\performance.py:148: error: "ConnectionPoolManager" has no attribute "get_optimization_recommendations"
+resync\api\performance.py:150: error: Incompatible return value type (got "JSONResponse", expected "dict[str, Any]")
+resync\api\performance.py:174: error: Incompatible return value type (got "JSONResponse", expected "dict[str, Any]")
+resync\api\performance.py:213: error: Incompatible return value type (got "JSONResponse", expected "dict[str, Any]")
+resync\api\performance.py:260: error: "ConnectionPoolStats" has no attribute "get"
+resync\api\performance.py:261: error: "ConnectionPoolStats" has no attribute "get"
+resync\api\performance.py:281: error: Incompatible return value type (got "JSONResponse", expected "dict[str, Any]")
+resync\api\health_simplified.py:490: error: Function is missing a return type annotation
+resync\api\health_simplified.py:562: error: Function is missing a return type annotation
+resync\api\health_simplified.py:562: note: Use "-> None" if function does not return a value
+resync\api\health.py:25: error: Function is missing a return type annotation
+resync\api\health.py:119: error: "ConsolidatedHealthService" has no attribute "perform_comprehensive_health_check"
+resync\api\health.py:183: error: "ConsolidatedHealthService" has no attribute "perform_comprehensive_health_check"
+resync\api\health.py:271: error: "ConsolidatedHealthService" has no attribute "perform_comprehensive_health_check"
+resync\api\health.py:293: error: "ConsolidatedHealthService" has no attribute "get_health_history"; maybe "health_history"?
+resync\api\health.py:341: error: "ConsolidatedHealthService" has no attribute "perform_comprehensive_health_check"
+resync\api\health.py:471: error: "ConsolidatedHealthService" has no attribute "attempt_recovery"
+resync\api\health.py:540: error: "ConsolidatedHealthService" has no attribute "perform_comprehensive_health_check"
+resync\api\health.py:660: error: Function is missing a return type annotation
+resync\api\health.py:660: note: Use "-> None" if function does not return a value
+resync\api\exception_handlers.py:187: error: Missing positional argument "title" in call to "create_validation_problem_detail"
+resync\api\exception_handlers.py:331: error: Function is missing a type annotation for one or more arguments
+resync\api\connection_pool_monitoring.py:340: error: Unsupported operand types for + ("object" and "int")
+resync\api\connection_pool_monitoring.py:356: error: Unsupported target for indexed assignment ("object")
+resync\api\connection_pool_monitoring.py:357: error: "object" has no attribute "get"
+resync\api\circuit_breaker_metrics.py:305: error: "Sequence[str]" has no attribute "extend"
+resync\api\circuit_breaker_metrics.py:308: error: "Sequence[str]" has no attribute "extend"
+resync\api\agents.py:8: error: Module "resync.core.security" has no attribute "SafeAgentID"
+resync\api\agents.py:19: error: Function is missing a type annotation for one or more arguments
+resync\api\agents.py:45: error: Function is missing a return type annotation
+resync\api\agents.py:45: error: Function is missing a type annotation for one or more arguments
+resync\api\validation\middleware.py:228: error: "Request" has no attribute "files"
+resync\api\validation\middleware.py:246: error: List item 0 has incompatible type "str"; expected "InitErrorDetails"
+resync\api\validation\middleware.py:251: error: List item 0 has incompatible type "str"; expected "InitErrorDetails"
+resync\api\validation\middleware.py:274: error: Need type annotation for "converted_params" (hint: "converted_params: dict[<type>, <type>] = ...")
+resync\api\validation\middleware.py:280: error: Incompatible types in assignment (expression has type "list[Never]", target has type "str")
+resync\api\validation\middleware.py:281: error: "str" has no attribute "append"
+resync\api\validation\middleware.py:301: error: List item 0 has incompatible type "str"; expected "InitErrorDetails"
+resync\api\validation\middleware.py:519: error: Argument 1 to "loads" has incompatible type "Coroutine[Any, Any, bytes]"; expected "str | bytes | bytearray"
+resync\api\validation\middleware.py:519: note: Maybe you forgot to use "await"?
+resync\api\validation\middleware.py:525: error: List item 0 has incompatible type "str"; expected "InitErrorDetails"
+resync\api\validation\middleware.py:549: error: Need type annotation for "converted_params" (hint: "converted_params: dict[<type>, <type>] = ...")
+resync\api\validation\middleware.py:554: error: Incompatible types in assignment (expression has type "list[Never]", target has type "str")
+resync\api\validation\middleware.py:555: error: "str" has no attribute "append"
+resync\api\utils\stream_handler.py:126: error: Function is missing a type annotation for one or more arguments
+resync\api\utils\error_handlers.py:131: error: Incompatible types in assignment (expression has type "dict[Any, Any]", target has type "str")
+resync\api\middleware\oauth2_middleware.py:12: error: Function is missing a return type annotation
+resync\api\middleware\idempotency.py:457: error: Argument "app" to "IdempotencyMiddleware" has incompatible type "None"; expected "Callable[..., Any]"
+resync\api\middleware\error_handler.py:28: error: Function is missing a type annotation
+resync\api\middleware\error_handler.py:282: error: Function is missing a type annotation
+resync\api\middleware\error_handler.py:292: error: Function is missing a type annotation
+resync\api\middleware\endpoint_utils.py:20: error: Function is missing a return type annotation
+resync\api\middleware\endpoint_utils.py:28: error: Function is missing a type annotation
+resync\api\middleware\endpoint_utils.py:92: error: Function is missing a return type annotation
+resync\api\middleware\endpoint_utils.py:100: error: Function is missing a type annotation
+resync\api\middleware\endpoint_utils.py:131: error: Function is missing a return type annotation
+resync\api\middleware\endpoint_utils.py:139: error: Function is missing a type annotation
+resync\api\middleware\csrf_protection.py:19: error: Function is missing a type annotation for one or more arguments
+resync\api\middleware\csrf_protection.py:25: error: Function is missing a return type annotation
+resync\api\middleware\csrf_protection.py:25: error: Function is missing a type annotation for one or more arguments
+resync\api\middleware\csrf_protection.py:49: error: Item "None" of "Address | None" has no attribute "host"
+resync\api\middleware\csp_middleware.py:25: error: Function is missing a type annotation for one or more arguments
+resync\api\middleware\csp_middleware.py:211: error: Function is missing a type annotation for one or more arguments
+resync\api\middleware\csp_middleware.py:233: error: Incompatible return value type (got "BaseHTTPMiddleware", expected "CSPMiddleware")
+resync\api\middleware\cors_monitoring.py:32: error: Function is missing a return type annotation
+resync\api\middleware\cors_monitoring.py:32: note: Use "-> None" if function does not return a value
+resync\api\middleware\cors_monitoring.py:221: error: Function is missing a type annotation for one or more arguments
+resync\api\middleware\cors_monitoring.py:226: error: Function is missing a type annotation
+resync\api\middleware\cors_monitoring.py:232: error: Function is missing a type annotation
+resync\api\middleware\cors_middleware.py:90: error: Function is missing a return type annotation
+resync\api\middleware\cors_middleware.py:90: error: Function is missing a type annotation for one or more arguments
+resync\api\middleware\cors_middleware.py:219: error: Incompatible default for argument "environment" (default has type "None", argument has type "str | Environment")
+resync\utils\error_utils.py:95: error: "type[AuthenticationErrorResponse]" has no attribute "token_expired"
+resync\utils\error_utils.py:105: error: Argument "correlation_id" to "AuthenticationErrorResponse" has incompatible type "str | None"; expected "str"
+resync\utils\error_utils.py:144: error: "type[BusinessLogicErrorResponse]" has no attribute "resource_already_exists"
+resync\utils\error_utils.py:153: error: "type[BusinessLogicErrorResponse]" has no attribute "invalid_operation"
+resync\utils\error_utils.py:165: error: Argument "correlation_id" to "BusinessLogicErrorResponse" has incompatible type "str | None"; expected "str"
+resync\utils\error_utils.py:197: error: "type[SystemErrorResponse]" has no attribute "database_error"
+resync\utils\error_utils.py:207: error: Argument "correlation_id" to "SystemErrorResponse" has incompatible type "str | None"; expected "str"
+resync\utils\error_utils.py:218: error: "type[ExternalServiceErrorResponse]" has no attribute "timeout"
+resync\utils\error_utils.py:225: error: "type[ExternalServiceErrorResponse]" has no attribute "service_error"
+resync\utils\error_utils.py:233: error: Function is missing a type annotation for one or more arguments
+resync\utils\error_utils.py:426: error: Function is missing a type annotation
+resync\utils\error_utils.py:439: error: Function is missing a return type annotation
+resync\utils\error_utils.py:456: error: Function is missing a return type annotation
+resync\utils\error_utils.py:472: error: Incompatible types in assignment (expression has type "AuthenticationErrorResponse", variable has type "BusinessLogicErrorResponse")
+resync\utils\error_utils.py:474: error: Incompatible types in assignment (expression has type "AuthorizationErrorResponse", variable has type "BusinessLogicErrorResponse")
+resync\utils\error_utils.py:476: error: Incompatible types in assignment (expression has type "RateLimitErrorResponse", variable has type "BusinessLogicErrorResponse")
+resync\utils\error_utils.py:480: error: Incompatible types in assignment (expression has type "SystemErrorResponse", variable has type "BusinessLogicErrorResponse")
+resync\utils\error_utils.py:495: error: Function is missing a return type annotation
+resync\utils\error_utils.py:509: error: Function is missing a return type annotation
+resync\config\security.py:22: error: Function is missing a return type annotation
+resync\config\security.py:22: error: Function is missing a type annotation for one or more arguments
+resync\config\csp.py:18: error: Function is missing a return type annotation
+resync\config\csp.py:18: error: Function is missing a type annotation for one or more arguments
+resync\api\dependencies.py:109: error: Function is missing a type annotation
+resync\api\chat.py:31: error: Module "resync.core.security" has no attribute "SafeAgentID"
+resync\api\chat.py:31: error: Module "resync.core.security" has no attribute "sanitize_input"
+resync\api\cache.py:19: error: Cannot assign multiple types to name "Redis" without an explicit "type[...]" annotation
+resync\api\cache.py:19: error: Incompatible types in assignment (expression has type "None", variable has type "type[Redis[str]]")
+resync\api\cache.py:20: error: Cannot assign to a type
+resync\api\cache.py:20: error: Incompatible types in assignment (expression has type "None", variable has type "type[ConnectionError]")
+resync\api\cache.py:21: error: Cannot assign to a type
+resync\api\cache.py:21: error: Incompatible types in assignment (expression has type "None", variable has type "type[TimeoutError]")
+resync\api\auth_secure.py:158: error: Item "None" of "Any | None" has no attribute "encode"
+resync\api\auth_secure.py:249: error: Argument 2 has incompatible type "Any | None"; expected "RSAPublicKey | EllipticCurvePublicKey | Ed25519PublicKey | Ed448PublicKey | PyJWK | str | bytes"
+resync\api\auth_secure.py:294: error: Argument 2 has incompatible type "Any | None"; expected "RSAPrivateKey | EllipticCurvePrivateKey | Ed25519PrivateKey | Ed448PrivateKey | PyJWK | str | bytes"
+resync\api\auth.py:158: error: Item "None" of "Any | None" has no attribute "encode"
+resync\api\auth.py:249: error: Argument 2 has incompatible type "Any | None"; expected "RSAPublicKey | EllipticCurvePublicKey | Ed25519PublicKey | Ed448PublicKey | PyJWK | str | bytes"
+resync\api\auth.py:294: error: Argument 2 has incompatible type "Any | None"; expected "RSAPrivateKey | EllipticCurvePrivateKey | Ed25519PrivateKey | Ed448PrivateKey | PyJWK | str | bytes"
+resync\api\operations.py:327: error: Function is missing a return type annotation
+resync\api\endpoints.py:67: error: Function is missing a return type annotation
+resync\api\audit.py:511: error: Function is missing a return type annotation
+resync\api\audit.py:511: note: Use "-> None" if function does not return a value
+resync\api\audit.py:514: error: Function is missing a return type annotation
+resync\api\audit.py:524: error: Function is missing a return type annotation
+resync\api\audit.py:530: error: Missing named argument "correlation_id" for "AuditRecordResponse"
+resync\api\audit.py:530: error: Missing named argument "ip_address" for "AuditRecordResponse"
+resync\api\audit.py:530: error: Missing named argument "user_agent" for "AuditRecordResponse"
+resync\api\audit.py:540: error: Function is missing a return type annotation
+resync\utils\llm_factories.py:144: error: Function is missing a type annotation for one or more arguments
+resync\utils\llm_factories.py:158: error: Function is missing a type annotation
+resync\utils\llm_factories.py:165: error: Function is missing a type annotation for one or more arguments
+resync\utils\llm_factories.py:169: error: Argument "model" to "call_llm" of "LLMFactory" has incompatible type "Any | None"; expected "str"
+resync\utils\llm_factories.py:181: error: Function is missing a type annotation
+resync\utils\llm_factories.py:190: error: Function is missing a type annotation
+resync\utils\llm_factories.py:199: error: Function is missing a type annotation
+resync\utils\llm_factories.py:208: error: Function is missing a type annotation
+resync\utils\test_llm.py:12: error: Function is missing a type annotation
+resync\utils\test_llm.py:44: error: Function is missing a type annotation
+resync\utils\test_llm.py:78: error: Function is missing a type annotation
+Found 819 errors in 124 files (checked 178 source files)

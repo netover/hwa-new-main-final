@@ -1,0 +1,37 @@
+# requirements/dev.txt - Development dependencies
+-r base.txt
+
+# Testing framework
+pytest==7.4.3
+pytest-asyncio==0.21.1
+pytest-cov==4.0.0
+
+# Mutation testing
+mutmut==2.4.3
+
+# Security scanning
+bandit==1.7.6
+# safety==3.0.0
+
+# Type checking
+mypy==1.7.1
+
+# Linting
+pylint==3.2.5
+ruff==0.1.8
+
+# Code formatting
+black==23.11.0
+isort==5.12.0
+
+# Development tools
+pre-commit==3.5.0
+
+# Additional type stubs
+types-redis==4.6.0.0
+types-openpyxl==3.1.0.0
+types-psutil==5.9.5.0
+
+# WebSockets client (used in tests)
+websockets==12.0
+

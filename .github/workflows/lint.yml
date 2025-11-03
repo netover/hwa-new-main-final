@@ -1,0 +1,7 @@
+- name: Verify TLS Disabled for TWS
+  run: |
+    if ! grep -q "TWS_VERIFY = False" resync/settings.py
+    then
+      echo "ERROR: TWS TLS verification must remain disabled"
+      exit 1
+    fi

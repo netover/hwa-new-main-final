@@ -1,0 +1,2211 @@
+{
+  "timestamp": "2025-10-26T15:24:56.721794",
+  "summary": {
+    "total_python_files": 338,
+    "unused_files": 318,
+    "duplicate_groups": 29,
+    "legacy_files": 1,
+    "backup_files": 0
+  },
+  "unused_files": [
+    {
+      "path": "resync\\app_factory.py",
+      "module": "app_factory",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\csp_validation.py",
+      "module": "csp_validation",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\environment_managers.py",
+      "module": "environment_managers",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\lifespan.py",
+      "module": "lifespan",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\main_clean.py",
+      "module": "main_clean",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\settings.py",
+      "module": "settings",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\settings_legacy.py",
+      "module": "settings_legacy",
+      "is_backup": false,
+      "is_legacy": true
+    },
+    {
+      "path": "resync\\settings_types.py",
+      "module": "settings_types",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\settings_validators.py",
+      "module": "settings_validators",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\__init__.py",
+      "module": "",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\admin.py",
+      "module": "api.admin",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\agents.py",
+      "module": "api.agents",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\audit.py",
+      "module": "api.audit",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\auth.py",
+      "module": "api.auth",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\cache.py",
+      "module": "api.cache",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\chat.py",
+      "module": "api.chat",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\circuit_breaker_metrics.py",
+      "module": "api.circuit_breaker_metrics",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\connection_pool_monitoring.py",
+      "module": "api.connection_pool_monitoring",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\cors_monitoring.py",
+      "module": "api.cors_monitoring",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\dependencies.py",
+      "module": "api.dependencies",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\endpoints.py",
+      "module": "api.endpoints",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\exception_handlers.py",
+      "module": "api.exception_handlers",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\gateway.py",
+      "module": "api.gateway",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\health.py",
+      "module": "api.health",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\health_simplified.py",
+      "module": "api.health_simplified",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\operations.py",
+      "module": "api.operations",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\performance.py",
+      "module": "api.performance",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\rag_upload.py",
+      "module": "api.rag_upload",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\rfc_examples.py",
+      "module": "api.rfc_examples",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\routes.py",
+      "module": "api.routes",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\__init__.py",
+      "module": "api",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\middleware\\correlation_id.py",
+      "module": "api.middleware.correlation_id",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\middleware\\cors_config.py",
+      "module": "api.middleware.cors_config",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\middleware\\cors_middleware.py",
+      "module": "api.middleware.cors_middleware",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\middleware\\cors_monitoring.py",
+      "module": "api.middleware.cors_monitoring",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\middleware\\csp_middleware.py",
+      "module": "api.middleware.csp_middleware",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\middleware\\csrf_protection.py",
+      "module": "api.middleware.csrf_protection",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\middleware\\endpoint_utils.py",
+      "module": "api.middleware.endpoint_utils",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\middleware\\error_handler.py",
+      "module": "api.middleware.error_handler",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\middleware\\idempotency.py",
+      "module": "api.middleware.idempotency",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\middleware\\oauth2_middleware.py",
+      "module": "api.middleware.oauth2_middleware",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\middleware\\__init__.py",
+      "module": "api.middleware",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\models\\agents.py",
+      "module": "api.models.agents",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\models\\auth.py",
+      "module": "api.models.auth",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\models\\base.py",
+      "module": "api.models.base",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\models\\health.py",
+      "module": "api.models.health",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\models\\links.py",
+      "module": "api.models.links",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\models\\rag.py",
+      "module": "api.models.rag",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\models\\responses.py",
+      "module": "api.models.responses",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\models\\__init__.py",
+      "module": "api.models",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\security\\models.py",
+      "module": "api.security.models",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\security\\validations.py",
+      "module": "api.security.validations",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\utils\\error_handlers.py",
+      "module": "api.utils.error_handlers",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\utils\\stream_handler.py",
+      "module": "api.utils.stream_handler",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\validation\\agents.py",
+      "module": "api.validation.agents",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\validation\\auth.py",
+      "module": "api.validation.auth",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\validation\\chat.py",
+      "module": "api.validation.chat",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\validation\\common.py",
+      "module": "api.validation.common",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\validation\\config.py",
+      "module": "api.validation.config",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\validation\\enhanced_security.py",
+      "module": "api.validation.enhanced_security",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\validation\\enhanced_security_fixed.py",
+      "module": "api.validation.enhanced_security_fixed",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\validation\\files.py",
+      "module": "api.validation.files",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\validation\\middleware.py",
+      "module": "api.validation.middleware",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\validation\\monitoring.py",
+      "module": "api.validation.monitoring",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\validation\\query_params.py",
+      "module": "api.validation.query_params",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api\\validation\\__init__.py",
+      "module": "api.validation",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api_gateway\\container.py",
+      "module": "api_gateway.container",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api_gateway\\core.py",
+      "module": "api_gateway.core",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api_gateway\\services.py",
+      "module": "api_gateway.services",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\api_gateway\\__init__.py",
+      "module": "api_gateway",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\config\\cors.py",
+      "module": "config.cors",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\config\\csp.py",
+      "module": "config.csp",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\config\\enhanced_security.py",
+      "module": "config.enhanced_security",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\config\\security.py",
+      "module": "config.security",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\config\\slo.py",
+      "module": "config.slo",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\adaptive_eviction.py",
+      "module": "core.adaptive_eviction",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\agent_manager.py",
+      "module": "core.agent_manager",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\alerting.py",
+      "module": "core.alerting",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\anomaly_detector.py",
+      "module": "core.anomaly_detector",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\app_context.py",
+      "module": "core.app_context",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\audit_db.py",
+      "module": "core.audit_db",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\audit_lock.py",
+      "module": "core.audit_lock",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\audit_log.py",
+      "module": "core.audit_log",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\audit_queue.py",
+      "module": "core.audit_queue",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\auto_recovery.py",
+      "module": "core.auto_recovery",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\benchmarking.py",
+      "module": "core.benchmarking",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\cache_hierarchy.py",
+      "module": "core.cache_hierarchy",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\chaos_engineering.py",
+      "module": "core.chaos_engineering",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\circuit_breaker.py",
+      "module": "core.circuit_breaker",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\circuit_breakers.py",
+      "module": "core.circuit_breakers",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\config_watcher.py",
+      "module": "core.config_watcher",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\connection_manager.py",
+      "module": "core.connection_manager",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\connection_pool_manager.py",
+      "module": "core.connection_pool_manager",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\constants.py",
+      "module": "core.constants",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\container.py",
+      "module": "core.container",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\context.py",
+      "module": "core.context",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\csp_jinja_extension.py",
+      "module": "core.csp_jinja_extension",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\csp_template_response.py",
+      "module": "core.csp_template_response",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\database_optimizer.py",
+      "module": "core.database_optimizer",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\dependencies.py",
+      "module": "core.dependencies",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\distributed_tracing.py",
+      "module": "core.distributed_tracing",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\di_container.py",
+      "module": "core.di_container",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\encoding_utils.py",
+      "module": "core.encoding_utils",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\encrypted_audit.py",
+      "module": "core.encrypted_audit",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\encryption_service.py",
+      "module": "core.encryption_service",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\exceptions.py",
+      "module": "core.exceptions",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\exceptions_enhanced.py",
+      "module": "core.exceptions_enhanced",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\fastapi_di.py",
+      "module": "core.fastapi_di",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\file_ingestor.py",
+      "module": "core.file_ingestor",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\global_utils.py",
+      "module": "core.global_utils",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\header_parser.py",
+      "module": "core.header_parser",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health_config.py",
+      "module": "core.health_config",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health_models.py",
+      "module": "core.health_models",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health_service.py",
+      "module": "core.health_service",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health_service_complete.py",
+      "module": "core.health_service_complete",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health_service_refactored.py",
+      "module": "core.health_service_refactored",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health_utils.py",
+      "module": "core.health_utils",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\ia_auditor.py",
+      "module": "core.ia_auditor",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\incident_response.py",
+      "module": "core.incident_response",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\interfaces.py",
+      "module": "core.interfaces",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\knowledge_graph.py",
+      "module": "core.knowledge_graph",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\knowledge_graph_circuit_breaker.py",
+      "module": "core.knowledge_graph_circuit_breaker",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\lifecycle.py",
+      "module": "core.lifecycle",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\litellm_init.py",
+      "module": "core.litellm_init",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\llm_monitor.py",
+      "module": "core.llm_monitor",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\llm_optimizer.py",
+      "module": "core.llm_optimizer",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\llm_wrapper.py",
+      "module": "core.llm_wrapper",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\logger.py",
+      "module": "core.logger",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\logging_utils.py",
+      "module": "core.logging_utils",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\log_aggregator.py",
+      "module": "core.log_aggregator",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\memory_manager.py",
+      "module": "core.memory_manager",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\metrics.py",
+      "module": "core.metrics",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\metrics_collector.py",
+      "module": "core.metrics_collector",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\migration_managers.py",
+      "module": "core.migration_managers",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\performance_config.py",
+      "module": "core.performance_config",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\performance_optimizer.py",
+      "module": "core.performance_optimizer",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\performance_tracker.py",
+      "module": "core.performance_tracker",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\predictive_analysis.py",
+      "module": "core.predictive_analysis",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\predictive_analyzer.py",
+      "module": "core.predictive_analyzer",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\proactive_monitor.py",
+      "module": "core.proactive_monitor",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\proactive_monitoring.py",
+      "module": "core.proactive_monitoring",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\query_cache.py",
+      "module": "core.query_cache",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\rag_health_check.py",
+      "module": "core.rag_health_check",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\rag_watcher.py",
+      "module": "core.rag_watcher",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\rate_limiter.py",
+      "module": "core.rate_limiter",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\rate_limiter_improved.py",
+      "module": "core.rate_limiter_improved",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\redis_init.py",
+      "module": "core.redis_init",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\resilience.py",
+      "module": "core.resilience",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\resource_manager.py",
+      "module": "core.resource_manager",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\retry.py",
+      "module": "core.retry",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\runbooks.py",
+      "module": "core.runbooks",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\security.py",
+      "module": "core.security",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\security_dashboard.py",
+      "module": "core.security_dashboard",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\security_hardening.py",
+      "module": "core.security_hardening",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\service_discovery.py",
+      "module": "core.service_discovery",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\shard_balancer.py",
+      "module": "core.shard_balancer",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\shared_utils.py",
+      "module": "core.shared_utils",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\simple_logger.py",
+      "module": "core.simple_logger",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\smart_pooling.py",
+      "module": "core.smart_pooling",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\snapshot_cleaner.py",
+      "module": "core.snapshot_cleaner",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\startup_validation.py",
+      "module": "core.startup_validation",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\structured_logger.py",
+      "module": "core.structured_logger",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\task_manager.py",
+      "module": "core.task_manager",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\teams_integration.py",
+      "module": "core.teams_integration",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\tws_monitor.py",
+      "module": "core.tws_monitor",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\user_behavior.py",
+      "module": "core.user_behavior",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\websocket_pool_manager.py",
+      "module": "core.websocket_pool_manager",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\write_ahead_log.py",
+      "module": "core.write_ahead_log",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\__init__.py",
+      "module": "core",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\cache\\base_cache.py",
+      "module": "core.cache.base_cache",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\cache\\cache_factory.py",
+      "module": "core.cache.cache_factory",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\cache\\memory_manager.py",
+      "module": "core.cache.memory_manager",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\cache\\persistence_manager.py",
+      "module": "core.cache.persistence_manager",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\cache\\strategies.py",
+      "module": "core.cache.strategies",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\cache\\transaction_manager.py",
+      "module": "core.cache.transaction_manager",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\cache\\unified_cache.py",
+      "module": "core.cache.unified_cache",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\cache\\__init__.py",
+      "module": "core.cache",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\compliance\\report_strategies.py",
+      "module": "core.compliance.report_strategies",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\compliance\\types.py",
+      "module": "core.compliance.types",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\compliance\\__init__.py",
+      "module": "core.compliance",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health\\circuit_breaker.py",
+      "module": "core.health.circuit_breaker",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health\\circuit_breaker_manager.py",
+      "module": "core.health.circuit_breaker_manager",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health\\component_cache_manager.py",
+      "module": "core.health.component_cache_manager",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health\\enhanced_health_config_manager.py",
+      "module": "core.health.enhanced_health_config_manager",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health\\enhanced_health_service.py",
+      "module": "core.health.enhanced_health_service",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health\\global_health_service_manager.py",
+      "module": "core.health.global_health_service_manager",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health\\health_alerting.py",
+      "module": "core.health.health_alerting",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health\\health_check_retry.py",
+      "module": "core.health.health_check_retry",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health\\health_check_service.py",
+      "module": "core.health.health_check_service",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health\\health_check_utils.py",
+      "module": "core.health.health_check_utils",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health\\health_config_manager.py",
+      "module": "core.health.health_config_manager",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health\\health_history_manager.py",
+      "module": "core.health.health_history_manager",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health\\health_metrics_simplified.py",
+      "module": "core.health.health_metrics_simplified",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health\\health_monitoring_coordinator.py",
+      "module": "core.health.health_monitoring_coordinator",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health\\health_monitoring_observer.py",
+      "module": "core.health.health_monitoring_observer",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health\\health_service_facade.py",
+      "module": "core.health.health_service_facade",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health\\health_service_manager.py",
+      "module": "core.health.health_service_manager",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health\\health_service_manager_simplified.py",
+      "module": "core.health.health_service_manager_simplified",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health\\health_service_orchestrator.py",
+      "module": "core.health.health_service_orchestrator",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health\\health_service_simplified.py",
+      "module": "core.health.health_service_simplified",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health\\memory_manager.py",
+      "module": "core.health.memory_manager",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health\\memory_usage_tracker.py",
+      "module": "core.health.memory_usage_tracker",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health\\monitoring_aggregator.py",
+      "module": "core.health.monitoring_aggregator",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health\\performance_metrics_collector.py",
+      "module": "core.health.performance_metrics_collector",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health\\proactive_monitor.py",
+      "module": "core.health.proactive_monitor",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health\\recovery_manager.py",
+      "module": "core.health.recovery_manager",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health\\refactored_enhanced_health_service.py",
+      "module": "core.health.refactored_enhanced_health_service",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health\\refactored_health_check_service.py",
+      "module": "core.health.refactored_health_check_service",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health\\refactored_health_service_orchestrator.py",
+      "module": "core.health.refactored_health_service_orchestrator",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health\\__init__.py",
+      "module": "core.health",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health\\health_checkers\\base_health_checker.py",
+      "module": "core.health.health_checkers.base_health_checker",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health\\health_checkers\\cache_health_checker.py",
+      "module": "core.health.health_checkers.cache_health_checker",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health\\health_checkers\\connection_pools_health_checker.py",
+      "module": "core.health.health_checkers.connection_pools_health_checker",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health\\health_checkers\\cpu_health_checker.py",
+      "module": "core.health.health_checkers.cpu_health_checker",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health\\health_checkers\\database_health_checker.py",
+      "module": "core.health.health_checkers.database_health_checker",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health\\health_checkers\\filesystem_health_checker.py",
+      "module": "core.health.health_checkers.filesystem_health_checker",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health\\health_checkers\\health_checker_factory.py",
+      "module": "core.health.health_checkers.health_checker_factory",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health\\health_checkers\\memory_health_checker.py",
+      "module": "core.health.health_checkers.memory_health_checker",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health\\health_checkers\\redis_health_checker.py",
+      "module": "core.health.health_checkers.redis_health_checker",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health\\health_checkers\\tws_monitor_health_checker.py",
+      "module": "core.health.health_checkers.tws_monitor_health_checker",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health\\health_checkers\\websocket_pool_health_checker.py",
+      "module": "core.health.health_checkers.websocket_pool_health_checker",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health\\health_checkers\\__init__.py",
+      "module": "core.health.health_checkers",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health\\monitors\\cache_monitor.py",
+      "module": "core.health.monitors.cache_monitor",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health\\monitors\\connection_monitor.py",
+      "module": "core.health.monitors.connection_monitor",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health\\monitors\\database_monitor.py",
+      "module": "core.health.monitors.database_monitor",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health\\monitors\\filesystem_monitor.py",
+      "module": "core.health.monitors.filesystem_monitor",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health\\monitors\\redis_monitor.py",
+      "module": "core.health.monitors.redis_monitor",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health\\monitors\\service_monitor.py",
+      "module": "core.health.monitors.service_monitor",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health\\monitors\\system_monitor.py",
+      "module": "core.health.monitors.system_monitor",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\health\\monitors\\tws_monitor.py",
+      "module": "core.health.monitors.tws_monitor",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\idempotency\\config.py",
+      "module": "core.idempotency.config",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\idempotency\\exceptions.py",
+      "module": "core.idempotency.exceptions",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\idempotency\\manager.py",
+      "module": "core.idempotency.manager",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\idempotency\\metrics.py",
+      "module": "core.idempotency.metrics",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\idempotency\\models.py",
+      "module": "core.idempotency.models",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\idempotency\\storage.py",
+      "module": "core.idempotency.storage",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\idempotency\\validation.py",
+      "module": "core.idempotency.validation",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\idempotency\\__init__.py",
+      "module": "core.idempotency",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\pools\\base_pool.py",
+      "module": "core.pools.base_pool",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\pools\\connection_pool_monitor.py",
+      "module": "core.pools.connection_pool_monitor",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\pools\\db_pool.py",
+      "module": "core.pools.db_pool",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\pools\\http_pool.py",
+      "module": "core.pools.http_pool",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\pools\\pool_manager.py",
+      "module": "core.pools.pool_manager",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\pools\\redis_pool.py",
+      "module": "core.pools.redis_pool",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\utils\\async_iterator_mock.py",
+      "module": "core.utils.async_iterator_mock",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\utils\\common_error_handlers.py",
+      "module": "core.utils.common_error_handlers",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\utils\\error_factories.py",
+      "module": "core.utils.error_factories",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\utils\\error_utils.py",
+      "module": "core.utils.error_utils",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\utils\\executors.py",
+      "module": "core.utils.executors",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\utils\\json_commands.py",
+      "module": "core.utils.json_commands",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\utils\\json_parser.py",
+      "module": "core.utils.json_parser",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\utils\\llm.py",
+      "module": "core.utils.llm",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\utils\\llm_factories.py",
+      "module": "core.utils.llm_factories",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\utils\\resource_managers.py",
+      "module": "core.utils.resource_managers",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\utils\\validation.py",
+      "module": "core.utils.validation",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\core\\utils\\__init__.py",
+      "module": "core.utils",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\cqrs\\base.py",
+      "module": "cqrs.base",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\cqrs\\commands.py",
+      "module": "cqrs.commands",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\cqrs\\command_handlers.py",
+      "module": "cqrs.command_handlers",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\cqrs\\dispatcher.py",
+      "module": "cqrs.dispatcher",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\cqrs\\queries.py",
+      "module": "cqrs.queries",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\cqrs\\query_handlers.py",
+      "module": "cqrs.query_handlers",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\cqrs\\__init__.py",
+      "module": "cqrs",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\fastapi_app\\__init__.py",
+      "module": "fastapi_app",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\fastapi_app\\api\\__init__.py",
+      "module": "fastapi_app.api",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\fastapi_app\\api\\v1\\dependencies.py",
+      "module": "fastapi_app.api.v1.dependencies",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\fastapi_app\\api\\v1\\__init__.py",
+      "module": "fastapi_app.api.v1",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\fastapi_app\\api\\v1\\models\\request_models.py",
+      "module": "fastapi_app.api.v1.models.request_models",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\fastapi_app\\api\\v1\\models\\response_models.py",
+      "module": "fastapi_app.api.v1.models.response_models",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\fastapi_app\\api\\v1\\models\\__init__.py",
+      "module": "fastapi_app.api.v1.models",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\fastapi_app\\api\\v1\\routes\\admin.py",
+      "module": "fastapi_app.api.v1.routes.admin",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\fastapi_app\\api\\v1\\routes\\admin_config.py",
+      "module": "fastapi_app.api.v1.routes.admin_config",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\fastapi_app\\api\\v1\\routes\\agents.py",
+      "module": "fastapi_app.api.v1.routes.agents",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\fastapi_app\\api\\v1\\routes\\audit.py",
+      "module": "fastapi_app.api.v1.routes.audit",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\fastapi_app\\api\\v1\\routes\\auth.py",
+      "module": "fastapi_app.api.v1.routes.auth",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\fastapi_app\\api\\v1\\routes\\chat.py",
+      "module": "fastapi_app.api.v1.routes.chat",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\fastapi_app\\api\\v1\\routes\\endpoints.py",
+      "module": "fastapi_app.api.v1.routes.endpoints",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\fastapi_app\\api\\v1\\routes\\health.py",
+      "module": "fastapi_app.api.v1.routes.health",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\fastapi_app\\api\\v1\\routes\\rag.py",
+      "module": "fastapi_app.api.v1.routes.rag",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\fastapi_app\\api\\v1\\routes\\status.py",
+      "module": "fastapi_app.api.v1.routes.status",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\fastapi_app\\api\\v1\\routes\\__init__.py",
+      "module": "fastapi_app.api.v1.routes",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\fastapi_app\\api\\v1\\websocket\\handlers.py",
+      "module": "fastapi_app.api.v1.websocket.handlers",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\fastapi_app\\api\\websocket\\handlers.py",
+      "module": "fastapi_app.api.websocket.handlers",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\fastapi_app\\api\\websocket\\__init__.py",
+      "module": "fastapi_app.api.websocket",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\fastapi_app\\core\\config.py",
+      "module": "fastapi_app.core.config",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\fastapi_app\\core\\exceptions.py",
+      "module": "fastapi_app.core.exceptions",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\fastapi_app\\core\\security.py",
+      "module": "fastapi_app.core.security",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\fastapi_app\\core\\__init__.py",
+      "module": "fastapi_app.core",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\fastapi_app\\utils\\helpers.py",
+      "module": "fastapi_app.utils.helpers",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\fastapi_app\\utils\\validators.py",
+      "module": "fastapi_app.utils.validators",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\fastapi_app\\utils\\__init__.py",
+      "module": "fastapi_app.utils",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\models\\agents.py",
+      "module": "models.agents",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\models\\error_models.py",
+      "module": "models.error_models",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\models\\tws.py",
+      "module": "models.tws",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\models\\validation.py",
+      "module": "models.validation",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\models\\__init__.py",
+      "module": "models",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\RAG\\__init__.py",
+      "module": "RAG",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\RAG\\microservice\\__init__.py",
+      "module": "RAG.microservice",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\RAG\\microservice\\core\\chunking.py",
+      "module": "RAG.microservice.core.chunking",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\RAG\\microservice\\core\\config.py",
+      "module": "RAG.microservice.core.config",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\RAG\\microservice\\core\\embedding_service.py",
+      "module": "RAG.microservice.core.embedding_service",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\RAG\\microservice\\core\\ingest.py",
+      "module": "RAG.microservice.core.ingest",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\RAG\\microservice\\core\\interfaces.py",
+      "module": "RAG.microservice.core.interfaces",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\RAG\\microservice\\core\\monitoring.py",
+      "module": "RAG.microservice.core.monitoring",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\RAG\\microservice\\core\\persistence.py",
+      "module": "RAG.microservice.core.persistence",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\RAG\\microservice\\core\\retriever.py",
+      "module": "RAG.microservice.core.retriever",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\RAG\\microservice\\core\\vector_store.py",
+      "module": "RAG.microservice.core.vector_store",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\RAG\\microservice\\core\\__init__.py",
+      "module": "RAG.microservice.core",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\security\\oauth2.py",
+      "module": "security.oauth2",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\services\\http_client_factory.py",
+      "module": "services.http_client_factory",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\services\\llm_service.py",
+      "module": "services.llm_service",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\services\\mock_tws_service.py",
+      "module": "services.mock_tws_service",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\services\\rag_client.py",
+      "module": "services.rag_client",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\services\\tws_client_factory.py",
+      "module": "services.tws_client_factory",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\services\\tws_service.py",
+      "module": "services.tws_service",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\services\\__init__.py",
+      "module": "services",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\tool_definitions\\tws_tools.py",
+      "module": "tool_definitions.tws_tools",
+      "is_backup": false,
+      "is_legacy": false
+    },
+    {
+      "path": "resync\\tool_definitions\\__init__.py",
+      "module": "tool_definitions",
+      "is_backup": false,
+      "is_legacy": false
+    }
+  ],
+  "duplicate_files": [
+    {
+      "base_name": "main",
+      "files": [
+        "resync\\main.py",
+        "resync\\fastapi_app\\main.py"
+      ]
+    },
+    {
+      "base_name": "test_agents",
+      "files": [
+        "resync\\test_agents.py",
+        "resync\\fastapi_app\\tests\\test_agents.py"
+      ]
+    },
+    {
+      "base_name": "__init__",
+      "files": [
+        "resync\\__init__.py",
+        "resync\\api\\__init__.py",
+        "resync\\api\\middleware\\__init__.py",
+        "resync\\api\\models\\__init__.py",
+        "resync\\api\\validation\\__init__.py",
+        "resync\\api_gateway\\__init__.py",
+        "resync\\core\\__init__.py",
+        "resync\\core\\cache\\__init__.py",
+        "resync\\core\\compliance\\__init__.py",
+        "resync\\core\\health\\__init__.py",
+        "resync\\core\\health\\health_checkers\\__init__.py",
+        "resync\\core\\idempotency\\__init__.py",
+        "resync\\core\\utils\\__init__.py",
+        "resync\\cqrs\\__init__.py",
+        "resync\\fastapi_app\\__init__.py",
+        "resync\\fastapi_app\\api\\__init__.py",
+        "resync\\fastapi_app\\api\\v1\\__init__.py",
+        "resync\\fastapi_app\\api\\v1\\models\\__init__.py",
+        "resync\\fastapi_app\\api\\v1\\routes\\__init__.py",
+        "resync\\fastapi_app\\api\\websocket\\__init__.py",
+        "resync\\fastapi_app\\core\\__init__.py",
+        "resync\\fastapi_app\\tests\\__init__.py",
+        "resync\\fastapi_app\\utils\\__init__.py",
+        "resync\\models\\__init__.py",
+        "resync\\RAG\\__init__.py",
+        "resync\\RAG\\microservice\\__init__.py",
+        "resync\\RAG\\microservice\\core\\__init__.py",
+        "resync\\RAG\\microservice\\tests\\__init__.py",
+        "resync\\services\\__init__.py",
+        "resync\\tool_definitions\\__init__.py"
+      ]
+    },
+    {
+      "base_name": "admin",
+      "files": [
+        "resync\\api\\admin.py",
+        "resync\\fastapi_app\\api\\v1\\routes\\admin.py"
+      ]
+    },
+    {
+      "base_name": "agents",
+      "files": [
+        "resync\\api\\agents.py",
+        "resync\\api\\models\\agents.py",
+        "resync\\api\\validation\\agents.py",
+        "resync\\fastapi_app\\api\\v1\\routes\\agents.py",
+        "resync\\models\\agents.py"
+      ]
+    },
+    {
+      "base_name": "audit",
+      "files": [
+        "resync\\api\\audit.py",
+        "resync\\fastapi_app\\api\\v1\\routes\\audit.py"
+      ]
+    },
+    {
+      "base_name": "auth",
+      "files": [
+        "resync\\api\\auth.py",
+        "resync\\api\\models\\auth.py",
+        "resync\\api\\validation\\auth.py",
+        "resync\\fastapi_app\\api\\v1\\routes\\auth.py"
+      ]
+    },
+    {
+      "base_name": "chat",
+      "files": [
+        "resync\\api\\chat.py",
+        "resync\\api\\validation\\chat.py",
+        "resync\\fastapi_app\\api\\v1\\routes\\chat.py"
+      ]
+    },
+    {
+      "base_name": "cors_monitoring",
+      "files": [
+        "resync\\api\\cors_monitoring.py",
+        "resync\\api\\middleware\\cors_monitoring.py"
+      ]
+    },
+    {
+      "base_name": "dependencies",
+      "files": [
+        "resync\\api\\dependencies.py",
+        "resync\\core\\dependencies.py",
+        "resync\\fastapi_app\\api\\v1\\dependencies.py"
+      ]
+    },
+    {
+      "base_name": "endpoints",
+      "files": [
+        "resync\\api\\endpoints.py",
+        "resync\\fastapi_app\\api\\v1\\routes\\endpoints.py"
+      ]
+    },
+    {
+      "base_name": "health",
+      "files": [
+        "resync\\api\\health.py",
+        "resync\\api\\models\\health.py",
+        "resync\\fastapi_app\\api\\v1\\routes\\health.py"
+      ]
+    },
+    {
+      "base_name": "base",
+      "files": [
+        "resync\\api\\models\\base.py",
+        "resync\\cqrs\\base.py"
+      ]
+    },
+    {
+      "base_name": "rag",
+      "files": [
+        "resync\\api\\models\\rag.py",
+        "resync\\fastapi_app\\api\\v1\\routes\\rag.py"
+      ]
+    },
+    {
+      "base_name": "models",
+      "files": [
+        "resync\\api\\security\\models.py",
+        "resync\\core\\idempotency\\models.py"
+      ]
+    },
+    {
+      "base_name": "config",
+      "files": [
+        "resync\\api\\validation\\config.py",
+        "resync\\core\\idempotency\\config.py",
+        "resync\\fastapi_app\\core\\config.py",
+        "resync\\RAG\\microservice\\core\\config.py"
+      ]
+    },
+    {
+      "base_name": "enhanced_security",
+      "files": [
+        "resync\\api\\validation\\enhanced_security.py",
+        "resync\\config\\enhanced_security.py"
+      ]
+    },
+    {
+      "base_name": "monitoring",
+      "files": [
+        "resync\\api\\validation\\monitoring.py",
+        "resync\\RAG\\microservice\\core\\monitoring.py"
+      ]
+    },
+    {
+      "base_name": "container",
+      "files": [
+        "resync\\api_gateway\\container.py",
+        "resync\\core\\container.py"
+      ]
+    },
+    {
+      "base_name": "security",
+      "files": [
+        "resync\\config\\security.py",
+        "resync\\core\\security.py",
+        "resync\\fastapi_app\\core\\security.py"
+      ]
+    },
+    {
+      "base_name": "circuit_breaker",
+      "files": [
+        "resync\\core\\circuit_breaker.py",
+        "resync\\core\\health\\circuit_breaker.py"
+      ]
+    },
+    {
+      "base_name": "exceptions",
+      "files": [
+        "resync\\core\\exceptions.py",
+        "resync\\core\\idempotency\\exceptions.py",
+        "resync\\fastapi_app\\core\\exceptions.py"
+      ]
+    },
+    {
+      "base_name": "interfaces",
+      "files": [
+        "resync\\core\\interfaces.py",
+        "resync\\RAG\\microservice\\core\\interfaces.py"
+      ]
+    },
+    {
+      "base_name": "memory_manager",
+      "files": [
+        "resync\\core\\memory_manager.py",
+        "resync\\core\\cache\\memory_manager.py",
+        "resync\\core\\health\\memory_manager.py"
+      ]
+    },
+    {
+      "base_name": "metrics",
+      "files": [
+        "resync\\core\\metrics.py",
+        "resync\\core\\idempotency\\metrics.py"
+      ]
+    },
+    {
+      "base_name": "proactive_monitor",
+      "files": [
+        "resync\\core\\proactive_monitor.py",
+        "resync\\core\\health\\proactive_monitor.py"
+      ]
+    },
+    {
+      "base_name": "tws_monitor",
+      "files": [
+        "resync\\core\\tws_monitor.py",
+        "resync\\core\\health\\monitors\\tws_monitor.py"
+      ]
+    },
+    {
+      "base_name": "validation",
+      "files": [
+        "resync\\core\\idempotency\\validation.py",
+        "resync\\core\\utils\\validation.py",
+        "resync\\models\\validation.py"
+      ]
+    },
+    {
+      "base_name": "handlers",
+      "files": [
+        "resync\\fastapi_app\\api\\v1\\websocket\\handlers.py",
+        "resync\\fastapi_app\\api\\websocket\\handlers.py"
+      ]
+    }
+  ],
+  "legacy_files": [
+    "resync\\settings_legacy.py"
+  ],
+  "backup_files": [],
+  "functionality_overlap": {
+    "auth": [
+      "resync\\api\\auth.py",
+      "resync\\api\\models\\auth.py",
+      "resync\\api\\validation\\auth.py",
+      "resync\\fastapi_app\\api\\v1\\routes\\auth.py"
+    ],
+    "monitoring": [
+      "resync\\api\\cors_monitoring.py",
+      "resync\\api\\middleware\\cors_monitoring.py",
+      "resync\\api\\validation\\monitoring.py",
+      "resync\\RAG\\microservice\\core\\monitoring.py",
+      "resync\\core\\proactive_monitor.py",
+      "resync\\core\\health\\proactive_monitor.py",
+      "resync\\core\\tws_monitor.py",
+      "resync\\core\\health\\monitors\\tws_monitor.py"
+    ],
+    "models": [
+      "resync\\api\\security\\models.py",
+      "resync\\core\\idempotency\\models.py"
+    ],
+    "config": [
+      "resync\\api\\validation\\config.py",
+      "resync\\core\\idempotency\\config.py",
+      "resync\\fastapi_app\\core\\config.py",
+      "resync\\RAG\\microservice\\core\\config.py"
+    ],
+    "security": [
+      "resync\\api\\validation\\enhanced_security.py",
+      "resync\\config\\enhanced_security.py",
+      "resync\\config\\security.py",
+      "resync\\core\\security.py",
+      "resync\\fastapi_app\\core\\security.py"
+    ],
+    "exceptions": [
+      "resync\\core\\exceptions.py",
+      "resync\\core\\idempotency\\exceptions.py",
+      "resync\\fastapi_app\\core\\exceptions.py"
+    ]
+  }
+}

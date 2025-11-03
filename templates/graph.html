@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resync - Grafo de Dependências</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        #graph-container {
+            height: 600px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: #ffffff;
+        }
+        .graph-info {
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav style="margin-bottom: 1rem;">
+            <ul style="list-style: none; display: flex; gap: 1rem; padding: 0;">
+                <li><a href="/">Dashboard</a></li>
+                <li><a href="/reports">Relatórios</a></li>
+                <li><a href="/incidents">Incidentes</a></li>
+            </ul>
+        </nav>
+        <header>
+            <h1>Grafo de Dependências do Job</h1>
+        </header>
+        <main>
+            <section class="card">
+                <div class="graph-info">
+                    <p><strong>Job:</strong> <span id="graph-job-id">{{ job_id }}</span></p>
+                    <p>Este gráfico mostra as dependências e dependentes do job especificado.  Passe o cursor nos nós para ver mais detalhes.</p>
+                </div>
+                <div id="graph-container"></div>
+            </section>
+        </main>
+        <footer>
+            <p>Resync &copy; 2024 - Monitoramento inteligente.</p>
+        </footer>
+    </div>
+    <!-- Include Cytoscape.js and dagre layout from CDN. -->
+    <script src="https://unpkg.com/dagre@0.8.4/dist/dagre.min.js"></script>
+    <script src="https://unpkg.com/cytoscape@3.22.2/dist/cytoscape.min.js"></script>
+    <script src="https://unpkg.com/cytoscape-dagre@2.3.2/cytoscape-dagre.js"></script>
+    <!-- Include Cytoscape navigator plugin for a minimap. -->
+    <script src="https://unpkg.com/cytoscape-navigator@1.2.4/cytoscape-navigator.js"></script>
+    <script nonce="{{ request.state.csp_nonce | default('') }}">
+        const jobId = "{{ job_id }}";
+
+        async function loadGraph() {
+            try {
+                const resp = await fetch(`/api/v1/tws/jobs/${jobId}/dependencies`);
+                const data = await resp.json();
+                if (window.cytoscape) {
+                    drawGraphCytoscape(data);
+                } else {
+                    fallbackList(data);
+                }
+            } catch (err) {
+                console.error('Erro ao carregar dependências:', err);
+            }
+        }
+
+        function drawGraphCytoscape(data) {
+            const elements = [];
+            const added = new Set();
+            // Add root node
+            elements.push({ data: { id: data.job_id, label: data.job_id } });
+            added.add(data.job_id);
+            const graph = data.dependency_graph || {};
+            // Build from dependency_graph
+            Object.keys(graph).forEach(job => {
+                if (!added.has(job)) {
+                    elements.push({ data: { id: job, label: job } });
+                    added.add(job);
+                }
+                graph[job].forEach(dep => {
+                    if (!added.has(dep)) {
+                        elements.push({ data: { id: dep, label: dep } });
+                        added.add(dep);
+                    }
+                    elements.push({ data: { id: job + '-' + dep, source: job, target: dep } });
+                });
+            });
+            // If graph empty, use direct dependencies
+            if (!Object.keys(graph).length) {
+                (data.dependencies || []).forEach(dep => {
+                    elements.push({ data: { id: dep, label: dep } });
+                    elements.push({ data: { id: data.job_id + '-' + dep, source: data.job_id, target: dep } });
+                });
+                (data.dependents || []).forEach(dep => {
+                    elements.push({ data: { id: dep, label: dep } });
+                    elements.push({ data: { id: dep + '-' + data.job_id, source: dep, target: data.job_id } });
+                });
+            }
+            const container = document.getElementById('graph-container');
+            const cy = cytoscape({
+                container: container,
+                elements: elements,
+                style: [
+                    {
+                        selector: 'node',
+                        style: {
+                            'background-color': '#0a9396',
+                            'label': 'data(label)',
+                            'color': '#003049',
+                            'font-size': '12px',
+                            'text-valign': 'center',
+                            'text-halign': 'center',
+                            'width': 'label',
+                            'height': 'label',
+                            'padding': '5px',
+                            'shape': 'roundrectangle'
+                        }
+                    },
+                    {
+                        selector: 'edge',
+                        style: {
+                            'width': 2,
+                            'line-color': '#94d2bd',
+                            'target-arrow-color': '#94d2bd',
+                            'target-arrow-shape': 'triangle',
+                            'curve-style': 'bezier'
+                        }
+                    }
+                ],
+                layout: {
+                    name: 'dagre',
+                    rankDir: 'TB',
+                    nodeSep: 50,
+                    edgeSep: 10,
+                    rankSep: 50,
+                    fit: true,
+                }
+            });
+            // Enable panning and zooming
+            cy.userZoomingEnabled(true);
+            cy.userPanningEnabled(true);
+            // Add a minimap navigator for better overview.  The plugin must be
+            // registered on the global cytoscape object before use.  This
+            // provides a thumbnail overview of the graph that follows user
+            // navigation.  See https://github.com/cytoscape/cytoscape.js-navigator
+            if (typeof cy.navigator === 'function') {
+                cy.navigator({
+                    container: document.createElement('div'),
+                    viewLiveFramerate: 0,
+                    thumbnailEventFramerate: 15,
+                    dblClickDelay: 200,
+                    removeCustomContainer: false,
+                    rerenderDelay: 50,
+                });
+            }
+            // Colour nodes based on their current status
+            async function applyStatusColours() {
+                const nodes = cy.nodes();
+                const promises = [];
+                nodes.forEach(node => {
+                    const nodeId = node.id();
+                    // Skip combined edges (id containing '-')
+                    if (nodeId.includes('-')) return;
+                    // Fetch job details to determine status
+                    const p = fetch(`/api/v1/tws/jobs/${nodeId}/details`)
+                        .then(r => r.json())
+                        .then(details => {
+                            const status = (details.status || '').toUpperCase();
+                            let color = '#0a9396'; // default colour
+                            if (status === 'SUCC') color = '#2a9d8f';
+                            else if (status === 'ABEND') color = '#e76f51';
+                            else if (status === 'RUNNING') color = '#e9c46a';
+                            else if (status === 'HOLD') color = '#f4a261';
+                            node.data('status', status);
+                            node.style('background-color', color);
+                        })
+                        .catch(() => {
+                            // On error, leave default colour
+                        });
+                    promises.push(p);
+                });
+                await Promise.all(promises);
+            }
+            applyStatusColours();
+            // Tooltip via title attribute (simplified)
+            cy.nodes().forEach(node => {
+                node.qtip = node.popperRef();
+            });
+        }
+
+        function fallbackList(data) {
+            const container = document.getElementById('graph-container');
+            container.innerHTML = '';
+            const ul = document.createElement('ul');
+            ul.innerHTML = `<li><strong>${data.job_id}</strong></li>`;
+            const depsUl = document.createElement('ul');
+            (data.dependencies || []).forEach(dep => {
+                const li = document.createElement('li');
+                li.textContent = dep;
+                depsUl.appendChild(li);
+            });
+            ul.appendChild(depsUl);
+            container.appendChild(ul);
+        }
+
+        loadGraph();
+    </script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+# Test-specific settings for the Resync application
+# This file is loaded when APP_ENV=test
+
+[test]
+APP_NAME = "Resync Test"
+LOG_LEVEL = "DEBUG"
+TWS_MOCK_MODE = true
+NEO4J_URI = ""
+NEO4J_USER = ""
+NEO4J_PASSWORD = ""
+REDIS_HOST = "redis" # Use the service name from docker-compose
+REDIS_PORT = 6379
+REDIS_DB = 1 # Use a separate DB for tests
+AGENT_CONFIG_PATH = "config/agents.test.json"
+RAG_DIR = "/tmp/rag_test"
+LLM_ENDPOINT = "http://mock-llm-server:8080/v1/chat/completions"
+LLM_API_KEY = ""  # Must be set via environment variable
+AGENT_MODEL_NAME = "test-model"
+TWS_HOST = "mock-tws-host"
+TWS_PORT = 12345
+TWS_USERNAME = "testuser"
+TWS_PASSWORD = ""  # Must be set via environment variable
+TWS_ENGINE_NAME = "test-engine"
+TWS_ENGINE_OWNER = "test-owner"

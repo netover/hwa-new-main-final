@@ -1,0 +1,128 @@
+{
+  "validation_summary": {
+    "correlation_id": "core_boot_1759215122_c2944c7d",
+    "duration_seconds": 3.4332275390625e-05,
+    "timestamp": 1759215122.7539756,
+    "environment": {
+      "environment": "production",
+      "is_production": true,
+      "is_testing": false,
+      "security_level": "high",
+      "should_use_mocks": false,
+      "correlation_id": "core_boot_1759215122_c2944c7d",
+      "boot_timestamp": 1759215122.017923
+    },
+    "overall_score": 21,
+    "scores": {
+      "health": 70,
+      "chaos_resilience": 0,
+      "fuzzing_resilience": 0,
+      "stress_resilience": 0,
+      "overall": 21
+    }
+  },
+  "test_results": {
+    "health_check": {
+      "overall_status": "degraded",
+      "boot_status": {
+        "correlation_id": "core_boot_1759215122_c2944c7d",
+        "total_components": 5,
+        "total_boot_time": 1.9073486328125e-06,
+        "failed_imports": [
+          "agent_manager",
+          "AsyncKnowledgeGraph"
+        ],
+        "failed_count": 2,
+        "components": {
+          "AsyncTTLCache": {
+            "boot_time": 2.384185791015625e-07,
+            "health": {
+              "status": "unknown",
+              "message": "No health check available"
+            }
+          },
+          "handle_config_change": {
+            "boot_time": 9.5367431640625e-07,
+            "health": {
+              "status": "unknown",
+              "message": "No health check available"
+            }
+          },
+          "runtime_metrics": {
+            "boot_time": 2.384185791015625e-07,
+            "health": {
+              "status": "unknown",
+              "message": "No health check available"
+            }
+          },
+          "connection_manager": {
+            "boot_time": 2.384185791015625e-07,
+            "health": {
+              "status": "unknown",
+              "message": "No health check available"
+            }
+          },
+          "encryption_service": {
+            "boot_time": 2.384185791015625e-07,
+            "health": {
+              "status": "healthy",
+              "service": "encryption",
+              "mock_mode": false,
+              "security_level": "high",
+              "test_encryption": true,
+              "test_decryption": true,
+              "timestamp": 1759215122.6981819
+            }
+          }
+        },
+        "overall_status": "degraded",
+        "global_context": {
+          "boot_id": "core_boot_1759215122_c2944c7d",
+          "environment": "production",
+          "security_level": "high",
+          "start_time": 1759215122.017923,
+          "events": []
+        }
+      },
+      "environment": {
+        "environment": "production",
+        "is_production": true,
+        "is_testing": false,
+        "security_level": "high",
+        "should_use_mocks": false,
+        "correlation_id": "core_boot_1759215122_c2944c7d",
+        "boot_timestamp": 1759215122.017923
+      },
+      "component_health": {
+        "total_components": 5,
+        "healthy_components": 1,
+        "health_issues": [
+          "AsyncTTLCache: No health check available",
+          "handle_config_change: No health check available",
+          "runtime_metrics: No health check available",
+          "connection_manager: No health check available"
+        ]
+      },
+      "runtime_metrics": {
+        "cache_hit_rate": 0,
+        "agent_success_rate": 0,
+        "audit_approval_rate": 0
+      },
+      "timestamp": 1759215122.753969
+    }
+  },
+  "recommendations": [
+    " CRITICAL: System health is degraded. Check component initialization and dependencies.",
+    " HIGH: System shows vulnerabilities under chaos conditions. Implement better error handling and circuit breakers.",
+    " MEDIUM: Fuzzing tests reveal input validation issues. Strengthen input sanitization and bounds checking.",
+    " HIGH: System performance degrades under load. Consider optimizing concurrent operations and resource usage.",
+    " POOR: System requires immediate attention. Multiple critical issues detected.",
+    " Consider implementing rate limiting and request queuing for high-load scenarios.",
+    " Enhance input validation with comprehensive schema validation and sanitization."
+  ],
+  "system_info": {
+    "python_version": "3.13.7",
+    "platform": "win32",
+    "architecture": "64-bit"
+  }
+}
