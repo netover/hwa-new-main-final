@@ -2,8 +2,8 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-from ..exceptions import LLMError
-from .llm import call_llm
+from resync.utils.exceptions import LLMError
+from resync.utils.llm import call_llm
 
 # Marks all tests in this file as async
 pytestmark = pytest.mark.asyncio

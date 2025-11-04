@@ -9,12 +9,12 @@ from pydantic import (
     BaseModel,
     ConfigDict,
     Field,
-    StringConstraints,
+    StringConstraints as PydanticStringConstraints,
     field_validator,
     model_validator,
 )
 
-from .common import NumericConstraints, ValidationPatterns
+from .common import NumericConstraints, StringConstraints, ValidationPatterns
 
 
 class AgentType(str, Enum):
@@ -57,7 +57,7 @@ class AgentConfig(BaseModel):
 
     name: Annotated[
         str,
-        StringConstraints(
+        PydanticStringConstraints(
             min_length=NumericConstraints.MIN_AGENT_NAME_LENGTH,
             max_length=NumericConstraints.MAX_AGENT_NAME_LENGTH,
             strip_whitespace=True,
@@ -122,7 +122,7 @@ class AgentConfig(BaseModel):
     description: (
         Annotated[
             str,
-            StringConstraints(
+            PydanticStringConstraints(
                 min_length=NumericConstraints.MIN_AGENT_DESCRIPTION_LENGTH,
                 max_length=NumericConstraints.MAX_AGENT_DESCRIPTION_LENGTH,
                 strip_whitespace=True,
@@ -138,7 +138,7 @@ class AgentConfig(BaseModel):
     )
 
     tags: list[
-        Annotated[str, StringConstraints(min_length=1, max_length=50)]
+        Annotated[str, PydanticStringConstraints(min_length=1, max_length=50)]
     ] = Field(
         default_factory=list,
         description="Agent tags for categorization",
@@ -263,7 +263,7 @@ class AgentUpdateRequest(BaseModel):
     name: (
         Annotated[
             str,
-            StringConstraints(
+            PydanticStringConstraints(
                 min_length=NumericConstraints.MIN_AGENT_NAME_LENGTH,
                 max_length=NumericConstraints.MAX_AGENT_NAME_LENGTH,
                 strip_whitespace=True,
@@ -305,7 +305,7 @@ class AgentUpdateRequest(BaseModel):
     description: (
         Annotated[
             str,
-            StringConstraints(
+            PydanticStringConstraints(
                 min_length=NumericConstraints.MIN_AGENT_DESCRIPTION_LENGTH,
                 max_length=NumericConstraints.MAX_AGENT_DESCRIPTION_LENGTH,
                 strip_whitespace=True,
@@ -319,7 +319,11 @@ class AgentUpdateRequest(BaseModel):
     )
 
     tags: (
-        list[Annotated[str, StringConstraints(min_length=1, max_length=50)]]
+        list[
+            Annotated[
+                str, PydanticStringConstraints(min_length=1, max_length=50)
+            ]
+        ]
         | None
     ) = Field(None, description="Updated tags", max_length=10)
 
@@ -387,7 +391,8 @@ class AgentQueryParams(BaseModel):
     )
 
     name: (
-        Annotated[str, StringConstraints(min_length=1, max_length=100)] | None
+        Annotated[str, PydanticStringConstraints(min_length=1, max_length=100)]
+        | None
     ) = Field(None, description="Filter by agent name (partial match)")
 
     type: AgentType | None = Field(None, description="Filter by agent type")
@@ -397,7 +402,11 @@ class AgentQueryParams(BaseModel):
     )
 
     tags: (
-        list[Annotated[str, StringConstraints(min_length=1, max_length=50)]]
+        list[
+            Annotated[
+                str, PydanticStringConstraints(min_length=1, max_length=50)
+            ]
+        ]
         | None
     ) = Field(None, description="Filter by tags", max_length=5)
 

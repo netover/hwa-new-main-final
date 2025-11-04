@@ -3,8 +3,8 @@ from pathlib import Path
 
 import pytest
 
-from ..agent_manager import AgentManager
-from ..exceptions import InvalidConfigError, MissingConfigError, ParsingError
+from resync.core.agent_manager import AgentManager
+from resync.utils.exceptions import InvalidConfigError, MissingConfigError, ParsingError
 
 # Marks all tests in this file as async
 pytestmark = pytest.mark.asyncio

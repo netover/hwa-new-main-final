@@ -12,7 +12,7 @@ from collections.abc import Callable
 from functools import wraps
 from typing import Any, TypeVar, cast
 
-from ..exceptions import ResyncException
+from resync.utils.exceptions import ResyncException
 
 logger = logging.getLogger(__name__)
 
@@ -37,7 +37,7 @@ def handle_parsing_errors(
                 return func(*args, **kwargs)
             except Exception as e:
                 logger.debug(f"{error_message}: {e}")
-                from ..exceptions import ParsingError
+                from resync.utils.exceptions import ParsingError
 
                 raise ParsingError(f"{error_message}: {e}") from e
 
@@ -63,7 +63,7 @@ def handle_llm_errors(
                 return func(*args, **kwargs)
             except Exception as e:
                 logger.error(f"{error_message}: {e}", exc_info=True)
-                from ..exceptions import LLMError
+                from resync.utils.exceptions import LLMError
 
                 raise LLMError(f"{error_message}: {e}") from e
 

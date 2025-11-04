@@ -12,16 +12,19 @@ import inspect
 from collections.abc import Callable
 from functools import wraps
 from typing import Any, TypeVar, get_type_hints
-import inspect
 
 from fastapi import FastAPI, Request, Response
 from resync.core.agent_manager import AgentManager
 from resync.core.audit_queue import AsyncAuditQueue
 from resync.core.connection_manager import ConnectionManager
-from resync.core.di_container import DIContainer, container
+from resync.core.di_container import DIContainer, ServiceScope, container
 from resync.core.file_ingestor import create_file_ingestor
 from resync.core.knowledge_graph import AsyncKnowledgeGraph
-from resync.core.teams_integration import ITeamsIntegration
+from resync.core.teams_integration import (
+    ITeamsIntegration,
+    TeamsConfig,
+    TeamsIntegration,
+)
 from resync.config.settings import settings
 from resync.utils.interfaces import (
     IAgentManager,
@@ -66,7 +69,7 @@ def get_tws_client_factory():
     )
 
 
-def get_teams_integration_factory():
+def get_teams_integration_factory() -> TeamsIntegration:
     """
     Factory function to create Teams integration service.
 
@@ -74,8 +77,22 @@ def get_teams_integration_factory():
         TeamsIntegration service instance.
     """
     logger.info("Creating TeamsIntegration service.")
-    # This will create a singleton instance
-    return ITeamsIntegration()
+    config = TeamsConfig(
+        enabled=getattr(settings, "TEAMS_ENABLED", False),
+        webhook_url=getattr(settings, "TEAMS_WEBHOOK_URL", None),
+        channel_name=getattr(settings, "TEAMS_CHANNEL_NAME", None),
+        bot_name=getattr(settings, "TEAMS_BOT_NAME", "Resync Bot"),
+        enable_job_notifications=getattr(
+            settings, "TEAMS_ENABLE_JOB_NOTIFICATIONS", False
+        ),
+        job_status_filters=list(
+            getattr(settings, "TEAMS_JOB_STATUS_FILTERS", ["ABEND", "ERROR"])
+        ),
+        enable_conversation_learning=getattr(
+            settings, "TEAMS_ENABLE_CONVERSATION_LEARNING", False
+        ),
+    )
+    return TeamsIntegration(config)
 
 
 def configure_container(app_container: DIContainer = container) -> DIContainer:
@@ -98,24 +115,27 @@ def configure_container(app_container: DIContainer = container) -> DIContainer:
         app_container.register_singleton(IAuditQueue, AsyncAuditQueue)
 
         # Register TWS client with factory (singleton semantics handled by the container)
-        app_container.register_factory(ITWSClient, get_tws_client_factory)
+        app_container.register_factory(
+            ITWSClient, get_tws_client_factory, ServiceScope.SINGLETON
+        )
 
         # Register Teams integration with factory
-        app_container.register_factory(ITeamsIntegration, get_teams_integration_factory)
+        app_container.register_factory(
+            ITeamsIntegration, get_teams_integration_factory, ServiceScope.SINGLETON
+        )
+        app_container.register_factory(
+            TeamsIntegration, get_teams_integration_factory, ServiceScope.SINGLETON
+        )
 
         # Register FileIngestor - depends on KnowledgeGraph.  Note: this factory returns a coroutine.
         async def file_ingestor_factory():
             """
             Factory for creating a FileIngestor.  This factory resolves the
             knowledge graph dependency from the container, awaiting the provider
-            only if necessary.  This avoids awaiting a non‑awaitable provider
+            only if necessary.  This avoids awaiting a non-awaitable provider
             and addresses type checkers that cannot determine the return type.
             """
-            knowledge_graph_provider = app_container.get(IKnowledgeGraph)  # type: ignore[arg-type]
-            if inspect.iscoroutine(knowledge_graph_provider):
-                knowledge_graph = await knowledge_graph_provider  # type: ignore[assignment]
-            else:
-                knowledge_graph = knowledge_graph_provider  # type: ignore[assignment]
+            knowledge_graph = await app_container.get(IKnowledgeGraph)  # type: ignore[arg-type]
             return create_file_ingestor(knowledge_graph)
 
         app_container.register_factory(IFileIngestor, file_ingestor_factory)
@@ -152,11 +172,8 @@ def get_service(service_type: type[T]) -> Callable[[], T]:
         surfaced with additional context.
         """
         try:
-            provider = container.get(service_type)
-            # provider may be a coroutine or a regular instance
-            if inspect.iscoroutine(provider):
-                return await provider  # type: ignore[return-value]
-            return provider  # type: ignore[return-value]
+            instance = await container.get(service_type)
+            return instance  # type: ignore[return-value]
         except KeyError as exc:
             logger.error(
                 "service_not_registered_in_container",
@@ -193,10 +210,20 @@ async def get_connection_manager_dependency() -> IConnectionManager:
     return await factory()
 
 
+async def get_connection_manager() -> IConnectionManager:
+    """Compatibility helper returning the shared connection manager."""
+    return await get_connection_manager_dependency()
+
+
 async def get_knowledge_graph_dependency() -> IKnowledgeGraph:
     """Get the knowledge graph from the container."""
     factory = get_service(IKnowledgeGraph)
     return await factory()
+
+
+async def get_knowledge_graph() -> IKnowledgeGraph:
+    """Compatibility helper wrapping get_knowledge_graph_dependency."""
+    return await get_knowledge_graph_dependency()
 
 
 async def get_audit_queue_dependency() -> IAuditQueue:
@@ -205,10 +232,20 @@ async def get_audit_queue_dependency() -> IAuditQueue:
     return await factory()
 
 
+async def get_audit_queue() -> IAuditQueue:
+    """Compatibility helper returning the audit queue service."""
+    return await get_audit_queue_dependency()
+
+
 async def get_tws_client_dependency() -> ITWSClient:
     """Get the TWS client from the container."""
     factory = get_service(ITWSClient)
     return await factory()
+
+
+async def get_tws_client() -> ITWSClient:
+    """Compatibility helper returning the shared TWS client."""
+    return await get_tws_client_dependency()
 
 
 async def get_file_ingestor_dependency() -> IFileIngestor:
@@ -221,6 +258,11 @@ async def get_teams_integration_dependency() -> ITeamsIntegration:
     """Get the teams integration from the container."""
     factory = get_service(ITeamsIntegration)
     return await factory()
+
+
+async def get_teams_integration() -> ITeamsIntegration:
+    """Return the Teams integration service."""
+    return await get_teams_integration_dependency()
 
 
 class DIMiddleware(BaseHTTPMiddleware):
@@ -347,7 +389,3 @@ def with_injection(func: Callable) -> Callable:
         return func(*args, **kwargs)
 
     return sync_wrapper
-
-
-
-

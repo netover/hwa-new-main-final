@@ -267,8 +267,15 @@ class Settings(BaseSettings, SettingsValidators):
     )
 
     llm_timeout: float = Field(
-        default=60.0, gt=0, description="Timeout para chamadas LLM em segundos"
+        default=60.0,
+        gt=0,
+        description="Timeout para chamadas LLM em segundos",
+        alias="LLM_TIMEOUT",
     )
+
+    @property
+    def LLM_TIMEOUT(self) -> float:
+        return self.llm_timeout
 
     auditor_model_name: str = Field(default="gpt-3.5-turbo")
     agent_model_name: str = Field(default="gpt-4o")
@@ -456,6 +463,22 @@ class Settings(BaseSettings, SettingsValidators):
             "microserviço RAG"
         ),
     )
+
+    @property
+    def RAG_SERVICE_URL(self) -> str:
+        return self.rag_service_url
+
+    @property
+    def RAG_SERVICE_TIMEOUT(self) -> int:
+        return self.rag_service_timeout
+
+    @property
+    def RAG_SERVICE_MAX_RETRIES(self) -> int:
+        return self.rag_service_max_retries
+
+    @property
+    def RAG_SERVICE_RETRY_BACKOFF(self) -> float:
+        return self.rag_service_retry_backoff
 
     # ============================================================================
     # BACKWARD COMPATIBILITY PROPERTIES
@@ -668,7 +691,5 @@ def __getattr__(name: str) -> Any:
                 _LOADED_IMPORTS[name] = None
         return _LOADED_IMPORTS[name]
     raise AttributeError(f"module '{__name__}' has no attribute '{name}'")
-
-
 
 

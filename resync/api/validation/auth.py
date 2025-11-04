@@ -7,9 +7,9 @@ from pydantic import (
     ConfigDict,
     EmailStr,
     Field,
-    StringConstraints,
+    FieldValidationInfo,
+    StringConstraints as PydanticStringConstraints,
     field_validator,
-    validator,
 )
 
 from .common import BaseValidatedModel
@@ -54,7 +54,7 @@ class LoginRequest(BaseValidatedModel):
 
     password: Annotated[
         str,
-        StringConstraints(min_length=8, max_length=128, strip_whitespace=True),
+        PydanticStringConstraints(min_length=8, max_length=128, strip_whitespace=True),
     ] = Field(
         ...,
         description="Password for authentication",
@@ -141,7 +141,7 @@ class TokenRequest(BaseValidatedModel):
     password: (
         Annotated[
             str,
-            StringConstraints(
+            PydanticStringConstraints(
                 min_length=8, max_length=128, strip_whitespace=True
             ),
         ]
@@ -169,41 +169,41 @@ class TokenRequest(BaseValidatedModel):
         extra="forbid",
     )
 
-    # TODO[pydantic]: We couldn't refactor the `validator`, please replace it by `field_validator` manually.
-    # Check https://docs.pydantic.dev/dev-v2/migration/#changes-to-validators for more information.
-    @validator("username", "password")
-    def validate_credentials_fields(self, v, values):
+    @field_validator("username", "password", mode="before")
+    @classmethod
+    def validate_credentials_fields(
+        cls, v: str | None, info: FieldValidationInfo
+    ) -> str | None:
         """Validate credential fields based on grant type."""
-        grant_type = values.get("grant_type")
+        grant_type = info.data.get("grant_type") if info.data else None
         if grant_type == "password" and not v:
-            field_name = "username" if "username" in str(v) else "password"
             raise ValueError(
-                f"{field_name} is required for password grant type"
+                f"{info.field_name} is required for password grant type"
             )
         return v
 
-    # TODO[pydantic]: We couldn't refactor the `validator`, please replace it by `field_validator` manually.
-    # Check https://docs.pydantic.dev/dev-v2/migration/#changes-to-validators for more information.
-    @validator("refresh_token")
-    def validate_refresh_token(self, v, values):
+    @field_validator("refresh_token", mode="before")
+    @classmethod
+    def validate_refresh_token(
+        cls, v: str | None, info: FieldValidationInfo
+    ) -> str | None:
         """Validate refresh token field."""
-        grant_type = values.get("grant_type")
+        grant_type = info.data.get("grant_type") if info.data else None
         if grant_type == "refresh_token" and not v:
             raise ValueError(
                 "refresh_token is required for refresh_token grant type"
             )
         return v
 
-    # TODO[pydantic]: We couldn't refactor the `validator`, please replace it by `field_validator` manually.
-    # Check https://docs.pydantic.dev/dev-v2/migration/#changes-to-validators for more information.
-    @validator("client_id", "client_secret")
-    def validate_client_credentials(self, v, values):
+    @field_validator("client_id", "client_secret", mode="before")
+    @classmethod
+    def validate_client_credentials(
+        cls, v: str | None, info: FieldValidationInfo
+    ) -> str | None:
         """Validate client credential fields."""
-        grant_type = values.get("grant_type")
+        grant_type = info.data.get("grant_type") if info.data else None
         if grant_type == "client_credentials" and not v:
-            field_name = (
-                "client_id" if "client_id" in str(v) else "client_secret"
-            )
+            field_name = info.field_name.replace("_", " ")
             raise ValueError(
                 f"{field_name} is required for client_credentials grant type"
             )
@@ -215,17 +215,17 @@ class PasswordChangeRequest(BaseValidatedModel):
 
     current_password: Annotated[
         str,
-        StringConstraints(min_length=8, max_length=128, strip_whitespace=True),
+        PydanticStringConstraints(min_length=8, max_length=128, strip_whitespace=True),
     ] = Field(..., description="Current password")
 
     new_password: Annotated[
         str,
-        StringConstraints(min_length=8, max_length=128, strip_whitespace=True),
+        PydanticStringConstraints(min_length=8, max_length=128, strip_whitespace=True),
     ] = Field(..., description="New password")
 
     confirm_password: Annotated[
         str,
-        StringConstraints(min_length=8, max_length=128, strip_whitespace=True),
+        PydanticStringConstraints(min_length=8, max_length=128, strip_whitespace=True),
     ] = Field(..., description="Confirm new password")
 
     model_config = ConfigDict(
@@ -251,12 +251,13 @@ class PasswordChangeRequest(BaseValidatedModel):
             )
         return v
 
-    # TODO[pydantic]: We couldn't refactor the `validator`, please replace it by `field_validator` manually.
-    # Check https://docs.pydantic.dev/dev-v2/migration/#changes-to-validators for more information.
-    @validator("confirm_password")
-    def validate_password_match(self, v, values):
+    @field_validator("confirm_password")
+    @classmethod
+    def validate_password_match(
+        cls, v: str, info: FieldValidationInfo
+    ) -> str:
         """Validate password confirmation matches."""
-        new_password = values.get("new_password")
+        new_password = info.data.get("new_password") if info.data else None
         if new_password and v != new_password:
             raise ValueError("Passwords do not match")
         return v
@@ -273,13 +274,13 @@ class UserRegistrationRequest(BaseValidatedModel):
 
     password: Annotated[
         str,
-        StringConstraints(min_length=8, max_length=128, strip_whitespace=True),
+        PydanticStringConstraints(min_length=8, max_length=128, strip_whitespace=True),
     ] = Field(..., description="Password")
 
     first_name: (
         Annotated[
             str,
-            StringConstraints(
+            PydanticStringConstraints(
                 min_length=1, max_length=50, strip_whitespace=True
             ),
         ]
@@ -289,7 +290,7 @@ class UserRegistrationRequest(BaseValidatedModel):
     last_name: (
         Annotated[
             str,
-            StringConstraints(
+            PydanticStringConstraints(
                 min_length=1, max_length=50, strip_whitespace=True
             ),
         ]
@@ -390,7 +391,7 @@ class TokenRefreshRequest(BaseValidatedModel):
     """Token refresh request validation model."""
 
     refresh_token: Annotated[
-        str, StringConstraints(min_length=10, max_length=500)
+        str, PydanticStringConstraints(min_length=10, max_length=500)
     ] = Field(..., description="Refresh token")
 
     client_id: str | None = Field(None, description="Client ID")
@@ -425,13 +426,13 @@ class APIKeyRequest(BaseValidatedModel):
 
     name: Annotated[
         str,
-        StringConstraints(min_length=3, max_length=50, strip_whitespace=True),
+        PydanticStringConstraints(min_length=3, max_length=50, strip_whitespace=True),
     ] = Field(..., description="API key name")
 
     description: (
         Annotated[
             str,
-            StringConstraints(
+            PydanticStringConstraints(
                 min_length=5, max_length=200, strip_whitespace=True
             ),
         ]
@@ -489,7 +490,4 @@ class MFARequest(BaseValidatedModel):
     model_config = ConfigDict(
         extra="forbid",
     )
-
-
-
 

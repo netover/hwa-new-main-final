@@ -6,7 +6,13 @@ import socket
 from enum import Enum
 from urllib.parse import urlparse
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator, validator
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    Field,
+    FieldValidationInfo,
+    field_validator,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -102,44 +108,50 @@ class CORSPolicy(BaseModel):
                 return Environment.TEST
         return v
 
-    # TODO[pydantic]: We couldn't refactor the `validator`, please replace it by `field_validator` manually.
-    # Check https://docs.pydantic.dev/dev-v2/migration/#changes-to-validators for more information.
-    @validator("allowed_origins", each_item=True)
-    def validate_origin(self, v, values):
-        """Validate each origin in the allowed_origins list."""
-        if not v:
-            return v
+    @field_validator("allowed_origins")
+    @classmethod
+    def validate_origin(
+        cls,
+        origins: list[str],
+        info: FieldValidationInfo,
+    ) -> list[str]:
+        """Validate the allowed origin list while keeping wildcard rules intact."""
+        environment = info.data.get("environment") if info.data else None
+        validated: list[str] = []
 
-        environment = values.get("environment")
+        for origin in origins:
+            if not origin:
+                validated.append(origin)
+                continue
 
-        # Check for wildcard in production
-        if environment == Environment.PRODUCTION and "*" in v:
-            raise ValueError(
-                "Wildcard origins are not allowed in production. "
-                "Use specific domain names instead."
-            )
+            if environment == Environment.PRODUCTION and "*" in origin:
+                raise ValueError(
+                    "Wildcard origins are not allowed in production. "
+                    "Use specific domain names instead."
+                )
 
-        # Validate origin format
-        if v != "*" and not self._is_valid_origin_format(v):
-            raise ValueError(
-                f"Invalid origin format: {v}. "
-                "Expected format: http(s)://domain.com or http(s)://domain.com:port"
-            )
+            if origin != "*" and not cls._is_valid_origin_format(origin):
+                raise ValueError(
+                    f"Invalid origin format: {origin}. "
+                    "Expected format: http(s)://domain.com or http(s)://domain.com:port"
+                )
 
-        return v
+            validated.append(origin)
 
-    # TODO[pydantic]: We couldn't refactor the `validator`, please replace it by `field_validator` manually.
-    # Check https://docs.pydantic.dev/dev-v2/migration/#changes-to-validators for more information.
-    @validator("allowed_methods", each_item=True)
-    def validate_method(self, v):
-        """Validate HTTP methods."""
+        return validated
+
+    @field_validator("allowed_methods")
+    @classmethod
+    def validate_method(cls, methods: list[str]) -> list[str]:
+        """Validate the list of HTTP methods."""
         allowed_methods = {method.value for method in CORSMethods}
-        if v not in allowed_methods:
-            raise ValueError(
-                f"Invalid HTTP method: {v}. "
-                f"Allowed methods: {', '.join(allowed_methods)}"
-            )
-        return v
+        for method in methods:
+            if method not in allowed_methods:
+                raise ValueError(
+                    f"Invalid HTTP method: {method}. "
+                    f"Allowed methods: {', '.join(sorted(allowed_methods))}"
+                )
+        return methods
 
     @field_validator("max_age")
     @classmethod
@@ -153,18 +165,19 @@ class CORSPolicy(BaseModel):
             )
         return v
 
-    # TODO[pydantic]: We couldn't refactor the `validator`, please replace it by `field_validator` manually.
-    # Check https://docs.pydantic.dev/dev-v2/migration/#changes-to-validators for more information.
-    @validator("origin_regex_patterns", each_item=True)
-    def validate_regex_pattern(self, v, values):
-        """Validate regex patterns are compilable and not allowed in production."""
-        values.get("environment")
-
-        try:
-            re.compile(v)
-        except re.error as e:
-            raise ValueError(f"Invalid regex pattern '{v}': {e}")
-        return v
+    @field_validator("origin_regex_patterns")
+    @classmethod
+    def validate_regex_pattern(
+        cls,
+        patterns: list[str],
+    ) -> list[str]:
+        """Validate regex patterns are compilable and safe."""
+        for pattern in patterns:
+            try:
+                re.compile(pattern)
+            except re.error as exc:
+                raise ValueError(f"Invalid regex pattern '{pattern}': {exc}")
+        return patterns
 
     @staticmethod
     def _is_valid_origin_format(origin: str) -> bool:

@@ -1,11 +1,6 @@
-# This file has been consolidated into enhanced_security_fixed.py
-# Please update imports to use: from .enhanced_security_fixed import *
+"""Compatibility wrapper for enhanced security validation."""
 
-# Legacy file - replaced by enhanced_security_fixed.py for better security
-# All functionality is now available in the enhanced_security_fixed module
+from .enhanced_security_fixed import *  # noqa: F401,F403
 
-# This comment marks the file as deprecated - consider removing this file
-
-
-
+__all__ = [name for name in globals() if not name.startswith("_")]
 

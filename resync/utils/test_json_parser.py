@@ -1,6 +1,6 @@
 import pytest
 
-from ..exceptions import ParsingError
+from resync.utils.exceptions import ParsingError
 from .json_parser import parse_llm_json_response
 
 

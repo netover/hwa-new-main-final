@@ -19,6 +19,8 @@ environment variables.
 
 from __future__ import annotations
 
+from enum import Enum
+
 # ---------------------------------------------------------------------------
 # HTTP client defaults
 #
@@ -95,3 +97,37 @@ RISK_WEIGHT_ABEND: float = 1.5
 
 RISK_WEIGHT_QUEUE: float = 2.0
 """Weight multiplier applied to incidents queued for execution."""
+
+
+class ErrorMessages(str, Enum):
+    """Standardized error message templates for API responses."""
+
+    TIMEOUT = "{operation} timed out: {detail}"
+    CONNECTION = "{operation} failed due to connection issues: {detail}"
+    AUTH_REQUIRED = "{operation} requires authentication."
+    UNAUTHORIZED = "Unauthorized to perform {operation}."
+    FORBIDDEN = "{operation} is forbidden."
+    NOT_FOUND = "{operation} resource was not found."
+    VALIDATION_ERROR = "Validation error in {operation}: {detail}"
+    CONFLICT = "Conflict while performing {operation}: {detail}"
+    SERVICE_UNAVAILABLE = "{operation} is temporarily unavailable. Try again later."
+    RATE_LIMIT_EXCEEDED = "Rate limit exceeded during {operation}. Please retry later."
+    QUOTA_EXCEEDED = "Quota exceeded during {operation}. Please contact support."
+    INTERNAL_ERROR = "Unexpected error during {operation}: {detail}"
+
+
+__all__ = [
+    "DEFAULT_CONNECT_TIMEOUT",
+    "DEFAULT_READ_TIMEOUT",
+    "DEFAULT_WRITE_TIMEOUT",
+    "DEFAULT_POOL_TIMEOUT",
+    "DEFAULT_MAX_CONNECTIONS",
+    "DEFAULT_MAX_KEEPALIVE_CONNECTIONS",
+    "DEFAULT_REDIS_MAX_CONNECTIONS",
+    "DEFAULT_REDIS_CONNECT_TIMEOUT",
+    "DEFAULT_REDIS_SOCKET_TIMEOUT",
+    "DEFAULT_REDIS_HEALTH_CHECK_INTERVAL",
+    "RISK_WEIGHT_ABEND",
+    "RISK_WEIGHT_QUEUE",
+    "ErrorMessages",
+]

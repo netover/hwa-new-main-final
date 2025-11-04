@@ -16,6 +16,45 @@ import structlog
 logger = structlog.get_logger(__name__)
 
 
+
+class _SimpleCircuitBreaker:
+    def __init__(self, fail_max: int, reset_timeout: int, exclude: tuple[type[Exception], ...] = ()):
+        self.fail_max = fail_max
+        self.reset_timeout = reset_timeout
+        self.exclude = exclude
+        self.failure_count = 0
+        self.state = 'closed'
+        self.last_failure_time: datetime | None = None
+
+    async def call(self, func, *args, **kwargs):
+        if self.state == 'open':
+            if self.last_failure_time and datetime.now() - self.last_failure_time > timedelta(seconds=self.reset_timeout):
+                self.state = 'half-open'
+            else:
+                raise RuntimeError('Circuit breaker open')
+
+        try:
+            result = await func(*args, **kwargs)
+            self.failure_count = 0
+            self.state = 'closed'
+            return result
+        except Exception as exc:
+            if self.exclude and isinstance(exc, self.exclude):
+                raise
+            self.failure_count += 1
+            self.last_failure_time = datetime.now()
+            if self.failure_count >= self.fail_max:
+                self.state = 'open'
+            raise
+
+    def get_stats(self) -> dict[str, Any]:
+        return {
+            'state': self.state,
+            'failures': self.failure_count,
+            'last_failure_time': self.last_failure_time.isoformat() if self.last_failure_time else None,
+        }
+
+
 class CircuitBreakerManager:
     """
     Manages multiple circuit breakers for different system components.
@@ -45,6 +84,18 @@ class CircuitBreakerManager:
         """
         self._circuit_breakers[name] = circuit_breaker
         logger.info("circuit_breaker_registered", name=name)
+
+    def register(
+        self,
+        name: str,
+        *,
+        fail_max: int = 5,
+        reset_timeout: int = 60,
+        exclude: tuple[type[Exception], ...] = (),
+    ) -> None:
+        """Convenience helper to create and register a simple circuit breaker."""
+        breaker = _SimpleCircuitBreaker(fail_max, reset_timeout, exclude)
+        self.register_circuit_breaker(name, breaker)
 
     def unregister_circuit_breaker(self, name: str) -> bool:
         """

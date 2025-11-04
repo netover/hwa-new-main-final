@@ -80,3 +80,11 @@ async def shutdown_websocket_pool_manager() -> None:
     if _websocket_pool_manager is not None:
         await _websocket_pool_manager.clear_all()
         _websocket_pool_manager = None
+
+
+class WebSocketPoolManager(SimpleWebSocketPoolManager):
+    """Backward compatible alias used throughout the codebase."""
+    pass
+
+
+__all__ = ["WebSocketPoolManager", "SimpleWebSocketPoolManager", "IWebSocketPoolManager", "get_websocket_pool_manager", "shutdown_websocket_pool_manager"]

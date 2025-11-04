@@ -9,7 +9,7 @@ from typing import Annotated, Any
 from pydantic import (
     ConfigDict,
     Field,
-    StringConstraints,
+    StringConstraints as PydanticStringConstraints,
     field_validator,
     model_validator,
 )
@@ -69,7 +69,7 @@ class FileUploadRequest(BaseValidatedModel):
 
     purpose: Annotated[
         str,
-        StringConstraints(min_length=1, max_length=100, strip_whitespace=True),
+        PydanticStringConstraints(min_length=1, max_length=100, strip_whitespace=True),
     ] = Field(..., description="Purpose of file upload")
 
     metadata: dict[str, Any] | None = Field(
@@ -331,7 +331,7 @@ class FileUpdateRequest(BaseValidatedModel):
     purpose: (
         Annotated[
             str,
-            StringConstraints(
+            PydanticStringConstraints(
                 min_length=1, max_length=100, strip_whitespace=True
             ),
         ]
@@ -343,7 +343,7 @@ class FileUpdateRequest(BaseValidatedModel):
     )
 
     tags: (
-        list[Annotated[str, StringConstraints(min_length=1, max_length=50)]]
+        list[Annotated[str, PydanticStringConstraints(min_length=1, max_length=50)]]
         | None
     ) = Field(None, description="File tags", max_length=10)
 
@@ -524,7 +524,7 @@ class RAGUploadRequest(BaseValidatedModel):
 
     collection_name: Annotated[
         str,
-        StringConstraints(min_length=1, max_length=100, strip_whitespace=True),
+        PydanticStringConstraints(min_length=1, max_length=100, strip_whitespace=True),
     ] = Field(..., description="RAG collection name")
 
     chunk_size: int = Field(

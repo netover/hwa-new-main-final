@@ -17,6 +17,7 @@ workflow.
 
 from __future__ import annotations
 
+import logging
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator, Optional
 
@@ -75,6 +76,8 @@ except Exception:
     DEFAULT_MAX_CONNECTIONS = 100  # type: ignore
     DEFAULT_MAX_KEEPALIVE_CONNECTIONS = 20  # type: ignore
 
+logger = logging.getLogger(__name__)
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:  # type: ignore[async-yield-type]
@@ -94,6 +97,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:  # type: ignore[
     """
     redis_client: Optional[object] = None
     http_client: Optional[object] = None
+    neo4j_driver: Optional[object] = None
     # ----------------------------------------------------------------------
     # Startup: initialise shared resources
     #
@@ -106,6 +110,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:  # type: ignore[
             redis_client = create_redis()
             app.state.redis = redis_client  # type: ignore[attr-defined]
         except Exception:
+            logger.exception("Failed to create Redis client during startup")
             redis_client = None
 
     # Create a shared HTTP client when httpx is available.  Use sensible
@@ -116,7 +121,9 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:  # type: ignore[
     if httpx is not None:
         try:
             http_client = httpx.AsyncClient(
+                http2=True,
                 timeout=httpx.Timeout(
+                    DEFAULT_READ_TIMEOUT,
                     connect=DEFAULT_CONNECT_TIMEOUT,
                     read=DEFAULT_READ_TIMEOUT,
                     write=DEFAULT_WRITE_TIMEOUT,
@@ -125,12 +132,37 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:  # type: ignore[
                 limits=httpx.Limits(
                     max_connections=DEFAULT_MAX_CONNECTIONS,
                     max_keepalive_connections=DEFAULT_MAX_KEEPALIVE_CONNECTIONS,
+                    keepalive_expiry=30.0,
                 ),
-                http2=True,
+                follow_redirects=True,
             )
+            app.state.http = http_client  # type: ignore[attr-defined]
             app.state.http_client = http_client  # type: ignore[attr-defined]
         except Exception:
+            logger.exception("Failed to create shared HTTPX client during startup")
             http_client = None
+
+    # Create a shared Neo4j driver when available so the connection pool
+    # can be reused by request handlers.  The driver is stored on
+    # ``app.state`` for dependency injection and closed on shutdown.
+    try:
+        from neo4j import AsyncGraphDatabase  # type: ignore
+    except Exception:  # pragma: no cover - optional dependency
+        AsyncGraphDatabase = None  # type: ignore
+
+    if AsyncGraphDatabase is not None:
+        neo4j_uri = os.getenv("NEO4J_URI", "neo4j://localhost:7687")
+        neo4j_user = os.getenv("NEO4J_USER", "neo4j")
+        neo4j_password = os.getenv("NEO4J_PASSWORD", "")
+        try:
+            neo4j_driver = AsyncGraphDatabase.driver(
+                neo4j_uri,
+                auth=(neo4j_user, neo4j_password),
+            )
+            app.state.neo4j = neo4j_driver  # type: ignore[attr-defined]
+        except Exception:
+            logger.exception("Failed to initialise Neo4j driver")
+            neo4j_driver = None
 
     # If the Neo4j backend is enabled via KG_BACKEND=neo4j then
     # idempotently ensure indexes and constraints exist.  If the
@@ -142,6 +174,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:  # type: ignore[
                 await ensure_indexes()
                 app.state.kg_backend = "neo4j"  # type: ignore[attr-defined]
             except Exception:
+                logger.exception("Failed to ensure Neo4j indexes; falling back to stub backend")
                 # Keep stub fallback; do not fail startup
                 app.state.kg_backend = "stub"  # type: ignore[attr-defined]
 
@@ -157,15 +190,23 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:  # type: ignore[
             try:
                 await http_client.aclose()  # type: ignore[no-untyped-call]
             except Exception:
+                logger.exception("Error while closing shared HTTPX client during shutdown")
                 pass
         # Close Redis client if created
         if redis_client is not None:
             try:
                 await redis_client.aclose()  # type: ignore[no-untyped-call]
             except Exception:
+                logger.exception("Error while closing Redis client during shutdown")
                 pass
+        if neo4j_driver is not None:
+            try:
+                await neo4j_driver.close()  # type: ignore[no-untyped-call]
+            except Exception:
+                logger.exception("Error while closing Neo4j driver during shutdown")
         # Shut down any TWS HTTPX clients
         try:
             await shutdown_httpx()
         except Exception:
+            logger.exception("Error while shutting down TWS HTTPX client")
             pass

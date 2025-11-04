@@ -20,11 +20,12 @@ class WalOperationType(Enum):
 @dataclass
 class WalEntry:
     """Entry in the write-ahead log."""
+
     operation: WalOperationType
     key: str
+    sequence_number: int = 0
     value: Optional[Any] = None
     timestamp: float = 0.0  # Valor padrão para timestamp
-    sequence_number: int
 
 
 class IWriteAheadLog(ABC):

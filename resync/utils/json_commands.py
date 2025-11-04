@@ -9,7 +9,7 @@ import json
 import logging
 from typing import Any
 
-from ..exceptions import ParsingError
+from resync.utils.exceptions import ParsingError
 from .common_error_handlers import handle_parsing_errors
 
 logger = logging.getLogger(__name__)

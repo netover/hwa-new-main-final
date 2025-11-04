@@ -2,11 +2,11 @@ from unittest.mock import AsyncMock
 
 import pytest
 
-from ...tool_definitions.tws_tools import (
+from resync.tool_definitions.tws_tools import (
     tws_status_tool,
     tws_troubleshooting_tool,
 )
-from ..exceptions import (
+from resync.utils.exceptions import (
     ToolConnectionError,
     ToolExecutionError,
     ToolProcessingError,

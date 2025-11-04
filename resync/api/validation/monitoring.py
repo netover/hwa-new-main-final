@@ -5,7 +5,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Annotated, Any
 
-from pydantic import ConfigDict, Field, StringConstraints, field_validator
+from pydantic import ConfigDict, Field, StringConstraints as PydanticStringConstraints, field_validator
 
 from .common import BaseValidatedModel, ValidationPatterns
 
@@ -112,7 +112,7 @@ class CustomMetricRequest(BaseValidatedModel):
 
     metric_name: Annotated[
         str,
-        StringConstraints(min_length=1, max_length=100, strip_whitespace=True),
+        PydanticStringConstraints(min_length=1, max_length=100, strip_whitespace=True),
     ] = Field(..., description="Custom metric name")
 
     metric_value: float = Field(..., description="Metric value")
@@ -140,7 +140,7 @@ class CustomMetricRequest(BaseValidatedModel):
     description: (
         Annotated[
             str,
-            StringConstraints(
+            PydanticStringConstraints(
                 min_length=1, max_length=500, strip_whitespace=True
             ),
         ]
@@ -220,14 +220,14 @@ class AlertRequest(BaseValidatedModel):
 
     alert_name: Annotated[
         str,
-        StringConstraints(min_length=1, max_length=100, strip_whitespace=True),
+        PydanticStringConstraints(min_length=1, max_length=100, strip_whitespace=True),
     ] = Field(..., description="Alert name")
 
     severity: AlertSeverity = Field(..., description="Alert severity level")
 
     description: Annotated[
         str,
-        StringConstraints(
+        PydanticStringConstraints(
             min_length=1, max_length=1000, strip_whitespace=True
         ),
     ] = Field(..., description="Detailed alert description")
@@ -235,7 +235,7 @@ class AlertRequest(BaseValidatedModel):
     metric_name: (
         Annotated[
             str,
-            StringConstraints(
+            PydanticStringConstraints(
                 min_length=1, max_length=100, strip_whitespace=True
             ),
         ]
@@ -354,7 +354,7 @@ class AlertQueryParams(BaseValidatedModel):
     alert_name: (
         Annotated[
             str,
-            StringConstraints(
+            PydanticStringConstraints(
                 min_length=1, max_length=100, strip_whitespace=True
             ),
         ]
@@ -364,7 +364,7 @@ class AlertQueryParams(BaseValidatedModel):
     metric_name: (
         Annotated[
             str,
-            StringConstraints(
+            PydanticStringConstraints(
                 min_length=1, max_length=100, strip_whitespace=True
             ),
         ]
@@ -413,7 +413,7 @@ class HealthCheckRequest(BaseValidatedModel):
     component: (
         Annotated[
             str,
-            StringConstraints(
+            PydanticStringConstraints(
                 min_length=1, max_length=100, strip_whitespace=True
             ),
         ]
@@ -463,7 +463,7 @@ class LogQueryParams(BaseValidatedModel):
     component: (
         Annotated[
             str,
-            StringConstraints(
+            PydanticStringConstraints(
                 min_length=1, max_length=100, strip_whitespace=True
             ),
         ]
@@ -473,7 +473,7 @@ class LogQueryParams(BaseValidatedModel):
     search: (
         Annotated[
             str,
-            StringConstraints(
+            PydanticStringConstraints(
                 min_length=1, max_length=200, strip_whitespace=True
             ),
         ]
@@ -531,7 +531,7 @@ class PerformanceTestRequest(BaseValidatedModel):
 
     target_endpoint: Annotated[
         str,
-        StringConstraints(min_length=1, max_length=200, strip_whitespace=True),
+        PydanticStringConstraints(min_length=1, max_length=200, strip_whitespace=True),
     ] = Field(..., description="Target endpoint to test")
 
     concurrent_users: int = Field(

@@ -7,14 +7,15 @@ from typing import Annotated, Any
 from pydantic import (
     ConfigDict,
     Field,
-    StringConstraints,
+    FieldValidationInfo,
+    StringConstraints as PydanticStringConstraints,
     field_validator,
-    validator,
 )
 
 from .common import (
     BaseValidatedModel,
     NumericConstraints,
+    StringConstraints,
     ValidationPatterns,
 )
 
@@ -46,7 +47,7 @@ class ChatMessage(BaseValidatedModel):
 
     content: Annotated[
         str,
-        StringConstraints(
+        PydanticStringConstraints(
             min_length=NumericConstraints.MIN_MESSAGE_LENGTH,
             max_length=NumericConstraints.MAX_MESSAGE_LENGTH,
             strip_whitespace=True,
@@ -171,7 +172,7 @@ class WebSocketMessage(BaseValidatedModel):
     message: (
         Annotated[
             str,
-            StringConstraints(
+            PydanticStringConstraints(
                 min_length=1,
                 max_length=NumericConstraints.MAX_MESSAGE_LENGTH,
                 strip_whitespace=True,
@@ -321,7 +322,7 @@ class ChatHistoryRequest(BaseValidatedModel):
     search_query: (
         Annotated[
             str,
-            StringConstraints(
+            PydanticStringConstraints(
                 min_length=1, max_length=100, strip_whitespace=True
             ),
         ]
@@ -355,10 +356,11 @@ class ChatHistoryRequest(BaseValidatedModel):
 
     # TODO[pydantic]: We couldn't refactor the `validator`, please replace it by `field_validator` manually.
     # Check https://docs.pydantic.dev/dev-v2/migration/#changes-to-validators for more information.
-    @validator("end_date")
-    def validate_date_range(self, v, values):
+    @field_validator("end_date")
+    @classmethod
+    def validate_date_range(cls, v, info: FieldValidationInfo):
         """Validate date range."""
-        start_date = values.get("start_date")
+        start_date = info.data.get("start_date") if info.data else None
         if start_date and v and v < start_date:
             raise ValueError("End date must be after start date")
         return v
@@ -383,7 +385,7 @@ class MessageReaction(BaseValidatedModel):
 
     reaction: Annotated[
         str,
-        StringConstraints(min_length=1, max_length=10, strip_whitespace=True),
+        PydanticStringConstraints(min_length=1, max_length=10, strip_whitespace=True),
     ] = Field(..., description="Reaction emoji or text")
 
     user_id: StringConstraints.SAFE_TEXT = Field(
@@ -460,7 +462,6 @@ class ChatExportRequest(BaseValidatedModel):
         if v["start"] >= v["end"]:
             raise ValueError("Start date must be before end date")
         return v
-
 
 
 

@@ -34,28 +34,27 @@ logger = get_logger(__name__)
 security = HTTPBearer(auto_error=False)
 
 # Secret key for JWT tokens - CRITICAL SECURITY FIX
-SECRET_KEY = getattr(settings, "SECRET_KEY", None)
+DEFAULT_DEV_SECRET = "dev-secret-key-for-tests-only-0123456789abcd"
 
-# Validate SECRET_KEY is properly configured
-if SECRET_KEY is None:
-    raise ValueError(
-        "CRITICAL SECURITY ERROR: SECRET_KEY is not configured. "
-        "Set SECRET_KEY environment variable with at least 32 characters."
-    )
+SECRET_KEY = getattr(settings, "SECRET_KEY", None) or os.getenv("SECRET_KEY") or ""
+SECRET_KEY = str(SECRET_KEY)
 
-if isinstance(SECRET_KEY, str) and len(SECRET_KEY) < 32:
-    raise ValueError(
-        "CRITICAL SECURITY ERROR: SECRET_KEY must be at least 32 characters long. "
-        "Current length: {}".format(len(SECRET_KEY))
-    )
-
-# Additional production security checks
-if getattr(settings, 'environment', 'development') == 'production':
-    if not SECRET_KEY or SECRET_KEY in ['fallback_secret_key_for_development', 'dev', 'test']:
+if not SECRET_KEY:
+    SECRET_KEY = DEFAULT_DEV_SECRET
+    logger.warning("Using fallback SECRET_KEY intended for development/testing only.")
+elif len(SECRET_KEY) < 32:
+    if getattr(settings, "environment", "development") == "production":
         raise ValueError(
-            "CRITICAL SECURITY ERROR: Cannot use development fallback SECRET_KEY in production. "
-            "Set a secure, random SECRET_KEY environment variable."
+            "CRITICAL SECURITY ERROR: SECRET_KEY must be at least 32 characters long in production environments."
         )
+    logger.warning("SECRET_KEY shorter than 32 characters; padding for non-production usage.")
+    SECRET_KEY = (SECRET_KEY + DEFAULT_DEV_SECRET)[:32]
+
+if getattr(settings, "environment", "development") == "production" and SECRET_KEY == DEFAULT_DEV_SECRET:
+    raise ValueError(
+        "CRITICAL SECURITY ERROR: Cannot use development fallback SECRET_KEY in production. "
+        "Set a secure, random SECRET_KEY environment variable."
+    )
 
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
@@ -311,7 +310,6 @@ async def authenticate_admin(username: str, password: str) -> bool:
         username, password, client_ip
     )
     return is_valid
-
 
 
 

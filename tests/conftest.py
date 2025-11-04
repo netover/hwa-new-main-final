@@ -3,9 +3,12 @@
 This prevents ModuleNotFoundError for optional libs when tests don't actually need them.
 """
 
+import asyncio
 import os
 import sys
 import types
+
+import pytest
 
 # Desabilita integrações pesadas durante a coleta
 os.environ.setdefault("RESYNC_DISABLE_REDIS", "1")
@@ -21,6 +24,17 @@ for name in _OPTIONAL_DEPS:
         except ImportError:
             # Só cria mock se realmente não conseguir importar
             sys.modules[name] = types.SimpleNamespace()
+
+
+@pytest.fixture
+def event_loop():
+    """Compat fixture for pytest-asyncio strict mode."""
+    loop = asyncio.new_event_loop()
+    try:
+        yield loop
+    finally:
+        loop.run_until_complete(asyncio.sleep(0))
+        loop.close()
 
 
 

@@ -20,11 +20,13 @@ This implementation does not record latency or increment metrics.
 
 from __future__ import annotations
 
-import time
 import uuid
-from typing import Awaitable, Callable, Optional
+from typing import Any, Awaitable, Callable, Optional
 
 from starlette.types import ASGIApp, Message, Receive, Scope, Send
+
+CORRELATION_ID_HEADER = "X-Correlation-ID"
+CORRELATION_ID_STATE_KEY = "correlation_id"
 
 
 def _safe_cid(value: Optional[str]) -> str:
@@ -60,16 +62,33 @@ class CorrelationIdMiddleware:
         cid = _safe_cid(headers.get("x-correlation-id"))
 
         # Store on request state for downstream handlers
-        scope.setdefault("state", {})["correlation_id"] = cid
+        scope.setdefault("state", {})[CORRELATION_ID_STATE_KEY] = cid
 
         # Wrap send to inject the header into the response
         async def send_wrapper(message: Message) -> None:
             if message["type"] == "http.response.start":
                 # Append the correlation ID to response headers
                 raw_headers = list(message.get("headers", []))
-                raw_headers.append((b"x-correlation-id", cid.encode()))
+                raw_headers.append((CORRELATION_ID_HEADER.lower().encode(), cid.encode()))
                 message["headers"] = raw_headers
             await send(message)
 
         # Call downstream app
         await self.app(scope, receive, send_wrapper)
+
+
+def get_correlation_id_from_request(request: Any) -> Optional[str]:
+    """Retrieve correlation ID from request state or headers."""
+    cid = getattr(getattr(request, "state", None), CORRELATION_ID_STATE_KEY, None)
+    if cid:
+        return cid
+    headers = getattr(request, "headers", {})
+    return headers.get(CORRELATION_ID_HEADER)
+
+
+__all__ = [
+    "CORRELATION_ID_HEADER",
+    "CORRELATION_ID_STATE_KEY",
+    "CorrelationIdMiddleware",
+    "get_correlation_id_from_request",
+]

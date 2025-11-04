@@ -12,7 +12,7 @@ from pydantic import (
     BaseModel,
     ConfigDict,
     Field,
-    StringConstraints,
+    StringConstraints as PydanticStringConstraints,
     field_validator,
 )
 
@@ -97,7 +97,7 @@ class StringConstraints:
     # Agent IDs: alphanumeric, underscore, hyphen (3-50 chars)
     AGENT_ID = Annotated[
         str,
-        StringConstraints(
+        PydanticStringConstraints(
             pattern=r"^[a-zA-Z0-9_-]+$",
             min_length=3,
             max_length=50,
@@ -108,7 +108,7 @@ class StringConstraints:
     # Safe text: alphanumeric, spaces, common punctuation
     SAFE_TEXT = Annotated[
         str,
-        StringConstraints(
+        PydanticStringConstraints(
             pattern=r"^[a-zA-Z0-9\s.,!?'\"()\-:;]*$",
             min_length=1,
             max_length=1000,
@@ -119,7 +119,7 @@ class StringConstraints:
     # Role/Goal text: more permissive but still safe
     ROLE_TEXT = Annotated[
         str,
-        StringConstraints(
+        PydanticStringConstraints(
             pattern=r"^[a-zA-Z0-9\s.,!?'\"()\-:;/]+$",
             min_length=5,
             max_length=500,
@@ -130,7 +130,7 @@ class StringConstraints:
     # Model names: alphanumeric and common separators
     MODEL_NAME = Annotated[
         str,
-        StringConstraints(
+        PydanticStringConstraints(
             pattern=r"^[a-zA-Z0-9\-:_/]+$",
             min_length=3,
             max_length=100,
@@ -141,7 +141,7 @@ class StringConstraints:
     # Tool names: alphanumeric and underscore
     TOOL_NAME = Annotated[
         str,
-        StringConstraints(
+        PydanticStringConstraints(
             pattern=r"^[a-zA-Z0-9_]+$",
             min_length=3,
             max_length=50,
@@ -152,7 +152,7 @@ class StringConstraints:
     # File names: alphanumeric, underscore, hyphen, dot
     FILENAME = Annotated[
         str,
-        StringConstraints(
+        PydanticStringConstraints(
             pattern=r"^[a-zA-Z0-9_.\-]+$",
             min_length=1,
             max_length=255,

@@ -1,34 +1,41 @@
-"""Unified logging utilities.
-
-This module wraps Python's standard ``logging`` facilities to provide
-backwards‑compatible functions used throughout the codebase.  Older
-modules import functions such as ``log_with_correlation`` and
-``log_audit_event`` from ``resync.core.logger``.  Those functions
-previously relied on a custom structured logging system.  For
-simplicity and to improve maintainability, this implementation uses
-standard logging combined with the simple logger utilities from
-``resync.utils.simple_logger``.
-
-The goal of this shim is not to replicate the full structured logging
-behaviour, but rather to ensure that calls to these functions do not
-fail at runtime.  Messages are logged with an optional correlation ID
-prefix when provided.  Audit events are recorded at INFO level with
-a consistent format.
-
-Usage:
-
-    from resync.core.logger import log_with_correlation, log_audit_event
-
-    log_with_correlation(logging.INFO, "Starting operation", correlation_id)
-    log_audit_event("login", {"user_id": "alice"}, correlation_id=cid)
-"""
+"""Unified logging utilities with audit support."""
 
 from __future__ import annotations
 
 import logging
-from typing import Any
+from typing import Any, Mapping
 
-from resync.utils.simple_logger import get_logger, set_correlation_id, get_correlation_id  # noqa: F401
+from resync.utils.simple_logger import get_logger  # re-exported for compatibility
+
+try:  # Optional import when audit subsystem is available
+    from resync.core.audit_log import get_audit_log_manager
+except Exception:  # pragma: no cover - defensive
+    get_audit_log_manager = None  # type: ignore
+
+SENSITIVE_KEYS = {
+    "password",
+    "api_key",
+    "token",
+    "secret",
+    "credit_card",
+    "cc",
+    "access_key",
+}
+
+
+def _sanitize_audit_details(details: Mapping[str, Any] | Any) -> Any:
+    """Recursively redact sensitive payload fields."""
+    if isinstance(details, Mapping):
+        sanitized: dict[str, Any] = {}
+        for key, value in details.items():
+            if key.lower() in SENSITIVE_KEYS:
+                sanitized[key] = "REDACTED"
+            else:
+                sanitized[key] = _sanitize_audit_details(value)
+        return sanitized
+    if isinstance(details, list):
+        return [_sanitize_audit_details(item) for item in details]
+    return details
 
 
 def log_with_correlation(
@@ -37,23 +44,8 @@ def log_with_correlation(
     correlation_id: str | None = None,
     exc_info: bool | Exception = False,
 ) -> None:
-    """Log a message at the given level with an optional correlation ID.
-
-    If ``correlation_id`` is provided, it is prefixed in square brackets
-    to the log message.  The ``exc_info`` parameter may be set to
-    ``True`` or an exception instance to include traceback information.
-
-    Args:
-        level: Logging level (e.g. ``logging.INFO``)
-        message: The message to log
-        correlation_id: Optional correlation ID for request tracing
-        exc_info: Whether to include exception information
-    """
     logger = logging.getLogger("resync")
-    if correlation_id:
-        formatted = f"[{correlation_id}] {message}"
-    else:
-        formatted = message
+    formatted = f"[{correlation_id}] {message}" if correlation_id else message
     logger.log(level, formatted, exc_info=exc_info)
 
 
@@ -65,22 +57,10 @@ def log_audit_event(
     user_id: str | None = None,
     ip_address: str | None = None,
     user_agent: str | None = None,
+    severity: str = "INFO",
+    source_component: str | None = None,
 ) -> None:
-    """Record an audit event via the standard logger.
-
-    This is a simplified implementation that logs audit actions at INFO
-    level.  Additional metadata such as user ID, IP address and user
-    agent are included when provided.
-
-    Args:
-        action: A short string describing the audited action
-        details: Optional dictionary with extra detail about the action
-        correlation_id: Optional correlation ID
-        user_id: Optional user identifier
-        ip_address: Optional IP address of the requester
-        user_agent: Optional user agent string
-    """
-    logger = logging.getLogger("resync.audit")
+    sanitized_details = _sanitize_audit_details(details or {})
     parts = [f"action={action}"]
     if user_id:
         parts.append(f"user_id={user_id}")
@@ -90,10 +70,23 @@ def log_audit_event(
         parts.append(f"ua={user_agent}")
     if correlation_id:
         parts.append(f"cid={correlation_id}")
-    if details:
-        parts.append(f"details={details}")
-    msg = " | ".join(parts)
-    logger.info(msg)
+    parts.append(f"details={sanitized_details}")
+    logger = logging.getLogger("resync.audit")
+    logger.info(" | ".join(parts))
+
+    if get_audit_log_manager:
+        try:
+            manager = get_audit_log_manager()
+            manager.log_audit_event(
+                action=action,
+                user_id=user_id,
+                details=sanitized_details,
+                correlation_id=correlation_id,
+                severity=severity,
+                source_component=source_component,
+            )
+        except Exception:  # pragma: no cover - defensive
+            logger.exception("Failed to persist audit event")
 
 
-__all__ = ["log_with_correlation", "log_audit_event"]
+__all__ = ["log_with_correlation", "log_audit_event", "_sanitize_audit_details", "get_logger"]

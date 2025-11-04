@@ -348,20 +348,27 @@ curl -X POST "http://localhost:8000/api/v1/operations/transactions" \\
             },
             "python": {
                 "create_resource": """
-import requests
+import asyncio
 import uuid
+import httpx
 
-response = requests.post(
-    "http://localhost:8000/api/v1/operations/resources",
-    headers={
-        "X-Idempotency-Key": str(uuid.uuid4()),
-        "Content-Type": "application/json"
-    },
-    json={
-        "name": "My Resource",
-        "description": "Test resource"
-    }
-)
+async def create_resource():
+    async with httpx.AsyncClient() as client:
+        response = await client.post(
+            "http://localhost:8000/api/v1/operations/resources",
+            headers={
+                "X-Idempotency-Key": str(uuid.uuid4()),
+                "Content-Type": "application/json"
+            },
+            json={
+                "name": "My Resource",
+                "description": "Test resource"
+            },
+        )
+        response.raise_for_status()
+        return response.json()
+
+asyncio.run(create_resource())
                 """.strip()
             },
         },

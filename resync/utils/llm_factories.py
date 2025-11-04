@@ -18,9 +18,9 @@ from litellm.exceptions import (
     RateLimitError,
 )
 
-from ...settings import settings
-from ..exceptions import LLMError
-from ..structured_logger import get_logger
+from resync.settings import settings
+from resync.utils.exceptions import LLMError
+from resync.utils.structured_logger import get_logger
 
 logger = get_logger(__name__)
 

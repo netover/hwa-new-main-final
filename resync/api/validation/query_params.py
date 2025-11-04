@@ -8,14 +8,15 @@ from typing import Annotated, Any
 from pydantic import (
     ConfigDict,
     Field,
-    StringConstraints,
+    FieldValidationInfo,
+    StringConstraints as PydanticStringConstraints,
     field_validator,
-    validator,
 )
 
 from .common import (
     BaseValidatedModel,
     NumericConstraints,
+    StringConstraints,
     ValidationPatterns,
 )
 
@@ -90,7 +91,7 @@ class SearchParams(BaseValidatedModel):
 
     query: Annotated[
         str,
-        StringConstraints(min_length=1, max_length=200, strip_whitespace=True),
+        PydanticStringConstraints(min_length=1, max_length=200, strip_whitespace=True),
     ] = Field(..., description="Search query string")
 
     search_fields: list[str] | None = Field(
@@ -300,7 +301,7 @@ class AgentQueryParams(BaseValidatedModel):
     )
 
     name: (
-        Annotated[str, StringConstraints(min_length=1, max_length=100)] | None
+        Annotated[str, PydanticStringConstraints(min_length=1, max_length=100)] | None
     ) = Field(None, description="Filter by agent name (partial match)")
 
     type: str | None = Field(None, description="Filter by agent type")
@@ -324,7 +325,7 @@ class AgentQueryParams(BaseValidatedModel):
     )
 
     tags: (
-        list[Annotated[str, StringConstraints(min_length=1, max_length=50)]]
+        list[Annotated[str, PydanticStringConstraints(min_length=1, max_length=50)]]
         | None
     ) = Field(None, description="Filter by tags", max_length=5)
 
@@ -413,7 +414,7 @@ class AuditQueryParams(BaseValidatedModel):
     query: (
         Annotated[
             str,
-            StringConstraints(
+            PydanticStringConstraints(
                 min_length=1, max_length=200, strip_whitespace=True
             ),
         ]
@@ -476,10 +477,11 @@ class FileQueryParams(BaseValidatedModel):
 
     # TODO[pydantic]: We couldn't refactor the `validator`, please replace it by `field_validator` manually.
     # Check https://docs.pydantic.dev/dev-v2/migration/#changes-to-validators for more information.
-    @validator("size_max")
-    def validate_size_range(self, v, values):
+    @field_validator("size_max")
+    @classmethod
+    def validate_size_range(cls, v, info: FieldValidationInfo):
         """Validate file size range."""
-        size_min = values.get("size_min")
+        size_min = info.data.get("size_min") if info.data else None
         if size_min and v and v < size_min:
             raise ValueError("Maximum size must be greater than minimum size")
         return v
@@ -530,7 +532,6 @@ __all__ = [
     "SortOrder",
     "FilterOperator",
 ]
-
 
 
 

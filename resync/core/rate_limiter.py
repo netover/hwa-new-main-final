@@ -7,10 +7,33 @@ Uses in-memory storage for simplicity. For production, consider Redis-backed rat
 import asyncio
 import time
 from collections import defaultdict
+from functools import wraps
 from typing import Dict, Tuple
 
 from fastapi import HTTPException, Request
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.responses import Response
+from fastapi.responses import JSONResponse
+
 from resync.config.settings import settings
+from resync.utils.simple_logger import get_logger
+
+
+logger = get_logger(__name__)
+
+
+class RateLimitConfig:
+    """Default rate limit strings for various endpoint categories."""
+
+    PUBLIC_ENDPOINTS = "100/minute"
+    AUTHENTICATED_ENDPOINTS = "1000/minute"
+    CRITICAL_ENDPOINTS = "50/minute"
+    ERROR_HANDLER = "15/minute"
+    WEBSOCKET = "30/minute"
+    DASHBOARD = "10/minute"
+
+
+_slowapi_limiter: Limiter | None = None
 
 
 class SimpleRateLimiter:
@@ -69,6 +92,21 @@ class SimpleRateLimiter:
 
 # Global rate limiter instance
 rate_limiter = SimpleRateLimiter()
+limiter = rate_limiter  # Alias preserved for backwards compatibility
+
+
+def _build_rate_limit_key(request: Request, key_prefix: str) -> str:
+    """Generate a rate limit key based on the provided prefix."""
+    if key_prefix == "ip":
+        client_ip = getattr(request.client, "host", "unknown") if request.client else "unknown"
+        return f"ip:{client_ip}"
+    if key_prefix == "user":
+        user_id = getattr(request.state, "user_id", None)
+        if user_id:
+            return f"user:{user_id}"
+        client_ip = getattr(request.client, "host", "unknown") if request.client else "unknown"
+        return f"ip:{client_ip}"
+    return f"{key_prefix}:default"
 
 
 async def check_rate_limit(
@@ -88,21 +126,7 @@ async def check_rate_limit(
         HTTPException: If rate limit exceeded
     """
     # Generate key based on type
-    if key_prefix == "ip":
-        # Get client IP (simplified - in production use proper IP extraction)
-        client_ip = getattr(request.client, 'host', 'unknown') if request.client else 'unknown'
-        key = f"ip:{client_ip}"
-    elif key_prefix == "user":
-        # For authenticated requests
-        user_id = getattr(request.state, 'user_id', None)
-        if user_id:
-            key = f"user:{user_id}"
-        else:
-            # Fallback to IP if no user
-            client_ip = getattr(request.client, 'host', 'unknown') if request.client else 'unknown'
-            key = f"ip:{client_ip}"
-    else:
-        key = f"{key_prefix}:default"
+    key = _build_rate_limit_key(request, key_prefix)
 
     allowed, remaining = await rate_limiter.check_rate_limit(key, limit)
 
@@ -115,13 +139,15 @@ async def check_rate_limit(
         )
 
     # Store rate limit info in request state for logging
-    if not hasattr(request.state, 'rate_limit'):
+    if not hasattr(request.state, "rate_limit"):
         request.state.rate_limit = {}
-    request.state.rate_limit.update({
-        'limit': limit,
-        'remaining': remaining,
-        'reset_time': await rate_limiter.get_remaining_time(key)
-    })
+    request.state.rate_limit.update(
+        {
+            "limit": limit,
+            "remaining": remaining,
+            "reset_time": await rate_limiter.get_remaining_time(key),
+        }
+    )
 
 
 # Convenience decorators
@@ -163,5 +189,65 @@ def authenticated_rate_limit(func):
     return wrapper
 
 
+class CustomRateLimitMiddleware(BaseHTTPMiddleware):
+    """Starlette middleware wrapping :class:`SimpleRateLimiter` for FastAPI apps."""
+
+    def __init__(
+        self,
+        app,
+        *,
+        limiter: SimpleRateLimiter | None = None,
+        limit: int | None = None,
+        window_seconds: int = 60,
+        key_prefix: str = "ip",
+    ) -> None:
+        super().__init__(app)
+        self._limiter = limiter or rate_limiter
+        self._default_limit = limit
+        self._window_seconds = window_seconds
+        self._key_prefix = key_prefix
+
+    async def dispatch(self, request: Request, call_next) -> Response:
+        limit = self._default_limit
+        if limit is None:
+            limit = getattr(settings, "rate_limit_public_per_minute", 100)
+
+        key = _build_rate_limit_key(request, self._key_prefix)
+        allowed, remaining = await self._limiter.check_rate_limit(
+            key,
+            limit,
+            window_seconds=self._window_seconds,
+        )
+
+        if not allowed:
+            reset_time = await self._limiter.get_remaining_time(key, self._window_seconds)
+            raise HTTPException(
+                status_code=429,
+                detail="Rate limit exceeded. Try again later.",
+                headers={"Retry-After": str(reset_time)},
+            )
+
+        if not hasattr(request.state, "rate_limit"):
+            request.state.rate_limit = {}
+        request.state.rate_limit.update(
+            {
+                "limit": limit,
+                "remaining": remaining,
+                "reset_time": await self._limiter.get_remaining_time(key, self._window_seconds),
+            }
+        )
+
+        return await call_next(request)
+
+
+__all__ = [
+    "SimpleRateLimiter",
+    "rate_limiter",
+    "limiter",
+    "check_rate_limit",
+    "public_rate_limit",
+    "authenticated_rate_limit",
+    "CustomRateLimitMiddleware",
+]
 
 
