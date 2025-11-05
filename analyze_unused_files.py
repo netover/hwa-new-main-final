@@ -9,7 +9,15 @@ in the project.
 import ast
 import os
 from pathlib import Path
-from typing import Dict, List, Tuple
+from typing import Dict, List, Set, Tuple
+
+
+def _module_is_imported(module_path: str, imported_modules: Set[str]) -> bool:
+    """Return True when ``module_path`` appears in ``imported_modules``."""
+
+    return any(
+        module_path.startswith(imported) for imported in imported_modules
+    )
 
 
 def get_all_python_files(directory: Path) -> List[Path]:
@@ -98,15 +106,16 @@ def find_unused_files(
         module_path = get_module_from_path(file_path, base_dir)
 
         # Check if this module is imported
-        is_imported = any(module_path.startswith(imported)
-                         for imported in imported_modules)
+        is_imported = _module_is_imported(module_path, imported_modules)
 
         # Check file characteristics and collect unused files
         file_name = file_path.name
-        if (not is_imported and
-            file_name not in entry_points and
-            'test' not in file_name.lower() and
-            'tests' not in str(file_path).lower()):
+        if (
+            not is_imported
+            and file_name not in entry_points
+            and 'test' not in file_name.lower()
+            and 'tests' not in str(file_path).lower()
+        ):
             file_str = str(file_path)
             unused_files.append((
                 file_path, module_path,
@@ -194,8 +203,10 @@ def main():
         if is_backup or is_legacy:
             safely_removable.append(file_path)
 
-    print(f"\nFiles that can be safely removed "
-          f"(backups and legacy): {len(safely_removable)}")
+    print(
+        "\nFiles that can be safely removed "
+        f"(backups and legacy): {len(safely_removable)}"
+    )
     for file_path in safely_removable:
         print(f"  {file_path}")
 
