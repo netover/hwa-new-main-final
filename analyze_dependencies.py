@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
-"""
-Script para analisar dependências entre arquivos Python no projeto resync
+"""Ferramentas utilitárias para analisar dependências do projeto Resync.
+
+O módulo provê funções que percorrem o código Python procurando por
+importações para entender como os módulos se relacionam entre si.
 """
 
 import ast
@@ -16,7 +18,9 @@ class DependencyAnalyzer:
     def __init__(self, root_dir: str = "resync") -> None:
         self.root_dir = Path(root_dir)
         self.dependencies: defaultdict[str, set[str]] = defaultdict(set)
-        self.reverse_dependencies: defaultdict[str, set[str]] = defaultdict(set)
+        self.reverse_dependencies: defaultdict[
+            str, set[str]
+        ] = defaultdict(set)
         self.all_files: set[str] = set()
 
     def get_all_python_files(self) -> list[Path]:
