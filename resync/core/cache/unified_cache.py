@@ -123,6 +123,12 @@ class UnifiedCacheConfig:
     # Hierarchy configuration
     enable_hierarchy: bool = False
     l1_max_size: int = 5000
+    # Maximum number of entries allowed in the L2 cache when hierarchy is enabled
+    # The original implementation referenced ``l2_max_size`` without defining it
+    # in the configuration. Without this attribute the cache would raise an
+    # AttributeError when trying to create the L2 cache. Provide a sensible
+    # default (50k entries) so that the two‑tier cache can be constructed.
+    l2_max_size: int = 50_000
     l2_ttl_seconds: int = 600
     l2_cleanup_interval: int = 60
     # Option to disable Redis L2 cache for small deployments

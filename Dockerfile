@@ -48,6 +48,12 @@ COPY ./templates ./templates
 # Expose the port the application will run on
 EXPOSE 8000
 
+# Configure a simple healthcheck.  This instructs the container runtime to
+# periodically check the /health endpoint to verify that the API is up
+# and responding.  The interval, timeout and retries are conservative
+# defaults and may be tuned in production environments.
+HEALTHCHECK --interval=30s --timeout=5s --retries=3 CMD [ "sh", "-c", "wget -qO- http://localhost:8000/health || exit 1" ]
+
 # The command to run the application using Gunicorn+Uvicorn for production
 # It will be run by a container orchestration system (e.g., Docker Compose, Kubernetes)
 # Use different configurations based on environment

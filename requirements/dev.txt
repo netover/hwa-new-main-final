@@ -11,7 +11,7 @@ mutmut==2.4.3
 
 # Security scanning
 bandit==1.7.6
-# safety==3.0.0
+safety==3.0.0
 
 # Type checking
 mypy==1.7.1

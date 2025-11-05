@@ -236,8 +236,15 @@ class BatchAnalyzer:
         
         # Verifica se é uma variável usada em string formatting
         if issue.tool == "flake8" and issue.code == "F841":
+            # Se a variável sinalizada por F841 é usada apenas em uma string formatada,
+            # extraímos seu nome da mensagem do Flake8 uma vez e depois verificamos
+            # nas linhas de contexto se aparece em formatação por % ou antecedida por ':'.
+            try:
+                var_name = issue.message.split("'")[1]
+            except Exception:
+                var_name = ""
             for line in context:
-                if f"%{issue.message.split("'")[1]}" in line or f"{issue.message.split("'")[1]}:" in line:
+                if f"%{var_name}" in line or f"{var_name}:" in line:
                     return True
         
         return False

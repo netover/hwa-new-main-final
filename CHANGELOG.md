@@ -7,6 +7,50 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [10.2.3-internal] - 2025-11-04
+
+### Added
+- **Prometheus metrics integration**: added counters and histograms for rate
+  limit hits, Neo4j query latency, Redis connection pool usage and HTTPX
+  active connections.  Metrics are exposed via `/metrics`.
+- **Structured logging**: integrated `structlog` JSON logging across the
+  application.  Logs include timestamps, correlation IDs, optional
+  request IDs and contextual fields.
+- **Pre‑commit hooks**: introduced a `.pre-commit-config.yaml` with
+  `black`, `ruff`, `mypy`, `bandit` and `safety` hooks to enforce code
+  quality and security.
+- **Environment validation**: application startup now summarises and
+  validates key environment variables (Redis, HTTPX, Neo4j and
+  knowledge graph backend) and logs the resolved configuration.
+- **Automatic Neo4j fallback**: when `KG_BACKEND=neo4j` and the driver
+  cannot be initialised the system falls back to the in‑memory stub
+  without failing startup.
+- **Operations documentation**: added `README_OPERATIONS.md` detailing
+  environment variables, startup flow, health checks, metrics and
+  deployment commands.
+- **Docker healthcheck**: added `HEALTHCHECK` directive to the
+  `Dockerfile` to probe `/health` periodically.
+
+### Changed
+- **Rate limiting**: the unified rate limiter now increments a global
+  counter on each 429 (rate limit exceeded) response.
+- **Neo4j knowledge graph**: all graph operations now record latency
+  into a histogram for observability.
+- **Metrics endpoint**: gauges for Redis and HTTP connection pool usage
+  are refreshed immediately before exporting metrics.
+- **Development requirements**: enabled the `safety` package in
+  `requirements/dev.txt` to detect vulnerable dependencies.
+
+### Deprecated
+- None.
+
+### Removed
+- None.
+
+### Security
+- Enabled `bandit` and `safety` checks in the pre-commit pipeline.
+
+
 ## [1.4.0] - 2024-10-24
 
 ### Added

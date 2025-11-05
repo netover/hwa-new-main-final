@@ -315,6 +315,28 @@ class RuntimeMetrics:
         self.connection_validation_failure = MetricCounter()
         self.health_check_with_auto_enable = MetricCounter()
 
+        # ------------------------------------------------------------------
+        # Custom metrics added for improved observability
+        #
+        # rate_limit_hits_total: counter tracking the number of times a
+        # request was rejected due to exceeding the configured rate limit.
+        # neo4j_query_latency_seconds: histogram capturing the duration of
+        # Neo4j queries (read/write) in seconds.  This should be observed
+        # around calls to the Neo4j driver.
+        # redis_connection_pool_active: gauge representing the number of
+        # active connections in the Redis connection pool.  Updated at
+        # metrics collection time based on the current connection pool
+        # state.
+        # httpx_active_connections: gauge representing the number of
+        # active HTTP connections used by the shared AsyncClient.  Also
+        # refreshed during metrics collection.
+        self.rate_limit_hits_total = MetricCounter()
+        self.neo4j_query_latency_seconds = MetricHistogram(
+            help_text="Latency of Neo4j queries in seconds"
+        )
+        self.redis_connection_pool_active = MetricGauge()
+        self.httpx_active_connections = MetricGauge()
+
         # SLO
         self.api_response_time = MetricHistogram(
             help_text="API response time seconds"

@@ -98,6 +98,56 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:  # type: ignore[
     redis_client: Optional[object] = None
     http_client: Optional[object] = None
     neo4j_driver: Optional[object] = None
+
+    # ------------------------------------------------------------------
+    # Validate and summarise environment configuration.  If required
+    # variables are missing or malformed, fallback defaults are used and
+    # a warning is logged.  A summary of the resolved configuration
+    # values is emitted to aid troubleshooting and ensure operators are
+    # aware of the active runtime configuration.
+    env_summary = {}
+    # Redis configuration
+    redis_url = os.getenv("REDIS_URL", os.getenv("REDIS_URI", "redis://localhost:6379/0"))
+    env_summary["REDIS_URL"] = redis_url
+    redis_max_conn = os.getenv("REDIS_MAX_CONNECTIONS", None)
+    try:
+        redis_max_conn_int = int(redis_max_conn) if redis_max_conn is not None else None
+    except Exception:
+        logger.warning(
+            "Invalid REDIS_MAX_CONNECTIONS value '%s'; using default", redis_max_conn
+        )
+        redis_max_conn_int = None
+    env_summary["REDIS_MAX_CONNECTIONS"] = redis_max_conn_int
+
+    # HTTPX/HTTP client configuration
+    http_max_conn = os.getenv("HTTP_MAX_CONNECTIONS", None)
+    try:
+        http_max_conn_int = int(http_max_conn) if http_max_conn is not None else None
+    except Exception:
+        logger.warning(
+            "Invalid HTTP_MAX_CONNECTIONS value '%s'; using default", http_max_conn
+        )
+        http_max_conn_int = None
+    env_summary["HTTP_MAX_CONNECTIONS"] = http_max_conn_int
+
+    # Neo4j configuration
+    neo4j_uri = os.getenv("NEO4J_URI", "neo4j://localhost:7687")
+    neo4j_user = os.getenv("NEO4J_USER", "neo4j")
+    neo4j_password = os.getenv("NEO4J_PASSWORD", "")
+    env_summary["NEO4J_URI"] = neo4j_uri
+    env_summary["NEO4J_USER"] = neo4j_user
+    env_summary["NEO4J_PASSWORD_SET"] = bool(neo4j_password)
+    kg_backend = os.getenv("KG_BACKEND", "stub").lower()
+    env_summary["KG_BACKEND"] = kg_backend
+
+    # Log environment summary at INFO level once on startup
+    try:
+        logger.info(
+            "Application configuration", extra={"config": env_summary}
+        )
+    except Exception:
+        # Do not crash startup due to logging failure
+        pass
     # ----------------------------------------------------------------------
     # Startup: initialise shared resources
     #

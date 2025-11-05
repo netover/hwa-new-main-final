@@ -710,6 +710,63 @@ def get_metrics(request: Request) -> str:
     """
     Returns application metrics in Prometheus text exposition format.
     """
+    # Before exporting metrics, refresh gauges that rely on runtime
+    # application state.  These gauges cannot be maintained via
+    # automatic counters because they depend on the current size of
+    # connection pools.  We attempt to compute them based on the
+    # resources attached to the FastAPI app.  If the information is
+    # unavailable or cannot be determined, the gauges remain unchanged.
+    try:
+        # Update Redis connection pool gauge
+        redis_client = getattr(request.app.state, "redis", None)
+        if redis_client is not None:
+            pool = getattr(redis_client, "connection_pool", None)
+            active = 0
+            # Attempt to derive number of in‑use connections.  Use
+            # protected attributes if available; fall back to 0 on
+            # failure.  Note: redis-py does not expose a public API for
+            # in-use connection counts, so this is an approximation.
+            if pool is not None:
+                # Pool may expose _in_use_connections or _created_connections
+                active = getattr(pool, "_in_use_connections", None)
+                if isinstance(active, set):
+                    active = len(active)
+                elif active is None:
+                    created = getattr(pool, "_created_connections", None)
+                    available = getattr(pool, "_available_connections", None)
+                    if (isinstance(created, int) and isinstance(available, list)):
+                        active = max(created - len(available), 0)
+                    else:
+                        active = 0
+            runtime_metrics.redis_connection_pool_active.set(float(active))
+    except Exception:
+        # Swallow errors to avoid impacting the metrics endpoint
+        pass
+
+    try:
+        # Update HTTPX active connections gauge
+        http_client = getattr(request.app.state, "http", None)
+        active_http = 0
+        if http_client is not None:
+            # httpx AsyncClient does not expose the number of active
+            # connections directly.  As a heuristic, inspect the
+            # internal connection pool if available.  This may not be
+            # fully accurate but provides an indicative value.  If
+            # unavailable, leave the gauge unchanged.
+            transport = getattr(http_client, "_transport", None)
+            if transport is not None:
+                pool = getattr(transport, "_pool", None)
+                if pool is not None:
+                    conns = getattr(pool, "_connections", None)
+                    if isinstance(conns, dict):
+                        # Flatten lists of connections per origin
+                        active_http = sum(
+                            len(v) for v in conns.values() if isinstance(v, list)
+                        )
+        runtime_metrics.httpx_active_connections.set(float(active_http))
+    except Exception:
+        pass
+
     return runtime_metrics.generate_prometheus_metrics()
 
 

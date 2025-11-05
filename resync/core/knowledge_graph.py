@@ -15,6 +15,18 @@ from __future__ import annotations
 
 from typing import Any, Dict, List, Optional
 
+import os
+
+# Attempt to import the Neo4j-backed knowledge graph. When the Neo4j
+# driver or implementation is unavailable this will fail and the
+# in-memory stub will be used instead. The environment variable
+# ``KG_BACKEND`` governs which implementation to instantiate via
+# :func:`create_knowledge_graph`.
+try:
+    from .neo4j_knowledge_graph import AsyncNeo4jKnowledgeGraph  # type: ignore[attr-defined]
+except Exception:
+    AsyncNeo4jKnowledgeGraph = None  # type: ignore
+
 
 class AsyncKnowledgeGraph:
     """In-memory knowledge graph stub.
@@ -60,6 +72,31 @@ class AsyncKnowledgeGraph:
         """
         # Ensure the memory exists; no other action taken
         _ = self._memories.get(memory_id)
+
+
+# Factory function to create an appropriate knowledge graph backend.
+def create_knowledge_graph() -> "AsyncKnowledgeGraph | AsyncNeo4jKnowledgeGraph":
+    """Create a knowledge graph instance based on configuration.
+
+    When ``KG_BACKEND`` is set to ``"neo4j"`` and the Neo4j driver is
+    available, an instance of :class:`AsyncNeo4jKnowledgeGraph` is
+    returned. Otherwise the default :class:`AsyncKnowledgeGraph` stub
+    backed by in-memory storage is used.
+
+    Returns:
+        An asynchronous knowledge graph implementation.
+    """
+    backend = os.getenv("KG_BACKEND", "stub").lower()
+    if backend == "neo4j" and AsyncNeo4jKnowledgeGraph is not None:
+        try:
+            return AsyncNeo4jKnowledgeGraph()  # type: ignore[return-value]
+        except Exception:
+            # Fall back to in-memory stub on any initialization error
+            pass
+    return AsyncKnowledgeGraph()  # type: ignore[return-value]
+
+
+__all__ = ["AsyncKnowledgeGraph", "create_knowledge_graph"]
 
 
 

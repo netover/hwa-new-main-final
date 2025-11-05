@@ -439,8 +439,16 @@ class SimpleBatchAnalyzer:
         
         # Verifica se é uma variável usada em string formatting
         if issue.tool == "flake8" and issue.code == "F841":
+            # Quando uma variável só aparece dentro de uma string formatada (por exemplo via % formatting),
+            # a mensagem do Flake8 inclui o nome da variável entre aspas. Extraímos essa porção uma vez
+            # para evitar escapes complexos dentro da f-string.
+            try:
+                var_name = issue.message.split("'")[1]
+            except Exception:
+                var_name = ""
             for line in context:
-                if f"%{issue.message.split('\'')[1]}" in line or f"{issue.message.split('\'')[1]}:" in line:
+                # Verifica se a variável é usada em formatação por % ou seguida de ':' em f-strings
+                if f"%{var_name}" in line or f"{var_name}:" in line:
                     return True
         
         return False
@@ -530,6 +538,8 @@ if __name__ == "__main__":
     
     print(f"Análise detalhada concluída para {len(top_issues)} issues.")
     print(f"Relatório salvo em: {os.path.join(current_dir, 'batch1_detailed_analysis.txt')}")
+
+
 
 
 
