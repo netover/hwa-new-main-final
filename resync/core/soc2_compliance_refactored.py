@@ -21,7 +21,10 @@ logger = get_logger(__name__)
 
 
 # Import shared types to avoid circular dependency
-from resync.core.compliance.types import SOC2TrustServiceCriteria, SOC2ComplianceManager as BaseSOC2ComplianceManager
+from resync.core.compliance.types import (
+    SOC2TrustServiceCriteria,
+    SOC2ComplianceManager as BaseSOC2ComplianceManager,
+)
 
 
 class ControlCategory(Enum):
@@ -271,6 +274,7 @@ class SOC2ComplianceManager(BaseSOC2ComplianceManager):
 
         # Initialize report generator (lazy import to avoid circular dependency)
         from resync.core.compliance.report_strategies import ReportGenerator
+
         self.report_generator = ReportGenerator()
 
     async def start(self) -> None:
@@ -657,7 +661,7 @@ class SOC2ComplianceManager(BaseSOC2ComplianceManager):
             AvailabilitySummaryStrategy,
             ProcessingIntegritySummaryStrategy,
             ConfidentialityIncidentsSummaryStrategy,
-            RecommendationsStrategy
+            RecommendationsStrategy,
         )
 
         # Create report structure
@@ -682,8 +686,12 @@ class SOC2ComplianceManager(BaseSOC2ComplianceManager):
         report["control_status"] = ControlStatusSummaryStrategy().execute(self)
         report["evidence_summary"] = EvidenceSummaryStrategy().execute(self)
         report["availability_summary"] = AvailabilitySummaryStrategy().execute(self)
-        report["processing_integrity_summary"] = ProcessingIntegritySummaryStrategy().execute(self)
-        report["confidentiality_incidents"] = ConfidentialityIncidentsSummaryStrategy().execute(self)
+        report[
+            "processing_integrity_summary"
+        ] = ProcessingIntegritySummaryStrategy().execute(self)
+        report[
+            "confidentiality_incidents"
+        ] = ConfidentialityIncidentsSummaryStrategy().execute(self)
         report["recommendations"] = RecommendationsStrategy().execute(self, report)
 
         # Store report

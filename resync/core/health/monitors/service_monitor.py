@@ -3,12 +3,11 @@ from __future__ import annotations
 import time
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 import structlog
 
 from resync.core.health_models import ComponentHealth, ComponentType, HealthStatus
-
 
 logger = structlog.get_logger(__name__)
 
@@ -19,11 +18,11 @@ class ServiceDependencyStatus:
 
     service_name: str
     status: HealthStatus
-    dependencies: List[str] = field(default_factory=list)
-    dependency_status: Dict[str, HealthStatus] = field(default_factory=dict)
+    dependencies: list[str] = field(default_factory=list)
+    dependency_status: dict[str, HealthStatus] = field(default_factory=dict)
     last_check: Optional[datetime] = None
     response_time_ms: Optional[float] = None
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
@@ -37,7 +36,7 @@ class ExternalServiceStatus:
     last_check: Optional[datetime] = None
     response_time_ms: Optional[float] = None
     error_message: Optional[str] = None
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 
 class ServiceHealthMonitor:
@@ -52,8 +51,8 @@ class ServiceHealthMonitor:
 
     def __init__(self):
         """Initialize the service health monitor."""
-        self._cache: Dict[str, Any] = {}
-        self._cache_expiry: Dict[str, datetime] = {}
+        self._cache: dict[str, Any] = {}
+        self._cache_expiry: dict[str, datetime] = {}
         self._cache_ttl_seconds = 300  # 5 minutes default TTL
 
     async def check_service_dependencies(self) -> ServiceDependencyStatus:

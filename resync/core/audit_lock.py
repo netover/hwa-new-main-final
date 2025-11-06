@@ -278,7 +278,7 @@ class AuditLockContext:
             if self.release_script_sha:
                 result = await self.client.evalsha(
                     self.release_script_sha, 1, self.lock_key, self.lock_value
-                )  [misc]
+                )
             else:
                 # Fallback to eval if script not loaded
                 logger.warning("Using eval fallback - script not loaded")
@@ -291,7 +291,7 @@ class AuditLockContext:
                 """
                 result = await self.client.eval(
                     lua_script, 1, self.lock_key, self.lock_value
-                )  [misc]
+                )
 
             if result == 1:
                 logger.debug("successfully_released_audit_lock", lock_key=self.lock_key)

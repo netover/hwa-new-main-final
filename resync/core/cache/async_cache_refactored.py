@@ -26,6 +26,7 @@ logger = logging.getLogger(__name__)
 # ------------------------------
 try:
     from django.conf import settings as django_settings  # type: ignore
+
     settings = django_settings
 except Exception:
     try:
@@ -60,7 +61,6 @@ class AsyncTTLCache(BaseCache):
         paranoia_mode: bool = False,
         snapshot_dir: str = "./cache_snapshots",
     ) -> None:
-
         correlation_id = runtime_metrics.create_correlation_id(
             {
                 "component": "async_cache_refactored",
@@ -79,12 +79,16 @@ class AsyncTTLCache(BaseCache):
             # Carregar configuração de settings (se houver)
             if settings is not None:
                 self.ttl_seconds = (
-                    ttl_seconds if ttl_seconds != 60 else getattr(settings, "ASYNC_CACHE_TTL", ttl_seconds)
+                    ttl_seconds
+                    if ttl_seconds != 60
+                    else getattr(settings, "ASYNC_CACHE_TTL", ttl_seconds)
                 )
                 self.cleanup_interval = (
                     cleanup_interval
                     if cleanup_interval != 30
-                    else getattr(settings, "ASYNC_CACHE_CLEANUP_INTERVAL", cleanup_interval)
+                    else getattr(
+                        settings, "ASYNC_CACHE_CLEANUP_INTERVAL", cleanup_interval
+                    )
                 )
                 self.num_shards = (
                     num_shards
@@ -97,7 +101,9 @@ class AsyncTTLCache(BaseCache):
                     else getattr(settings, "ASYNC_CACHE_ENABLE_WAL", enable_wal)
                 )
                 self.wal_path = (
-                    wal_path if wal_path is not None else getattr(settings, "ASYNC_CACHE_WAL_PATH", wal_path)
+                    wal_path
+                    if wal_path is not None
+                    else getattr(settings, "ASYNC_CACHE_WAL_PATH", wal_path)
                 )
                 self.max_entries = (
                     max_entries
@@ -114,7 +120,11 @@ class AsyncTTLCache(BaseCache):
                     if paranoia_mode is not False
                     else getattr(settings, "ASYNC_CACHE_PARANOIA_MODE", paranoia_mode)
                 )
-                log_with_correlation(logging.DEBUG, "Loaded cache config from settings module", correlation_id)
+                log_with_correlation(
+                    logging.DEBUG,
+                    "Loaded cache config from settings module",
+                    correlation_id,
+                )
             else:
                 self.ttl_seconds = ttl_seconds
                 self.cleanup_interval = cleanup_interval
@@ -125,7 +135,9 @@ class AsyncTTLCache(BaseCache):
                 self.max_memory_mb = max_memory_mb
                 self.paranoia_mode = paranoia_mode
                 log_with_correlation(
-                    logging.WARNING, "Settings module not available, using provided values or defaults", correlation_id
+                    logging.WARNING,
+                    "Settings module not available, using provided values or defaults",
+                    correlation_id,
                 )
 
             if self.paranoia_mode:
@@ -133,8 +145,12 @@ class AsyncTTLCache(BaseCache):
                 self.max_memory_mb = min(self.max_memory_mb, 10)
 
             self.num_shards = int(self.num_shards)
-            self.shards: List[Dict[str, CacheEntry]] = [dict() for _ in range(self.num_shards)]
-            self.shard_locks: List[asyncio.Lock] = [asyncio.Lock() for _ in range(self.num_shards)]
+            self.shards: List[Dict[str, CacheEntry]] = [
+                dict() for _ in range(self.num_shards)
+            ]
+            self.shard_locks: List[asyncio.Lock] = [
+                asyncio.Lock() for _ in range(self.num_shards)
+            ]
             self._startup_lock = asyncio.Lock()
             self._needs_wal_replay_on_first_use = True
 
@@ -144,20 +160,30 @@ class AsyncTTLCache(BaseCache):
 
             # métricas de lock
             self._lock_contention_counts = [0] * self.num_shards
-            self._lock_acquisition_times = [deque(maxlen=100) for _ in range(self.num_shards)]
+            self._lock_acquisition_times = [
+                deque(maxlen=100) for _ in range(self.num_shards)
+            ]
 
             # managers
             self.memory_manager = CacheMemoryManager(
-                max_entries=self.max_entries, max_memory_mb=self.max_memory_mb, paranoia_mode=self.paranoia_mode
+                max_entries=self.max_entries,
+                max_memory_mb=self.max_memory_mb,
+                paranoia_mode=self.paranoia_mode,
             )
-            self.persistence_manager = CachePersistenceManager(snapshot_dir=snapshot_dir)
+            self.persistence_manager = CachePersistenceManager(
+                snapshot_dir=snapshot_dir
+            )
 
             # WAL
             self.wal: Optional[WriteAheadLog] = None
             if self.enable_wal:
                 wal_path_to_use = self.wal_path or "./cache_wal"
                 self.wal = WriteAheadLog(wal_path_to_use)
-                log_with_correlation(logging.INFO, f"WAL enabled, path: {wal_path_to_use}", correlation_id)
+                log_with_correlation(
+                    logging.INFO,
+                    f"WAL enabled, path: {wal_path_to_use}",
+                    correlation_id,
+                )
 
             # cleanup background
             self.cleanup_task: Optional[asyncio.Task] = None
@@ -173,11 +199,21 @@ class AsyncTTLCache(BaseCache):
                     "enable_wal": self.enable_wal,
                 },
             )
-            log_with_correlation(logging.INFO, "AsyncTTLCache (refactored) initialized successfully", correlation_id)
+            log_with_correlation(
+                logging.INFO,
+                "AsyncTTLCache (refactored) initialized successfully",
+                correlation_id,
+            )
 
         except Exception as e:
-            runtime_metrics.record_health_check("async_cache_refactored", "init_failed", {"error": str(e)})
-            log_with_correlation(logging.CRITICAL, f"Failed to initialize AsyncTTLCache (refactored): {e}", correlation_id)
+            runtime_metrics.record_health_check(
+                "async_cache_refactored", "init_failed", {"error": str(e)}
+            )
+            log_with_correlation(
+                logging.CRITICAL,
+                f"Failed to initialize AsyncTTLCache (refactored): {e}",
+                correlation_id,
+            )
             raise
         finally:
             runtime_metrics.close_correlation_id(correlation_id)
@@ -227,12 +263,17 @@ class AsyncTTLCache(BaseCache):
             async with self._startup_lock:
                 if self._needs_wal_replay_on_first_use:
                     replayed = await self._replay_wal_on_startup()
-                    logger.info("replayed_operations_from_WAL_on_first_use", extra={"replayed": replayed})
+                    logger.info(
+                        "replayed_operations_from_WAL_on_first_use",
+                        extra={"replayed": replayed},
+                    )
                     self._needs_wal_replay_on_first_use = False
         if not self.is_running:
             self.is_running = True
             if not self.cleanup_task or self.cleanup_task.done():
-                self.cleanup_task = asyncio.create_task(self._cleanup_loop(), name="cache_cleanup_loop")
+                self.cleanup_task = asyncio.create_task(
+                    self._cleanup_loop(), name="cache_cleanup_loop"
+                )
 
     async def _cleanup_loop(self) -> None:
         try:
@@ -285,7 +326,9 @@ class AsyncTTLCache(BaseCache):
         Retorna o número de chaves removidas.
         """
         max_bytes = self.max_memory_mb * 1024 * 1024
-        if (self._entry_count < self.max_entries) and (self._memory_bytes + incoming_bytes <= max_bytes):
+        if (self._entry_count < self.max_entries) and (
+            self._memory_bytes + incoming_bytes <= max_bytes
+        ):
             return 0
 
         evicted = 0
@@ -294,7 +337,9 @@ class AsyncTTLCache(BaseCache):
             # Reconta sob locks
             total_entries = 0
             total_bytes = 0
-            candidates: List[Tuple[float, int, str, int]] = []  # (last_access, shard_idx, key, size_bytes)
+            candidates: List[
+                Tuple[float, int, str, int]
+            ] = []  # (last_access, shard_idx, key, size_bytes)
             now = self._now()
             for i in range(self.num_shards):
                 shard = self.shards[i]
@@ -311,12 +356,18 @@ class AsyncTTLCache(BaseCache):
             self._memory_bytes = total_bytes
 
             target_bytes = max_bytes - incoming_bytes
-            if self._entry_count <= self.max_entries and self._memory_bytes <= target_bytes:
+            if (
+                self._entry_count <= self.max_entries
+                and self._memory_bytes <= target_bytes
+            ):
                 return 0
 
             candidates.sort(key=lambda x: x[0])  # LRU primeiro
             idx = 0
-            while (self._entry_count > self.max_entries or self._memory_bytes > target_bytes) and idx < len(candidates):
+            while (
+                self._entry_count > self.max_entries
+                or self._memory_bytes > target_bytes
+            ) and idx < len(candidates):
                 _, shard_idx, key, sz = candidates[idx]
                 idx += 1
                 entry = self.shards[shard_idx].pop(key, None)
@@ -354,7 +405,9 @@ class AsyncTTLCache(BaseCache):
             setattr(entry, "last_access", now)
             return entry.value
 
-    async def set(self, key: Any, value: Any, ttl_seconds: Optional[int] = None) -> None:
+    async def set(
+        self, key: Any, value: Any, ttl_seconds: Optional[int] = None
+    ) -> None:
         await self._ensure_started()
         k = self._validate_key(key)
         ttl = self.ttl_seconds if ttl_seconds is None else int(ttl_seconds)
@@ -367,7 +420,13 @@ class AsyncTTLCache(BaseCache):
 
         # WAL (write-ahead) antes da mutação
         if self.enable_wal and self.wal:
-            entry = WalEntry(operation=getattr(WalOperationType, "SET", "SET"), key=k, value=value, ttl=ttl, ts=now)
+            entry = WalEntry(
+                operation=getattr(WalOperationType, "SET", "SET"),
+                key=k,
+                value=value,
+                ttl=ttl,
+                ts=now,
+            )
             if hasattr(self.wal, "append"):
                 await self.wal.append(entry)
             elif hasattr(self.wal, "log_operation"):
@@ -382,7 +441,12 @@ class AsyncTTLCache(BaseCache):
             else:
                 self._entry_count += 1
 
-            ce = CacheEntry(value=value, expires_at=expires_at, last_access=now, size_bytes=size_bytes)
+            ce = CacheEntry(
+                value=value,
+                expires_at=expires_at,
+                last_access=now,
+                size_bytes=size_bytes,
+            )
             shard[k] = ce
             self._memory_bytes += size_bytes
 
@@ -392,7 +456,11 @@ class AsyncTTLCache(BaseCache):
 
         # WAL antes
         if self.enable_wal and self.wal:
-            entry = WalEntry(operation=getattr(WalOperationType, "DELETE", "DELETE"), key=k, ts=self._now())
+            entry = WalEntry(
+                operation=getattr(WalOperationType, "DELETE", "DELETE"),
+                key=k,
+                ts=self._now(),
+            )
             if hasattr(self.wal, "append"):
                 await self.wal.append(entry)
             elif hasattr(self.wal, "log_operation"):
@@ -413,7 +481,9 @@ class AsyncTTLCache(BaseCache):
 
         # WAL para CLEAR — evita “reaparecimento” após restart
         if self.enable_wal and self.wal:
-            entry = WalEntry(operation=getattr(WalOperationType, "CLEAR", "CLEAR"), ts=self._now())
+            entry = WalEntry(
+                operation=getattr(WalOperationType, "CLEAR", "CLEAR"), ts=self._now()
+            )
             if hasattr(self.wal, "append"):
                 await self.wal.append(entry)
             elif hasattr(self.wal, "log_operation"):
@@ -467,7 +537,9 @@ class AsyncTTLCache(BaseCache):
         if hasattr(self.persistence_manager, "create_backup_snapshot_async"):
             return await self.persistence_manager.create_backup_snapshot_async(snapshot)  # type: ignore[attr-defined]
         loop = asyncio.get_running_loop()
-        return await loop.run_in_executor(None, self.persistence_manager.create_backup_snapshot, snapshot)
+        return await loop.run_in_executor(
+            None, self.persistence_manager.create_backup_snapshot, snapshot
+        )
 
     async def restore_from_snapshot(self, snapshot_id: str) -> None:
         """
@@ -481,7 +553,9 @@ class AsyncTTLCache(BaseCache):
             data = await self.persistence_manager.load_snapshot_async(snapshot_id)  # type: ignore[attr-defined]
         else:
             loop = asyncio.get_running_loop()
-            data = await loop.run_in_executor(None, self.persistence_manager.load_snapshot, snapshot_id)
+            data = await loop.run_in_executor(
+                None, self.persistence_manager.load_snapshot, snapshot_id
+            )
 
         # Limpa estado atual (com WAL CLEAR para consistência com recovery futuro)
         await self.clear()
@@ -509,18 +583,28 @@ class AsyncTTLCache(BaseCache):
                     if exp is not None and exp <= now:
                         continue
                     # Inserção direta
-                    shard[k] = CacheEntry(value=v, expires_at=exp, last_access=la, size_bytes=sz)
+                    shard[k] = CacheEntry(
+                        value=v, expires_at=exp, last_access=la, size_bytes=sz
+                    )
                     self._entry_count += 1
                     self._memory_bytes += sz
         finally:
             self._release_all_shard_locks()
 
-        logger.info("restore_from_snapshot_complete", extra={"snapshot_id": snapshot_id})
+        logger.info(
+            "restore_from_snapshot_complete", extra={"snapshot_id": snapshot_id}
+        )
 
     # ------------------------------
     # WAL replay hooks (usados por WriteAheadLog.replay_log)
     # ------------------------------
-    async def apply_wal_set(self, key: str, value: Any, ttl: Optional[int] = None, ts: Optional[float] = None):
+    async def apply_wal_set(
+        self,
+        key: str,
+        value: Any,
+        ttl: Optional[int] = None,
+        ts: Optional[float] = None,
+    ):
         """
         Aplica SET do WAL sem re-logar. Mantém a mesma disciplina: evicção global fora de locks.
         """
@@ -541,7 +625,12 @@ class AsyncTTLCache(BaseCache):
                 self._memory_bytes -= int(getattr(prev, "size_bytes", 0))
             else:
                 self._entry_count += 1
-            ce = CacheEntry(value=value, expires_at=expires_at, last_access=ts or now, size_bytes=size_bytes)
+            ce = CacheEntry(
+                value=value,
+                expires_at=expires_at,
+                last_access=ts or now,
+                size_bytes=size_bytes,
+            )
             shard[k] = ce
             self._memory_bytes += size_bytes
 

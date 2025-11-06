@@ -134,15 +134,15 @@ class TransactionResponse(BaseModel):
     summary="Create a new resource",
     description="""
     Creates a new resource with idempotency support.
-    
+
     **Idempotency**: This endpoint requires an `X-Idempotency-Key` header.
     Multiple requests with the same key will return the same result without
     creating duplicate resources.
-    
+
     **Headers**:
     - `X-Idempotency-Key`: UUID v4 format (required)
     - `X-Correlation-ID`: For request tracing (optional)
-    
+
     **Example**:
     ```bash
     curl -X POST "http://localhost:8000/api/v1/operations/resources" \\
@@ -224,14 +224,14 @@ async def create_resource(
     summary="Create a new transaction",
     description="""
     Creates a new transaction with idempotency support.
-    
+
     **Idempotency**: This endpoint requires an `X-Idempotency-Key` header.
     This is critical for financial operations to prevent duplicate charges.
-    
+
     **Headers**:
     - `X-Idempotency-Key`: UUID v4 format (required)
     - `X-Correlation-ID`: For request tracing (optional)
-    
+
     **Example**:
     ```bash
     curl -X POST "http://localhost:8000/api/v1/operations/transactions" \\

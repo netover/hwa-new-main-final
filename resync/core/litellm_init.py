@@ -152,7 +152,9 @@ class LiteLLMManager:
         try:
             return float(completion_cost(completion_response=completion_response))
         except (ValueError, TypeError, KeyError) as err:
-            logger.warning("Could not calculate completion cost: %s", err, exc_info=False)
+            logger.warning(
+                "Could not calculate completion cost: %s", err, exc_info=False
+            )
             self._metrics.increment_cost_calc_fail()
             return 0.0
 
@@ -195,7 +197,9 @@ def _apply_env_from_settings(*, overwrite: bool = False) -> dict[str, bool]:
 
     endpoint = getattr(settings, "LLM_ENDPOINT", None)
     # Fonte de verdade: OPENAI_BASE_URL; só preenche OPENAI_API_BASE se não existir
-    changed["OPENAI_BASE_URL"] = _set_env("OPENAI_BASE_URL", endpoint, overwrite=overwrite)
+    changed["OPENAI_BASE_URL"] = _set_env(
+        "OPENAI_BASE_URL", endpoint, overwrite=overwrite
+    )
     changed["OPENAI_API_BASE"] = _set_env(
         "OPENAI_API_BASE",
         endpoint if ("OPENAI_API_BASE" not in os.environ or overwrite) else None,
@@ -206,10 +210,14 @@ def _apply_env_from_settings(*, overwrite: bool = False) -> dict[str, bool]:
     changed["OPENAI_API_KEY"] = _set_env("OPENAI_API_KEY", llm_key, overwrite=overwrite)
 
     or_key = getattr(settings, "OPENROUTER_API_KEY", None)
-    changed["OPENROUTER_API_KEY"] = _set_env("OPENROUTER_API_KEY", or_key, overwrite=overwrite)
+    changed["OPENROUTER_API_KEY"] = _set_env(
+        "OPENROUTER_API_KEY", or_key, overwrite=overwrite
+    )
 
     or_base = getattr(settings, "OPENROUTER_API_BASE", None)
-    changed["OPENROUTER_API_BASE"] = _set_env("OPENROUTER_API_BASE", or_base, overwrite=overwrite)
+    changed["OPENROUTER_API_BASE"] = _set_env(
+        "OPENROUTER_API_BASE", or_base, overwrite=overwrite
+    )
 
     # Loga quais variáveis foram definidas (nunca os valores)
     set_vars = [k for k, v in changed.items() if v]

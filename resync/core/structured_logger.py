@@ -25,11 +25,14 @@ from structlog.types import EventDict, WrappedLogger
 
 from .encoding_utils import can_encode
 
+
 # Lazy import of settings to avoid circular dependencies
 def _get_settings():
     """Lazy import of settings to avoid circular dependencies."""
     from resync.settings import settings
+
     return settings
+
 
 # ============================================================================
 # CONTEXT VARIABLES

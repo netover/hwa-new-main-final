@@ -29,12 +29,16 @@ logger = get_logger(__name__)
 # Lazy initialization of knowledge graph
 _knowledge_graph = None
 
+
 def _get_knowledge_graph():
     global _knowledge_graph
     if _knowledge_graph is None:
         from resync.core.knowledge_graph import AsyncKnowledgeGraph
+
         _knowledge_graph = AsyncKnowledgeGraph()
     return _knowledge_graph
+
+
 audit_lock = DistributedAuditLock()
 audit_queue = AsyncAuditQueue()
 
@@ -154,7 +158,9 @@ async def _perform_action_on_memory(
 async def _fetch_recent_memories() -> list[dict[str, Any]]:
     """Fetches recent memories from knowledge graph."""
     try:
-        memories = await _get_knowledge_graph().get_memories(limit=RECENT_MEMORIES_FETCH_LIMIT)
+        memories = await _get_knowledge_graph().get_memories(
+            limit=RECENT_MEMORIES_FETCH_LIMIT
+        )
         return memories or []
     except KnowledgeGraphError as e:
         logger.error("failed_to_fetch_memories", error=str(e), exc_info=True)
@@ -272,7 +278,9 @@ async def _cleanup_locks() -> None:
 # Old functions removed - replaced by refactored versions above
 
 
-async def _analyze_memories_concurrently(memories: list[dict[str, Any]]) -> list[tuple[str, Any]]:
+async def _analyze_memories_concurrently(
+    memories: list[dict[str, Any]]
+) -> list[tuple[str, Any]]:
     """
     Analyze multiple memories concurrently using analyze_memory function.
 
@@ -294,11 +302,7 @@ async def _analyze_memories_concurrently(memories: list[dict[str, Any]]) -> list
     processed_results = []
     for result in results:
         if isinstance(result, Exception):
-            logger.error(
-                "memory_analysis_failed",
-                error=str(result),
-                exc_info=True
-            )
+            logger.error("memory_analysis_failed", error=str(result), exc_info=True)
             processed_results.append(None)
         else:
             processed_results.append(result)
@@ -306,7 +310,9 @@ async def _analyze_memories_concurrently(memories: list[dict[str, Any]]) -> list
     return processed_results
 
 
-async def _process_analysis_results(results: list[tuple[str, Any] | None]) -> tuple[list[str], list[dict[str, Any]]]:
+async def _process_analysis_results(
+    results: list[tuple[str, Any] | None]
+) -> tuple[list[str], list[dict[str, Any]]]:
     """
     Process analysis results, separating memories to delete and flag.
 
@@ -332,7 +338,7 @@ async def _process_analysis_results(results: list[tuple[str, Any] | None]) -> tu
                 resource_type="memory",
                 resource_id=data,
                 details={"reason": "IA audit flagged for deletion"},
-                severity="info"
+                severity="info",
             )
         elif action == "flag" and isinstance(data, dict):
             memories_to_flag.append(data)
@@ -341,7 +347,7 @@ async def _process_analysis_results(results: list[tuple[str, Any] | None]) -> tu
                 resource_type="memory",
                 resource_id=str(data.get("id", "unknown")),
                 details={"reason": "IA audit flagged for review"},
-                severity="warning"
+                severity="warning",
             )
 
     return memories_to_delete, memories_to_flag

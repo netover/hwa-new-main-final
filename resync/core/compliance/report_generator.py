@@ -9,20 +9,25 @@ from __future__ import annotations
 
 import time
 from datetime import datetime
-from typing import Dict, List, Any
+from typing import Any
 
 from resync.core.structured_logger import get_logger
+
 
 # Lazy imports to avoid circular dependency
 def _get_soc2_compliance_manager():
     """Lazy import to avoid circular dependency."""
     from resync.core.soc2_compliance_refactored import SOC2ComplianceManager
+
     return SOC2ComplianceManager
+
 
 def _get_compliance_report():
     """Lazy import to avoid circular dependency."""
     from resync.core.security_dashboard import ComplianceReport
+
     return ComplianceReport
+
 
 logger = get_logger(__name__)
 
@@ -53,7 +58,7 @@ class ComplianceReportGenerator:
         SOC2ComplianceManager = _get_soc2_compliance_manager()
         ComplianceReport = _get_compliance_report()
         self.soc2_manager = soc2_manager or SOC2ComplianceManager()
-        self._report_cache: Dict[str, ComplianceReport] = {}
+        self._report_cache: dict[str, ComplianceReport] = {}
 
     async def generate_soc2_report(
         self, start_date: datetime, end_date: datetime
@@ -173,7 +178,7 @@ class ComplianceReportGenerator:
         logger.info(f"GDPR compliance report generated successfully: {report_id}")
         return report
 
-    def _generate_soc2_executive_summary(self, soc2_data: Dict[str, Any]) -> str:
+    def _generate_soc2_executive_summary(self, soc2_data: dict[str, Any]) -> str:
         """Generate executive summary for SOC 2 report."""
         overall_score = soc2_data.get("overall_compliance_score", 0.0)
         control_status = soc2_data.get("control_status", {})
@@ -194,8 +199,8 @@ class ComplianceReportGenerator:
         """
 
     def _generate_soc2_findings(
-        self, soc2_data: Dict[str, Any]
-    ) -> List[Dict[str, Any]]:
+        self, soc2_data: dict[str, Any]
+    ) -> list[dict[str, Any]]:
         """Generate findings section for SOC 2 report."""
         findings = []
 
@@ -240,7 +245,7 @@ class ComplianceReportGenerator:
 
         return findings
 
-    def _generate_soc2_recommendations(self, soc2_data: Dict[str, Any]) -> List[str]:
+    def _generate_soc2_recommendations(self, soc2_data: dict[str, Any]) -> list[str]:
         """Generate recommendations for SOC 2 report."""
         recommendations = []
 
@@ -265,8 +270,8 @@ class ComplianceReportGenerator:
         return recommendations
 
     def _generate_soc2_metrics_summary(
-        self, soc2_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+        self, soc2_data: dict[str, Any]
+    ) -> dict[str, Any]:
         """Generate metrics summary for SOC 2 report."""
         return {
             "overall_compliance_score": soc2_data.get("overall_compliance_score", 0.0),
@@ -282,7 +287,7 @@ class ComplianceReportGenerator:
 
     def _collect_gdpr_data(
         self, start_date: datetime, end_date: datetime
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Collect GDPR compliance data for the reporting period."""
         # Placeholder implementation - in real scenario, this would
         # collect data from various GDPR-related systems and processes
@@ -298,7 +303,7 @@ class ComplianceReportGenerator:
             "privacy_notices_updated": 3,
         }
 
-    def _generate_gdpr_executive_summary(self, gdpr_data: Dict[str, Any]) -> str:
+    def _generate_gdpr_executive_summary(self, gdpr_data: dict[str, Any]) -> str:
         """Generate executive summary for GDPR report."""
         overall_score = gdpr_data.get("overall_compliance_score", 0.0)
 
@@ -318,8 +323,8 @@ class ComplianceReportGenerator:
         """
 
     def _generate_gdpr_findings(
-        self, gdpr_data: Dict[str, Any]
-    ) -> List[Dict[str, Any]]:
+        self, gdpr_data: dict[str, Any]
+    ) -> list[dict[str, Any]]:
         """Generate findings section for GDPR report."""
         findings = []
 
@@ -349,7 +354,7 @@ class ComplianceReportGenerator:
 
         return findings
 
-    def _generate_gdpr_recommendations(self, gdpr_data: Dict[str, Any]) -> List[str]:
+    def _generate_gdpr_recommendations(self, gdpr_data: dict[str, Any]) -> list[str]:
         """Generate recommendations for GDPR report."""
         recommendations = []
 
@@ -372,8 +377,8 @@ class ComplianceReportGenerator:
         return recommendations
 
     def _generate_gdpr_metrics_summary(
-        self, gdpr_data: Dict[str, Any]
-    ) -> Dict[str, Any]:
+        self, gdpr_data: dict[str, Any]
+    ) -> dict[str, Any]:
         """Generate metrics summary for GDPR report."""
         return {
             "overall_compliance_score": gdpr_data.get("overall_compliance_score", 0.0),

@@ -14,9 +14,10 @@ import structlog
 
 from resync.core.health_models import HealthCheckConfig
 
+from .enhanced_health_service import EnhancedHealthService
+
 # Import the health services
 from .health_check_service import HealthCheckService
-from .enhanced_health_service import EnhancedHealthService
 
 logger = structlog.get_logger(__name__)
 

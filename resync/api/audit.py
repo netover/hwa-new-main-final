@@ -486,23 +486,22 @@ class AuditLogger:
 
     def log_action(self, action: AuditAction, details: dict = None):
         """Log an audit action."""
-        record = {
-            "action": action,
-            "details": details or {},
-            "timestamp": "now"
-        }
+        record = {"action": action, "details": details or {}, "timestamp": "now"}
         self.records.append(record)
         return record
 
-    def generate_audit_log(self, user_id: str, action: AuditAction, details: dict = None):
+    def generate_audit_log(
+        self, user_id: str, action: AuditAction, details: dict = None
+    ):
         """Generate an audit log entry."""
         import uuid
+
         record = AuditRecordResponse(
             id=str(uuid.uuid4()),
             user_id=user_id,
             action=action,
             details=details or {},
-            timestamp="now"
+            timestamp="now",
         )
         self.records.append(record)
         return record

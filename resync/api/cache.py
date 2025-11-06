@@ -11,6 +11,7 @@ from typing import Optional, Union
 
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
+
 try:
     from redis import Redis
     from redis.exceptions import ConnectionError, TimeoutError

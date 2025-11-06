@@ -10,12 +10,12 @@ from __future__ import annotations
 
 import time
 from datetime import datetime
-from typing import Dict, Optional
+from typing import Optional
 
 import structlog
 
-from resync.core.health_models import ComponentHealth, ComponentType, HealthStatus
 from resync.core.connection_pool_manager import get_connection_pool_manager
+from resync.core.health_models import ComponentHealth, ComponentType, HealthStatus
 
 logger = structlog.get_logger(__name__)
 
@@ -34,7 +34,7 @@ class ConnectionPoolMonitor:
     def __init__(self):
         """Initialize the connection pool monitor."""
         self._last_check: Optional[datetime] = None
-        self._cached_results: Dict[str, ComponentHealth] = {}
+        self._cached_results: dict[str, ComponentHealth] = {}
 
     async def check_connection_pools_health(self) -> ComponentHealth:
         """
@@ -195,7 +195,7 @@ class ConnectionPoolMonitor:
                 error_count=1,
             )
 
-    async def check_all_connection_health(self) -> Dict[str, ComponentHealth]:
+    async def check_all_connection_health(self) -> dict[str, ComponentHealth]:
         """
         Check all connection pool health metrics.
 

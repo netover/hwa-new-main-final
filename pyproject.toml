@@ -65,3 +65,33 @@ ignore = [
 [tool.ruff.lint.per-file-ignores]
 "resync/core/__init__.py" = ["F401"]  # Barrel module - re-exports symbols
 "resync/core/health/__init__.py" = ["F401"]  # Barrel module - re-exports symbols
+
+[tool.ruff.format]
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".ipynb_checkpoints",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pyenv",
+    ".pytest_cache",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    ".vscode",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "site-packages",
+    "venv",
+]

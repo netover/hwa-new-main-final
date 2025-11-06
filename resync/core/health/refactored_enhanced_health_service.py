@@ -10,7 +10,7 @@ from __future__ import annotations
 import asyncio
 import time
 from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 import structlog
 
@@ -22,8 +22,9 @@ from resync.core.health_models import (
     HealthStatus,
     HealthStatusHistory,
 )
-from .health_checkers.health_checker_factory import HealthCheckerFactory
+
 from .enhanced_health_config_manager import EnhancedHealthConfigurationManager
+from .health_checkers.health_checker_factory import HealthCheckerFactory
 
 logger = structlog.get_logger(__name__)
 
@@ -49,7 +50,7 @@ class RefactoredEnhancedHealthService:
         self.checker_factory = HealthCheckerFactory(self.config_manager.get_config())
         self.config_manager.set_health_checker_factory(self.checker_factory)
 
-        self.health_history: List[HealthStatusHistory] = []
+        self.health_history: list[HealthStatusHistory] = []
         self.last_health_check: Optional[datetime] = None
 
         # Performance metrics
@@ -210,7 +211,7 @@ class RefactoredEnhancedHealthService:
         return result
 
     def _calculate_overall_status(
-        self, components: Dict[str, ComponentHealth]
+        self, components: dict[str, ComponentHealth]
     ) -> HealthStatus:
         """Calculate overall health status from component results."""
         # Simple aggregation: worst status wins
@@ -227,8 +228,8 @@ class RefactoredEnhancedHealthService:
         return worst
 
     def _generate_summary(
-        self, components: Dict[str, ComponentHealth]
-    ) -> Dict[str, int]:
+        self, components: dict[str, ComponentHealth]
+    ) -> dict[str, int]:
         """Generate summary of health status counts."""
         summary = {
             "healthy": 0,
@@ -247,7 +248,7 @@ class RefactoredEnhancedHealthService:
                 summary["unknown"] += 1
         return summary
 
-    def _check_alerts(self, components: Dict[str, ComponentHealth]) -> List[str]:
+    def _check_alerts(self, components: dict[str, ComponentHealth]) -> list[str]:
         """Check for alerts based on component health status."""
         alerts = []
         for name, comp in components.items():
@@ -287,7 +288,7 @@ class RefactoredEnhancedHealthService:
 
     def get_health_history(
         self, hours: int = 24, max_entries: Optional[int] = None
-    ) -> List[HealthStatusHistory]:
+    ) -> list[HealthStatusHistory]:
         """Get health history for specified time period."""
         cutoff_time = datetime.now() - timedelta(hours=hours)
 
@@ -324,11 +325,11 @@ class RefactoredEnhancedHealthService:
             )
             return False
 
-    def get_config_summary(self) -> Dict[str, Any]:
+    def get_config_summary(self) -> dict[str, Any]:
         """Get configuration summary."""
         return self.config_manager.get_config_summary_enhanced()
 
-    def validate_configuration(self) -> Dict[str, Any]:
+    def validate_configuration(self) -> dict[str, Any]:
         """Validate current configuration."""
         return {
             "config_validation": self.config_manager.validate_config(),

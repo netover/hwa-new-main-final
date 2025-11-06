@@ -18,4 +18,4 @@ class AdaptiveEviction:
 
     def get_eviction_candidates(self, items: Dict[str, Any]) -> List[str]:
         """Get items that should be evicted."""
-        return list(items.keys())[:len(items)//4]  # Evict 25% of items
+        return list(items.keys())[: len(items) // 4]  # Evict 25% of items

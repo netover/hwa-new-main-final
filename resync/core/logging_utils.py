@@ -49,12 +49,12 @@ class SecretRedactor(logging.Filter):
         self.sensitive_value_patterns = [
             # Basic patterns for key=value structures
             r'(?:password|pwd|token|secret|key|api_key)\s*[:=]\s*["\'][^"\']*["\']',
-            r'(?:authorization)[:\s]*bearer\s+[^\s]+',
-            r'(?:basic)\s+[a-zA-Z0-9+/=]+',
+            r"(?:authorization)[:\s]*bearer\s+[^\s]+",
+            r"(?:basic)\s+[a-zA-Z0-9+/=]+",
             # Credit card pattern
-            r'\b\d{4}[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{4}\b',
+            r"\b\d{4}[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{4}\b",
             # SSN pattern
-            r'\b\d{3}-?\d{2}-?\d{4}\b',
+            r"\b\d{3}-?\d{2}-?\d{4}\b",
         ]
 
     def filter(self, record: logging.LogRecord) -> bool:
@@ -75,7 +75,7 @@ class SecretRedactor(logging.Filter):
             record.args = self._redact_args(record.args)
 
         # If the record has additional structured data, redact from there
-        if hasattr(record, '__dict__'):
+        if hasattr(record, "__dict__"):
             for key, value in record.__dict__.items():
                 if isinstance(value, str):
                     record.__dict__[key] = self._redact_sensitive_data(value)
@@ -131,9 +131,14 @@ class SecretRedactor(logging.Filter):
             elif isinstance(value, dict):
                 redacted[key] = self._redact_dict(value)
             elif isinstance(value, list):
-                redacted[key] = [self._redact_dict(item) if isinstance(item, dict) else 
-                                self._redact_sensitive_data(str(item)) if isinstance(item, str) else 
-                                item for item in value]
+                redacted[key] = [
+                    self._redact_dict(item)
+                    if isinstance(item, dict)
+                    else self._redact_sensitive_data(str(item))
+                    if isinstance(item, str)
+                    else item
+                    for item in value
+                ]
             elif isinstance(value, str):
                 redacted[key] = self._redact_sensitive_data(value)
             else:

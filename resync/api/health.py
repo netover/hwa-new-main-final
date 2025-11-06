@@ -20,11 +20,14 @@ from resync.core.health_service import (
 
 logger = logging.getLogger(__name__)
 
+
 # Lazy import of runtime_metrics to avoid circular dependencies
 def _get_runtime_metrics():
     """Lazy import of runtime_metrics."""
     from resync.core.metrics import runtime_metrics
+
     return runtime_metrics
+
 
 # Main health router
 router = APIRouter(prefix="/health", tags=["health"])

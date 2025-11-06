@@ -1,9 +1,9 @@
 from __future__ import annotations
 
+from collections import Counter, defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any, Dict, List, Optional
-from collections import defaultdict, Counter
+from typing import Any, Optional
 
 from resync.core.health_models import (
     ComponentHealth,
@@ -25,7 +25,7 @@ class ComponentHealthSummary:
     unhealthy_count: int
     unknown_count: int
     average_response_time_ms: Optional[float] = None
-    components: List[ComponentHealth] = field(default_factory=list)
+    components: list[ComponentHealth] = field(default_factory=list)
 
     @property
     def health_percentage(self) -> float:
@@ -59,11 +59,11 @@ class OverallHealthStatus:
     unhealthy_components: int
     unknown_components: int
     overall_health_percentage: float
-    component_summaries: Dict[ComponentType, ComponentHealthSummary] = field(
+    component_summaries: dict[ComponentType, ComponentHealthSummary] = field(
         default_factory=dict
     )
-    critical_issues: List[str] = field(default_factory=list)
-    recommendations: List[str] = field(default_factory=list)
+    critical_issues: list[str] = field(default_factory=list)
+    recommendations: list[str] = field(default_factory=list)
 
     @property
     def is_system_healthy(self) -> bool:
@@ -77,11 +77,11 @@ class HealthReport:
 
     timestamp: datetime
     overall_status: OverallHealthStatus
-    component_health: Dict[str, ComponentHealth] = field(default_factory=dict)
-    performance_metrics: Dict[str, Any] = field(default_factory=dict)
-    trends: Dict[str, Any] = field(default_factory=dict)
-    alerts: List[str] = field(default_factory=list)
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    component_health: dict[str, ComponentHealth] = field(default_factory=dict)
+    performance_metrics: dict[str, Any] = field(default_factory=dict)
+    trends: dict[str, Any] = field(default_factory=dict)
+    alerts: list[str] = field(default_factory=list)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 
 class HealthMonitoringAggregator:
@@ -152,7 +152,7 @@ class HealthMonitoringAggregator:
 
     async def aggregate_component_health(
         self,
-    ) -> Dict[ComponentType, ComponentHealthSummary]:
+    ) -> dict[ComponentType, ComponentHealthSummary]:
         """
         Aggregate health data by component type.
 
@@ -168,7 +168,7 @@ class HealthMonitoringAggregator:
             await self.collect_all_health_checks()
 
         # Group components by type
-        components_by_type: Dict[ComponentType, List[ComponentHealth]] = defaultdict(
+        components_by_type: dict[ComponentType, list[ComponentHealth]] = defaultdict(
             list
         )
 
@@ -257,7 +257,7 @@ class HealthMonitoringAggregator:
         )
 
     def _create_component_summary(
-        self, component_type: ComponentType, components: List[ComponentHealth]
+        self, component_type: ComponentType, components: list[ComponentHealth]
     ) -> ComponentHealthSummary:
         """Create a summary for a specific component type."""
         status_counts = Counter(component.status for component in components)
@@ -284,8 +284,8 @@ class HealthMonitoringAggregator:
         )
 
     def _identify_critical_issues(
-        self, components: Dict[str, ComponentHealth]
-    ) -> List[str]:
+        self, components: dict[str, ComponentHealth]
+    ) -> list[str]:
         """Identify critical issues from component health data."""
         issues = []
 
@@ -318,9 +318,9 @@ class HealthMonitoringAggregator:
 
     def _generate_recommendations(
         self,
-        components: Dict[str, ComponentHealth],
-        summaries: Dict[ComponentType, ComponentHealthSummary],
-    ) -> List[str]:
+        components: dict[str, ComponentHealth],
+        summaries: dict[ComponentType, ComponentHealthSummary],
+    ) -> list[str]:
         """Generate recommendations based on component health."""
         recommendations = []
 

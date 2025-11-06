@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
-from typing import TYPE_CHECKING, Dict, Optional
+from typing import TYPE_CHECKING, Optional
 
 from resync.core.exceptions import TWSConnectionError
 from resync.core.pools.base_pool import (
@@ -81,7 +81,7 @@ class ConnectionPoolManager:
     """Central manager for all connection pools."""
 
     def __init__(self) -> None:
-        self.pools: Dict[str, ConnectionPool] = {}  [type-arg]
+        self.pools: dict[str, ConnectionPool] = {}[type - arg]
         self._initialized = False
         self._shutdown = False
         self._lock = asyncio.Lock()
@@ -190,14 +190,14 @@ class ConnectionPoolManager:
         """Get a specific connection pool by name."""
         return self.pools.get(pool_name)
 
-    def get_pool_stats(self) -> Dict[str, ConnectionPoolStats]:
+    def get_pool_stats(self) -> dict[str, ConnectionPoolStats]:
         """Get statistics for all pools."""
         stats = {}
         for name, pool in self.pools.items():
             stats[name] = pool.stats
         return stats
 
-    async def health_check_all(self) -> Dict[str, bool]:
+    async def health_check_all(self) -> dict[str, bool]:
         """Perform health checks on all pools."""
         results = {}
         for name, pool in self.pools.items():

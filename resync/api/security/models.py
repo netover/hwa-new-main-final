@@ -3,7 +3,7 @@ from __future__ import annotations
 from datetime import datetime
 
 from passlib.context import CryptContext
-from pydantic import field_validator, BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field, field_validator
 
 # --- Password Validation Context ---
 password_hasher = CryptContext(schemes=["bcrypt"], deprecated="auto")

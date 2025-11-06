@@ -193,7 +193,9 @@ async def managed_file(file_path: str, mode: str = "r") -> AsyncIterator[Any]:
         aiofiles = None  # type: ignore
 
     if aiofiles is None:
-        raise RuntimeError("aiofiles is required for async file operations but is not installed.")
+        raise RuntimeError(
+            "aiofiles is required for async file operations but is not installed."
+        )
 
     file_handle = None
     try:

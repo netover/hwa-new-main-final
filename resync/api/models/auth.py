@@ -50,25 +50,3 @@ class TokenData(BaseModel):
     """JWT token payload data."""
 
     username: Optional[str] = None
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

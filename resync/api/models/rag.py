@@ -30,25 +30,3 @@ class RAGFileDetail(RAGFileCreate):
     id: str
     file_size: int
     ingestion_status: str
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import List, Union
+from typing import Union
 
 from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
@@ -30,9 +30,9 @@ class LoggingCORSMiddleware(BaseHTTPMiddleware):
         app: ASGIApp,
         policy: CORSPolicy,
         *,
-        allow_origins: List[str] = None,
-        allow_methods: List[str] = None,
-        allow_headers: List[str] = None,
+        allow_origins: list[str] = None,
+        allow_methods: list[str] = None,
+        allow_headers: list[str] = None,
         allow_credentials: bool = False,
         max_age: int = 86400,
         allow_origin_regex: str = None,
@@ -272,7 +272,7 @@ def get_development_cors_config() -> CORSPolicy:
 
 
 def get_production_cors_config(
-    allowed_origins: List[str] = None, allow_credentials: bool = False
+    allowed_origins: list[str] = None, allow_credentials: bool = False
 ) -> CORSPolicy:
     """
     Get CORS configuration for production environment.

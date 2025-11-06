@@ -10,7 +10,7 @@ from __future__ import annotations
 import asyncio
 import time
 from datetime import datetime
-from typing import Dict, Optional
+from typing import Optional
 
 import psutil
 import structlog
@@ -34,7 +34,7 @@ class SystemResourceMonitor:
     def __init__(self):
         """Initialize the system resource monitor."""
         self._last_check: Optional[datetime] = None
-        self._cached_results: Dict[str, ComponentHealth] = {}
+        self._cached_results: dict[str, ComponentHealth] = {}
 
     async def check_memory_health(self) -> ComponentHealth:
         """
@@ -182,7 +182,7 @@ class SystemResourceMonitor:
                 error_count=1,
             )
 
-    async def check_system_health(self) -> Dict[str, ComponentHealth]:
+    async def check_system_health(self) -> dict[str, ComponentHealth]:
         """
         Check all system resource health metrics.
 

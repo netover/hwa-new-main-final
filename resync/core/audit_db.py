@@ -28,10 +28,7 @@ async def ensure_consumer_group():
     try:
         client = await get_redis_client()
         await client.xgroup_create(
-            AUDIT_STREAM_KEY,
-            AUDIT_CONSUMER_GROUP,
-            "$",
-            mkstream=True
+            AUDIT_STREAM_KEY, AUDIT_CONSUMER_GROUP, "$", mkstream=True
         )
         logger.info("consumer_group_created", group=AUDIT_CONSUMER_GROUP)
     except redis.ResponseError as e:
@@ -60,22 +57,32 @@ async def add_audit_record_async(memory: Dict[str, Any]) -> Optional[str]:
             "user_query": validated_memory["user_query"],
             "agent_response": validated_memory["agent_response"],
             "status": "pending",
-            "created_at": validated_memory.get("created_at", "*")
+            "created_at": validated_memory.get("created_at", "*"),
         }
 
         if validated_memory.get("ia_audit_reason"):
             stream_data["ia_audit_reason"] = validated_memory["ia_audit_reason"]
         if validated_memory.get("ia_audit_confidence") is not None:
-            stream_data["ia_audit_confidence"] = str(validated_memory["ia_audit_confidence"])
+            stream_data["ia_audit_confidence"] = str(
+                validated_memory["ia_audit_confidence"]
+            )
 
         # Add to Redis Stream
         message_id = await client.xadd(AUDIT_STREAM_KEY, stream_data)
 
-        logger.debug("added_memory_to_redis_stream", memory_id=validated_memory["id"], message_id=message_id)
+        logger.debug(
+            "added_memory_to_redis_stream",
+            memory_id=validated_memory["id"],
+            message_id=message_id,
+        )
         return message_id
 
     except Exception as e:
-        logger.error("failed_to_add_audit_record_to_redis", error=str(e), memory_id=memory.get("id"))
+        logger.error(
+            "failed_to_add_audit_record_to_redis",
+            error=str(e),
+            memory_id=memory.get("id"),
+        )
         # Fallback to SQLite
         return add_audit_record(memory)
 
@@ -93,7 +100,7 @@ async def get_pending_audits_async() -> List[Dict[str, Any]]:
             AUDIT_CONSUMER_GROUP,
             AUDIT_CONSUMER_NAME,
             {AUDIT_STREAM_KEY: ">"},
-            count=100
+            count=100,
         )
 
         audits = []
@@ -106,9 +113,11 @@ async def get_pending_audits_async() -> List[Dict[str, Any]]:
                         "user_query": message_data.get("user_query"),
                         "agent_response": message_data.get("agent_response"),
                         "ia_audit_reason": message_data.get("ia_audit_reason"),
-                        "ia_audit_confidence": float(message_data.get("ia_audit_confidence", 0)),
+                        "ia_audit_confidence": float(
+                            message_data.get("ia_audit_confidence", 0)
+                        ),
                         "status": message_data.get("status"),
-                        "created_at": message_data.get("created_at")
+                        "created_at": message_data.get("created_at"),
                     }
                     audits.append(audit_record)
 
@@ -141,7 +150,11 @@ async def update_audit_status_async(memory_id: str, status: str) -> bool:
                     updated_data["reviewed_at"] = "*"
 
                     await client.xadd(AUDIT_STREAM_KEY, updated_data)
-                    logger.info("updated_audit_status_in_redis", memory_id=memory_id, status=status)
+                    logger.info(
+                        "updated_audit_status_in_redis",
+                        memory_id=memory_id,
+                        status=status,
+                    )
                     return True
 
         logger.warning("audit_record_not_found_in_redis", memory_id=memory_id)
@@ -463,6 +476,7 @@ def is_memory_approved(memory_id: str) -> bool:
     if USE_REDIS_STREAMS:
         try:
             import asyncio
+
             loop = asyncio.new_event_loop()
             asyncio.set_event_loop(loop)
 
@@ -508,6 +522,7 @@ def add_audit_record_redis(memory: Dict[str, Any]) -> Optional[str]:
     """
     try:
         import asyncio
+
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
         result = loop.run_until_complete(add_audit_record_async(memory))
@@ -525,6 +540,7 @@ def get_pending_audits_redis() -> List[Dict[str, Any]]:
     """
     try:
         import asyncio
+
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
         result = loop.run_until_complete(get_pending_audits_async())
@@ -542,6 +558,7 @@ def update_audit_status_redis(memory_id: str, status: str) -> bool:
     """
     try:
         import asyncio
+
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
         result = loop.run_until_complete(update_audit_status_async(memory_id, status))
@@ -566,7 +583,7 @@ def add_audit_record(memory: Dict[str, Any]) -> Optional[int]:
         # Try Redis Streams first
         redis_result = add_audit_record_redis(memory)
         if redis_result:
-            return int(redis_result.split('-')[0]) if '-' in redis_result else 1
+            return int(redis_result.split("-")[0]) if "-" in redis_result else 1
         # Fallback to SQLite if Redis fails
         logger.warning("falling_back_to_sqlite_after_redis_failure")
 
@@ -669,4 +686,5 @@ initialize_database()
 
 if USE_REDIS_STREAMS:
     import asyncio
+
     asyncio.run(initialize_redis_streams())

@@ -6,8 +6,15 @@ from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional
 
-from pydantic import field_validator, StringConstraints, Field, model_validator, validator, ConfigDict
-from pydantic.types import constr
+from pydantic import (
+    ConfigDict,
+    Field,
+    StringConstraints,
+    field_validator,
+    model_validator,
+    validator,
+)
+from typing_extensions import Annotated
 
 from .common import (
     BaseValidatedModel,
@@ -15,7 +22,6 @@ from .common import (
     StringConstraints,
     ValidationPatterns,
 )
-from typing_extensions import Annotated
 
 
 class FileType(str, Enum):
@@ -54,9 +60,9 @@ class FileUploadRequest(BaseValidatedModel):
 
     file_type: Optional[FileType] = Field(None, description="Categorized file type")
 
-    purpose: Annotated[str, StringConstraints(min_length=1, max_length=100, strip_whitespace=True)] = Field(
-        ..., description="Purpose of file upload"
-    )
+    purpose: Annotated[
+        str, StringConstraints(min_length=1, max_length=100, strip_whitespace=True)
+    ] = Field(..., description="Purpose of file upload")
 
     metadata: Optional[Dict[str, Any]] = Field(
         default_factory=dict, description="Additional file metadata", max_length=50
@@ -290,17 +296,19 @@ class FileUpdateRequest(BaseValidatedModel):
         None, description="New filename"
     )
 
-    purpose: Optional[Annotated[str, StringConstraints(min_length=1, max_length=100, strip_whitespace=True)]] = (
-        Field(None, description="New purpose")
-    )
+    purpose: Optional[
+        Annotated[
+            str, StringConstraints(min_length=1, max_length=100, strip_whitespace=True)
+        ]
+    ] = Field(None, description="New purpose")
 
     metadata: Optional[Dict[str, Any]] = Field(
         None, description="Updated metadata", max_length=50
     )
 
-    tags: Optional[List[Annotated[str, StringConstraints(min_length=1, max_length=50)]]] = Field(
-        None, description="File tags", max_length=10
-    )
+    tags: Optional[
+        List[Annotated[str, StringConstraints(min_length=1, max_length=50)]]
+    ] = Field(None, description="File tags", max_length=10)
 
     model_config = ConfigDict(
         extra="forbid",
@@ -463,9 +471,9 @@ class RAGUploadRequest(BaseValidatedModel):
         ..., description="Files to process for RAG", min_length=1, max_length=10
     )
 
-    collection_name: Annotated[str, StringConstraints(min_length=1, max_length=100, strip_whitespace=True)] = (
-        Field(..., description="RAG collection name")
-    )
+    collection_name: Annotated[
+        str, StringConstraints(min_length=1, max_length=100, strip_whitespace=True)
+    ] = Field(..., description="RAG collection name")
 
     chunk_size: int = Field(
         default=1000, ge=100, le=10000, description="Text chunk size for processing"

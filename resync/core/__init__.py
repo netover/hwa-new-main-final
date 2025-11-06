@@ -25,9 +25,16 @@ VALIDATION_CACHE_TTL = 60  # seconds
 # Import from local modules
 # Direct imports of exceptions for stability and simplicity
 from resync.core.exceptions import (
-    AuditError, DatabaseError, PoolExhaustedError, ToolProcessingError,
-    BaseAppException, InvalidConfigError, AgentExecutionError,
-    AuthenticationError, LLMError, RedisConnectionError
+    AuditError,
+    DatabaseError,
+    PoolExhaustedError,
+    ToolProcessingError,
+    BaseAppException,
+    InvalidConfigError,
+    AgentExecutionError,
+    AuthenticationError,
+    LLMError,
+    RedisConnectionError,
 )
 
 # Initialize logger early
@@ -36,7 +43,7 @@ logger = logging.getLogger(__name__)
 
 class CorrelationIdFilter(logging.Filter):
     """Logging filter to inject correlation_id into all log records."""
-    
+
     def __init__(self, correlation_id_getter=None):
         super().__init__()
         self.correlation_id_getter = correlation_id_getter
@@ -51,6 +58,7 @@ class CorrelationIdFilter(logging.Filter):
                 # If getting correlation_id fails, don't crash
                 pass
         return True
+
 
 # Lazy loading for heavy imports to avoid collection issues
 _LAZY_EXPORTS = {
@@ -72,9 +80,13 @@ def __getattr__(name: str):
                         module = importlib.import_module(mod)
                         _LOADED_EXPORTS[name] = getattr(module, attr)
                     except ImportError as e:
-                        raise ImportError(f"Cannot import {attr} from {mod}: {e}") from e
+                        raise ImportError(
+                            f"Cannot import {attr} from {mod}: {e}"
+                        ) from e
                     except AttributeError as e:
-                        raise AttributeError(f"Module {mod} does not have attribute {attr}: {e}") from e
+                        raise AttributeError(
+                            f"Module {mod} does not have attribute {attr}: {e}"
+                        ) from e
         return _LOADED_EXPORTS[name]
     raise AttributeError(f"module '{__name__}' has no attribute '{name}'")
 
@@ -100,9 +112,7 @@ class CoreBootManager:
         self._health_status: Dict[str, Dict[str, Any]] = {}
         self._boot_lock = threading.RLock()
         # Global correlation ID for distributed tracing
-        self._correlation_id = (
-            f"core_boot_{int(time.time())}_{os.urandom(4).hex()}"
-        )
+        self._correlation_id = f"core_boot_{int(time.time())}_{os.urandom(4).hex()}"
         self._failed_imports: Set[str] = set()
         self._global_correlation_context = {
             "boot_id": self._correlation_id,
@@ -145,9 +155,13 @@ class CoreBootManager:
             # Sanitize inputs to prevent injection or malformed data
             sanitized_event = self._sanitize_log_data(event)
             sanitized_data = self._sanitize_log_data(data or {})
-            
+
             self._global_correlation_context["events"].append(
-                {"timestamp": time.time(), "event": sanitized_event, "data": sanitized_data}
+                {
+                    "timestamp": time.time(),
+                    "event": sanitized_event,
+                    "data": sanitized_data,
+                }
             )
             # Deque automatically handles size limitation (maxlen=100)
 
@@ -160,7 +174,9 @@ class CoreBootManager:
             sanitized = {}
             for key, value in obj.items():
                 # Sanitize both keys and values
-                sanitized_key = self._sanitize_log_data(str(key)) if key is not None else "null_key"
+                sanitized_key = (
+                    self._sanitize_log_data(str(key)) if key is not None else "null_key"
+                )
                 sanitized_value = self._sanitize_log_data(value)
                 sanitized[sanitized_key] = sanitized_value
             return sanitized
@@ -241,6 +257,7 @@ class EnvironmentDetector:
 _boot_manager_instance = None
 _boot_manager_lock = threading.Lock()
 
+
 def get_boot_manager():
     """Get the singleton instance of CoreBootManager."""
     global _boot_manager_instance
@@ -249,6 +266,7 @@ def get_boot_manager():
             if _boot_manager_instance is None:
                 _boot_manager_instance = CoreBootManager()
     return _boot_manager_instance
+
 
 # --- Remove duplicated lazy import functions ---
 
@@ -266,6 +284,7 @@ def _get_logger():
     """Lazy import of logger."""
     return _get_logger_func(__name__)
 
+
 # --- Remove get_async_ttl_cache_class (duplicated with __getattr__) ---
 
 # --- Update global access functions to use get_boot_manager ---
@@ -281,11 +300,10 @@ def get_environment_tags() -> Dict[str, Any]:
     return get_boot_manager().get_environment_tags()
 
 
-def add_global_trace_event(
-    event: str, data: Optional[Dict[str, Any]] = None
-) -> None:
+def add_global_trace_event(event: str, data: Optional[Dict[str, Any]] = None) -> None:
     """Add a trace event to the global correlation context."""
     get_boot_manager().add_global_event(event, data)
+
 
 # Validate environment on import
 def _validate_environment():
@@ -298,7 +316,7 @@ def _validate_environment():
         if not env_detector.validate_environment():
             log.warning(
                 "Environment validation failed - system may not be secure",
-                extra={"correlation_id": bm.get_global_correlation_id()}
+                extra={"correlation_id": bm.get_global_correlation_id()},
             )
     except (ImportError, AttributeError, OSError, RuntimeError) as e:
         # If validation fails, log but don't crash
@@ -308,6 +326,7 @@ def _validate_environment():
         except (ImportError, RuntimeError):
             pass  # Avoid circular import issues
 
+
 # Validation is now optional and lazy - call _validate_environment() explicitly
 # when needed
 # _validate_environment()  # Commented out to avoid import-time execution
@@ -316,14 +335,24 @@ def _validate_environment():
 
 
 __all__ = [
-    "CoreBootManager", "EnvironmentDetector",
-    "get_boot_manager", "get_global_correlation_id",
-    "get_environment_tags", "add_global_trace_event",
+    "CoreBootManager",
+    "EnvironmentDetector",
+    "get_boot_manager",
+    "get_global_correlation_id",
+    "get_environment_tags",
+    "add_global_trace_event",
     # AsyncTTLCache is available through lazy loading via __getattr__
     # Exceções re-exportadas:
-    "AuditError", "DatabaseError", "PoolExhaustedError", "ToolProcessingError",
-    "BaseAppException", "InvalidConfigError", "AgentExecutionError",
-    "AuthenticationError", "LLMError", "RedisConnectionError",
+    "AuditError",
+    "DatabaseError",
+    "PoolExhaustedError",
+    "ToolProcessingError",
+    "BaseAppException",
+    "InvalidConfigError",
+    "AgentExecutionError",
+    "AuthenticationError",
+    "LLMError",
+    "RedisConnectionError",
 ]
 
 # Add AsyncTTLCache to __all__ only if it's properly defined in lazy exports

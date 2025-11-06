@@ -41,7 +41,7 @@ knowledge_graph_dependency = Depends(get_knowledge_graph)
 chat_router = APIRouter()
 
 # Optional: track background tasks for observability (non-blocking)
-_bg_tasks: "weakref.WeakSet[asyncio.Task[Any]]" = weakref.WeakSet()
+_bg_tasks: weakref.WeakSet[asyncio.Task[Any]] = weakref.WeakSet()
 
 
 class SupportsAgentMeta(Protocol):
@@ -51,7 +51,7 @@ class SupportsAgentMeta(Protocol):
     description: str | None
     # Some agents expose 'llm_model', others 'model'
     llm_model: Any | None  # type: ignore[assignment]
-    model: Any | None      # type: ignore[assignment]
+    model: Any | None  # type: ignore[assignment]
 
 
 async def send_error_message(websocket: WebSocket, message: str) -> None:
@@ -360,18 +360,17 @@ async def websocket_endpoint(
         )
     except (LLMError, ToolExecutionError, AgentExecutionError) as exc:
         logger.error(
-            "Agent-related error in WebSocket for agent '%s': %s", agent_id, exc, exc_info=True
+            "Agent-related error in WebSocket for agent '%s': %s",
+            agent_id,
+            exc,
+            exc_info=True,
         )
-        await send_error_message(
-            websocket, f"Ocorreu um erro com o agente: {str(exc)}"
-        )
+        await send_error_message(websocket, f"Ocorreu um erro com o agente: {str(exc)}")
     except Exception:  # pylint: disable=broad-exception-caught
         logger.critical(
             "Unhandled exception in WebSocket for agent '%s'", agent_id, exc_info=True
         )
-        await send_error_message(
-            websocket, "Ocorreu um erro inesperado no servidor."
-        )
+        await send_error_message(websocket, "Ocorreu um erro inesperado no servidor.")
 
 
 async def _validate_input(
@@ -381,8 +380,7 @@ async def _validate_input(
     # Input validation and size check
     if len(raw_data) > 10000:  # Limit message size to 10KB
         await send_error_message(
-            websocket,
-            "Mensagem muito longa. Máximo de 10.000 caracteres permitido."
+            websocket, "Mensagem muito longa. Máximo de 10.000 caracteres permitido."
         )
         return {"is_valid": False}
 

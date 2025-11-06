@@ -7,7 +7,7 @@ Provides REST API endpoints for monitoring and optimizing system performance.
 from __future__ import annotations
 
 import logging
-from typing import Any, Dict
+from typing import Any
 
 from fastapi import APIRouter, HTTPException, status
 from fastapi.responses import JSONResponse
@@ -23,7 +23,7 @@ performance_router = APIRouter(prefix="/api/performance", tags=["performance"])
 
 
 @performance_router.get("/report")
-async def get_performance_report() -> Dict[str, Any]:
+async def get_performance_report() -> dict[str, Any]:
     """
     Get comprehensive system performance report.
 
@@ -48,7 +48,7 @@ async def get_performance_report() -> Dict[str, Any]:
 
 
 @performance_router.get("/cache/metrics")
-async def get_cache_metrics() -> Dict[str, Any]:
+async def get_cache_metrics() -> dict[str, Any]:
     """
     Get detailed cache performance metrics.
 
@@ -86,7 +86,7 @@ async def get_cache_metrics() -> Dict[str, Any]:
 
 
 @performance_router.get("/cache/recommendations")
-async def get_cache_recommendations() -> Dict[str, Any]:
+async def get_cache_recommendations() -> dict[str, Any]:
     """
     Get optimization recommendations for all caches.
 
@@ -98,9 +98,9 @@ async def get_cache_recommendations() -> Dict[str, Any]:
 
         recommendations = {}
         for cache_name, monitor in performance_service.cache_monitors.items():
-            recommendations[cache_name] = (
-                await monitor.get_optimization_recommendations()
-            )
+            recommendations[
+                cache_name
+            ] = await monitor.get_optimization_recommendations()
 
         return JSONResponse(
             status_code=status.HTTP_200_OK, content={"recommendations": recommendations}
@@ -114,7 +114,7 @@ async def get_cache_recommendations() -> Dict[str, Any]:
 
 
 @performance_router.get("/pools/metrics")
-async def get_pool_metrics() -> Dict[str, Any]:
+async def get_pool_metrics() -> dict[str, Any]:
     """
     Get detailed connection pool metrics.
 
@@ -135,7 +135,7 @@ async def get_pool_metrics() -> Dict[str, Any]:
 
 
 @performance_router.get("/pools/recommendations")
-async def get_pool_recommendations() -> Dict[str, Any]:
+async def get_pool_recommendations() -> dict[str, Any]:
     """
     Get optimization recommendations for all connection pools.
 
@@ -158,7 +158,7 @@ async def get_pool_recommendations() -> Dict[str, Any]:
 
 
 @performance_router.get("/resources/stats")
-async def get_resource_stats() -> Dict[str, Any]:
+async def get_resource_stats() -> dict[str, Any]:
     """
     Get resource usage statistics.
 
@@ -181,7 +181,7 @@ async def get_resource_stats() -> Dict[str, Any]:
 
 
 @performance_router.get("/resources/leaks")
-async def detect_resource_leaks(max_lifetime_seconds: int = 3600) -> Dict[str, Any]:
+async def detect_resource_leaks(max_lifetime_seconds: int = 3600) -> dict[str, Any]:
     """
     Detect potential resource leaks.
 
@@ -223,7 +223,7 @@ async def detect_resource_leaks(max_lifetime_seconds: int = 3600) -> Dict[str, A
 
 
 @performance_router.get("/health")
-async def get_performance_health() -> Dict[str, Any]:
+async def get_performance_health() -> dict[str, Any]:
     """
     Get overall performance health status.
 

@@ -15,7 +15,6 @@ import threading
 from typing import Any, Callable, Optional, List
 
 import structlog
-from resync.core.fastapi_di import get_service
 from resync.core.interfaces import ITWSClient
 from resync.tool_definitions.tws_tools import (
     tws_status_tool,
@@ -284,6 +283,8 @@ class AgentManager:
     def _create_tws_client(self) -> Any:
         """Creates a TWS client instance."""
         try:
+            from resync.core.fastapi_di import get_service
+
             return get_service(ITWSClient)()
         except Exception as e:
             logger.warning(f"Failed to get TWS client: {e}")

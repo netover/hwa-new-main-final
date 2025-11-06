@@ -171,9 +171,7 @@ class CacheMemoryManager:
                 )
             else:
                 # Fallback to rough calculation if no items sampled
-                estimated_memory_mb = (
-                    current_size * 0.5
-                )  # ~500KB per 1000 entries
+                estimated_memory_mb = current_size * 0.5  # ~500KB per 1000 entries
 
             # Check if we're approaching the memory limit (80% threshold)
             memory_threshold = self.max_memory_mb * 0.8
@@ -190,9 +188,7 @@ class CacheMemoryManager:
                                 "current_size": current_size,
                                 "sample_count": sample_count,
                                 "avg_memory_per_item": (
-                                    avg_memory_per_item
-                                    if sample_count > 0
-                                    else 0
+                                    avg_memory_per_item if sample_count > 0 else 0
                                 ),
                                 "max_memory_mb": self.max_memory_mb,
                                 "threshold_reached": "80%",
@@ -214,9 +210,7 @@ class CacheMemoryManager:
                                     "current_size": current_size,
                                     "sample_count": sample_count,
                                     "avg_memory_per_item": (
-                                        avg_memory_per_item
-                                        if sample_count > 0
-                                        else 0
+                                        avg_memory_per_item if sample_count > 0 else 0
                                     ),
                                     "max_memory_mb": self.max_memory_mb,
                                 }
@@ -392,9 +386,7 @@ class CacheMemoryManager:
 
         return lru_key
 
-    def estimate_cache_memory_usage(
-        self, shards: list[dict[str, CacheEntry]]
-    ) -> float:
+    def estimate_cache_memory_usage(self, shards: list[dict[str, CacheEntry]]) -> float:
         """
         Estimate current memory usage of cache in MB.
 
@@ -426,9 +418,7 @@ class CacheMemoryManager:
             logger.warning(f"Failed to estimate cache memory usage: {e}")
             return 0.0
 
-    def get_memory_info(
-        self, shards: list[dict[str, CacheEntry]]
-    ) -> dict[str, Any]:
+    def get_memory_info(self, shards: list[dict[str, CacheEntry]]) -> dict[str, Any]:
         """
         Get comprehensive memory information for the cache.
 

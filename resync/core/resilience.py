@@ -140,14 +140,14 @@ class CircuitBreaker:
                     "Circuit breaker failure caught",
                     name=self.config.name,
                     exception_type=type(e).__name__,
-                    consecutive_failures_before=self.metrics.consecutive_failures
+                    consecutive_failures_before=self.metrics.consecutive_failures,
                 )
                 await self._on_failure()
                 logger.debug(
                     "Circuit breaker failure processed",
                     name=self.config.name,
                     consecutive_failures_after=self.metrics.consecutive_failures,
-                    state=self.state.value
+                    state=self.state.value,
                 )
 
             raise e
@@ -532,6 +532,7 @@ class CircuitBreakerManager:
     """
     Registry-based Circuit Breaker manager (client-side), inspired by Resilience4j's registry.
     """
+
     def __init__(self) -> None:
         self._breakers: Dict[str, CircuitBreaker] = {}
 
@@ -559,13 +560,16 @@ class CircuitBreakerManager:
             raise KeyError(f"Circuit breaker '{name}' not registered")
         return br
 
-    async def call(self, name: str, func: Callable[..., Awaitable[T]], *args, **kwargs) -> T:
+    async def call(
+        self, name: str, func: Callable[..., Awaitable[T]], *args, **kwargs
+    ) -> T:
         br = self.get(name)
         return await br.call(func, *args, **kwargs)
 
     def state(self, name: str) -> str:
         state = self.get(name).state
         return state.value  # "closed" | "open" | "half-open"
+
 
 class CircuitBreakerError(pybreaker.CircuitBreakerError):  # re-export for app
     pass
@@ -595,5 +599,7 @@ async def retry_with_backoff_async(
             if jitter:
                 # full jitter
                 delay = random.uniform(0, delay)
-            logger.warning("retry attempt=%s delay=%.3fs err=%s", attempt, delay, type(e).__name__)
+            logger.warning(
+                "retry attempt=%s delay=%.3fs err=%s", attempt, delay, type(e).__name__
+            )
             await asyncio.sleep(delay)

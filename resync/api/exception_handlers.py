@@ -65,10 +65,10 @@ async def base_app_exception_handler(
     # Criar problem detail
     problem = create_problem_detail(
         type_uri=f"https://api.example.com/errors/{exc.error_code.value.lower()}",
-        title=exc.error_code.name.replace('_', ' ').title(),
+        title=exc.error_code.name.replace("_", " ").title(),
         status=exc.status_code,
         detail=exc.message,
-        instance=str(request.url.path)
+        instance=str(request.url.path),
     )
 
     # Adicionar headers específicos
@@ -130,10 +130,10 @@ async def resync_exception_handler(
     # Criar problem detail
     problem = create_problem_detail(
         type_uri=f"https://api.example.com/errors/{exc.error_code.lower()}",
-        title=exc.error_code.replace('_', ' ').title(),
+        title=exc.error_code.replace("_", " ").title(),
         status=status_code,
         detail=exc.user_friendly_message or exc.message,
-        instance=str(request.url.path)
+        instance=str(request.url.path),
     )
 
     headers = {}
@@ -258,7 +258,7 @@ async def http_exception_handler(
         title="HTTP Exception",
         status=exc.status_code,
         detail=str(exc.detail),
-        instance=str(request.url.path)
+        instance=str(request.url.path),
     )
 
     headers = {}
@@ -272,9 +272,7 @@ async def http_exception_handler(
     )
 
 
-async def unhandled_exception_handler(
-    request: Request, exc: Exception
-) -> JSONResponse:
+async def unhandled_exception_handler(request: Request, exc: Exception) -> JSONResponse:
     """Handler para exceções não tratadas.
 
     Args:
@@ -310,7 +308,7 @@ async def unhandled_exception_handler(
         title="Internal Server Error",
         status=500,
         detail="An unexpected error occurred",
-        instance=str(request.url.path)
+        instance=str(request.url.path),
     )
 
     headers = {}

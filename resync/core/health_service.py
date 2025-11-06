@@ -934,7 +934,9 @@ class HealthCheckService:
             write_test = "File system write test not completed"
             try:
                 if aiofiles is None:
-                    write_test = "File system write test skipped (aiofiles not available)"
+                    write_test = (
+                        "File system write test skipped (aiofiles not available)"
+                    )
                 else:
                     async with aiofiles.open(test_file, "w") as f:
                         await f.write("health check test")
@@ -1225,9 +1227,9 @@ class HealthCheckService:
                 enhanced_metadata["connection_usage_percent"] = round(
                     connection_usage_percent, 1
                 )
-                enhanced_metadata["threshold_percent"] = (
-                    self.config.database_connection_threshold_percent
-                )
+                enhanced_metadata[
+                    "threshold_percent"
+                ] = self.config.database_connection_threshold_percent
 
             return ComponentHealth(
                 name="connection_pools",

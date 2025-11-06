@@ -358,7 +358,9 @@ class HealthCheckService:
                         # Test write access
                         test_file = dir_path / ".health_check_test"
                         if aiofiles is None:
-                            dir_statuses[str(dir_path)] = "skipped (aiofiles not available)"
+                            dir_statuses[
+                                str(dir_path)
+                            ] = "skipped (aiofiles not available)"
                         else:
                             async with aiofiles.open(test_file, "w") as f:
                                 await f.write("health check test")

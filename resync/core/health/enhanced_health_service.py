@@ -11,7 +11,7 @@ from __future__ import annotations
 import asyncio
 import time
 from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 import structlog
 
@@ -27,12 +27,12 @@ from resync.core.health_models import (
 # Import extracted components
 from .circuit_breaker import CircuitBreaker
 from .health_check_utils import HealthCheckUtils
-from .proactive_monitor import ProactiveHealthMonitor
 from .monitors.cache_monitor import CacheHierarchyHealthMonitor
 from .monitors.connection_monitor import ConnectionPoolMonitor
 from .monitors.redis_monitor import RedisHealthMonitor
 from .monitors.system_monitor import SystemResourceMonitor
 from .monitors.tws_monitor import TWSMonitorHealthChecker
+from .proactive_monitor import ProactiveHealthMonitor
 
 logger = structlog.get_logger(__name__)
 
@@ -53,7 +53,7 @@ class EnhancedHealthService:
             config: Optional health check configuration
         """
         self.config = config or HealthCheckConfig()
-        self.health_history: List[HealthStatusHistory] = []
+        self.health_history: list[HealthStatusHistory] = []
         self.last_health_check: Optional[datetime] = None
 
         # Initialize component monitors
@@ -436,7 +436,7 @@ class EnhancedHealthService:
                 error_count=1,
             )
 
-    async def perform_proactive_health_checks(self) -> Dict[str, Any]:
+    async def perform_proactive_health_checks(self) -> dict[str, Any]:
         """
         Perform proactive health checks using extracted monitor.
 
@@ -464,7 +464,7 @@ class EnhancedHealthService:
 
     def get_health_history(
         self, hours: int = 24, max_entries: Optional[int] = None
-    ) -> List[HealthStatusHistory]:
+    ) -> list[HealthStatusHistory]:
         """Get health history for specified time period."""
         cutoff_time = datetime.now() - timedelta(hours=hours)
 

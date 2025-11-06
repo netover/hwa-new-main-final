@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import time
 from datetime import datetime
-from typing import Any, Dict
+from typing import Any
 
 import structlog
 
@@ -17,6 +17,7 @@ from resync.core.health_models import (
     ComponentType,
     HealthStatus,
 )
+
 from .base_health_checker import BaseHealthChecker
 
 logger = structlog.get_logger(__name__)
@@ -107,9 +108,9 @@ class ConnectionPoolsHealthChecker(BaseHealthChecker):
                 enhanced_metadata["connection_usage_percent"] = round(
                     connection_usage_percent, 1
                 )
-                enhanced_metadata["threshold_percent"] = (
-                    self.config.database_connection_threshold_percent
-                )
+                enhanced_metadata[
+                    "threshold_percent"
+                ] = self.config.database_connection_threshold_percent
 
             return ComponentHealth(
                 name=self.component_name,
@@ -138,7 +139,7 @@ class ConnectionPoolsHealthChecker(BaseHealthChecker):
         """Determine health status based on connection pool exception type."""
         return ComponentType.CONNECTION_POOL
 
-    def get_component_config(self) -> Dict[str, Any]:
+    def get_component_config(self) -> dict[str, Any]:
         """Get connection pools-specific configuration."""
         return {
             "timeout_seconds": self.config.timeout_seconds,

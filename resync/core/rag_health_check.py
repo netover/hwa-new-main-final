@@ -77,8 +77,7 @@ class RAGHealthCheck:
 
             # Calculate overall health
             overall_healthy = all(
-                result.get("healthy", False)
-                for result in self.check_results.values()
+                result.get("healthy", False) for result in self.check_results.values()
             )
 
             self.end_time = time.time()
@@ -122,15 +121,13 @@ class RAGHealthCheck:
                         list(dir_path.iterdir())
                         accessible_dirs.append(str(dir_path))
                     except (PermissionError, OSError) as e:
-                        inaccessible_dirs.append({
-                            "path": str(dir_path),
-                            "error": str(e)
-                        })
+                        inaccessible_dirs.append(
+                            {"path": str(dir_path), "error": str(e)}
+                        )
                 else:
-                    inaccessible_dirs.append({
-                        "path": str(dir_path),
-                        "error": "Directory does not exist"
-                    })
+                    inaccessible_dirs.append(
+                        {"path": str(dir_path), "error": "Directory does not exist"}
+                    )
 
             healthy = len(inaccessible_dirs) == 0
 
@@ -184,10 +181,9 @@ class RAGHealthCheck:
                         list(dir_path.iterdir())
                         protected_dirs_accessible.append(str(dir_path))
                     except (PermissionError, OSError) as e:
-                        protected_dirs_inaccessible.append({
-                            "path": str(dir_path),
-                            "error": str(e)
-                        })
+                        protected_dirs_inaccessible.append(
+                            {"path": str(dir_path), "error": str(e)}
+                        )
 
             healthy = test_file_created and len(protected_dirs_inaccessible) == 0
 
@@ -222,17 +218,20 @@ class RAGHealthCheck:
 
             # Test text chunking
             from resync.core.file_ingestor import chunk_text
+
             chunks = list(chunk_text(test_content, chunk_size=50, chunk_overlap=10))
 
             # Verify chunks were created
-            chunking_works = len(chunks) > 0 and all(len(chunk.strip()) > 0 for chunk in chunks)
+            chunking_works = len(chunks) > 0 and all(
+                len(chunk.strip()) > 0 for chunk in chunks
+            )
 
             # Test file readers
             file_readers_available = []
             file_readers_unavailable = []
 
             # Check if file readers are available (don't actually call them)
-            if hasattr(self.file_ingestor, 'file_readers'):
+            if hasattr(self.file_ingestor, "file_readers"):
                 for ext, reader_func in self.file_ingestor.file_readers.items():
                     if reader_func is not None:
                         file_readers_available.append(ext)
@@ -268,7 +267,7 @@ class RAGHealthCheck:
             test_content = "RAG health check test content"
             test_metadata = {
                 "source": "health_check",
-                "test_id": f"test_{int(time.time())}"
+                "test_id": f"test_{int(time.time())}",
             }
 
             # Try to add test content
@@ -287,7 +286,9 @@ class RAGHealthCheck:
                 logger.warning("knowledge_graph_get_context_failed", error=str(e))
                 context_retrieved = False
 
-            healthy = content_added or context_retrieved  # At least one operation should work
+            healthy = (
+                content_added or context_retrieved
+            )  # At least one operation should work
 
             return {
                 "healthy": healthy,
@@ -316,34 +317,46 @@ class RAGHealthCheck:
 
             # Test get_relevant_context
             try:
-                context = await self.knowledge_graph.get_relevant_context("artificial intelligence")
-                search_tests.append({
-                    "operation": "get_relevant_context",
-                    "success": True,
-                    "result_length": len(context) if context else 0
-                })
+                context = await self.knowledge_graph.get_relevant_context(
+                    "artificial intelligence"
+                )
+                search_tests.append(
+                    {
+                        "operation": "get_relevant_context",
+                        "success": True,
+                        "result_length": len(context) if context else 0,
+                    }
+                )
             except Exception as e:
-                search_tests.append({
-                    "operation": "get_relevant_context",
-                    "success": False,
-                    "error": str(e)
-                })
+                search_tests.append(
+                    {
+                        "operation": "get_relevant_context",
+                        "success": False,
+                        "error": str(e),
+                    }
+                )
 
             # Test search_similar_issues (if available)
-            if hasattr(self.knowledge_graph, 'search_similar_issues'):
+            if hasattr(self.knowledge_graph, "search_similar_issues"):
                 try:
-                    issues = await self.knowledge_graph.search_similar_issues("test issue")
-                    search_tests.append({
-                        "operation": "search_similar_issues",
-                        "success": True,
-                        "result_count": len(issues) if issues else 0
-                    })
+                    issues = await self.knowledge_graph.search_similar_issues(
+                        "test issue"
+                    )
+                    search_tests.append(
+                        {
+                            "operation": "search_similar_issues",
+                            "success": True,
+                            "result_count": len(issues) if issues else 0,
+                        }
+                    )
                 except Exception as e:
-                    search_tests.append({
-                        "operation": "search_similar_issues",
-                        "success": False,
-                        "error": str(e)
-                    })
+                    search_tests.append(
+                        {
+                            "operation": "search_similar_issues",
+                            "success": False,
+                            "error": str(e),
+                        }
+                    )
 
             # Check if at least one search operation works
             successful_searches = [test for test in search_tests if test["success"]]
@@ -379,11 +392,14 @@ class RAGHealthCheck:
             file_saved = False
             file_path = None
 
-            if hasattr(self.file_ingestor, 'save_uploaded_file'):
+            if hasattr(self.file_ingestor, "save_uploaded_file"):
                 try:
                     from io import BytesIO
-                    test_file_obj = BytesIO(test_content.encode('utf-8'))
-                    file_path = await self.file_ingestor.save_uploaded_file(test_filename, test_file_obj)
+
+                    test_file_obj = BytesIO(test_content.encode("utf-8"))
+                    file_path = await self.file_ingestor.save_uploaded_file(
+                        test_filename, test_file_obj
+                    )
                     file_saved = True
                 except Exception as e:
                     logger.warning("file_save_test_failed", error=str(e))
@@ -402,7 +418,9 @@ class RAGHealthCheck:
                 except Exception as e:
                     logger.warning("file_ingestion_test_failed", error=str(e))
 
-            healthy = ingestion_works or not file_saved  # If can't save, that's OK, but if can save must ingest
+            healthy = (
+                ingestion_works or not file_saved
+            )  # If can't save, that's OK, but if can save must ingest
 
             return {
                 "healthy": healthy,
@@ -420,7 +438,9 @@ class RAGHealthCheck:
 
 
 # Convenience function to run RAG health check
-async def run_rag_health_check(file_ingestor: IFileIngestor, knowledge_graph: IKnowledgeGraph) -> Dict[str, Any]:
+async def run_rag_health_check(
+    file_ingestor: IFileIngestor, knowledge_graph: IKnowledgeGraph
+) -> Dict[str, Any]:
     """
     Run comprehensive RAG health check.
 

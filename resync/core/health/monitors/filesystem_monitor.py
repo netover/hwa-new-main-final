@@ -5,7 +5,7 @@ import stat
 import time
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 from resync.core.health_models import HealthStatus
 from resync.core.structured_logger import get_logger
@@ -62,7 +62,7 @@ class IntegrityStatus:
     integrity_score: float = 100.0  # Percentage of files that passed integrity checks
 
     # Error details
-    error_details: List[str] = None
+    error_details: list[str] = None
 
     # Timestamp
     timestamp: float = 0.0
@@ -97,7 +97,7 @@ class PermissionStatus:
     security_score: float = 100.0  # Percentage of paths with secure permissions
 
     # Error details
-    error_details: List[str] = None
+    error_details: list[str] = None
 
     # Timestamp
     timestamp: float = 0.0
@@ -121,7 +121,7 @@ class FileSystemHealthMonitor:
     - File system performance metrics
     """
 
-    def __init__(self, config: Optional[Dict[str, Any]] = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         """
         Initialize the filesystem health monitor.
 
@@ -140,7 +140,7 @@ class FileSystemHealthMonitor:
         self.exclude_patterns = self.config.get("exclude_patterns", [])
 
         # Performance tracking
-        self._check_history: List[Dict[str, Any]] = []
+        self._check_history: list[dict[str, Any]] = []
         self._max_history_size = 100
 
     def check_disk_space(self) -> DiskSpaceStatus:
@@ -193,7 +193,7 @@ class FileSystemHealthMonitor:
 
                 except (OSError, AttributeError) as e:
                     logger.warning(
-                        f"disk_space_check_failed_for_path", path=path, error=str(e)
+                        "disk_space_check_failed_for_path", path=path, error=str(e)
                     )
                     continue
 
@@ -241,7 +241,7 @@ class FileSystemHealthMonitor:
 
                 except (OSError, AttributeError) as e:
                     logger.warning(
-                        f"integrity_check_failed_for_path", path=path, error=str(e)
+                        "integrity_check_failed_for_path", path=path, error=str(e)
                     )
                     integrity_status.scan_errors += 1
                     integrity_status.error_details.append(f"Path {path}: {str(e)}")
@@ -303,7 +303,7 @@ class FileSystemHealthMonitor:
 
                 except (OSError, AttributeError) as e:
                     logger.warning(
-                        f"permission_check_failed_for_path", path=path, error=str(e)
+                        "permission_check_failed_for_path", path=path, error=str(e)
                     )
                     permission_status.permission_errors += 1
                     permission_status.error_details.append(f"Path {path}: {str(e)}")
@@ -447,7 +447,7 @@ class FileSystemHealthMonitor:
 
         return False
 
-    def _add_check_to_history(self, check_type: str, data: Dict[str, Any]) -> None:
+    def _add_check_to_history(self, check_type: str, data: dict[str, Any]) -> None:
         """Add check result to history for trend analysis."""
         history_entry = {
             "type": check_type,
@@ -463,7 +463,7 @@ class FileSystemHealthMonitor:
 
     def get_check_history(
         self, check_type: Optional[str] = None, limit: Optional[int] = None
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """
         Get historical check results.
 

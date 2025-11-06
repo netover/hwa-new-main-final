@@ -16,11 +16,11 @@ from dataclasses import dataclass, field
 from typing import Any, Callable, Dict
 from unittest.mock import patch
 
-from resync.core import get_environment_tags, get_global_correlation_id  
+from resync.core import get_environment_tags, get_global_correlation_id
 from resync.core.agent_manager import AgentManager
 from resync.core.async_cache import AsyncTTLCache
-from resync.core.audit_db import add_audit_records_batch  
-from resync.core.audit_log import get_audit_log_manager  
+from resync.core.audit_db import add_audit_records_batch
+from resync.core.audit_log import get_audit_log_manager
 from resync.core.metrics import log_with_correlation, runtime_metrics
 
 logger = logging.getLogger(__name__)
@@ -289,7 +289,7 @@ class ChaosEngineer:
 
         # Simulate getting agent details
         try:
-            metrics = manager.get_detailed_metrics()  
+            metrics = manager.get_detailed_metrics()
             if "total_agents" not in metrics:
                 raise ValueError("Metrics missing total_agents")
         except Exception as e:
@@ -483,7 +483,7 @@ class ChaosEngineer:
                         operations += 1
 
                         # Try to get metrics
-                        metrics = manager.get_detailed_metrics()  
+                        metrics = manager.get_detailed_metrics()
                         if not isinstance(metrics, dict):
                             anomalies.append(f"Metrics not dict at iteration {i}")
 
@@ -557,7 +557,7 @@ class ChaosEngineer:
                         ):
                             try:
                                 manager = AgentManager()
-                                metrics = manager.get_detailed_metrics()  
+                                metrics = manager.get_detailed_metrics()
                                 operations += 1
                             except Exception as e:
                                 if "import failure" not in str(e):

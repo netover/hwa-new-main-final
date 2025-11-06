@@ -7,7 +7,7 @@ including metrics, statistics, and management operations.
 
 from __future__ import annotations
 
-from typing import Any, Dict, List
+from typing import Any
 
 from fastapi import APIRouter, HTTPException, Query
 
@@ -24,7 +24,7 @@ router = APIRouter(prefix="/api/circuit-breakers", tags=["monitoring"])
 
 
 @router.get("/metrics")
-async def get_circuit_breaker_metrics() -> Dict[str, Any]:
+async def get_circuit_breaker_metrics() -> dict[str, Any]:
     """Get comprehensive circuit breaker metrics."""
     return {
         "tws_api": adaptive_tws_api_breaker.get_enhanced_stats(),
@@ -46,7 +46,7 @@ async def get_circuit_breaker_metrics() -> Dict[str, Any]:
 
 
 @router.get("/health")
-async def get_circuit_breaker_health() -> Dict[str, Any]:
+async def get_circuit_breaker_health() -> dict[str, Any]:
     """Get circuit breaker health status."""
     tws_health = {
         "service": "tws_api",
@@ -94,7 +94,7 @@ async def get_circuit_breaker_health() -> Dict[str, Any]:
 
 
 @router.post("/reset/{service}")
-async def reset_circuit_breaker(service: str) -> Dict[str, str]:
+async def reset_circuit_breaker(service: str) -> dict[str, str]:
     """Reset circuit breaker for a specific service."""
     breakers = {
         "tws_api": adaptive_tws_api_breaker,
@@ -117,7 +117,7 @@ async def reset_circuit_breaker(service: str) -> Dict[str, str]:
 
 
 @router.get("/thresholds")
-async def get_adaptive_thresholds() -> Dict[str, Any]:
+async def get_adaptive_thresholds() -> dict[str, Any]:
     """Get current adaptive thresholds for all circuit breakers."""
     return {
         "tws_api": {
@@ -138,7 +138,7 @@ async def update_thresholds(
     service: str,
     p95_threshold: float = Query(..., ge=0.1, le=10.0),
     p99_threshold: float = Query(..., ge=0.2, le=20.0),
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Update latency thresholds for a specific service."""
     breakers = {
         "tws_api": adaptive_tws_api_breaker,
@@ -183,7 +183,7 @@ async def update_thresholds(
 
 
 @router.get("/proactive-health")
-async def get_proactive_health_checks() -> Dict[str, Any]:
+async def get_proactive_health_checks() -> dict[str, Any]:
     """Get proactive health check results with predictive analysis."""
     try:
         health_service = await get_health_check_service()
@@ -208,7 +208,7 @@ async def get_proactive_health_checks() -> Dict[str, Any]:
 
 
 @router.post("/proactive-health/analyze")
-async def analyze_system_health() -> Dict[str, Any]:
+async def analyze_system_health() -> dict[str, Any]:
     """Perform deep analysis of system health with recommendations."""
     try:
         health_service = await get_health_check_service()
@@ -233,7 +233,7 @@ async def analyze_system_health() -> Dict[str, Any]:
         raise HTTPException(status_code=500, detail=f"Health analysis failed: {str(e)}")
 
 
-async def _calculate_health_score(results: Dict[str, Any]) -> float:
+async def _calculate_health_score(results: dict[str, Any]) -> float:
     """Calculate overall system health score (0.0 to 1.0)."""
     score = 1.0  # Start with perfect health
 
@@ -260,7 +260,7 @@ async def _calculate_health_score(results: Dict[str, Any]) -> float:
     return max(0.0, min(1.0, score))
 
 
-async def _assess_system_risks(results: Dict[str, Any]) -> Dict[str, Any]:
+async def _assess_system_risks(results: dict[str, Any]) -> dict[str, Any]:
     """Assess system risks based on health data."""
     risks = {
         "overall_risk_level": "low",
@@ -295,7 +295,7 @@ async def _assess_system_risks(results: Dict[str, Any]) -> Dict[str, Any]:
     return risks
 
 
-async def _generate_recommendations(results: Dict[str, Any]) -> List[Dict[str, Any]]:
+async def _generate_recommendations(results: dict[str, Any]) -> list[dict[str, Any]]:
     """Generate actionable recommendations."""
     recommendations = []
 
@@ -365,7 +365,7 @@ async def _generate_recommendations(results: Dict[str, Any]) -> List[Dict[str, A
     return recommendations
 
 
-async def _create_action_plan(results: Dict[str, Any]) -> Dict[str, Any]:
+async def _create_action_plan(results: dict[str, Any]) -> dict[str, Any]:
     """Create prioritized action plan."""
     issues = results.get("issues_detected", [])
     alerts = results.get("predictive_alerts", [])

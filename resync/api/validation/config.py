@@ -5,7 +5,7 @@ from enum import Enum
 from pathlib import Path
 from typing import Any, List, Optional, Union
 
-from pydantic import field_validator, BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 class ValidationMode(str, Enum):
@@ -264,7 +264,9 @@ class ChatValidationConfig(BaseModel):
     )
 
     blocked_keywords: List[str] = Field(
-        default_factory=list, description="Keywords to block in messages", max_length=100
+        default_factory=list,
+        description="Keywords to block in messages",
+        max_length=100,
     )
 
     model_config = ConfigDict(
@@ -373,7 +375,7 @@ class ValidationSettings:
         """Load validation configuration."""
         if self.config_file and self.config_file.exists():
             try:
-                with open(self.config_file, "r") as f:
+                with open(self.config_file) as f:
                     config_data = f.read()
 
                 # Try JSON first, then fallback to other formats

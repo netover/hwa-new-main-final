@@ -27,7 +27,7 @@ logger = get_logger(__name__)
 
 class LLMFactory:
     """Factory class for creating LLM calls with different providers and configurations."""
-    
+
     @staticmethod
     async def call_llm(
         prompt: str,
@@ -42,16 +42,16 @@ class LLMFactory:
     ) -> str:
         """Factory method to call LLM with appropriate configuration."""
         start_time = time.time()
-        
+
         # Use provided api_key or settings, handle default placeholder
         effective_api_key = api_key or settings.LLM_API_KEY
         if effective_api_key == "your_default_api_key_here":
             effective_api_key = None
-        
+
         # Check if LiteLLM is available and has models configured
         try:
             from resync.core.litellm_init import get_litellm_router
-            
+
             router = get_litellm_router()
             if not router or len(router.model_list) == 0:
                 raise ImportError("No models available in LiteLLM router")
@@ -61,7 +61,7 @@ class LLMFactory:
                 "LiteLLM not available or no models configured, using mock response"
             )
             return "LLM service is currently unavailable. This is a mock response for development purposes."
-        
+
         # Use LiteLLM's acompletion for enhanced functionality with timeout
         try:
             response = await asyncio.wait_for(
@@ -80,24 +80,24 @@ class LLMFactory:
                 ),
                 timeout=timeout,
             )
-            
+
             # Validate response
             if not response.choices or len(response.choices) == 0:
                 raise LLMError("Empty response received from LLM")
-            
+
             content = response.choices[0].message.content
             if content is None:
                 raise LLMError("LLM returned null content")
-            
+
             content = content.strip()
             if not content:
                 raise LLMError("LLM returned empty content")
-            
+
             # Extract usage information for cost tracking
             usage = response.usage or {}
             input_tokens = usage.get("prompt_tokens", 0)
             output_tokens = usage.get("completion_tokens", 0)
-            
+
             # Record successful call metrics
             total_time = time.time() - start_time
             logger.info(
@@ -107,9 +107,9 @@ class LLMFactory:
                 input_tokens=input_tokens,
                 output_tokens=output_tokens,
             )
-            
+
             return content
-            
+
         except asyncio.TimeoutError:
             logger.error("llm_timeout", timeout_seconds=timeout)
             raise LLMError(f"LLM call timed out after {timeout} seconds")
@@ -138,7 +138,7 @@ class LLMFactory:
 
 class LLMProviderFactory:
     """Factory for creating LLM providers with specific configurations."""
-    
+
     @staticmethod
     def create_provider(provider: str, **kwargs) -> "LLMProvider":
         """Create an LLM provider based on the provider type."""
@@ -154,14 +154,14 @@ class LLMProviderFactory:
 
 class LLMProvider:
     """Base class for LLM providers."""
-    
+
     def __init__(self, **kwargs):
         self.api_key = kwargs.get("api_key")
         self.api_base = kwargs.get("api_base")
         self.model = kwargs.get("model")
         self.max_tokens = kwargs.get("max_tokens", 200)
         self.temperature = kwargs.get("temperature", 0.1)
-        
+
     async def call(self, prompt: str, **kwargs) -> str:
         """Call the LLM with the given prompt."""
         return await LLMFactory.call_llm(
@@ -171,13 +171,13 @@ class LLMProvider:
             temperature=self.temperature,
             api_key=self.api_key,
             api_base=self.api_base,
-            **kwargs
+            **kwargs,
         )
 
 
 class OpenAIProvider(LLMProvider):
     """Provider for OpenAI models."""
-    
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.model = kwargs.get("model", "gpt-4o")
@@ -186,7 +186,7 @@ class OpenAIProvider(LLMProvider):
 
 class OllamaProvider(LLMProvider):
     """Provider for Ollama models."""
-    
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.model = kwargs.get("model", "mistral")
@@ -195,7 +195,7 @@ class OllamaProvider(LLMProvider):
 
 class AnthropicProvider(LLMProvider):
     """Provider for Anthropic models."""
-    
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.model = kwargs.get("model", "claude-3-opus-20240229")
@@ -204,7 +204,7 @@ class AnthropicProvider(LLMProvider):
 
 class DefaultLLMProvider(LLMProvider):
     """Default provider for LLM calls."""
-    
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.model = kwargs.get("model", "gpt-4o")

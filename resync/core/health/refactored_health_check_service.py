@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import time
 from datetime import datetime
-from typing import Dict, List, Optional
+from typing import Optional
 
 import structlog
 
@@ -19,10 +19,11 @@ from resync.core.health_models import (
     HealthCheckConfig,
     HealthCheckResult,
     HealthStatus,
+    SystemHealthStatus,
 )
-from resync.core.health_models import SystemHealthStatus
-from .health_checkers.health_checker_factory import HealthCheckerFactory
+
 from .enhanced_health_config_manager import EnhancedHealthConfigurationManager
+from .health_checkers.health_checker_factory import HealthCheckerFactory
 
 logger = structlog.get_logger(__name__)
 
@@ -48,10 +49,10 @@ class RefactoredHealthCheckService:
         self.checker_factory = HealthCheckerFactory(self.config_manager.get_config())
         self.config_manager.set_health_checker_factory(self.checker_factory)
 
-        self._component_cache: Dict[str, ComponentHealth] = {}
+        self._component_cache: dict[str, ComponentHealth] = {}
         self._last_system_check: Optional[datetime] = None
 
-    async def run_all_checks(self) -> List[HealthCheckResult]:
+    async def run_all_checks(self) -> list[HealthCheckResult]:
         """
         Run health checks on all enabled system components.
 
@@ -212,7 +213,7 @@ class RefactoredHealthCheckService:
             # Return critical status on any error
             return SystemHealthStatus.CRITICAL
 
-    def get_cache_stats(self) -> Dict[str, Any]:
+    def get_cache_stats(self) -> dict[str, Any]:
         """
         Get cache statistics.
 
@@ -231,11 +232,11 @@ class RefactoredHealthCheckService:
         self._component_cache.clear()
         logger.info("refactored_health_check_cache_cleared")
 
-    def get_config_summary(self) -> Dict[str, Any]:
+    def get_config_summary(self) -> dict[str, Any]:
         """Get configuration summary."""
         return self.config_manager.get_config_summary_enhanced()
 
-    def validate_configuration(self) -> Dict[str, Any]:
+    def validate_configuration(self) -> dict[str, Any]:
         """Validate current configuration."""
         return {
             "config_validation": self.config_manager.validate_config(),

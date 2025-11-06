@@ -10,7 +10,7 @@ from __future__ import annotations
 import asyncio
 from abc import ABC, abstractmethod
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 import structlog
 
@@ -28,7 +28,7 @@ class HealthMonitoringEvent:
         component_name: str,
         health_status: HealthStatus,
         timestamp: Optional[datetime] = None,
-        metadata: Optional[Dict[str, Any]] = None,
+        metadata: Optional[dict[str, Any]] = None,
     ):
         self.event_type = event_type
         self.component_name = component_name
@@ -61,7 +61,7 @@ class HealthMonitoringSubject:
 
     def __init__(self):
         """Initialize the monitoring subject."""
-        self._observers: List[HealthMonitorObserver] = []
+        self._observers: list[HealthMonitorObserver] = []
         self._lock = asyncio.Lock()
 
     async def attach(self, observer: HealthMonitorObserver) -> None:
@@ -135,8 +135,8 @@ class HealthMonitoringSubject:
     async def notify_system_summary(
         self,
         overall_status: HealthStatus,
-        components: Dict[str, ComponentHealth],
-        summary: Dict[str, Any],
+        components: dict[str, ComponentHealth],
+        summary: dict[str, Any],
     ) -> None:
         """Notify observers of system health summary."""
         event = HealthMonitoringEvent(
@@ -236,7 +236,7 @@ class AlertingHealthObserver(HealthMonitorObserver):
 
     def __init__(self):
         """Initialize the alerting observer."""
-        self._last_alerts: Dict[str, datetime] = {}
+        self._last_alerts: dict[str, datetime] = {}
         self._alert_cooldown_minutes = 5
 
     async def on_health_status_changed(self, event: HealthMonitoringEvent) -> None:
@@ -298,9 +298,9 @@ class MetricsHealthObserver(HealthMonitorObserver):
 
     def __init__(self):
         """Initialize the metrics observer."""
-        self._status_changes: List[Dict[str, Any]] = []
-        self._check_durations: List[Dict[str, Any]] = []
-        self._system_summaries: List[Dict[str, Any]] = []
+        self._status_changes: list[dict[str, Any]] = []
+        self._check_durations: list[dict[str, Any]] = []
+        self._system_summaries: list[dict[str, Any]] = []
         self._max_metrics_history = 1000
 
     async def on_health_status_changed(self, event: HealthMonitoringEvent) -> None:
@@ -351,7 +351,7 @@ class MetricsHealthObserver(HealthMonitorObserver):
                 -self._max_metrics_history :
             ]
 
-    def get_metrics_summary(self) -> Dict[str, Any]:
+    def get_metrics_summary(self) -> dict[str, Any]:
         """Get summary of collected metrics."""
         return {
             "status_changes_count": len(self._status_changes),

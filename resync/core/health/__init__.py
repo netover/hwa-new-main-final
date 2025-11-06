@@ -143,9 +143,7 @@ def __getattr__(name: str) -> Any:
     try:
         module_name, attr_name = _EXPORTS[name]
     except KeyError as exc:
-        raise AttributeError(
-            f"module {__name__!r} has no attribute {name!r}"
-        ) from exc
+        raise AttributeError(f"module {__name__!r} has no attribute {name!r}") from exc
 
     if name in _DEPRECATED:
         warnings.warn(_DEPRECATED[name], DeprecationWarning, stacklevel=2)

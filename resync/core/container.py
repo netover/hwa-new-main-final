@@ -5,7 +5,6 @@ This module initializes the DI container and registers all services and their
 implementations, following the Inversion of Control (IoC) principle.
 """
 
-from resync.core.agent_manager import AgentManager
 from resync.core.connection_manager import ConnectionManager
 from resync.core.di_container import (
     DIContainer,
@@ -20,7 +19,6 @@ from resync.core.interfaces import (
 )
 from resync.core.knowledge_graph import AsyncKnowledgeGraph
 from resync.services.mock_tws_service import MockTWSClient
-from resync.services.tws_service import OptimizedTWSClient
 from resync.settings import settings
 
 
@@ -35,6 +33,8 @@ def create_container() -> DIContainer:
 
     # Register services with a SINGLETON scope to ensure a single instance
     # is shared across the application.
+    from resync.core.agent_manager import AgentManager
+
     container.register(IAgentManager, AgentManager, ServiceLifetime.SINGLETON)
     container.register(IConnectionManager, ConnectionManager, ServiceLifetime.SINGLETON)
     container.register(IKnowledgeGraph, AsyncKnowledgeGraph, ServiceLifetime.SINGLETON)
@@ -45,6 +45,8 @@ def create_container() -> DIContainer:
     else:
         # Register factory function for OptimizedTWSClient with proper configuration
         def create_tws_client(container_instance):
+            from resync.services.tws_service import OptimizedTWSClient
+
             return OptimizedTWSClient(
                 hostname=settings.TWS_HOST or "localhost",
                 port=settings.TWS_PORT or 31111,

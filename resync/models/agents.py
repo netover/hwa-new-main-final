@@ -35,5 +35,3 @@ class AgentConfig(BaseModel):
     max_rpm: Optional[int] = Field(
         None, description="Maximum requests per minute for the agent."
     )
-
-

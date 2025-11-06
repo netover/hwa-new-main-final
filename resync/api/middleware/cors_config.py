@@ -4,10 +4,10 @@ import logging
 import re
 import socket
 from enum import Enum
-from typing import List, Union
+from typing import Union
 from urllib.parse import urlparse
 
-from pydantic import field_validator, BaseModel, ConfigDict, Field, validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, validator
 
 logger = logging.getLogger(__name__)
 
@@ -44,19 +44,19 @@ class CORSPolicy(BaseModel):
     )
 
     # Allowed origins configuration
-    allowed_origins: List[str] = Field(
+    allowed_origins: list[str] = Field(
         default=[],
         description="List of allowed origins. Use specific domains in production, wildcards only in development.",
     )
 
     # Allowed methods configuration
-    allowed_methods: List[str] = Field(
+    allowed_methods: list[str] = Field(
         default=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
         description="List of allowed HTTP methods.",
     )
 
     # Allowed headers configuration
-    allowed_headers: List[str] = Field(
+    allowed_headers: list[str] = Field(
         default=["Content-Type", "Authorization", "X-Requested-With"],
         description="List of allowed headers.",
     )
@@ -83,7 +83,7 @@ class CORSPolicy(BaseModel):
     )
 
     # Dynamic validation settings
-    origin_regex_patterns: List[str] = Field(
+    origin_regex_patterns: list[str] = Field(
         default=[], description="Regex patterns for dynamic origin validation."
     )
 
@@ -215,14 +215,14 @@ class CORSPolicy(BaseModel):
                 try:
                     socket.inet_pton(socket.AF_INET6, host.strip("[]"))
                     return True
-                except socket.error:
+                except OSError:
                     pass  # Not a valid IPv6, continue to other checks
 
             elif "." in host:  # Likely IPv4 or domain
                 try:
                     socket.inet_aton(host)  # Valid IPv4
                     return True
-                except socket.error:
+                except OSError:
                     # Not IPv4, check if it's a valid domain name
                     # Simple domain validation using regex
                     domain_pattern = r"^[a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?)*$"

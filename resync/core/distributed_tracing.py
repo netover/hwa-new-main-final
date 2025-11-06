@@ -293,12 +293,16 @@ class DistributedTracingManager:
 
         # Add console processor for development
         try:
-            logger_level = getattr(logger, 'level', 20)  # Default to INFO if no level attribute
+            logger_level = getattr(
+                logger, "level", 20
+            )  # Default to INFO if no level attribute
             if logger_level <= 10 and CONSOLE_AVAILABLE:  # DEBUG level
                 console_processor = ConsoleSpanProcessor()
                 self.tracer_provider.add_span_processor(console_processor)
         except AttributeError:
-            if CONSOLE_AVAILABLE:  # Default to adding console processor if we can't check level
+            if (
+                CONSOLE_AVAILABLE
+            ):  # Default to adding console processor if we can't check level
                 console_processor = ConsoleSpanProcessor()
                 self.tracer_provider.add_span_processor(console_processor)
 
@@ -310,9 +314,7 @@ class DistributedTracingManager:
         trace.set_tracer_provider(self.tracer_provider)
 
         # Create tracer
-        self.tracer = trace.get_tracer(
-            __name__
-        )
+        self.tracer = trace.get_tracer(__name__)
 
         logger.info("Distributed tracing initialized")
 
@@ -648,7 +650,9 @@ def add_span_attribute(key: str, value: Any) -> None:
     distributed_tracing_manager.add_span_attribute(key, value)
 
 
-async def setup_tracing(config: Optional[TraceConfiguration] = None) -> DistributedTracingManager:
+async def setup_tracing(
+    config: Optional[TraceConfiguration] = None,
+) -> DistributedTracingManager:
     """
     Initialize and setup distributed tracing.
 
@@ -674,19 +678,24 @@ def traced(operation_name: str, **attributes):
     Returns:
         Decorator function
     """
+
     def decorator(func):
         if asyncio.iscoroutinefunction(func):
+
             @functools.wraps(func)
             async def async_wrapper(*args, **kwargs):
                 manager = await get_distributed_tracing_manager()
                 with manager.trace_context(operation_name, **attributes):
                     return await func(*args, **kwargs)
+
             return async_wrapper
         else:
+
             @functools.wraps(func)
             def sync_wrapper(*args, **kwargs):
                 # For sync functions, we'll use a simplified approach
                 return func(*args, **kwargs)
+
             return sync_wrapper
 
     return decorator

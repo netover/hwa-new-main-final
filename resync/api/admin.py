@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import logging
 from datetime import datetime
-from typing import Any, Dict
+from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from fastapi.responses import HTMLResponse
@@ -62,11 +62,11 @@ class TeamsConfigUpdate(BaseModel):
 class AdminConfigResponse(BaseModel):
     """Admin configuration response model."""
 
-    teams: Dict[str, Any] = Field(
+    teams: dict[str, Any] = Field(
         default_factory=dict, description="Teams integration configuration"
     )
-    tws: Dict[str, Any] = Field(default_factory=dict, description="TWS configuration")
-    system: Dict[str, Any] = Field(
+    tws: dict[str, Any] = Field(default_factory=dict, description="TWS configuration")
+    system: dict[str, Any] = Field(
         default_factory=dict, description="System configuration"
     )
     last_updated: str = Field(
@@ -78,7 +78,7 @@ class AdminConfigResponse(BaseModel):
 class TeamsHealthResponse(BaseModel):
     """Teams integration health check response."""
 
-    status: Dict[str, Any] = Field(
+    status: dict[str, Any] = Field(
         default_factory=dict, description="Teams integration status"
     )
     timestamp: str = Field(
@@ -285,7 +285,7 @@ async def test_teams_notification(
     request: Request,
     message: str = "Test notification from Resync",
     teams_integration: TeamsIntegration = teams_integration_dependency,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Send test notification to Microsoft Teams.
 
     Sends a test notification to verify Teams integration is working correctly.
@@ -337,7 +337,7 @@ async def get_admin_status(
     request: Request,
     tws_client: ITWSClient = tws_client_dependency,
     teams_integration: TeamsIntegration = teams_integration_dependency,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Get overall system status for administration.
 
     Returns comprehensive status information for system administration.

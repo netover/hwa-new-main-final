@@ -435,7 +435,6 @@ class DatabaseOptimizer:
                 and not batch.is_full
                 and not batch.is_expired
             ):
-
                 if batch.add_query(sql, params):
                     return batch_id
 

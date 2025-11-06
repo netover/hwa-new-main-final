@@ -101,12 +101,12 @@ _books_db: List[Book] = [
     summary="List books with pagination and HATEOAS",
     description="""
     Lista livros com paginação e links HATEOAS.
-    
+
     **Características**:
     - Paginação com links de navegação (first, last, prev, next)
     - Links HATEOAS para cada recurso
     - Respostas padronizadas
-    
+
     **Exemplo de Response**:
     ```json
     {
@@ -194,11 +194,11 @@ async def list_books(
     summary="Get book by ID with HATEOAS",
     description="""
     Obtém um livro específico com links HATEOAS.
-    
+
     **Características**:
     - Links para operações relacionadas (update, delete, collection)
     - Tratamento de erro RFC 7807 se não encontrado
-    
+
     **Exemplo de Response**:
     ```json
     {
@@ -213,7 +213,7 @@ async def list_books(
       }
     }
     ```
-    
+
     **Exemplo de Erro (RFC 7807)**:
     ```json
     {
@@ -273,12 +273,12 @@ async def get_book(book_id: str):
     summary="Create a new book",
     description="""
     Cria um novo livro.
-    
+
     **Características**:
     - Validação automática com erros RFC 7807
     - Response com links HATEOAS
     - Status 201 Created
-    
+
     **Exemplo de Erro de Validação (RFC 7807)**:
     ```json
     {
@@ -360,7 +360,7 @@ async def create_book(book_data: BookCreate):
     summary="Delete a book",
     description="""
     Deleta um livro.
-    
+
     **Características**:
     - Status 204 No Content em sucesso
     - Erro RFC 7807 se não encontrado

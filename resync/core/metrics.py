@@ -28,6 +28,7 @@ from bisect import bisect_right
 
 logger = logging.getLogger(__name__)
 
+
 # -----------------------------
 # Utilidades
 # -----------------------------
@@ -35,15 +36,22 @@ def _now_wall() -> float:
     """Wall-clock (para timestamps e logs)."""
     return time.time()
 
+
 def _now_perf() -> float:
     """Monotônico, alta resolução (para medir durações)."""
     return time.perf_counter()  # recomendado para benchmarking/medição de duração
+
 
 def _sanitize_metric_name(name: str) -> str:
     """Sanitiza nomes para Prometheus (básico: substitui chars inválidos por '_')."""
     out = []
     for ch in name:
-        if ("A" <= ch <= "Z") or ("a" <= ch <= "z") or ("0" <= ch <= "9") or ch in [":", "_"]:
+        if (
+            ("A" <= ch <= "Z")
+            or ("a" <= ch <= "z")
+            or ("0" <= ch <= "9")
+            or ch in [":", "_"]
+        ):
             out.append(ch)
         else:
             out.append("_")
@@ -53,8 +61,10 @@ def _sanitize_metric_name(name: str) -> str:
         s = "m_" + s
     return s
 
+
 def _escape_help(text: str) -> str:
     return text.replace("\\", "\\\\").replace("\n", "\\n")
+
 
 # -----------------------------
 # Métricas básicas
@@ -62,6 +72,7 @@ def _escape_help(text: str) -> str:
 @dataclass
 class MetricCounter:
     """Counter (só cresce ou zera)."""
+
     value: int = 0
     _lock: threading.Lock = field(default_factory=threading.Lock)
 
@@ -84,6 +95,7 @@ class MetricCounter:
 @dataclass
 class MetricGauge:
     """Gauge (sobe e desce)."""
+
     value: float = 0.0
     _lock: threading.Lock = field(default_factory=threading.Lock)
 
@@ -106,8 +118,8 @@ class MetricHistogram:
 
     __slots__ = (
         "boundaries",  # sorted list[float]
-        "counts",      # list[int] len = len(boundaries)+1
-        "samples",     # sliding window p/ quantis/diagnóstico
+        "counts",  # list[int] len = len(boundaries)+1
+        "samples",  # sliding window p/ quantis/diagnóstico
         "max_samples",
         "_sum",
         "_count",
@@ -125,8 +137,19 @@ class MetricHistogram:
     ) -> None:
         # Defaults bons p/ latências (segundos) — próximos aos defaults do Prom-client
         if boundaries is None:
-            boundaries = [0.005, 0.01, 0.025, 0.05, 0.1, 0.25,
-                          0.5, 1.0, 2.5, 5.0, 10.0]  # pode ajustar conforme o domínio
+            boundaries = [
+                0.005,
+                0.01,
+                0.025,
+                0.05,
+                0.1,
+                0.25,
+                0.5,
+                1.0,
+                2.5,
+                5.0,
+                10.0,
+            ]  # pode ajustar conforme o domínio
         b = sorted(set(float(x) for x in boundaries))
         self.boundaries: List[float] = b
         self.counts: List[int] = [0] * (len(b) + 1)  # +Inf
@@ -215,7 +238,9 @@ class MetricHistogram:
 # -----------------------------
 # Correlation por contexto (contextvars)
 # -----------------------------
-_current_correlation_id: ContextVar[Optional[str]] = ContextVar("_current_correlation_id", default=None)
+_current_correlation_id: ContextVar[Optional[str]] = ContextVar(
+    "_current_correlation_id", default=None
+)
 
 
 class RuntimeMetrics:
@@ -234,7 +259,9 @@ class RuntimeMetrics:
         self.agent_creation_failures = MetricCounter()
         self.agent_mock_fallbacks = MetricCounter()
         self.agent_active_count = MetricGauge()
-        self.agent_orchestration_time = MetricHistogram(help_text="Agent orchestration duration seconds")
+        self.agent_orchestration_time = MetricHistogram(
+            help_text="Agent orchestration duration seconds"
+        )
 
         # Cache
         self.cache_hits = MetricCounter()
@@ -263,7 +290,9 @@ class RuntimeMetrics:
         self.llm_tokens = MetricCounter()
 
         # "error_rate" era usado para tempos de erro — manter nome por compatibilidade
-        self.error_rate = MetricHistogram(help_text="Observed error processing duration seconds")
+        self.error_rate = MetricHistogram(
+            help_text="Observed error processing duration seconds"
+        )
 
         # Error tracking
         self.error_counts: Dict[str, MetricCounter] = {}
@@ -283,10 +312,12 @@ class RuntimeMetrics:
 
         # SLO
         self.api_response_time = MetricHistogram(help_text="API response time seconds")
-        self.api_error_rate = MetricGauge()       # percentual agregado externamente
+        self.api_error_rate = MetricGauge()  # percentual agregado externamente
         self.system_availability = MetricGauge()  # percentual agregado externamente
         self.tws_connection_success_rate = MetricGauge()
-        self.ai_agent_response_time = MetricHistogram(help_text="AI agent response time seconds")
+        self.ai_agent_response_time = MetricHistogram(
+            help_text="AI agent response time seconds"
+        )
 
         # Correlation tracking
         self._correlation_context: Dict[str, Dict[str, Any]] = {}
@@ -342,12 +373,19 @@ class RuntimeMetrics:
             op_count = len(ctx["operations"])
             logger.info(
                 "Correlation %s completed: duration=%.4fs, operations=%d",
-                correlation_id, duration, op_count
+                correlation_id,
+                duration,
+                op_count,
             )
 
     # Context manager p/ spans
     class _Span:
-        def __init__(self, rm: "RuntimeMetrics", name: str, context: Optional[Dict[str, Any]] = None):
+        def __init__(
+            self,
+            rm: "RuntimeMetrics",
+            name: str,
+            context: Optional[Dict[str, Any]] = None,
+        ):
             self.rm = rm
             self.name = name
             self.context = context or {}
@@ -355,7 +393,9 @@ class RuntimeMetrics:
             self._t0 = 0.0
 
         def __enter__(self):
-            self.correlation_id = self.rm.create_correlation_id({"span": self.name, **self.context})
+            self.correlation_id = self.rm.create_correlation_id(
+                {"span": self.name, **self.context}
+            )
             self.rm.set_current_correlation_id(self.correlation_id)
             self._t0 = _now_perf()
             return self.correlation_id
@@ -366,12 +406,16 @@ class RuntimeMetrics:
             self.rm.agent_orchestration_time.observe(dur)
             cid = self.correlation_id
             if cid:
-                self.rm.add_correlation_event(cid, "span_end", {"duration_seconds": dur})
+                self.rm.add_correlation_event(
+                    cid, "span_end", {"duration_seconds": dur}
+                )
                 self.rm.close_correlation_id(cid)
             # limpar contextvar
             self.rm.set_current_correlation_id(None)
 
-    def span(self, name: str, context: Optional[Dict[str, Any]] = None) -> "RuntimeMetrics._Span":
+    def span(
+        self, name: str, context: Optional[Dict[str, Any]] = None
+    ) -> "RuntimeMetrics._Span":
         """Cria um span de correlação (context manager)."""
         return RuntimeMetrics._Span(self, name, context)
 
@@ -548,6 +592,7 @@ class RuntimeMetrics:
 _runtime_metrics: Optional[RuntimeMetrics] = None
 _runtime_lock = threading.Lock()
 
+
 def _get_runtime_metrics() -> RuntimeMetrics:
     global _runtime_metrics
     if _runtime_metrics is None:
@@ -556,12 +601,16 @@ def _get_runtime_metrics() -> RuntimeMetrics:
                 _runtime_metrics = RuntimeMetrics()
     return _runtime_metrics
 
+
 class _RuntimeMetricsProxy:
     """Proxy que delega dinamicamente ao singleton verdadeiro (sem instância própria)."""
+
     def __getattr__(self, name):
         return getattr(_get_runtime_metrics(), name)
 
+
 runtime_metrics = _RuntimeMetricsProxy()
+
 
 # -----------------------------
 # Funções utilitárias públicas
@@ -591,6 +640,7 @@ def track_llm_metrics(func):
     import inspect
 
     if inspect.iscoroutinefunction(func):
+
         @functools.wraps(func)
         async def async_wrapper(*args, **kwargs):
             t0 = _now_perf()
@@ -613,9 +663,11 @@ def track_llm_metrics(func):
             except Exception:
                 runtime_metrics.llm_errors.increment()
                 raise
+
         return async_wrapper
 
     else:
+
         @functools.wraps(func)
         def sync_wrapper(*args, **kwargs):
             t0 = _now_perf()
@@ -637,6 +689,7 @@ def track_llm_metrics(func):
             except Exception:
                 runtime_metrics.llm_errors.increment()
                 raise
+
         return sync_wrapper
 
 

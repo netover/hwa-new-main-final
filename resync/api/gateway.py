@@ -18,24 +18,24 @@ from __future__ import annotations
 
 import asyncio
 import hashlib
-import time
 import re
+import time
 from collections import defaultdict, deque
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Set, Callable
-from urllib.parse import urlparse, urljoin
+from typing import Any, Callable, Optional
+from urllib.parse import urljoin, urlparse
 
 import aiohttp
-from aiohttp import web
 import jwt
+from aiohttp import web
 
-from resync.core.structured_logger import get_logger
 from resync.core.circuit_breaker import (
     adaptive_llm_api_breaker,
     adaptive_tws_api_breaker,
 )
+from resync.core.structured_logger import get_logger
 
 logger = get_logger(__name__)
 
@@ -105,13 +105,13 @@ class RouteConfiguration:
 
     path_pattern: str
     service_name: str
-    methods: Set[HTTPMethod] = field(
+    methods: set[HTTPMethod] = field(
         default_factory=lambda: {HTTPMethod.GET, HTTPMethod.POST}
     )
     strip_prefix: bool = True
     add_prefix: str = ""
     timeout_seconds: float = 30.0
-    rate_limit: Optional[Dict[str, Any]] = None
+    rate_limit: Optional[dict[str, Any]] = None
     authentication_required: bool = False
     authorization_required: bool = False
     cors_enabled: bool = True
@@ -134,7 +134,7 @@ class RateLimitRule:
     window_seconds: int
     burst_limit: Optional[int] = None
     key_strategy: str = "ip"  # ip, user, api_key, custom
-    exclude_paths: Set[str] = field(default_factory=set)
+    exclude_paths: set[str] = field(default_factory=set)
 
     def get_key(self, request: web.Request) -> str:
         """Get rate limit key from request."""
@@ -164,34 +164,34 @@ class APIGateway:
     - Monitoring and observability
     """
 
-    def __init__(self, config: Optional[Dict[str, Any]] = None):
+    def __init__(self, config: Optional[dict[str, Any]] = None):
         self.config = config or {}
 
         # Core components
-        self.routes: List[RouteConfiguration] = []
-        self.services: Dict[str, List[ServiceEndpoint]] = defaultdict(list)
-        self.rate_limits: Dict[str, RateLimitRule] = {}
-        self.auth_providers: Dict[str, Any] = {}
-        self.transformers: Dict[str, Callable] = {}
+        self.routes: list[RouteConfiguration] = []
+        self.services: dict[str, list[ServiceEndpoint]] = defaultdict(list)
+        self.rate_limits: dict[str, RateLimitRule] = {}
+        self.auth_providers: dict[str, Any] = {}
+        self.transformers: dict[str, Callable] = {}
 
         # Runtime state
-        self.service_index: Dict[str, int] = defaultdict(int)  # For round-robin
-        self.active_connections: Dict[str, int] = defaultdict(
+        self.service_index: dict[str, int] = defaultdict(int)  # For round-robin
+        self.active_connections: dict[str, int] = defaultdict(
             int
         )  # For least connections
-        self.request_counts: Dict[str, deque] = defaultdict(lambda: deque(maxlen=10000))
+        self.request_counts: dict[str, deque] = defaultdict(lambda: deque(maxlen=10000))
 
         # Caching
-        self.cache: Dict[str, Dict[str, Any]] = {}
-        self.cache_ttl: Dict[str, float] = {}
+        self.cache: dict[str, dict[str, Any]] = {}
+        self.cache_ttl: dict[str, float] = {}
 
         # Security
-        self.waf_rules: List[Dict[str, Any]] = []
-        self.blacklisted_ips: Set[str] = set()
-        self.suspicious_patterns: List[re.Pattern] = []
+        self.waf_rules: list[dict[str, Any]] = []
+        self.blacklisted_ips: set[str] = set()
+        self.suspicious_patterns: list[re.Pattern] = []
 
         # Metrics
-        self.metrics: Dict[str, Any] = {
+        self.metrics: dict[str, Any] = {
             "requests_total": 0,
             "requests_success": 0,
             "requests_failed": 0,
@@ -408,7 +408,7 @@ class APIGateway:
             logger.error(f"Request processing error: {e}", exc_info=True)
             return self._create_error_response(500, "Internal server error")
 
-    async def _perform_security_checks(self, request: web.Request) -> Dict[str, Any]:
+    async def _perform_security_checks(self, request: web.Request) -> dict[str, Any]:
         """Perform security checks on incoming request."""
         client_ip = self._get_client_ip(request)
 
@@ -427,7 +427,7 @@ class APIGateway:
 
         return {"allowed": True}
 
-    async def _check_rate_limits(self, request: web.Request) -> Dict[str, Any]:
+    async def _check_rate_limits(self, request: web.Request) -> dict[str, Any]:
         """Check rate limits for request."""
         route_config = getattr(request, "route_config", None)
         rule_name = (
@@ -473,7 +473,7 @@ class APIGateway:
 
         return {"allowed": True}
 
-    async def _authenticate_request(self, request: web.Request) -> Dict[str, Any]:
+    async def _authenticate_request(self, request: web.Request) -> dict[str, Any]:
         """Authenticate incoming request."""
         auth_header = request.headers.get("Authorization", "")
 
@@ -823,7 +823,7 @@ class APIGateway:
             except Exception as e:
                 logger.error(f"Metrics worker error: {e}")
 
-    def get_metrics(self) -> Dict[str, Any]:
+    def get_metrics(self) -> dict[str, Any]:
         """Get comprehensive gateway metrics."""
         return {
             "performance": {

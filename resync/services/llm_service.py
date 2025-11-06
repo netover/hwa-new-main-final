@@ -15,17 +15,18 @@ from resync.core.exceptions import IntegrationError
 from resync.settings import settings
 
 try:
-    from openai import AsyncOpenAI
     # Import specific exceptions from OpenAI v1.x
     from openai import (
+        APIConnectionError,
+        APIError,
+        APIStatusError,
+        APITimeoutError,
+        AsyncOpenAI,
         AuthenticationError,
         BadRequestError,
-        APIConnectionError,
         RateLimitError,
-        APIError,
-        APITimeoutError,
-        APIStatusError,
     )
+
     OPENAI_AVAILABLE = True
 except ImportError:  # pragma: no cover
     OPENAI_AVAILABLE = False
@@ -62,7 +63,9 @@ class LLMService:
         if not model:
             raise IntegrationError(
                 message="No LLM model configured",
-                details={"hint": "Define settings.llm_model or settings.agent_model_name"},
+                details={
+                    "hint": "Define settings.llm_model or settings.agent_model_name"
+                },
             )
         self.model: str = str(model)
 
@@ -79,7 +82,9 @@ class LLMService:
         if not base_url:
             raise IntegrationError(
                 message="Missing LLM base_url",
-                details={"hint": "Configure settings.llm_endpoint (NVIDIA OpenAI-compatible)"},
+                details={
+                    "hint": "Configure settings.llm_endpoint (NVIDIA OpenAI-compatible)"
+                },
             )
 
         if api_key:
@@ -106,7 +111,11 @@ class LLMService:
             APITimeoutError,
             APIStatusError,
         ) as exc:
-            logger.error("Failed to initialize LLM service (OpenAI error): %s", exc, exc_info=True)
+            logger.error(
+                "Failed to initialize LLM service (OpenAI error): %s",
+                exc,
+                exc_info=True,
+            )
             raise IntegrationError(
                 message="Failed to initialize LLM service",
                 details={
@@ -152,10 +161,14 @@ class LLMService:
         top_p = self.default_top_p if top_p is None else top_p
         max_tokens = self.default_max_tokens if max_tokens is None else max_tokens
         frequency_penalty = (
-            self.default_frequency_penalty if frequency_penalty is None else frequency_penalty
+            self.default_frequency_penalty
+            if frequency_penalty is None
+            else frequency_penalty
         )
         presence_penalty = (
-            self.default_presence_penalty if presence_penalty is None else presence_penalty
+            self.default_presence_penalty
+            if presence_penalty is None
+            else presence_penalty
         )
 
         logger.info("Generating LLM response with model: %s", self.model)
@@ -209,7 +222,9 @@ class LLMService:
                 },
             ) from exc
         except Exception as exc:  # pylint: disable=broad-exception-caught
-            logger.error("Unexpected error generating LLM response: %s", exc, exc_info=True)
+            logger.error(
+                "Unexpected error generating LLM response: %s", exc, exc_info=True
+            )
             raise IntegrationError(
                 message="Failed to generate LLM response",
                 details={"error": str(exc), "model": self.model},
@@ -266,7 +281,9 @@ class LLMService:
             APITimeoutError,
             APIStatusError,
         ) as exc:
-            logger.error("Error generating streaming LLM response: %s", exc, exc_info=True)
+            logger.error(
+                "Error generating streaming LLM response: %s", exc, exc_info=True
+            )
             raise IntegrationError(
                 message="Failed to generate streaming LLM response",
                 details={
@@ -336,7 +353,9 @@ class LLMService:
         """
         agent_type = (agent_config or {}).get("type", "general")
         agent_name = (agent_config or {}).get("name", f"Agente {agent_id}")
-        agent_description = (agent_config or {}).get("description", f"Assistente {agent_type}")
+        agent_description = (agent_config or {}).get(
+            "description", f"Assistente {agent_type}"
+        )
 
         system_message = (
             f"Você é {agent_name}, {agent_description}. "
@@ -379,7 +398,9 @@ class LLMService:
         if conversation_history:
             messages.extend(conversation_history[-3:])
 
-        contextual_query = f"Contexto relevante:\n{context}\n\nPergunta do usuário: {query}"
+        contextual_query = (
+            f"Contexto relevante:\n{context}\n\nPergunta do usuário: {query}"
+        )
         messages.append({"role": "user", "content": contextual_query})
         return await self.generate_response(messages, max_tokens=1000)
 

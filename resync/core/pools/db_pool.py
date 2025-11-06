@@ -72,8 +72,7 @@ class SecretRedactor(logging.Filter):
 # Registro idempotente (evita duplicação em hot-reload)
 _root = logging.getLogger()
 if not any(
-    getattr(f, "__class__", None).__name__ == "SecretRedactor"
-    for f in _root.filters
+    getattr(f, "__class__", None).__name__ == "SecretRedactor" for f in _root.filters
 ):
     _root.addFilter(SecretRedactor())
 
@@ -105,20 +104,14 @@ async def execute_with_retry(
             msg = str(e).lower()
 
             # Fallback defensivo por mensagem
-            if not (
-                is_busy or "database is locked" in msg or "sqlite_busy" in msg
-            ):
+            if not (is_busy or "database is locked" in msg or "sqlite_busy" in msg):
                 raise
 
             if tries >= max_retries:
                 raise
 
             tries += 1
-            delay = (
-                base_delay
-                * (2 ** (tries - 1))
-                * (1 + random.uniform(-0.1, 0.1))
-            )
+            delay = base_delay * (2 ** (tries - 1)) * (1 + random.uniform(-0.1, 0.1))
             await asyncio.sleep(delay)
 
 
@@ -152,9 +145,7 @@ class DatabaseConnectionPool(ConnectionPool[AsyncEngine]):
                 cur.execute("PRAGMA foreign_keys = ON;")
                 # 'journal_mode=WAL' é persistente no arquivo;
                 # manter se quiser reforçar
-                cur.execute(
-                    "PRAGMA synchronous = NORMAL;"
-                )  # trade-off durabilidade
+                cur.execute("PRAGMA synchronous = NORMAL;")  # trade-off durabilidade
                 cur.close()
                 logger.debug(
                     "PRAGMAs SQLite aplicados por conexão para pool '%s'",
@@ -204,9 +195,7 @@ class DatabaseConnectionPool(ConnectionPool[AsyncEngine]):
                     )
 
                 # Criar engine para SQLite
-                self._engine = create_async_engine(
-                    self.database_url, **engine_kwargs
-                )
+                self._engine = create_async_engine(self.database_url, **engine_kwargs)
 
                 # (B) listeners síncronos para aplicar PRAGMAs a cada conexão
                 self._setup_sqlite_listeners()  # também em in-memory para consistência
@@ -223,9 +212,7 @@ class DatabaseConnectionPool(ConnectionPool[AsyncEngine]):
                 self._engine = create_async_engine(
                     self.database_url,
                     pool_size=self.config.min_size,
-                    max_overflow=max(
-                        0, self.config.max_size - self.config.min_size
-                    ),
+                    max_overflow=max(0, self.config.max_size - self.config.min_size),
                     pool_pre_ping=True,  # detecta conexões 'stale' no checkout
                     pool_recycle=self.config.max_lifetime,  # recicla após N segundos
                     pool_timeout=self.config.connection_timeout,  # tempo máx. do pool
@@ -256,17 +243,13 @@ class DatabaseConnectionPool(ConnectionPool[AsyncEngine]):
                 e,
                 exc_info=True,
             )
-            raise DatabaseError(
-                f"Failed to setup database connection pool: {e}"
-            ) from e
+            raise DatabaseError(f"Failed to setup database connection pool: {e}") from e
 
     async def _init_sqlite_pragmas(self) -> None:
         """Configura PRAGMAs persistentes para SQLite file-based."""
         try:
             async with self._engine.begin() as conn:
-                await conn.exec_driver_sql(
-                    "PRAGMA journal_mode=WAL;"
-                )  # persistente
+                await conn.exec_driver_sql("PRAGMA journal_mode=WAL;")  # persistente
                 logger.debug(
                     "PRAGMA journal_mode=WAL aplicado para pool '%s'",
                     self.config.pool_name,
@@ -356,9 +339,7 @@ class DatabaseConnectionPool(ConnectionPool[AsyncEngine]):
                         e,
                         exc_info=True,
                     )
-                    raise DatabaseError(
-                        f"Database operation failed: {e}"
-                    ) from e
+                    raise DatabaseError(f"Database operation failed: {e}") from e
 
         except SATimeoutError as e:
             # Captura timeout no "enter" do sessionmaker (antes do async with)

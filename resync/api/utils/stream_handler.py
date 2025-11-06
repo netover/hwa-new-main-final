@@ -57,9 +57,7 @@ class AgentResponseStreamer:
             raise
         except Exception as e:
             logger.error("streaming_error", error=str(e), exc_info=True)
-            await self._send_error(
-                "Ocorreu um erro ao processar sua solicitação."
-            )
+            await self._send_error("Ocorreu um erro ao processar sua solicitação.")
             return self.full_response or "Erro no processamento"
 
     async def _handle_streaming_response(self, agent: Any, query: str) -> None:
@@ -76,9 +74,7 @@ class AgentResponseStreamer:
             self.full_response = response
             await self._send_stream_message(response)
 
-    async def _handle_non_streaming_response(
-        self, agent: Any, query: str
-    ) -> None:
+    async def _handle_non_streaming_response(self, agent: Any, query: str) -> None:
         """Handle non-streaming response from agent."""
         response = await agent.arun(query)
         self.full_response = str(response)
@@ -91,9 +87,7 @@ class AgentResponseStreamer:
             self.full_response += chunk_str
             await self._send_stream_message(chunk_str, is_chunk=True)
 
-    async def _send_stream_message(
-        self, message: str, is_chunk: bool = False
-    ) -> None:
+    async def _send_stream_message(self, message: str, is_chunk: bool = False) -> None:
         """Send a stream message to the client."""
         message_type = "stream"
         await self.websocket.send_json(

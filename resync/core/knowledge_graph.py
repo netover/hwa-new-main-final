@@ -15,8 +15,9 @@ logger = get_logger(__name__)
 # Circuit breaker for Neo4j operations
 neo4j_circuit_breaker = CircuitBreaker(
     failure_threshold=5,  # Open after 5 failures
-    recovery_timeout=120  # Try to recover after 2 minutes
+    recovery_timeout=120,  # Try to recover after 2 minutes
 )
+
 
 # Circuit breaker statistics function
 def get_neo4j_circuit_breaker_stats() -> dict[str, Any]:

@@ -10,10 +10,10 @@ from __future__ import annotations
 
 import asyncio
 import gc
-import psutil
 from datetime import datetime, timedelta
-from typing import Dict, List, Optional
+from typing import Optional
 
+import psutil
 import structlog
 
 logger = structlog.get_logger(__name__)
@@ -52,7 +52,7 @@ class MemoryManager:
         self._current_memory_usage_mb: float = 0.0
         self._peak_memory_usage_mb: float = 0.0
         self._last_memory_check: Optional[datetime] = None
-        self._memory_history: List[Dict[str, float]] = []
+        self._memory_history: list[dict[str, float]] = []
 
         # Cleanup tracking
         self._last_cleanup: Optional[datetime] = None
@@ -183,7 +183,7 @@ class MemoryManager:
             logger.warning("failed_to_get_memory_usage", error=str(e))
             return 0.0
 
-    def get_memory_stats(self) -> Dict[str, any]:
+    def get_memory_stats(self) -> dict[str, any]:
         """
         Get comprehensive memory statistics.
 
@@ -210,7 +210,7 @@ class MemoryManager:
 
     def get_memory_history(
         self, hours: int = 24, limit: Optional[int] = None
-    ) -> List[Dict[str, float]]:
+    ) -> list[dict[str, float]]:
         """
         Get memory usage history.
 
@@ -236,7 +236,7 @@ class MemoryManager:
 
         return filtered_history
 
-    async def force_memory_cleanup(self) -> Dict[str, any]:
+    async def force_memory_cleanup(self) -> dict[str, any]:
         """
         Force immediate memory cleanup.
 
@@ -344,7 +344,7 @@ class HealthHistoryMemoryManager(MemoryManager):
 
     async def perform_history_cleanup(
         self, current_entries: int, cleanup_callback=None
-    ) -> Dict[str, any]:
+    ) -> dict[str, any]:
         """
         Perform cleanup of health history based on memory pressure.
 
@@ -412,7 +412,7 @@ class HealthHistoryMemoryManager(MemoryManager):
                     "entries_removed": 0,
                 }
 
-    def get_history_memory_stats(self) -> Dict[str, any]:
+    def get_history_memory_stats(self) -> dict[str, any]:
         """Get memory statistics specific to health history."""
         base_stats = self.get_memory_stats()
 
@@ -492,7 +492,7 @@ class SystemMemoryMonitor:
                 logger.error("error_in_memory_monitoring_loop", error=str(e))
                 await asyncio.sleep(60)  # Wait longer on error
 
-    async def get_memory_info(self) -> Dict[str, float]:
+    async def get_memory_info(self) -> dict[str, float]:
         """
         Get current system memory information.
 

@@ -27,7 +27,9 @@ async def test_call_llm_success(mocker):
     # Mock the router to avoid the fallback response
     mock_router = MagicMock()
     mock_router.model_list = ["test-model"]
-    mocker.patch("resync.core.litellm_init.get_litellm_router", return_value=mock_router)
+    mocker.patch(
+        "resync.core.litellm_init.get_litellm_router", return_value=mock_router
+    )
 
     # Call the function
     result = await call_llm(prompt="test prompt", model="test-model")
@@ -46,11 +48,12 @@ async def test_call_llm_raises_llmerror_after_retries_on_apierror(mocker):
     # Make it raise LLMError directly since that's what the retry decorators expect
     mock_factory_call = AsyncMock(
         side_effect=LLMError(
-            message="API error: litellm.APIError: API is down",
-            model_name="test-model"
+            message="API error: litellm.APIError: API is down", model_name="test-model"
         )
     )
-    mocker.patch("resync.core.utils.llm_factories.LLMFactory.call_llm", mock_factory_call)
+    mocker.patch(
+        "resync.core.utils.llm_factories.LLMFactory.call_llm", mock_factory_call
+    )
 
     # Call the function and assert that it raises our custom LLMError
     with pytest.raises(LLMError):
@@ -75,10 +78,12 @@ async def test_call_llm_raises_llmerror_after_retries_on_network_error(mocker):
     mock_factory_call = AsyncMock(
         side_effect=LLMError(
             message="Unexpected error: litellm.APIConnectionError: Network error",
-            model_name="test-model"
+            model_name="test-model",
         )
     )
-    mocker.patch("resync.core.utils.llm_factories.LLMFactory.call_llm", mock_factory_call)
+    mocker.patch(
+        "resync.core.utils.llm_factories.LLMFactory.call_llm", mock_factory_call
+    )
 
     # Call the function and assert that it raises our custom LLMError
     with pytest.raises(LLMError):

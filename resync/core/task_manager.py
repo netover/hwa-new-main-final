@@ -70,9 +70,9 @@ class TaskManager:
     def __init__(self, max_workers: int = 10):
         self.max_workers = max_workers
         self.tasks: dict[str, Task] = {}
-        self.task_queue: asyncio.PriorityQueue[tuple[int, str]] = (
-            asyncio.PriorityQueue()
-        )
+        self.task_queue: asyncio.PriorityQueue[
+            tuple[int, str]
+        ] = asyncio.PriorityQueue()
         self.running_tasks: dict[str, asyncio.Task[Any]] = {}
         self.semaphore = asyncio.Semaphore(max_workers)
         self._shutdown = False

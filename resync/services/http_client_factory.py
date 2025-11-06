@@ -9,6 +9,8 @@ import logging
 
 import httpx
 from httpx import AsyncClient
+
+from resync import settings
 from resync.core.constants import (
     DEFAULT_CONNECT_TIMEOUT,
     DEFAULT_MAX_CONNECTIONS,
@@ -17,7 +19,6 @@ from resync.core.constants import (
     DEFAULT_READ_TIMEOUT,
     DEFAULT_WRITE_TIMEOUT,
 )
-from resync_new.config.settings import settings
 
 
 def create_async_http_client(
@@ -66,9 +67,7 @@ def create_async_http_client(
         verify=verify,
         timeout=httpx.Timeout(
             connect=connect_timeout
-            or getattr(
-                settings, "TWS_CONNECT_TIMEOUT", DEFAULT_CONNECT_TIMEOUT
-            ),
+            or getattr(settings, "TWS_CONNECT_TIMEOUT", DEFAULT_CONNECT_TIMEOUT),
             read=read_timeout
             or getattr(settings, "TWS_READ_TIMEOUT", DEFAULT_READ_TIMEOUT),
             write=write_timeout
@@ -78,9 +77,7 @@ def create_async_http_client(
         ),
         limits=httpx.Limits(
             max_connections=max_connections
-            or getattr(
-                settings, "TWS_MAX_CONNECTIONS", DEFAULT_MAX_CONNECTIONS
-            ),
+            or getattr(settings, "TWS_MAX_CONNECTIONS", DEFAULT_MAX_CONNECTIONS),
             max_keepalive_connections=max_keepalive
             or getattr(
                 settings,
@@ -89,6 +86,7 @@ def create_async_http_client(
             ),
         ),
     )
+
 
 logger = logging.getLogger(__name__)
 
@@ -109,9 +107,7 @@ def create_tws_http_client(
 
     # Define timeout values based on settings
     timeout = httpx.Timeout(
-        connect=getattr(
-            settings, "TWS_CONNECT_TIMEOUT", DEFAULT_CONNECT_TIMEOUT
-        ),
+        connect=getattr(settings, "TWS_CONNECT_TIMEOUT", DEFAULT_CONNECT_TIMEOUT),
         read=getattr(settings, "TWS_READ_TIMEOUT", DEFAULT_READ_TIMEOUT),
         write=getattr(settings, "TWS_WRITE_TIMEOUT", DEFAULT_WRITE_TIMEOUT),
         pool=getattr(settings, "TWS_POOL_TIMEOUT", DEFAULT_POOL_TIMEOUT),

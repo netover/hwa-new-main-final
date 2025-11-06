@@ -245,7 +245,6 @@ class AutoScalingManager:
             load_score > self.config.scale_up_threshold
             and current_time - self.last_scale_up_time > self.config.scale_up_cooldown
         ):
-
             asyncio.run(self._scale_up())
             self.last_scale_up_time = current_time
 
@@ -255,7 +254,6 @@ class AutoScalingManager:
             and current_time - self.last_scale_down_time
             > self.config.scale_down_cooldown
         ):
-
             asyncio.run(self._scale_down())
             self.last_scale_down_time = current_time
 

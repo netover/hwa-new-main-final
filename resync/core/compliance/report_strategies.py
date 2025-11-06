@@ -7,18 +7,21 @@ testable, and maintainable.
 """
 
 import logging
-from typing import Dict, Any, List, Optional, Protocol, runtime_checkable
-from collections import defaultdict
 from abc import ABC, abstractmethod
+from collections import defaultdict
+from typing import Any, Dict, List, Optional, Protocol, runtime_checkable
+
 
 # Custom exceptions for better error handling
 class ComplianceCalculationError(Exception):
     """Raised when there's an error in compliance calculation."""
+
     pass
 
 
 class StrategyValidationError(ValueError):
     """Raised when strategy validation fails."""
+
     pass
 
 
@@ -26,8 +29,10 @@ class StrategyValidationError(ValueError):
 def _get_soc2_classes():
     """Lazy import to avoid circular dependency."""
     from resync.core.compliance.types import SOC2TrustServiceCriteria
+
     # Get the actual implementation from soc2_compliance_refactored
     from resync.core.soc2_compliance_refactored import SOC2ComplianceManager
+
     return SOC2ComplianceManager, SOC2TrustServiceCriteria
 
 
@@ -142,7 +147,9 @@ class ControlComplianceStrategy(ReportStrategy):
         'total_controls', 'compliant_controls', 'compliance_rate'
     """
 
-    def _execute_strategy(self, manager: Any, context: Dict[str, Any]) -> Dict[str, Any]:
+    def _execute_strategy(
+        self, manager: Any, context: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Calculate control compliance statistics with enhanced error handling."""
         try:
             total_controls = len(manager.controls)
@@ -151,26 +158,34 @@ class ControlComplianceStrategy(ReportStrategy):
                 return {
                     "total_controls": 0,
                     "compliant_controls": 0,
-                    "compliance_rate": 0.0
+                    "compliance_rate": 0.0,
                 }
 
-            compliant_controls = sum(1 for c in manager.controls.values() if c.is_compliant())
+            compliant_controls = sum(
+                1 for c in manager.controls.values() if c.is_compliant()
+            )
 
             compliance_rate = compliant_controls / total_controls
 
-            logger.info(f"Control compliance calculated: {compliant_controls}/{total_controls} "
-                       f"({compliance_rate:.2%})")
+            logger.info(
+                f"Control compliance calculated: {compliant_controls}/{total_controls} "
+                f"({compliance_rate:.2%})"
+            )
 
             return {
                 "total_controls": total_controls,
                 "compliant_controls": compliant_controls,
-                "compliance_rate": compliance_rate
+                "compliance_rate": compliance_rate,
             }
 
         except AttributeError as e:
-            raise ComplianceCalculationError(f"Manager missing required attributes: {e}")
+            raise ComplianceCalculationError(
+                f"Manager missing required attributes: {e}"
+            )
         except Exception as e:
-            raise ComplianceCalculationError(f"Error calculating control compliance: {e}")
+            raise ComplianceCalculationError(
+                f"Error calculating control compliance: {e}"
+            )
 
 
 class CriteriaScoresStrategy(ReportStrategy):
@@ -184,7 +199,9 @@ class CriteriaScoresStrategy(ReportStrategy):
         Dict mapping criteria names to their scores and statistics
     """
 
-    def _execute_strategy(self, manager: Any, context: Dict[str, Any]) -> Dict[str, Any]:
+    def _execute_strategy(
+        self, manager: Any, context: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Calculate criteria scores with enhanced error handling."""
         try:
             criteria_compliance = defaultdict(lambda: {"total": 0, "compliant": 0})
@@ -208,13 +225,17 @@ class CriteriaScoresStrategy(ReportStrategy):
                     "total_controls": scores["total"],
                 }
 
-                logger.debug(f"Criteria {criterion.value}: {scores['compliant']}/{scores['total']} "
-                           f"({score:.2%})")
+                logger.debug(
+                    f"Criteria {criterion.value}: {scores['compliant']}/{scores['total']} "
+                    f"({score:.2%})"
+                )
 
             return criteria_scores
 
         except AttributeError as e:
-            raise ComplianceCalculationError(f"Manager or control missing required attributes: {e}")
+            raise ComplianceCalculationError(
+                f"Manager or control missing required attributes: {e}"
+            )
         except Exception as e:
             raise ComplianceCalculationError(f"Error calculating criteria scores: {e}")
 
@@ -266,7 +287,9 @@ class OverallComplianceStrategy(ReportStrategy):
                     score = criteria_scores[criterion.value]["score"]
                     weighted_score += score * weight
                     total_weight += weight
-                    logger.debug(f"Criterion {criterion.value}: score={score:.3f}, weight={weight}")
+                    logger.debug(
+                        f"Criterion {criterion.value}: score={score:.3f}, weight={weight}"
+                    )
 
             if total_weight == 0.0:
                 logger.warning("No valid criteria found for overall score calculation")
@@ -278,7 +301,9 @@ class OverallComplianceStrategy(ReportStrategy):
             return overall_score
 
         except Exception as e:
-            raise ComplianceCalculationError(f"Error calculating overall compliance score: {e}")
+            raise ComplianceCalculationError(
+                f"Error calculating overall compliance score: {e}"
+            )
 
 
 class ControlStatusSummaryStrategy(ReportStrategy):
@@ -291,7 +316,9 @@ class ControlStatusSummaryStrategy(ReportStrategy):
         Dict mapping status values to their counts
     """
 
-    def _execute_strategy(self, manager: Any, context: Dict[str, Any]) -> Dict[str, int]:
+    def _execute_strategy(
+        self, manager: Any, context: Dict[str, Any]
+    ) -> Dict[str, int]:
         """Generate summary of control status counts with enhanced error handling."""
         try:
             status_counts = defaultdict(int)
@@ -305,9 +332,13 @@ class ControlStatusSummaryStrategy(ReportStrategy):
             return result
 
         except AttributeError as e:
-            raise ComplianceCalculationError(f"Manager or control missing required attributes: {e}")
+            raise ComplianceCalculationError(
+                f"Manager or control missing required attributes: {e}"
+            )
         except Exception as e:
-            raise ComplianceCalculationError(f"Error generating control status summary: {e}")
+            raise ComplianceCalculationError(
+                f"Error generating control status summary: {e}"
+            )
 
 
 class EvidenceSummaryStrategy(ReportStrategy):
@@ -320,14 +351,18 @@ class EvidenceSummaryStrategy(ReportStrategy):
         Dict containing total valid evidence count and breakdown by type
     """
 
-    def _execute_strategy(self, manager: Any, context: Dict[str, Any]) -> Dict[str, Any]:
+    def _execute_strategy(
+        self, manager: Any, context: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Generate summary of valid evidence with enhanced error handling."""
         try:
             evidence_counts = defaultdict(int)
 
             for evidence in manager.evidence.values():
                 if evidence.is_valid():
-                    key = getattr(evidence.evidence_type, "value", evidence.evidence_type)
+                    key = getattr(
+                        evidence.evidence_type, "value", evidence.evidence_type
+                    )
                     evidence_counts[key] += 1
 
             total_valid = sum(evidence_counts.values())
@@ -336,13 +371,17 @@ class EvidenceSummaryStrategy(ReportStrategy):
                 "by_type": dict(evidence_counts),
             }
 
-            logger.info(f"Evidence summary: {total_valid} valid evidence items across "
-                       f"{len(evidence_counts)} types")
+            logger.info(
+                f"Evidence summary: {total_valid} valid evidence items across "
+                f"{len(evidence_counts)} types"
+            )
 
             return result
 
         except AttributeError as e:
-            raise ComplianceCalculationError(f"Manager or evidence missing required attributes: {e}")
+            raise ComplianceCalculationError(
+                f"Manager or evidence missing required attributes: {e}"
+            )
         except Exception as e:
             raise ComplianceCalculationError(f"Error generating evidence summary: {e}")
 
@@ -359,7 +398,9 @@ class AvailabilitySummaryStrategy(ReportStrategy):
         Dict containing availability statistics and target compliance status
     """
 
-    def _execute_strategy(self, manager: Any, context: Dict[str, Any]) -> Dict[str, Any]:
+    def _execute_strategy(
+        self, manager: Any, context: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Generate summary of availability metrics with enhanced error handling."""
         try:
             if not manager.availability_metrics:
@@ -384,17 +425,25 @@ class AvailabilitySummaryStrategy(ReportStrategy):
                 "meets_target": meets_target,
             }
 
-            logger.info(f"Availability summary: {avg_availability:.2%} avg availability, "
-                       f"{total_downtime}s downtime, meets target: {meets_target}")
+            logger.info(
+                f"Availability summary: {avg_availability:.2%} avg availability, "
+                f"{total_downtime}s downtime, meets target: {meets_target}"
+            )
 
             return result
 
         except AttributeError as e:
-            raise ComplianceCalculationError(f"Manager or metrics missing required attributes: {e}")
+            raise ComplianceCalculationError(
+                f"Manager or metrics missing required attributes: {e}"
+            )
         except ZeroDivisionError:
-            raise ComplianceCalculationError("Cannot calculate average with empty metrics list")
+            raise ComplianceCalculationError(
+                "Cannot calculate average with empty metrics list"
+            )
         except Exception as e:
-            raise ComplianceCalculationError(f"Error generating availability summary: {e}")
+            raise ComplianceCalculationError(
+                f"Error generating availability summary: {e}"
+            )
 
 
 class ProcessingIntegritySummaryStrategy(ReportStrategy):
@@ -409,7 +458,9 @@ class ProcessingIntegritySummaryStrategy(ReportStrategy):
         Dict containing integrity statistics and target compliance status
     """
 
-    def _execute_strategy(self, manager: Any, context: Dict[str, Any]) -> Dict[str, Any]:
+    def _execute_strategy(
+        self, manager: Any, context: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Generate summary of processing integrity metrics with enhanced error handling."""
         try:
             if not manager.processing_checks:
@@ -420,7 +471,9 @@ class ProcessingIntegritySummaryStrategy(ReportStrategy):
                 c.integrity_score for c in manager.processing_checks
             ) / len(manager.processing_checks)
 
-            failed_checks = sum(1 for c in manager.processing_checks if not c.is_valid())
+            failed_checks = sum(
+                1 for c in manager.processing_checks if not c.is_valid()
+            )
 
             integrity_target = 99.9
             meets_target = avg_integrity >= integrity_target
@@ -433,18 +486,26 @@ class ProcessingIntegritySummaryStrategy(ReportStrategy):
                 "meets_target": meets_target,
             }
 
-            logger.info(f"Processing integrity: {avg_integrity:.1f}% avg score, "
-                       f"{failed_checks}/{len(manager.processing_checks)} failed, "
-                       f"meets target: {meets_target}")
+            logger.info(
+                f"Processing integrity: {avg_integrity:.1f}% avg score, "
+                f"{failed_checks}/{len(manager.processing_checks)} failed, "
+                f"meets target: {meets_target}"
+            )
 
             return result
 
         except AttributeError as e:
-            raise ComplianceCalculationError(f"Manager or checks missing required attributes: {e}")
+            raise ComplianceCalculationError(
+                f"Manager or checks missing required attributes: {e}"
+            )
         except ZeroDivisionError:
-            raise ComplianceCalculationError("Cannot calculate average with empty checks list")
+            raise ComplianceCalculationError(
+                "Cannot calculate average with empty checks list"
+            )
         except Exception as e:
-            raise ComplianceCalculationError(f"Error generating processing integrity summary: {e}")
+            raise ComplianceCalculationError(
+                f"Error generating processing integrity summary: {e}"
+            )
 
 
 class ConfidentialityIncidentsSummaryStrategy(ReportStrategy):
@@ -459,7 +520,9 @@ class ConfidentialityIncidentsSummaryStrategy(ReportStrategy):
         Dict containing incident statistics and severity breakdown
     """
 
-    def _execute_strategy(self, manager: Any, context: Dict[str, Any]) -> Dict[str, Any]:
+    def _execute_strategy(
+        self, manager: Any, context: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Generate summary of confidentiality incidents with enhanced error handling."""
         try:
             incident_counts = defaultdict(int)
@@ -477,15 +540,21 @@ class ConfidentialityIncidentsSummaryStrategy(ReportStrategy):
                 "unresolved_incidents": unresolved_incidents,
             }
 
-            logger.info(f"Confidentiality incidents: {len(manager.confidentiality_incidents)} total, "
-                       f"{unresolved_incidents} unresolved")
+            logger.info(
+                f"Confidentiality incidents: {len(manager.confidentiality_incidents)} total, "
+                f"{unresolved_incidents} unresolved"
+            )
 
             return result
 
         except AttributeError as e:
-            raise ComplianceCalculationError(f"Manager or incidents missing required attributes: {e}")
+            raise ComplianceCalculationError(
+                f"Manager or incidents missing required attributes: {e}"
+            )
         except Exception as e:
-            raise ComplianceCalculationError(f"Error generating confidentiality incidents summary: {e}")
+            raise ComplianceCalculationError(
+                f"Error generating confidentiality incidents summary: {e}"
+            )
 
 
 class RecommendationsStrategy(ReportStrategy):
@@ -498,13 +567,17 @@ class RecommendationsStrategy(ReportStrategy):
         List of recommendation dictionaries with suggested improvements
     """
 
-    def _execute_strategy(self, manager: Any, context: Dict[str, Any]) -> List[Dict[str, Any]]:
+    def _execute_strategy(
+        self, manager: Any, context: Dict[str, Any]
+    ) -> List[Dict[str, Any]]:
         """Generate recommendations based on compliance report with enhanced error handling."""
         try:
             # Get report from context or create basic structure
             report = context.get("report")
             if report is None:
-                logger.warning("No report provided in context, generating basic recommendations")
+                logger.warning(
+                    "No report provided in context, generating basic recommendations"
+                )
                 report = {"overall_compliance_score": 0.0}
 
             # Reuse the existing _generate_recommendations method
@@ -515,11 +588,15 @@ class RecommendationsStrategy(ReportStrategy):
             return recommendations
 
         except AttributeError as e:
-            raise ComplianceCalculationError(f"Manager missing _generate_recommendations method: {e}")
+            raise ComplianceCalculationError(
+                f"Manager missing _generate_recommendations method: {e}"
+            )
         except Exception as e:
             raise ComplianceCalculationError(f"Error generating recommendations: {e}")
 
-    def execute(self, manager: Any, report: Dict[str, Any] = None) -> List[Dict[str, Any]]:
+    def execute(
+        self, manager: Any, report: Dict[str, Any] = None
+    ) -> List[Dict[str, Any]]:
         """Legacy method for backward compatibility.
 
         Args:
@@ -535,7 +612,7 @@ class RecommendationsStrategy(ReportStrategy):
 
 class ReportGenerator:
     """Facade for generating complete compliance reports using strategies."""
-    
+
     def __init__(self):
         self.strategies = {
             "control_compliance": ControlComplianceStrategy(),
@@ -548,19 +625,25 @@ class ReportGenerator:
             "confidentiality_incidents": ConfidentialityIncidentsSummaryStrategy(),
             "recommendations": RecommendationsStrategy(),
         }
-    
+
     def generate_report(self, manager: Any) -> Dict[str, Any]:
         """Generate a complete compliance report using all strategies with enhanced error handling."""
         try:
             # Validate manager before proceeding
             if not isinstance(manager, ComplianceManagerProtocol):
-                raise StrategyValidationError("Manager must implement ComplianceManagerProtocol")
+                raise StrategyValidationError(
+                    "Manager must implement ComplianceManagerProtocol"
+                )
 
             # Get timestamps safely
             get_ts = getattr(manager, "get_current_timestamp", None)
-            generated_at = get_ts() if callable(get_ts) else manager._get_current_timestamp()
+            generated_at = (
+                get_ts() if callable(get_ts) else manager._get_current_timestamp()
+            )
             get_start = getattr(manager, "get_period_start", None)
-            period_start = get_start() if callable(get_start) else manager._get_period_start()
+            period_start = (
+                get_start() if callable(get_start) else manager._get_period_start()
+            )
             get_end = getattr(manager, "get_period_end", None)
             period_end = get_end() if callable(get_end) else manager._get_period_end()
 
@@ -581,25 +664,45 @@ class ReportGenerator:
             logger.info("Starting compliance report generation")
 
             # Execute strategies in dependency order
-            report["control_compliance"] = self.strategies["control_compliance"].execute(manager)
-            report["criteria_scores"] = self.strategies["criteria_scores"].execute(manager)
+            report["control_compliance"] = self.strategies[
+                "control_compliance"
+            ].execute(manager)
+            report["criteria_scores"] = self.strategies["criteria_scores"].execute(
+                manager
+            )
 
             # Pass criteria scores as context to overall compliance calculation
             overall_context = {"criteria_scores": report["criteria_scores"]}
-            report["overall_compliance_score"] = self.strategies["overall_compliance"].execute(manager, overall_context)
+            report["overall_compliance_score"] = self.strategies[
+                "overall_compliance"
+            ].execute(manager, overall_context)
 
-            report["control_status"] = self.strategies["control_status"].execute(manager)
-            report["evidence_summary"] = self.strategies["evidence_summary"].execute(manager)
-            report["availability_summary"] = self.strategies["availability_summary"].execute(manager)
-            report["processing_integrity_summary"] = self.strategies["processing_integrity_summary"].execute(manager)
-            report["confidentiality_incidents"] = self.strategies["confidentiality_incidents"].execute(manager)
+            report["control_status"] = self.strategies["control_status"].execute(
+                manager
+            )
+            report["evidence_summary"] = self.strategies["evidence_summary"].execute(
+                manager
+            )
+            report["availability_summary"] = self.strategies[
+                "availability_summary"
+            ].execute(manager)
+            report["processing_integrity_summary"] = self.strategies[
+                "processing_integrity_summary"
+            ].execute(manager)
+            report["confidentiality_incidents"] = self.strategies[
+                "confidentiality_incidents"
+            ].execute(manager)
 
             # Pass complete report as context for recommendations
             recommendations_context = {"report": report}
-            report["recommendations"] = self.strategies["recommendations"].execute(manager, recommendations_context)
+            report["recommendations"] = self.strategies["recommendations"].execute(
+                manager, recommendations_context
+            )
 
-            logger.info(f"Compliance report generated successfully with overall score: "
-                       f"{report['overall_compliance_score']:.3f}")
+            logger.info(
+                f"Compliance report generated successfully with overall score: "
+                f"{report['overall_compliance_score']:.3f}"
+            )
 
             return report
 
@@ -607,4 +710,6 @@ class ReportGenerator:
             raise
         except Exception as e:
             logger.error(f"Error generating compliance report: {e}")
-            raise ComplianceCalculationError(f"Failed to generate compliance report: {e}")
+            raise ComplianceCalculationError(
+                f"Failed to generate compliance report: {e}"
+            )

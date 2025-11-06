@@ -2,15 +2,15 @@ from __future__ import annotations
 
 import time
 from datetime import datetime
-from typing import Dict, List, Optional
+from typing import Optional
 
 from resync.core.health_models import (
     ComponentHealth,
     ComponentType,
     HealthCheckResult,
     HealthStatus,
+    SystemHealthStatus,
 )
-from resync.core.health_models import SystemHealthStatus
 
 
 class HealthCheckService:
@@ -23,10 +23,10 @@ class HealthCheckService:
 
     def __init__(self):
         """Initialize the health check service."""
-        self._component_cache: Dict[str, ComponentHealth] = {}
+        self._component_cache: dict[str, ComponentHealth] = {}
         self._last_system_check: Optional[datetime] = None
 
-    async def run_all_checks(self) -> List[HealthCheckResult]:
+    async def run_all_checks(self) -> list[HealthCheckResult]:
         """
         Run health checks on all system components.
 

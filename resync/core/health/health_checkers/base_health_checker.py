@@ -9,7 +9,7 @@ from __future__ import annotations
 import time
 from abc import ABC, abstractmethod
 from datetime import datetime
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 
 import structlog
 
@@ -115,7 +115,7 @@ class BaseHealthChecker(ABC):
         # Default to UNKNOWN for most exceptions
         return ComponentType.UNKNOWN
 
-    def get_component_config(self) -> Dict[str, Any]:
+    def get_component_config(self) -> dict[str, Any]:
         """
         Get configuration specific to this component.
 

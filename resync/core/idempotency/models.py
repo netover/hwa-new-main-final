@@ -65,7 +65,7 @@ class RequestContext:
             "method": self.method,
             "url": self.url,
             "headers": dict(sorted(self.headers.items())),
-            "body": self.body.decode('utf-8') if self.body else None
+            "body": self.body.decode("utf-8") if self.body else None,
         }
 
         # Gerar hash

@@ -14,12 +14,12 @@ import socket
 from contextlib import suppress
 from typing import Optional
 
-from resync.core.container import app_container  # noqa: C0415
 from resync.core.idempotency.manager import IdempotencyManager  # noqa: C0415
 from resync.settings import settings
 
 try:  # pragma: no cover
     import redis.asyncio as redis  # type: ignore
+
     # Import correct Redis exceptions
     from redis.exceptions import (
         RedisError,
@@ -36,14 +36,18 @@ except ImportError:  # redis opcional
 
 logger = logging.getLogger(__name__)
 
+
 class RedisInitError(RuntimeError):
     """Erro de inicialização do Redis."""
 
+
 _REDIS_CLIENT: Optional["redis.Redis"] = None  # type: ignore
+
 
 def is_redis_available() -> bool:
     """Check if Redis library is available."""
     return redis is not None
+
 
 def get_redis_client() -> "redis.Redis":  # type: ignore
     """
@@ -130,7 +134,9 @@ class RedisInitializer:
                     if not acquired:
                         logger.info(
                             "Another instance is initializing Redis, waiting... "
-                            "(attempt %s/%s)", attempt + 1, max_retries
+                            "(attempt %s/%s)",
+                            attempt + 1,
+                            max_retries,
                         )
                         await asyncio.sleep(2)
                         continue
@@ -179,7 +185,9 @@ class RedisInitializer:
                     finally:
                         # Unlock seguro (só remove se ainda for nosso lock)
                         with suppress(RedisError, ConnectionError):
-                            await redis_client.eval(self.UNLOCK_SCRIPT, 1, lock_key, lock_val)
+                            await redis_client.eval(
+                                self.UNLOCK_SCRIPT, 1, lock_key, lock_val
+                            )
 
                 except AuthenticationError as e:
                     msg = f"Redis authentication failed: {e}"
@@ -221,7 +229,11 @@ class RedisInitializer:
         )
 
     async def _initialize_idempotency(self, redis_client: "redis.Redis") -> None:  # type: ignore
-        app_container.register_instance(IdempotencyManager, IdempotencyManager(redis_client))
+        from resync.core.container import app_container
+
+        app_container.register_instance(
+            IdempotencyManager, IdempotencyManager(redis_client)
+        )
 
     async def _health_check_loop(self, interval: int) -> None:
         while self._initialized:
@@ -230,11 +242,15 @@ class RedisInitializer:
                 if self._client:
                     await asyncio.wait_for(self._client.ping(), timeout=2.0)
             except (RedisError, asyncio.TimeoutError):
-                logger.error("Redis health check failed - connection may be lost", exc_info=True)
+                logger.error(
+                    "Redis health check failed - connection may be lost", exc_info=True
+                )
                 self._initialized = False
                 break
             except (OSError, ValueError) as e:
-                logger.error("Unexpected error in Redis health check: %s", e, exc_info=True)
+                logger.error(
+                    "Unexpected error in Redis health check: %s", e, exc_info=True
+                )
 
     async def close(self) -> None:
         """Close the Redis initializer and cleanup resources."""

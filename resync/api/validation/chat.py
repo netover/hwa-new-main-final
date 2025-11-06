@@ -4,8 +4,8 @@ from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional
 
-from pydantic import field_validator, StringConstraints, Field, validator, ConfigDict
-from pydantic.types import constr
+from pydantic import ConfigDict, Field, StringConstraints, field_validator, validator
+from typing_extensions import Annotated
 
 from .common import (
     BaseValidatedModel,
@@ -13,7 +13,6 @@ from .common import (
     StringConstraints,
     ValidationPatterns,
 )
-from typing_extensions import Annotated
 
 
 class MessageType(str, Enum):
@@ -41,12 +40,17 @@ class MessageStatus(str, Enum):
 class ChatMessage(BaseValidatedModel):
     """Chat message validation model."""
 
-    content: Annotated[str, StringConstraints(
-        min_length=NumericConstraints.MIN_MESSAGE_LENGTH,
-        max_length=NumericConstraints.MAX_MESSAGE_LENGTH,
-        strip_whitespace=True,
-    )] = Field(
-        ..., description="Message content", examples=["Hello, how can I help you today?"]
+    content: Annotated[
+        str,
+        StringConstraints(
+            min_length=NumericConstraints.MIN_MESSAGE_LENGTH,
+            max_length=NumericConstraints.MAX_MESSAGE_LENGTH,
+            strip_whitespace=True,
+        ),
+    ] = Field(
+        ...,
+        description="Message content",
+        examples=["Hello, how can I help you today?"],
     )
 
     message_type: MessageType = Field(
@@ -58,7 +62,9 @@ class ChatMessage(BaseValidatedModel):
     )
 
     recipient: Optional[StringConstraints.SAFE_TEXT] = Field(
-        None, description="Message recipient identifier", examples=["agent_tws_specialist"]
+        None,
+        description="Message recipient identifier",
+        examples=["agent_tws_specialist"],
     )
 
     session_id: Optional[StringConstraints.AGENT_ID] = Field(
@@ -153,11 +159,14 @@ class WebSocketMessage(BaseValidatedModel):
     sender: StringConstraints.SAFE_TEXT = Field(..., description="Message sender")
 
     message: Optional[
-        Annotated[str, StringConstraints(
-            min_length=1,
-            max_length=NumericConstraints.MAX_MESSAGE_LENGTH,
-            strip_whitespace=True,
-        )]
+        Annotated[
+            str,
+            StringConstraints(
+                min_length=1,
+                max_length=NumericConstraints.MAX_MESSAGE_LENGTH,
+                strip_whitespace=True,
+            ),
+        ]
     ] = Field(None, description="Message content")
 
     agent_id: StringConstraints.AGENT_ID = Field(..., description="Target agent ID")
@@ -290,7 +299,9 @@ class ChatHistoryRequest(BaseValidatedModel):
     )
 
     search_query: Optional[
-        Annotated[str, StringConstraints(min_length=1, max_length=100, strip_whitespace=True)]
+        Annotated[
+            str, StringConstraints(min_length=1, max_length=100, strip_whitespace=True)
+        ]
     ] = Field(None, description="Search query for message content")
 
     limit: int = Field(
@@ -337,9 +348,9 @@ class MessageReaction(BaseValidatedModel):
 
     message_id: str = Field(..., description="ID of the message being reacted to")
 
-    reaction: Annotated[str, StringConstraints(min_length=1, max_length=10, strip_whitespace=True)] = Field(
-        ..., description="Reaction emoji or text"
-    )
+    reaction: Annotated[
+        str, StringConstraints(min_length=1, max_length=10, strip_whitespace=True)
+    ] = Field(..., description="Reaction emoji or text")
 
     user_id: StringConstraints.SAFE_TEXT = Field(
         ..., description="User ID who added the reaction"

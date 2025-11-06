@@ -21,7 +21,7 @@ logger = get_logger(__name__)
 class IdempotencyManager:
     """
     Gerenciador de chaves de idempotência refatorado
-    
+
     Responsável por armazenar e recuperar respostas de operações
     idempotentes, garantindo que operações críticas não sejam
     executadas múltiplas vezes.
@@ -57,10 +57,10 @@ class IdempotencyManager:
         try:
             # Validar chave
             IdempotencyKeyValidator.validate(idempotency_key)
-            
+
             key = self._make_key(idempotency_key)
             cached_record = await self.storage.get(key)
-            
+
             if not cached_record:
                 self.metrics.cache_misses += 1
                 return None
@@ -151,7 +151,7 @@ class IdempotencyManager:
         try:
             # Validar chave
             IdempotencyKeyValidator.validate(idempotency_key)
-            
+
             # Verificar tamanho da resposta
             response_size = len(str(response_data).encode("utf-8"))
             max_size_bytes = config.max_response_size_kb * 1024
@@ -282,15 +282,19 @@ class IdempotencyManager:
                 "started_at": self._now().isoformat(),
                 "ttl_seconds": ttl_seconds,
             }
-            success = await self.storage.set(processing_key, IdempotencyRecord(
-                idempotency_key=idempotency_key,
-                request_hash="",
-                response_data=data,
-                status_code=200,
-                created_at=self._now(),
-                expires_at=self._now() + timedelta(seconds=ttl_seconds),
-            ), ttl_seconds)
-            
+            success = await self.storage.set(
+                processing_key,
+                IdempotencyRecord(
+                    idempotency_key=idempotency_key,
+                    request_hash="",
+                    response_data=data,
+                    status_code=200,
+                    created_at=self._now(),
+                    expires_at=self._now() + timedelta(seconds=ttl_seconds),
+                ),
+                ttl_seconds,
+            )
+
             if success:
                 logger.debug(
                     "Operation marked as processing",
@@ -460,13 +464,16 @@ class IdempotencyManager:
         """
         # Normalizar dados para hash consistente
         import json
+
         normalized = json.dumps(request_data, sort_keys=True)
         import hashlib
+
         return hashlib.sha256(normalized.encode("utf-8")).hexdigest()
 
     def _now(self) -> datetime:
         """Obtém data/hora atual"""
         from datetime import datetime
+
         return datetime.utcnow()
 
     def _is_expired(self, record: IdempotencyRecord) -> bool:

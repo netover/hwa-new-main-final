@@ -5,11 +5,10 @@ from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional
 
-from pydantic import field_validator, StringConstraints, Field, ConfigDict
-from pydantic.types import constr
+from pydantic import ConfigDict, Field, StringConstraints, field_validator
+from typing_extensions import Annotated
 
 from .common import BaseValidatedModel, ValidationPatterns
-from typing_extensions import Annotated
 
 
 class MetricType(str, Enum):
@@ -106,9 +105,9 @@ class SystemMetricRequest(BaseValidatedModel):
 class CustomMetricRequest(BaseValidatedModel):
     """Custom metric submission request validation."""
 
-    metric_name: Annotated[str, StringConstraints(min_length=1, max_length=100, strip_whitespace=True)] = Field(
-        ..., description="Custom metric name"
-    )
+    metric_name: Annotated[
+        str, StringConstraints(min_length=1, max_length=100, strip_whitespace=True)
+    ] = Field(..., description="Custom metric name")
 
     metric_value: float = Field(..., description="Metric value")
 
@@ -129,7 +128,9 @@ class CustomMetricRequest(BaseValidatedModel):
     )
 
     description: Optional[
-        Annotated[str, StringConstraints(min_length=1, max_length=500, strip_whitespace=True)]
+        Annotated[
+            str, StringConstraints(min_length=1, max_length=500, strip_whitespace=True)
+        ]
     ] = Field(None, description="Metric description")
 
     model_config = ConfigDict(
@@ -201,18 +202,20 @@ class CustomMetricRequest(BaseValidatedModel):
 class AlertRequest(BaseValidatedModel):
     """Alert creation/update request validation."""
 
-    alert_name: Annotated[str, StringConstraints(min_length=1, max_length=100, strip_whitespace=True)] = Field(
-        ..., description="Alert name"
-    )
+    alert_name: Annotated[
+        str, StringConstraints(min_length=1, max_length=100, strip_whitespace=True)
+    ] = Field(..., description="Alert name")
 
     severity: AlertSeverity = Field(..., description="Alert severity level")
 
-    description: Annotated[str, StringConstraints(min_length=1, max_length=1000, strip_whitespace=True)] = Field(
-        ..., description="Detailed alert description"
-    )
+    description: Annotated[
+        str, StringConstraints(min_length=1, max_length=1000, strip_whitespace=True)
+    ] = Field(..., description="Detailed alert description")
 
     metric_name: Optional[
-        Annotated[str, StringConstraints(min_length=1, max_length=100, strip_whitespace=True)]
+        Annotated[
+            str, StringConstraints(min_length=1, max_length=100, strip_whitespace=True)
+        ]
     ] = Field(None, description="Related metric name")
 
     threshold_value: Optional[float] = Field(
@@ -312,11 +315,15 @@ class AlertQueryParams(BaseValidatedModel):
     )
 
     alert_name: Optional[
-        Annotated[str, StringConstraints(min_length=1, max_length=100, strip_whitespace=True)]
+        Annotated[
+            str, StringConstraints(min_length=1, max_length=100, strip_whitespace=True)
+        ]
     ] = Field(None, description="Filter by alert name (partial match)")
 
     metric_name: Optional[
-        Annotated[str, StringConstraints(min_length=1, max_length=100, strip_whitespace=True)]
+        Annotated[
+            str, StringConstraints(min_length=1, max_length=100, strip_whitespace=True)
+        ]
     ] = Field(None, description="Filter by metric name")
 
     time_range: str = Field(
@@ -356,9 +363,11 @@ class AlertQueryParams(BaseValidatedModel):
 class HealthCheckRequest(BaseValidatedModel):
     """Health check request validation."""
 
-    component: Optional[Annotated[str, StringConstraints(min_length=1, max_length=100, strip_whitespace=True)]] = (
-        Field(None, description="Specific component to check")
-    )
+    component: Optional[
+        Annotated[
+            str, StringConstraints(min_length=1, max_length=100, strip_whitespace=True)
+        ]
+    ] = Field(None, description="Specific component to check")
 
     depth: str = Field(
         default="basic",
@@ -398,13 +407,17 @@ class LogQueryParams(BaseValidatedModel):
         None, description="Filter by log levels", max_length=5
     )
 
-    component: Optional[Annotated[str, StringConstraints(min_length=1, max_length=100, strip_whitespace=True)]] = (
-        Field(None, description="Filter by component")
-    )
+    component: Optional[
+        Annotated[
+            str, StringConstraints(min_length=1, max_length=100, strip_whitespace=True)
+        ]
+    ] = Field(None, description="Filter by component")
 
-    search: Optional[Annotated[str, StringConstraints(min_length=1, max_length=200, strip_whitespace=True)]] = (
-        Field(None, description="Search in log messages")
-    )
+    search: Optional[
+        Annotated[
+            str, StringConstraints(min_length=1, max_length=200, strip_whitespace=True)
+        ]
+    ] = Field(None, description="Search in log messages")
 
     time_range: str = Field(
         default="1h", pattern=r"^(1h|6h|24h|7d|30d)$", description="Time range for logs"
@@ -453,9 +466,9 @@ class PerformanceTestRequest(BaseValidatedModel):
         description="Type of performance test",
     )
 
-    target_endpoint: Annotated[str, StringConstraints(min_length=1, max_length=200, strip_whitespace=True)] = (
-        Field(..., description="Target endpoint to test")
-    )
+    target_endpoint: Annotated[
+        str, StringConstraints(min_length=1, max_length=200, strip_whitespace=True)
+    ] = Field(..., description="Target endpoint to test")
 
     concurrent_users: int = Field(
         ..., ge=1, le=1000, description="Number of concurrent users"

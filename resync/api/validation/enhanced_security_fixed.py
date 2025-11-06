@@ -194,7 +194,7 @@ class RateLimitInfo(BaseModel):
     window_seconds: int = Field(..., description="Window duration in seconds")
 
 
-class InputValidationResult(BaseModel):  
+class InputValidationResult(BaseModel):
     """Result of input validation."""
 
     is_valid: bool = Field(..., description="Whether input is valid")
@@ -217,7 +217,7 @@ class SecurityValidator(ABC):
 class AsyncSecurityContextManager:
     """Async context manager for security operations."""
 
-    def __init__(self, context: SecurityContext):  
+    def __init__(self, context: SecurityContext):
         self.context = context
         self.start_time: Optional[float] = None
 
@@ -227,7 +227,7 @@ class AsyncSecurityContextManager:
         logger.info("security_context_entered", context=self.context.model_dump())
         return self
 
-    async def __aexit__(self, exc_type, exc_val, exc_tb) -> bool:  
+    async def __aexit__(self, exc_type, exc_val, exc_tb) -> bool:
         """Exit the async context."""
         duration = time.time() - self.start_time if self.start_time else 0
         logger.info(
@@ -241,7 +241,7 @@ class AsyncSecurityContextManager:
 class EnhancedSecurityValidator:
     """Enhanced security validator with comprehensive validation capabilities."""
 
-    def __init__(self, settings_module: Any = None):  
+    def __init__(self, settings_module: Any = None):
         """Initialize the security validator."""
         self.settings = settings_module or settings
         self.failed_attempts: Dict[str, int] = {}
@@ -259,7 +259,7 @@ class EnhancedSecurityValidator:
         async with AsyncSecurityContextManager(context) as manager:
             yield manager.context
 
-    async def validate_password_strength(  
+    async def validate_password_strength(
         self, password: str, security_level: SecurityLevel = SecurityLevel.MEDIUM
     ) -> InputValidationResult:
         """
@@ -279,7 +279,7 @@ class EnhancedSecurityValidator:
 
         # Basic length check
         if len(truncated_password) < 8:
-            return InputValidationResult(  
+            return InputValidationResult(
                 is_valid=False,
                 error_message="Password must be at least 8 characters long",
                 threat_detected=ThreatType.BRUTE_FORCE,
@@ -289,7 +289,7 @@ class EnhancedSecurityValidator:
         # High security level requires stronger passwords
         if security_level == SecurityLevel.HIGH:
             if not SECURE_PASSWORD_PATTERN.match(truncated_password):
-                return InputValidationResult(  
+                return InputValidationResult(
                     is_valid=False,
                     error_message=(
                         "Password must contain at least 12 characters including "
@@ -302,7 +302,7 @@ class EnhancedSecurityValidator:
         # Medium security level
         elif security_level == SecurityLevel.MEDIUM:
             if len(truncated_password) < 10:
-                return InputValidationResult(  
+                return InputValidationResult(
                     is_valid=False,
                     error_message="Password must be at least 10 characters long for medium security",
                     threat_detected=ThreatType.BRUTE_FORCE,
@@ -318,7 +318,7 @@ class EnhancedSecurityValidator:
             )
 
             if not (has_upper and has_lower and has_digit and has_special):
-                return InputValidationResult(  
+                return InputValidationResult(
                     is_valid=False,
                     error_message=(
                         "Password must contain uppercase, lowercase, digit, "
@@ -343,7 +343,7 @@ class EnhancedSecurityValidator:
         }
 
         if truncated_password.lower() in weak_passwords:
-            return InputValidationResult(  
+            return InputValidationResult(
                 is_valid=False,
                 error_message="Password is too common, please choose a stronger password",
                 threat_detected=ThreatType.BRUTE_FORCE,
@@ -352,7 +352,7 @@ class EnhancedSecurityValidator:
 
         # Sanitize and return result
         sanitized = sanitize_input(truncated_password, SanitizationLevel.STRICT)
-        return InputValidationResult(  
+        return InputValidationResult(
             is_valid=True, sanitized_value=sanitized, security_context=context
         )
 
@@ -377,7 +377,7 @@ class EnhancedSecurityValidator:
 
             validated_email = validate_email(email)[1]  # Returns (name, email)
         except Exception:
-            return InputValidationResult(  
+            return InputValidationResult(
                 is_valid=False,
                 error_message="Invalid email format",
                 security_context=context,
@@ -385,7 +385,7 @@ class EnhancedSecurityValidator:
 
         # Check for suspicious patterns
         if self._detect_threats(validated_email):
-            return InputValidationResult(  
+            return InputValidationResult(
                 is_valid=False,
                 error_message="Email contains suspicious content",
                 threat_detected=ThreatType.XSS,
@@ -396,7 +396,7 @@ class EnhancedSecurityValidator:
         if security_level == SecurityLevel.HIGH:
             domain = validated_email.split("@")[1]
             if not DOMAIN_PATTERN.match(domain):
-                return InputValidationResult(  
+                return InputValidationResult(
                     is_valid=False,
                     error_message="Email domain is not valid",
                     security_context=context,
@@ -404,11 +404,11 @@ class EnhancedSecurityValidator:
 
         # Sanitize and return result
         sanitized = sanitize_input(validated_email, SanitizationLevel.MODERATE)
-        return InputValidationResult(  
+        return InputValidationResult(
             is_valid=True, sanitized_value=sanitized, security_context=context
         )
 
-    async def validate_csrf_token(  
+    async def validate_csrf_token(
         self,
         token: str,
         expected_token: str,
@@ -441,7 +441,7 @@ class EnhancedSecurityValidator:
             expected_parts = expected_token.split(":")
 
             if len(token_parts) != 3 or len(expected_parts) != 3:
-                return InputValidationResult(  
+                return InputValidationResult(
                     is_valid=False,
                     error_message="Invalid CSRF token binding format",
                     threat_detected=ThreatType.CSRF,
@@ -453,7 +453,7 @@ class EnhancedSecurityValidator:
             expected_user, expected_session, expected_actual_token = expected_parts
 
             if user_id and token_user != user_id:
-                return InputValidationResult(  
+                return InputValidationResult(
                     is_valid=False,
                     error_message="CSRF token user binding mismatch",
                     threat_detected=ThreatType.CSRF,
@@ -461,7 +461,7 @@ class EnhancedSecurityValidator:
                 )
 
             if session_id and token_session != session_id:
-                return InputValidationResult(  
+                return InputValidationResult(
                     is_valid=False,
                     error_message="CSRF token session binding mismatch",
                     threat_detected=ThreatType.CSRF,
@@ -471,23 +471,21 @@ class EnhancedSecurityValidator:
         # Secure comparison to prevent timing attacks
         try:
             if not hmac.compare_digest(actual_token, expected_actual_token):
-                return InputValidationResult(  
+                return InputValidationResult(
                     is_valid=False,
                     error_message="Invalid CSRF token",
                     threat_detected=ThreatType.CSRF,
                     security_context=context,
                 )
         except Exception:
-            return InputValidationResult(  
+            return InputValidationResult(
                 is_valid=False,
                 error_message="CSRF token validation failed",
                 threat_detected=ThreatType.CSRF,
                 security_context=context,
             )
 
-        return InputValidationResult(  
-            is_valid=True, security_context=context
-        )
+        return InputValidationResult(is_valid=True, security_context=context)
 
     async def validate_jwt_token(
         self, token: str, secret_key: str, algorithms: List[str] = None
@@ -533,7 +531,7 @@ class EnhancedSecurityValidator:
         except Exception as e:
             return False, None, f"Unexpected error: {str(e)}"
 
-    async def validate_ip_address(  
+    async def validate_ip_address(
         self, ip: str, trusted_ranges: List[str] = None
     ) -> InputValidationResult:
         """
@@ -554,7 +552,7 @@ class EnhancedSecurityValidator:
         try:
             ip_obj = ipaddress.ip_address(ip)
         except ValueError:
-            return InputValidationResult(  
+            return InputValidationResult(
                 is_valid=False,
                 error_message="Invalid IP address format",
                 security_context=context,
@@ -572,11 +570,11 @@ class EnhancedSecurityValidator:
                 continue
 
         context.metadata["is_trusted"] = is_trusted
-        return InputValidationResult(  
+        return InputValidationResult(
             is_valid=True, sanitized_value=str(ip_obj), security_context=context
         )
 
-    async def validate_input_security(  
+    async def validate_input_security(
         self,
         input_data: str,
         security_level: SecurityLevel = SecurityLevel.MEDIUM,
@@ -597,7 +595,7 @@ class EnhancedSecurityValidator:
 
         # Null byte check
         if "\x00" in input_data:
-            return InputValidationResult(  
+            return InputValidationResult(
                 is_valid=False,
                 error_message="Null bytes not allowed in input",
                 threat_detected=ThreatType.SQL_INJECTION,
@@ -614,7 +612,7 @@ class EnhancedSecurityValidator:
 
         max_length = max_lengths.get(security_level, 500)
         if len(input_data) > max_length:
-            return InputValidationResult(  
+            return InputValidationResult(
                 is_valid=False,
                 error_message=f"Input exceeds maximum length of {max_length} characters",
                 security_context=context,
@@ -623,7 +621,7 @@ class EnhancedSecurityValidator:
         # Detect threats
         threat_type = self._detect_threats(input_data)
         if threat_type:
-            return InputValidationResult(  
+            return InputValidationResult(
                 is_valid=False,
                 error_message="Suspicious content detected",
                 threat_detected=threat_type,
@@ -641,7 +639,7 @@ class EnhancedSecurityValidator:
         level = sanitization_levels.get(security_level, SanitizationLevel.MODERATE)
         sanitized = sanitize_input(input_data, level)
 
-        return InputValidationResult(  
+        return InputValidationResult(
             is_valid=True, sanitized_value=sanitized, security_context=context
         )
 
@@ -791,7 +789,7 @@ class EnhancedSecurityValidator:
         """
         return str(uuid.uuid4())
 
-    async def hash_password(self, password: str) -> str:  
+    async def hash_password(self, password: str) -> str:
         """
         Hash a password securely using passlib (bcrypt).
 
@@ -833,7 +831,7 @@ class EnhancedSecurityValidator:
                 "Secure password hashing library required but not available"
             )
 
-    async def verify_password(self, plain_password: str, hashed_password: str) -> bool:  
+    async def verify_password(self, plain_password: str, hashed_password: str) -> bool:
         """
         Verify a password against its secure hash using passlib (bcrypt).
 
@@ -939,10 +937,10 @@ async def validate_input(
 class SecurityHeadersMiddleware:
     """Middleware to add security headers to all responses."""
 
-    def __init__(self, app):  
+    def __init__(self, app):
         self.app = app
 
-    async def __call__(self, scope, receive, send):  
+    async def __call__(self, scope, receive, send):
         async def send_with_security_headers(message):
             if message["type"] == "http.response.start":
                 # Add security headers

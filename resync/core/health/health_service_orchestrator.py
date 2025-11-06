@@ -10,7 +10,7 @@ from __future__ import annotations
 import asyncio
 import time
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 import structlog
 
@@ -45,7 +45,7 @@ class HealthServiceOrchestrator:
         """
         self.config = config or HealthCheckConfig()
         self.last_health_check: Optional[datetime] = None
-        self._component_results: Dict[str, ComponentHealth] = {}
+        self._component_results: dict[str, ComponentHealth] = {}
         self._lock = asyncio.Lock()
 
     async def perform_comprehensive_health_check(
@@ -178,7 +178,7 @@ class HealthServiceOrchestrator:
 
         return result
 
-    async def _get_health_checks_dict(self) -> Dict[str, Any]:
+    async def _get_health_checks_dict(self) -> dict[str, Any]:
         """Get dictionary of all health check coroutines."""
         return {
             "database": self._check_database_health(),
@@ -335,7 +335,8 @@ class HealthServiceOrchestrator:
 
             # Test actual Redis connectivity
             import redis.asyncio as redis_async
-            from redis.exceptions import RedisError, TimeoutError as RedisTimeoutError
+            from redis.exceptions import RedisError
+            from redis.exceptions import TimeoutError as RedisTimeoutError
 
             try:
                 redis_client = redis_async.from_url(settings.REDIS_URL)
@@ -733,9 +734,9 @@ class HealthServiceOrchestrator:
                 enhanced_metadata["connection_usage_percent"] = round(
                     connection_usage_percent, 1
                 )
-                enhanced_metadata["threshold_percent"] = (
-                    self.config.database_connection_threshold_percent
-                )
+                enhanced_metadata[
+                    "threshold_percent"
+                ] = self.config.database_connection_threshold_percent
 
             return ComponentHealth(
                 name="connection_pools",
@@ -803,7 +804,7 @@ class HealthServiceOrchestrator:
         return mapping.get(name, ComponentType.OTHER)
 
     def _calculate_overall_status(
-        self, components: Dict[str, ComponentHealth]
+        self, components: dict[str, ComponentHealth]
     ) -> HealthStatus:
         """Calculate overall health status from component results."""
         # Simple aggregation: worst status wins
@@ -820,8 +821,8 @@ class HealthServiceOrchestrator:
         return worst
 
     def _generate_summary(
-        self, components: Dict[str, ComponentHealth]
-    ) -> Dict[str, int]:
+        self, components: dict[str, ComponentHealth]
+    ) -> dict[str, int]:
         """Generate summary of health status counts."""
         summary = {
             "healthy": 0,
@@ -840,7 +841,7 @@ class HealthServiceOrchestrator:
                 summary["unknown"] += 1
         return summary
 
-    def _check_alerts(self, components: Dict[str, ComponentHealth]) -> List[str]:
+    def _check_alerts(self, components: dict[str, ComponentHealth]) -> list[str]:
         """Check for alerts based on component health status."""
         alerts = []
         for name, comp in components.items():
@@ -868,7 +869,7 @@ class HealthServiceOrchestrator:
         async with self._lock:
             return self._component_results.get(component_name)
 
-    async def get_all_component_health(self) -> Dict[str, ComponentHealth]:
+    async def get_all_component_health(self) -> dict[str, ComponentHealth]:
         """Get all current component health results."""
         async with self._lock:
             return self._component_results.copy()

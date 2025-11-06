@@ -5,8 +5,8 @@ from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional
 
-from pydantic import field_validator, StringConstraints, Field, validator, ConfigDict
-from pydantic.types import constr
+from pydantic import ConfigDict, Field, StringConstraints, field_validator, validator
+from typing_extensions import Annotated
 
 from .common import (
     BaseValidatedModel,
@@ -14,7 +14,6 @@ from .common import (
     StringConstraints,
     ValidationPatterns,
 )
-from typing_extensions import Annotated
 
 
 class SortOrder(str, Enum):
@@ -85,9 +84,9 @@ class PaginationParams(BaseValidatedModel):
 class SearchParams(BaseValidatedModel):
     """Search query parameters."""
 
-    query: Annotated[str, StringConstraints(min_length=1, max_length=200, strip_whitespace=True)] = Field(
-        ..., description="Search query string"
-    )
+    query: Annotated[
+        str, StringConstraints(min_length=1, max_length=200, strip_whitespace=True)
+    ] = Field(..., description="Search query string")
 
     search_fields: Optional[List[str]] = Field(
         None, description="Specific fields to search in", max_length=10
@@ -279,9 +278,9 @@ class AgentQueryParams(BaseValidatedModel):
         None, description="Filter by agent ID"
     )
 
-    name: Optional[Annotated[str, StringConstraints(min_length=1, max_length=100)]] = Field(
-        None, description="Filter by agent name (partial match)"
-    )
+    name: Optional[
+        Annotated[str, StringConstraints(min_length=1, max_length=100)]
+    ] = Field(None, description="Filter by agent name (partial match)")
 
     type: Optional[str] = Field(None, description="Filter by agent type")
 
@@ -299,9 +298,9 @@ class AgentQueryParams(BaseValidatedModel):
 
     include_inactive: bool = Field(default=False, description="Include inactive agents")
 
-    tags: Optional[List[Annotated[str, StringConstraints(min_length=1, max_length=50)]]] = Field(
-        None, description="Filter by tags", max_length=5
-    )
+    tags: Optional[
+        List[Annotated[str, StringConstraints(min_length=1, max_length=50)]]
+    ] = Field(None, description="Filter by tags", max_length=5)
 
     model_config = ConfigDict(
         extra="forbid",
@@ -379,9 +378,11 @@ class AuditQueryParams(BaseValidatedModel):
         description="Audit status filter",
     )
 
-    query: Optional[Annotated[str, StringConstraints(min_length=1, max_length=200, strip_whitespace=True)]] = (
-        Field(None, description="Search query")
-    )
+    query: Optional[
+        Annotated[
+            str, StringConstraints(min_length=1, max_length=200, strip_whitespace=True)
+        ]
+    ] = Field(None, description="Search query")
 
     user_id: Optional[StringConstraints.SAFE_TEXT] = Field(
         None, description="Filter by user ID"

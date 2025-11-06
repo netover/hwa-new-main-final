@@ -3,7 +3,7 @@ from __future__ import annotations
 import time
 from dataclasses import dataclass
 from datetime import datetime
-from typing import List, Optional
+from typing import Optional
 
 from resync.core.health_models import ComponentHealth, ComponentType, HealthStatus
 from resync.core.structured_logger import get_logger
@@ -60,7 +60,7 @@ class ReplicationStatus:
 
     # Replication nodes
     master_node: Optional[str] = None
-    replica_nodes: List[str] = None
+    replica_nodes: list[str] = None
 
     # Replication metrics
     replication_throughput_bytes_per_sec: float = 0.0
@@ -100,7 +100,7 @@ class DatabaseHealthMonitor:
         """
         self.connection_pool_manager = connection_pool_manager
         self._monitoring_active = False
-        self._metrics_history: List[PerformanceMetrics] = []
+        self._metrics_history: list[PerformanceMetrics] = []
         self._max_history_size = 100
 
     async def check_connection_health(self) -> ComponentHealth:
@@ -342,7 +342,7 @@ class DatabaseHealthMonitor:
 
     def get_metrics_history(
         self, limit: Optional[int] = None
-    ) -> List[PerformanceMetrics]:
+    ) -> list[PerformanceMetrics]:
         """
         Get historical performance metrics.
 

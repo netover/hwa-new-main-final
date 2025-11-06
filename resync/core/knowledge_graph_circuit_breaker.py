@@ -18,7 +18,7 @@ logger = get_logger(__name__)
 # Circuit breaker for Neo4j operations
 neo4j_circuit_breaker = CircuitBreaker(
     failure_threshold=5,  # Open after 5 failures
-    recovery_timeout=120  # Try to recover after 2 minutes
+    recovery_timeout=120,  # Try to recover after 2 minutes
 )
 
 
@@ -45,7 +45,9 @@ class CircuitBreakerAsyncKnowledgeGraph:
     async def add_content(self, content: str, metadata: dict[str, Any]) -> str:
         """Adds a piece of content with circuit breaker protection."""
         try:
-            return await neo4j_circuit_breaker.call(self._kg.add_content, content, metadata)
+            return await neo4j_circuit_breaker.call(
+                self._kg.add_content, content, metadata
+            )
         except RuntimeError as e:
             if "Circuit breaker is open" in str(e):
                 logger.warning("neo4j_circuit_breaker_open", operation="add_content")
@@ -57,10 +59,14 @@ class CircuitBreakerAsyncKnowledgeGraph:
     async def get_relevant_context(self, user_query: str, top_k: int = 10) -> str:
         """Retrieves relevant context with circuit breaker protection."""
         try:
-            return await neo4j_circuit_breaker.call(self._kg.get_relevant_context, user_query, top_k)
+            return await neo4j_circuit_breaker.call(
+                self._kg.get_relevant_context, user_query, top_k
+            )
         except RuntimeError as e:
             if "Circuit breaker is open" in str(e):
-                logger.warning("neo4j_circuit_breaker_open", operation="get_relevant_context")
+                logger.warning(
+                    "neo4j_circuit_breaker_open", operation="get_relevant_context"
+                )
                 # Return empty context instead of failing
                 logger.info("returning_empty_context_due_to_circuit_breaker")
                 return ""
@@ -80,7 +86,9 @@ class CircuitBreakerAsyncKnowledgeGraph:
             )
         except RuntimeError as e:
             if "Circuit breaker is open" in str(e):
-                logger.warning("neo4j_circuit_breaker_open", operation="add_conversation")
+                logger.warning(
+                    "neo4j_circuit_breaker_open", operation="add_conversation"
+                )
                 raise KnowledgeGraphError(
                     "Neo4j service is temporarily unavailable due to circuit breaker protection."
                 ) from e
@@ -91,22 +99,33 @@ class CircuitBreakerAsyncKnowledgeGraph:
     ) -> list[dict[str, Any]]:
         """Searches similar issues with circuit breaker protection."""
         try:
-            return await neo4j_circuit_breaker.call(self._kg.search_similar_issues, query, limit)
+            return await neo4j_circuit_breaker.call(
+                self._kg.search_similar_issues, query, limit
+            )
         except RuntimeError as e:
             if "Circuit breaker is open" in str(e):
-                logger.warning("neo4j_circuit_breaker_open", operation="search_similar_issues")
+                logger.warning(
+                    "neo4j_circuit_breaker_open", operation="search_similar_issues"
+                )
                 # Return empty list instead of failing
                 logger.info("returning_empty_results_due_to_circuit_breaker")
                 return []
             raise
 
-    async def get_all_recent_conversations(self, limit: int = 50) -> list[dict[str, Any]]:
+    async def get_all_recent_conversations(
+        self, limit: int = 50
+    ) -> list[dict[str, Any]]:
         """Gets recent conversations with circuit breaker protection."""
         try:
-            return await neo4j_circuit_breaker.call(self._kg.get_all_recent_conversations, limit)
+            return await neo4j_circuit_breaker.call(
+                self._kg.get_all_recent_conversations, limit
+            )
         except RuntimeError as e:
             if "Circuit breaker is open" in str(e):
-                logger.warning("neo4j_circuit_breaker_open", operation="get_all_recent_conversations")
+                logger.warning(
+                    "neo4j_circuit_breaker_open",
+                    operation="get_all_recent_conversations",
+                )
                 # Return empty list instead of failing
                 logger.info("returning_empty_results_due_to_circuit_breaker")
                 return []
@@ -130,7 +149,9 @@ class CircuitBreakerAsyncKnowledgeGraph:
             return await neo4j_circuit_breaker.call(self._kg.get_all_memories)
         except RuntimeError as e:
             if "Circuit breaker is open" in str(e):
-                logger.warning("neo4j_circuit_breaker_open", operation="get_all_memories")
+                logger.warning(
+                    "neo4j_circuit_breaker_open", operation="get_all_memories"
+                )
                 # Return empty list instead of failing
                 logger.info("returning_empty_results_due_to_circuit_breaker")
                 return []

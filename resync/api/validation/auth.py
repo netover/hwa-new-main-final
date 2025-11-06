@@ -3,11 +3,17 @@
 from enum import Enum
 from typing import List, Optional
 
-from pydantic import field_validator, StringConstraints, EmailStr, Field, validator, ConfigDict
-from pydantic.types import constr
+from pydantic import (
+    ConfigDict,
+    EmailStr,
+    Field,
+    StringConstraints,
+    field_validator,
+    validator,
+)
+from typing_extensions import Annotated
 
 from .common import BaseValidatedModel
-from typing_extensions import Annotated
 
 
 class AuthProvider(str, Enum):
@@ -47,7 +53,9 @@ class LoginRequest(BaseValidatedModel):
         examples=["john.doe"],
     )
 
-    password: Annotated[str, StringConstraints(min_length=8, max_length=128, strip_whitespace=True)] = Field(
+    password: Annotated[
+        str, StringConstraints(min_length=8, max_length=128, strip_whitespace=True)
+    ] = Field(
         ..., description="Password for authentication", examples=["SecureP@ssw0rd123"]
     )
 
@@ -128,9 +136,11 @@ class TokenRequest(BaseValidatedModel):
         description="Username (required for password grant)",
     )
 
-    password: Optional[Annotated[str, StringConstraints(min_length=8, max_length=128, strip_whitespace=True)]] = (
-        Field(None, description="Password (required for password grant)")
-    )
+    password: Optional[
+        Annotated[
+            str, StringConstraints(min_length=8, max_length=128, strip_whitespace=True)
+        ]
+    ] = Field(None, description="Password (required for password grant)")
 
     refresh_token: Optional[str] = Field(
         None, description="Refresh token (required for refresh_token grant)"
@@ -190,17 +200,17 @@ class TokenRequest(BaseValidatedModel):
 class PasswordChangeRequest(BaseValidatedModel):
     """Password change request validation model."""
 
-    current_password: Annotated[str, StringConstraints(min_length=8, max_length=128, strip_whitespace=True)] = (
-        Field(..., description="Current password")
-    )
+    current_password: Annotated[
+        str, StringConstraints(min_length=8, max_length=128, strip_whitespace=True)
+    ] = Field(..., description="Current password")
 
-    new_password: Annotated[str, StringConstraints(min_length=8, max_length=128, strip_whitespace=True)] = Field(
-        ..., description="New password"
-    )
+    new_password: Annotated[
+        str, StringConstraints(min_length=8, max_length=128, strip_whitespace=True)
+    ] = Field(..., description="New password")
 
-    confirm_password: Annotated[str, StringConstraints(min_length=8, max_length=128, strip_whitespace=True)] = (
-        Field(..., description="Confirm new password")
-    )
+    confirm_password: Annotated[
+        str, StringConstraints(min_length=8, max_length=128, strip_whitespace=True)
+    ] = Field(..., description="Confirm new password")
 
     model_config = ConfigDict(
         extra="forbid",
@@ -245,17 +255,21 @@ class UserRegistrationRequest(BaseValidatedModel):
 
     email: EmailStr = Field(..., description="Email address")
 
-    password: Annotated[str, StringConstraints(min_length=8, max_length=128, strip_whitespace=True)] = Field(
-        ..., description="Password"
-    )
+    password: Annotated[
+        str, StringConstraints(min_length=8, max_length=128, strip_whitespace=True)
+    ] = Field(..., description="Password")
 
-    first_name: Optional[Annotated[str, StringConstraints(min_length=1, max_length=50, strip_whitespace=True)]] = (
-        Field(None, description="First name")
-    )
+    first_name: Optional[
+        Annotated[
+            str, StringConstraints(min_length=1, max_length=50, strip_whitespace=True)
+        ]
+    ] = Field(None, description="First name")
 
-    last_name: Optional[Annotated[str, StringConstraints(min_length=1, max_length=50, strip_whitespace=True)]] = (
-        Field(None, description="Last name")
-    )
+    last_name: Optional[
+        Annotated[
+            str, StringConstraints(min_length=1, max_length=50, strip_whitespace=True)
+        ]
+    ] = Field(None, description="Last name")
 
     role: UserRole = Field(default=UserRole.USER, description="User role")
 
@@ -350,9 +364,9 @@ class UserRegistrationRequest(BaseValidatedModel):
 class TokenRefreshRequest(BaseValidatedModel):
     """Token refresh request validation model."""
 
-    refresh_token: Annotated[str, StringConstraints(min_length=10, max_length=500)] = Field(
-        ..., description="Refresh token"
-    )
+    refresh_token: Annotated[
+        str, StringConstraints(min_length=10, max_length=500)
+    ] = Field(..., description="Refresh token")
 
     client_id: Optional[str] = Field(None, description="Client ID")
 
@@ -382,12 +396,14 @@ class LogoutRequest(BaseValidatedModel):
 class APIKeyRequest(BaseValidatedModel):
     """API key request validation model."""
 
-    name: Annotated[str, StringConstraints(min_length=3, max_length=50, strip_whitespace=True)] = Field(
-        ..., description="API key name"
-    )
+    name: Annotated[
+        str, StringConstraints(min_length=3, max_length=50, strip_whitespace=True)
+    ] = Field(..., description="API key name")
 
     description: Optional[
-        Annotated[str, StringConstraints(min_length=5, max_length=200, strip_whitespace=True)]
+        Annotated[
+            str, StringConstraints(min_length=5, max_length=200, strip_whitespace=True)
+        ]
     ] = Field(None, description="API key description")
 
     scopes: List[str] = Field(

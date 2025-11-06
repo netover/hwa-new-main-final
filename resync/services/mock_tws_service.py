@@ -57,9 +57,7 @@ class MockTWSClient:
         Returns:
             None
         """
-        mock_data_path = (
-            Path(__file__).parent.parent.parent / "mock_tws_data.json"
-        )
+        mock_data_path = Path(__file__).parent.parent.parent / "mock_tws_data.json"
         if not mock_data_path.exists():
             logger.warning(
                 f"Mock data file not found at {mock_data_path}. Returning empty data."
@@ -78,15 +76,11 @@ class MockTWSClient:
             self.mock_data = {}
             # Don't raise here to allow the service to continue with empty data
         except (OSError, IsADirectoryError) as e:
-            logger.error(
-                "Failed to access mock data file at %s: %s", mock_data_path, e
-            )
+            logger.error("Failed to access mock data file at %s: %s", mock_data_path, e)
             self.mock_data = {}
             # Don't raise here to allow the service to continue with empty data
         except FileNotFoundError as e:
-            logger.error(
-                "Mock data file not found at %s: %s", mock_data_path, e
-            )
+            logger.error("Mock data file not found at %s: %s", mock_data_path, e)
             self.mock_data = {}
             # Don't raise here to allow the service to continue with empty data
         except PermissionError as e:
@@ -133,9 +127,7 @@ class MockTWSClient:
         """
         await asyncio.sleep(0.1)  # Simulate network delay
         connection_status = self.mock_data.get("connection_status")
-        return (
-            bool(connection_status) if connection_status is not None else False
-        )
+        return bool(connection_status) if connection_status is not None else False
 
     async def ping(self) -> None:
         """
@@ -179,9 +171,7 @@ class MockTWSClient:
                 try:
                     workstations.append(WorkstationStatus(**ws))
                 except Exception as e:
-                    logger.warning(
-                        f"Failed to create WorkstationStatus from data: {e}"
-                    )
+                    logger.warning(f"Failed to create WorkstationStatus from data: {e}")
         return workstations
 
     async def get_jobs_status(self) -> list[JobStatus]:
@@ -202,9 +192,7 @@ class MockTWSClient:
                 try:
                     jobs.append(JobStatus(**job))
                 except Exception as e:
-                    logger.warning(
-                        f"Failed to create JobStatus from data: {e}"
-                    )
+                    logger.warning(f"Failed to create JobStatus from data: {e}")
         return jobs
 
     async def get_critical_path_status(self) -> list[CriticalJob]:
@@ -224,9 +212,7 @@ class MockTWSClient:
                 try:
                     critical_jobs.append(CriticalJob(**job))
                 except Exception as e:
-                    logger.warning(
-                        f"Failed to create CriticalJob from data: {e}"
-                    )
+                    logger.warning(f"Failed to create CriticalJob from data: {e}")
         return critical_jobs
 
     async def get_system_status(self) -> SystemStatus:
@@ -506,10 +492,7 @@ class MockTWSClient:
             job_stream="STREAM_A",
         )
 
-
-    async def list_jobs(
-        self, status_filter: str | None = None
-    ) -> list[JobStatus]:
+    async def list_jobs(self, status_filter: str | None = None) -> list[JobStatus]:
         """
         Mocks listing all jobs, optionally filtered by status.
 
@@ -523,9 +506,7 @@ class MockTWSClient:
             Simulates an asynchronous delay and returns filtered mock jobs
         """
         await asyncio.sleep(0.1)  # Simulate network delay
-        jobs = [
-            JobStatus(**job) for job in self.mock_data.get("jobs_status", [])
-        ]
+        jobs = [JobStatus(**job) for job in self.mock_data.get("jobs_status", [])]
 
         if status_filter:
             jobs = [job for job in jobs if job.status == status_filter]
@@ -552,9 +533,7 @@ class MockTWSClient:
             Dictionary with validation result
         """
         # Simulate validation process
-        await asyncio.sleep(
-            0.05
-        )  # Simulate short network delay for validation
+        await asyncio.sleep(0.05)  # Simulate short network delay for validation
 
         # Get validation config from mock data or default to success
         validation_config = self.mock_data.get("validation_config", {})

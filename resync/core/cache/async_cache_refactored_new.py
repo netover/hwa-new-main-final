@@ -196,7 +196,7 @@ class AsyncTTLCache(BaseCache):
 
             # Mark for WAL replay if needed
             self._needs_wal_replay_on_first_use = True
-            
+
             # Initialize lock contention metrics
             self._lock_contention_counts = [0] * self.num_shards
             self._lock_acquisition_times = [[] for _ in range(self.num_shards)]
@@ -247,12 +247,12 @@ class AsyncTTLCache(BaseCache):
     def _get_shard(self, key: str) -> Tuple[Dict[str, CacheEntry], asyncio.Lock]:
         """
         Get the shard and lock for a given key with bounds checking.
-        
+
         Returns:
             Tuple containing:
             - shard: The dictionary shard for this key
             - lock: The asyncio.Lock specific to this shard
-            
+
         Note: The lock MUST be used when modifying the shard to ensure thread safety.
         Always use: async with lock: # modify shard
         """
@@ -274,46 +274,53 @@ class AsyncTTLCache(BaseCache):
             )
 
         return self.shards[shard_index], self.shard_locks[shard_index]
-    
-    async def _acquire_lock_with_metrics(self, lock: asyncio.Lock, shard_idx: int) -> None:
+
+    async def _acquire_lock_with_metrics(
+        self, lock: asyncio.Lock, shard_idx: int
+    ) -> None:
         """
         Acquire a lock while measuring acquisition time and contention.
-        
+
         Args:
             lock: The asyncio.Lock to acquire
             shard_idx: Index of the shard for metrics tracking
         """
         start_time = time.time()
-        
+
         # Try to acquire lock with a small timeout to detect contention
         try:
             await asyncio.wait_for(lock.acquire(), timeout=0.01)
             acquisition_time = time.time() - start_time
-            
+
             # Record acquisition time
             self._lock_acquisition_times[shard_idx].append(acquisition_time)
-            
+
             # Keep only recent measurements (last 100)
             if len(self._lock_acquisition_times[shard_idx]) > 100:
-                self._lock_acquisition_times[shard_idx] = self._lock_acquisition_times[shard_idx][-100:]
-            
+                self._lock_acquisition_times[shard_idx] = self._lock_acquisition_times[
+                    shard_idx
+                ][-100:]
+
             # Log contention if acquisition took too long
             if acquisition_time > 0.01:  # 10ms threshold
                 self._lock_contention_counts[shard_idx] += 1
                 logger.warning(
                     "Lock contention detected on shard %d: acquisition time=%.3fms",
-                    shard_idx, acquisition_time * 1000
+                    shard_idx,
+                    acquisition_time * 1000,
                 )
         except asyncio.TimeoutError:
             # Lock is contended
             self._lock_contention_counts[shard_idx] += 1
-            logger.warning("Lock timeout on shard %d, acquiring without timeout", shard_idx)
+            logger.warning(
+                "Lock timeout on shard %d, acquiring without timeout", shard_idx
+            )
             await lock.acquire()
-    
+
     async def _release_lock_with_metrics(self, lock: asyncio.Lock) -> None:
         """
         Release a lock previously acquired with _acquire_lock_with_metrics.
-        
+
         Args:
             lock: The asyncio.Lock to release
         """
@@ -740,7 +747,11 @@ class AsyncTTLCache(BaseCache):
                                 )
                                 shard[key] = entry
                         except Exception as exc:
-                            logger.error("Erro ao restaurar shard %d do snapshot", shard_idx, exc_info=exc)
+                            logger.error(
+                                "Erro ao restaurar shard %d do snapshot",
+                                shard_idx,
+                                exc_info=exc,
+                            )
                             raise
                         finally:
                             self._release_lock_with_metrics(lock)
@@ -764,32 +775,33 @@ class AsyncTTLCache(BaseCache):
     def get_hot_shards(self, threshold_percentile: float = 0.8) -> List[int]:
         """
         Identify shards that have significantly more entries than others.
-        
+
         Args:
             threshold_percentile: Percentile threshold (0.0-1.0) to consider a shard "hot"
-            
+
         Returns:
             List of shard indices that are considered hot
         """
         shard_sizes = [len(shard) for shard in self.shards]
         if not shard_sizes:
             return []
-        
+
         # Calculate threshold based on percentile
         import numpy as np
+
         threshold = np.percentile(shard_sizes, threshold_percentile * 100)
-        
+
         # Identify shards above threshold
         hot_shards = [i for i, size in enumerate(shard_sizes) if size >= threshold]
-        
+
         # Log warning if hot shards detected
         if hot_shards:
             logger.warning(
                 "Hot shards detected: %s with sizes: %s",
                 hot_shards,
-                [shard_sizes[i] for i in hot_shards]
+                [shard_sizes[i] for i in hot_shards],
             )
-        
+
         return hot_shards
 
     def get_detailed_metrics(self) -> Dict[str, Any]:
@@ -828,7 +840,7 @@ class AsyncTTLCache(BaseCache):
                 "avg_acquisition_times": [
                     sum(times) / len(times) if times else 0
                     for times in self._lock_acquisition_times
-                ]
+                ],
             },
             "is_running": self.is_running,
             "health_status": runtime_metrics.get_health_status().get(
@@ -953,7 +965,9 @@ class AsyncTTLCache(BaseCache):
                 runtime_metrics.cache_sets.increment()
                 runtime_metrics.cache_size.set(self.size())
             except Exception as exc:
-                logger.error("Erro ao aplicar WAL SET para key=%s", validated_key, exc_info=exc)
+                logger.error(
+                    "Erro ao aplicar WAL SET para key=%s", validated_key, exc_info=exc
+                )
                 raise
             finally:
                 self._release_lock_with_metrics(lock)
@@ -972,7 +986,9 @@ class AsyncTTLCache(BaseCache):
                     runtime_metrics.cache_evictions.increment()
                     runtime_metrics.cache_size.set(self.size())
             except Exception as exc:
-                logger.error("Erro ao aplicar WAL DELETE para key=%s", key, exc_info=exc)
+                logger.error(
+                    "Erro ao aplicar WAL DELETE para key=%s", key, exc_info=exc
+                )
                 raise
             finally:
                 self._release_lock_with_metrics(lock)

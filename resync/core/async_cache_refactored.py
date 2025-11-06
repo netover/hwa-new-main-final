@@ -182,11 +182,7 @@ class AsyncTTLCache:
             runtime_metrics.close_correlation_id(correlation_id)
 
     def _get_setting_with_fallback(
-        self,
-        settings: Any,
-        param_value: Any,
-        default_value: Any,
-        setting_name: str
+        self, settings: Any, param_value: Any, default_value: Any, setting_name: str
     ) -> Any:
         """
         Helper to load setting with fallback logic (Issue #14).
@@ -218,8 +214,10 @@ class AsyncTTLCache:
                 settings, ttl_seconds, self.DEFAULT_TTL_SECONDS, "ASYNC_CACHE_TTL"
             )
             self.cleanup_interval = self._get_setting_with_fallback(
-                settings, cleanup_interval, self.DEFAULT_CLEANUP_INTERVAL,
-                "ASYNC_CACHE_CLEANUP_INTERVAL"
+                settings,
+                cleanup_interval,
+                self.DEFAULT_CLEANUP_INTERVAL,
+                "ASYNC_CACHE_CLEANUP_INTERVAL",
             )
             self.num_shards = self._get_setting_with_fallback(
                 settings, num_shards, self.DEFAULT_NUM_SHARDS, "ASYNC_CACHE_NUM_SHARDS"
@@ -236,11 +234,16 @@ class AsyncTTLCache:
                 else getattr(settings, "ASYNC_CACHE_WAL_PATH", wal_path)
             )
             self.max_entries = self._get_setting_with_fallback(
-                settings, max_entries, self.DEFAULT_MAX_ENTRIES, "ASYNC_CACHE_MAX_ENTRIES"
+                settings,
+                max_entries,
+                self.DEFAULT_MAX_ENTRIES,
+                "ASYNC_CACHE_MAX_ENTRIES",
             )
             self.max_memory_mb = self._get_setting_with_fallback(
-                settings, max_memory_mb, self.DEFAULT_MAX_MEMORY_MB,
-                "ASYNC_CACHE_MAX_MEMORY_MB"
+                settings,
+                max_memory_mb,
+                self.DEFAULT_MAX_MEMORY_MB,
+                "ASYNC_CACHE_MAX_MEMORY_MB",
             )
             # Fixed: use 'is not False' for boolean comparison (Issue #4)
             self.paranoia_mode = (
@@ -321,17 +324,22 @@ class AsyncTTLCache:
 
         except (OverflowError, ValueError) as e:
             # Use constant for slice length (Issue #15)
-            key_sum = sum(ord(c) for c in str(key)[:self.FALLBACK_HASH_KEY_LENGTH])
+            key_sum = sum(ord(c) for c in str(key)[: self.FALLBACK_HASH_KEY_LENGTH])
             shard_index = key_sum % self.num_shards
             logger.warning(
                 "Hash computation failed for key %s: %s, using fallback shard %d",
-                self._format_key_for_log(key), e, shard_index
+                self._format_key_for_log(key),
+                e,
+                shard_index,
             )
         except Exception as e:  # pylint: disable=broad-exception-caught
             # Last resort fallback for any unexpected error
             shard_index = 0
-            logger.error("Unexpected error in _get_shard for key %s: %s",
-                        self._format_key_for_log(key), e)
+            logger.error(
+                "Unexpected error in _get_shard for key %s: %s",
+                self._format_key_for_log(key),
+                e,
+            )
 
         return self.shards[shard_index], self.shard_locks[shard_index]
 
@@ -427,8 +435,7 @@ class AsyncTTLCache:
                 if expired_keys:
                     if len(expired_keys) > 10:  # Use batch for many deletions
                         new_shard = {
-                            k: v for k, v in shard.items()
-                            if k not in expired_keys
+                            k: v for k, v in shard.items() if k not in expired_keys
                         }
                         shard.clear()
                         shard.update(new_shard)
@@ -568,7 +575,7 @@ class AsyncTTLCache:
             {
                 "component": "async_cache_refactored",
                 "operation": "delete",
-                "key": self._format_key_for_log(key)  # Use helper (Issue #16)
+                "key": self._format_key_for_log(key),  # Use helper (Issue #16)
             }
         )
 
@@ -636,7 +643,7 @@ class AsyncTTLCache:
 
         Returns 0 if shards are not initialized (Issue #8).
         """
-        if not hasattr(self, 'shards') or not self.shards:
+        if not hasattr(self, "shards") or not self.shards:
             return 0
         return sum(len(shard) for shard in self.shards)
 
@@ -855,10 +862,11 @@ class AsyncTTLCache:
             environment = "unknown"
             try:
                 from resync.core import env_detector
+
                 environment = getattr(
                     env_detector,
-                    'environment',
-                    getattr(env_detector, '_environment', 'unknown')
+                    "environment",
+                    getattr(env_detector, "_environment", "unknown"),
                 )
             except (ImportError, AttributeError):
                 pass
@@ -924,18 +932,20 @@ class AsyncTTLCache:
                 str(e),
                 extra={
                     "component": "async_cache_refactored",
-                    "operation": "apply_wal_set"
-                }
+                    "operation": "apply_wal_set",
+                },
             )
             # Track failed operations for retry (Issue #11)
-            self._failed_wal_operations.append({
-                'operation': 'SET',
-                'key': key,
-                'value': value,
-                'ttl': ttl,
-                'error': str(e),
-                'timestamp': time()
-            })
+            self._failed_wal_operations.append(
+                {
+                    "operation": "SET",
+                    "key": key,
+                    "value": value,
+                    "ttl": ttl,
+                    "error": str(e),
+                    "timestamp": time(),
+                }
+            )
 
     async def apply_wal_delete(self, key: str):
         """
@@ -958,16 +968,18 @@ class AsyncTTLCache:
                 str(e),
                 extra={
                     "component": "async_cache_refactored",
-                    "operation": "apply_wal_delete"
-                }
+                    "operation": "apply_wal_delete",
+                },
             )
             # Track failed operations for retry (Issue #11)
-            self._failed_wal_operations.append({
-                'operation': 'DELETE',
-                'key': key,
-                'error': str(e),
-                'timestamp': time()
-            })
+            self._failed_wal_operations.append(
+                {
+                    "operation": "DELETE",
+                    "key": key,
+                    "error": str(e),
+                    "timestamp": time(),
+                }
+            )
 
     def get_failed_wal_operations(self) -> List[Dict[str, Any]]:
         """

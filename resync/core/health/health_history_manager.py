@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import asyncio
 from datetime import datetime, timedelta
-from typing import Dict, List, Optional
+from typing import Optional
 
 import structlog
 
@@ -57,7 +57,7 @@ class HealthHistoryManager:
         self.cleanup_batch_size = cleanup_batch_size
         self.history_cleanup_threshold = history_cleanup_threshold
 
-        self.health_history: List[HealthStatusHistory] = []
+        self.health_history: list[HealthStatusHistory] = []
         self._memory_usage_mb: float = 0.0
         self._cleanup_lock = asyncio.Lock()
 
@@ -87,8 +87,8 @@ class HealthHistoryManager:
             asyncio.create_task(self._update_memory_usage())
 
     async def _get_component_changes(
-        self, components: Dict[str, ComponentHealth]
-    ) -> Dict[str, HealthStatus]:
+        self, components: dict[str, ComponentHealth]
+    ) -> dict[str, HealthStatus]:
         """
         Track component status changes for history.
 
@@ -185,7 +185,7 @@ class HealthHistoryManager:
         except Exception as e:
             logger.error("error_updating_memory_usage", error=str(e))
 
-    def get_memory_usage(self) -> Dict[str, Any]:
+    def get_memory_usage(self) -> dict[str, Any]:
         """
         Get current memory usage statistics.
 
@@ -202,7 +202,7 @@ class HealthHistoryManager:
             "cleanup_batch_size": self.cleanup_batch_size,
         }
 
-    async def force_cleanup(self) -> Dict[str, Any]:
+    async def force_cleanup(self) -> dict[str, Any]:
         """
         Force immediate cleanup of health history.
 
@@ -225,7 +225,7 @@ class HealthHistoryManager:
         hours: int = 24,
         max_entries: Optional[int] = None,
         component_filter: Optional[str] = None,
-    ) -> List[HealthStatusHistory]:
+    ) -> list[HealthStatusHistory]:
         """
         Get health history for the specified time period.
 
@@ -261,7 +261,7 @@ class HealthHistoryManager:
 
     def get_component_status_history(
         self, component_name: str, hours: int = 24, max_entries: Optional[int] = None
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """
         Get status history for a specific component.
 
@@ -294,7 +294,7 @@ class HealthHistoryManager:
 
         return component_history
 
-    def get_history_stats(self) -> Dict[str, Any]:
+    def get_history_stats(self) -> dict[str, Any]:
         """
         Get statistics about the health history.
 

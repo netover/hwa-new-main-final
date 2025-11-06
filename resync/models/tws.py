@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 from pydantic import BaseModel, Field
 
@@ -68,16 +68,16 @@ class JobDetails(BaseModel):
     workstation: str = Field(..., description="The workstation where the job runs")
     status: str = Field(..., description="The current status of the job")
     job_stream: str = Field(..., description="The job stream the job belongs to")
-    full_definition: Dict[str, Any] = Field(
+    full_definition: dict[str, Any] = Field(
         ..., description="Complete job definition from TWS"
     )
-    dependencies: List[str] = Field(
+    dependencies: list[str] = Field(
         default_factory=list, description="List of job dependencies"
     )
-    resource_requirements: Dict[str, Any] = Field(
+    resource_requirements: dict[str, Any] = Field(
         default_factory=dict, description="Resource requirements for the job"
     )
-    execution_history: List[JobExecution] = Field(
+    execution_history: list[JobExecution] = Field(
         default_factory=list, description="Recent execution history"
     )
 
@@ -130,7 +130,7 @@ class PerformanceData(BaseModel):
     """Performance metrics for TWS operations."""
 
     timestamp: datetime = Field(..., description="When the metrics were collected")
-    api_response_times: Dict[str, float] = Field(
+    api_response_times: dict[str, float] = Field(
         default_factory=dict, description="API response times by endpoint"
     )
     cache_hit_rate: float = Field(..., description="Cache hit rate percentage")
@@ -144,13 +144,13 @@ class DependencyTree(BaseModel):
     """Represents the dependency tree for a job."""
 
     job_id: str = Field(..., description="The job ID this tree represents")
-    dependencies: List[str] = Field(
+    dependencies: list[str] = Field(
         default_factory=list, description="Direct dependencies"
     )
-    dependents: List[str] = Field(
+    dependents: list[str] = Field(
         default_factory=list, description="Jobs that depend on this job"
     )
-    dependency_graph: Dict[str, List[str]] = Field(
+    dependency_graph: dict[str, list[str]] = Field(
         default_factory=dict, description="Complete dependency graph"
     )
 
@@ -158,6 +158,6 @@ class DependencyTree(BaseModel):
 class SystemStatus(BaseModel):
     """A composite model representing the overall status of the TWS environment."""
 
-    workstations: List[WorkstationStatus]
-    jobs: List[JobStatus]
-    critical_jobs: List[CriticalJob]
+    workstations: list[WorkstationStatus]
+    jobs: list[JobStatus]
+    critical_jobs: list[CriticalJob]

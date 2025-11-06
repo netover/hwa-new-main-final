@@ -9,7 +9,7 @@ from __future__ import annotations
 import asyncio
 import time
 from datetime import datetime
-from typing import Any, Dict
+from typing import Any
 
 import structlog
 
@@ -18,6 +18,7 @@ from resync.core.health_models import (
     ComponentType,
     HealthStatus,
 )
+
 from .base_health_checker import BaseHealthChecker
 
 logger = structlog.get_logger(__name__)
@@ -103,7 +104,7 @@ class CpuHealthChecker(BaseHealthChecker):
         """Determine health status based on CPU exception type."""
         return ComponentType.CPU
 
-    def get_component_config(self) -> Dict[str, Any]:
+    def get_component_config(self) -> dict[str, Any]:
         """Get CPU-specific configuration."""
         return {
             "timeout_seconds": self.config.timeout_seconds,

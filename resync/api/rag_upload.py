@@ -14,7 +14,6 @@ PEP 563 and PEP 649 for details.
 from __future__ import annotations
 
 # resync/api/rag_upload.py
-
 import logging
 
 from fastapi import APIRouter, BackgroundTasks, Depends, File, HTTPException, UploadFile

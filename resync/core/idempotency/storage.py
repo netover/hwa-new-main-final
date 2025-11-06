@@ -22,15 +22,15 @@ class IdempotencyStorage:
             cached_data = await self.redis.get(key)
             if not cached_data:
                 return None
-            
+
             record_data = await self.redis.get(key)
             if not record_data:
                 return None
-            
+
             record_dict = await self.redis.get(key)
             if not record_dict:
                 return None
-            
+
             return IdempotencyRecord.from_dict(record_dict)
         except Exception as e:
             raise IdempotencyStorageError(f"Failed to get idempotency record: {str(e)}")

@@ -1,7 +1,7 @@
 """Shared types and interfaces for compliance modules."""
 
-from typing import Protocol, Dict, Any
 from enum import Enum
+from typing import Any, Dict, Protocol
 
 
 class SOC2TrustServiceCriteria(Enum):
@@ -18,15 +18,15 @@ class SOC2TrustServiceCriteria(Enum):
 
 class SOC2ComplianceManagerProtocol(Protocol):
     """Protocol for SOC2 compliance manager."""
-    
+
     def generate_report(self, report_type: str, **kwargs) -> Dict[str, Any]:
         """Generate a compliance report."""
         ...
-        
+
     def get_compliance_status(self) -> Dict[str, Any]:
         """Get current compliance status."""
         ...
-        
+
     def update_compliance_record(self, record_id: str, data: Dict[str, Any]) -> bool:
         """Update a compliance record."""
         ...
