@@ -9,7 +9,8 @@ from __future__ import annotations
 
 import os
 from datetime import datetime
-from typing import Any
+from typing import Any, Dict, List, Callable, Union
+from dataclasses import asdict
 
 import structlog
 from resync.models.health_models import HealthCheckConfig
@@ -36,8 +37,30 @@ class HealthCheckConfigurationManager:
             config: Base health check configuration (creates default if None)
         """
         self.config = config or self._create_default_config()
-        self._config_history: list[dict[str, Any]] = []
+        self._config_history: List[Dict[str, Any]] = []
         self._max_history_size = 100
+
+    def _add_to_config_history(self, old_config: Union[HealthCheckConfig, Dict[str, Any]], changes: Dict[str, Any]) -> None:
+        """
+        Add configuration change to history.
+
+        Args:
+            old_config: Previous configuration
+            changes: Dictionary of changes made
+        """
+        # Convert old_config to dict if it's a HealthCheckConfig
+        old_config_dict = asdict(old_config) if isinstance(old_config, HealthCheckConfig) else old_config
+
+        history_entry = {
+            "timestamp": datetime.now(),
+            "old_config": old_config_dict,
+            "changes": changes,
+        }
+        self._config_history.append(history_entry)
+
+        # Maintain history size limit
+        if len(self._config_history) > self._max_history_size:
+            self._config_history.pop(0)
 
     def _create_default_config(self) -> HealthCheckConfig:
         """Create default health check configuration."""
@@ -48,20 +71,19 @@ class HealthCheckConfigurationManager:
             alert_enabled=True,
             enable_memory_monitoring=True,
             max_history_entries=10000,
-            history_retention_days=30,
-            memory_usage_threshold_mb=100.0,
+            history_retention_hours=720,  # 30 days in hours
             history_cleanup_threshold=0.8,
-            cleanup_batch_size=100,
+            history_cleanup_batch_size=100,
         )
 
-    def update_config(self, **kwargs) -> None:
+    def update_config(self, **kwargs: Any) -> None:
         """
         Update configuration with new values.
 
         Args:
             **kwargs: Configuration parameters to update
         """
-        old_config = self.config.model_dump()
+        old_config = asdict(self.config)
 
         # Update configuration
         for key, value in kwargs.items():
@@ -94,7 +116,7 @@ class HealthCheckConfigurationManager:
         Returns:
             Dictionary with component-specific configuration
         """
-        config_dict = self.config.model_dump()
+        config_dict = asdict(self.config)
         component_configs = {
             "database": {
                 "connection_threshold_percent": config_dict.get(
@@ -152,7 +174,7 @@ class HealthCheckConfigurationManager:
 
     def load_from_environment(self) -> None:
         """Load configuration from environment variables."""
-        env_mappings = {
+        env_mappings: Dict[str, tuple[str, Union[type, Callable[[str], Any]], Any]] = {
             "check_interval_seconds": (
                 "HEALTH_CHECK_INTERVAL_SECONDS",
                 int,
@@ -166,12 +188,12 @@ class HealthCheckConfigurationManager:
             ),
             "alert_enabled": (
                 "HEALTH_ALERTS_ENABLED",
-                lambda x: x.lower() == "true",
+                lambda x: str(x).lower() == "true",  # type: ignore
                 True,
             ),
             "enable_memory_monitoring": (
                 "HEALTH_MEMORY_MONITORING_ENABLED",
-                lambda x: x.lower() == "true",
+                lambda x: str(x).lower() == "true",  # type: ignore
                 True,
             ),
             "max_history_entries": ("HEALTH_MAX_HISTORY_ENTRIES", int, 10000),
@@ -190,10 +212,10 @@ class HealthCheckConfigurationManager:
                 float,
                 0.8,
             ),
-            "cleanup_batch_size": ("HEALTH_CLEANUP_BATCH_SIZE", int, 100),
+            "history_cleanup_batch_size": ("HEALTH_CLEANUP_BATCH_SIZE", int, 100),
         }
 
-        updates = {}
+        updates: Dict[str, Any] = {}
         for config_key, (env_var, converter, _default) in env_mappings.items():
             env_value = os.getenv(env_var)
             if env_value is not None:
@@ -217,14 +239,14 @@ class HealthCheckConfigurationManager:
         if updates:
             self.update_config(**updates)
 
-    def validate_config(self) -> list[str]:
+    def validate_config(self) -> List[str]:
         """
         Validate current configuration.
 
         Returns:
             List of validation error messages (empty if valid)
         """
-        errors = []
+        errors: List[str] = []
 
         # Validate intervals
         if self.config.check_interval_seconds <= 0:
@@ -261,7 +283,7 @@ class HealthCheckConfigurationManager:
 
     def get_config_summary(self) -> dict[str, Any]:
         """Get a summary of current configuration."""
-        config_dict = self.config.model_dump()
+        config_dict = asdict(self.config)
         return {
             "check_interval_seconds": config_dict.get(
                 "check_interval_seconds", 30
@@ -289,24 +311,12 @@ class HealthCheckConfigurationManager:
 
     def reset_to_defaults(self) -> None:
         """Reset configuration to default values."""
-        old_config = self.config.model_dump()
+        old_config = asdict(self.config)
         self.config = self._create_default_config()
 
         self._add_to_config_history(old_config, {})
 
         logger.info("health_check_config_reset_to_defaults")
-
-    def _add_to_config_history(
-        self, old_config: dict[str, Any], changes: dict[str, Any]
-    ) -> None:
-        """Add configuration change to history."""
-        self._config_history.append(
-            {
-                "timestamp": datetime.now().isoformat(),
-                "old_config": old_config,
-                "changes": changes,
-            }
-        )
 
         # Cleanup old entries if needed
         if len(self._config_history) > self._max_history_size:
@@ -332,7 +342,7 @@ class HealthCheckConfigurationManager:
 
     def export_config(self) -> dict[str, Any]:
         """Export current configuration as dictionary."""
-        config_dict = self.config.model_dump()
+        config_dict = asdict(self.config)
         return {
             "config": config_dict,
             "exported_at": datetime.now().isoformat(),

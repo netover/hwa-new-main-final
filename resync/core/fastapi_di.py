@@ -25,7 +25,7 @@ from resync.core.teams_integration import (
     TeamsConfig,
     TeamsIntegration,
 )
-from resync.config.settings import settings
+from resync.settings.settings import settings
 from resync.utils.interfaces import (
     IAgentManager,
     IAuditQueue,
@@ -389,3 +389,7 @@ def with_injection(func: Callable) -> Callable:
         return func(*args, **kwargs)
 
     return sync_wrapper
+
+
+
+

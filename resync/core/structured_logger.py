@@ -22,7 +22,7 @@ DEFAULT_FORMAT = "%(asctime)s | %(levelname)s | %(name)s | %(message)s"
 class SafeEncodingFormatter(logging.Formatter):
     """Formatter that replaces unencodable characters with safe fallbacks."""
 
-    def __init__(self, fmt: Optional[str] = None, datefmt: Optional[str] = None, style: str = "%") -> None:
+    def __init__(self, fmt: Optional[str] = None, datefmt: Optional[str] = None, style: str = "%") -> None:  # type: ignore
         super().__init__(fmt or DEFAULT_FORMAT, datefmt=datefmt, style=style)
 
     def format(self, record: logging.LogRecord) -> str:

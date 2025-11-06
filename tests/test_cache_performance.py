@@ -6,7 +6,7 @@ import contextlib
 import time
 
 import pytest
-from resync.core.cache.async_cache_refactored import AsyncTTLCache
+from resync.core._deprecated.async_cache_refactored import AsyncTTLCache
 
 
 @pytest.fixture

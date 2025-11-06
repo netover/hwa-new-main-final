@@ -14,7 +14,7 @@ import logging
 import time
 from typing import Any, Dict, Literal, NotRequired, Optional, TypedDict
 
-from resync.config.settings import settings
+from resync.settings.settings import settings
 from resync.core.connection_pool_manager import ConnectionPoolConfig, DatabaseConnectionPool
 
 logger = logging.getLogger(__name__)
@@ -326,5 +326,9 @@ if __name__ == "__main__":
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     )
     asyncio.run(main())
+
+
+
+
 
 

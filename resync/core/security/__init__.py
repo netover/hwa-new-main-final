@@ -4,7 +4,14 @@ from __future__ import annotations
 
 import ipaddress
 from pathlib import Path
-from typing import Any, Dict, Tuple, Type, TypeVar, Union, cast
+from typing import (
+    Any,
+    Dict,
+    Tuple,
+    Type,
+    TypeVar,
+    cast
+)
 
 from resync.core import env_detector
 
@@ -12,10 +19,14 @@ try:  # pragma: no cover - optional import for runtime compatibility
     from pydantic import GetCoreSchemaHandler, GetJsonSchemaHandler
     from pydantic.json_schema import JsonSchemaValue
     from pydantic_core import core_schema
-except ImportError:  # pragma: no cover - fallback when Pydantic is not available
-    GetCoreSchemaHandler = GetJsonSchemaHandler = None  # type: ignore[assignment]
+    _pydantic_available = True
+except ImportError:  # pragma: no cover
+    # Fallback when Pydantic is not available at runtime.
+    GetCoreSchemaHandler = Any  # type: ignore[misc,assignment]
+    GetJsonSchemaHandler = Any  # type: ignore[misc,assignment]
     JsonSchemaValue = Dict[str, Any]  # type: ignore[misc,assignment]
-    core_schema = None  # type: ignore[assignment]
+    core_schema = Any  # type: ignore[assignment]
+    _pydantic_available = False
 
 T = TypeVar("T")
 
@@ -47,30 +58,30 @@ class SafeAgentID(str):
         yield cls._validate
 
     @classmethod
-    def __get_pydantic_core_schema__(  # pragma: no cover - exercised in runtime
+    def __get_pydantic_core_schema__(  # pragma: no cover
         cls,
         _source_type: Any,
-        handler: Union["GetCoreSchemaHandler", Any],
+        handler: GetCoreSchemaHandler,  # type: ignore
     ) -> Any:
-        if core_schema is None or GetCoreSchemaHandler is None:
+        if not _pydantic_available:
             return handler(str)
-        str_schema = core_schema.str_schema()
-        return core_schema.no_info_after_validator_function(
+        str_schema = core_schema.str_schema()  # type: ignore
+        return core_schema.no_info_after_validator_function(  # type: ignore
             cls._validate,
             str_schema,
-            serialization=core_schema.to_string_ser_schema(),
+            serialization=core_schema.to_string_ser_schema(),  # type: ignore
         )
 
     @classmethod
-    def __get_pydantic_json_schema__(  # pragma: no cover - exercised in runtime
+    def __get_pydantic_json_schema__(  # pragma: no cover
         cls,
-        schema: Any,
-        handler: Union["GetJsonSchemaHandler", Any],
-    ) -> "JsonSchemaValue":
-        if JsonSchemaValue is None or GetJsonSchemaHandler is None or core_schema is None:
+        _schema: Any,
+        handler: GetJsonSchemaHandler,  # type: ignore
+    ) -> JsonSchemaValue:
+        if not _pydantic_available:
             return {"type": "string", "title": "SafeAgentID", "minLength": 1}
 
-        str_schema = core_schema.str_schema()
+        str_schema = core_schema.str_schema()  # type: ignore
         base_schema = handler(str_schema)
         if isinstance(base_schema, dict):
             base_schema.setdefault("type", "string")
@@ -80,8 +91,11 @@ class SafeAgentID(str):
 
 
 class InputSanitizer:
+    """Collection of helpers for defensive input validation."""
+
     @staticmethod
     def sanitize_path(value: str | Path) -> Path:
+        """Return a safe `Path` instance from user-controlled input."""
         if isinstance(value, str):
             if not value:
                 raise ValueError("String should have at least 1 character")
@@ -89,7 +103,9 @@ class InputSanitizer:
                 raise ValueError("embedded null character in path")
         path = Path(value)
         if any(part == ".." for part in path.parts):
-            raise ValueError("Absolute paths outside allowed directories are not permitted")
+            raise ValueError(
+                "Absolute paths outside allowed directories are not permitted"
+            )
         if path.is_absolute():
             return path.resolve()
         base_dir = Path.cwd()
@@ -101,6 +117,7 @@ class InputSanitizer:
 
     @staticmethod
     def sanitize_host_port(value: str) -> Tuple[str, int]:
+        """Split host:port strings into validated components."""
         if ":" not in value:
             raise ValueError("Host:port format required")
         host, port_str = value.split(":", 1)
@@ -114,13 +131,18 @@ class InputSanitizer:
             raise ValueError("Port must be between 1 and 65535")
         try:
             ipaddress.ip_address(host)
-        except ValueError:
+        except ValueError as exc:
             if host.startswith("-") or ".." in host:
-                raise ValueError("Invalid hostname format")
+                raise ValueError("Invalid hostname format") from exc
         return host, port
 
     @staticmethod
-    def sanitize_environment_value(name: str, value: str, expected_type: Type[T]) -> T:
+    def sanitize_environment_value(
+        name: str,
+        value: str,
+        expected_type: Type[T],
+    ) -> T:
+        """Cast environment variable values to strongly typed equivalents."""
         if expected_type is bool:
             lowered = value.lower()
             if lowered in {"true", "1", "yes"}:
@@ -137,7 +159,12 @@ class InputSanitizer:
         raise TypeError(f"Unsupported type {expected_type!r}")
 
     @staticmethod
-    def validate_path_exists(path: str | Path, *, must_exist: bool = True) -> Path:
+    def validate_path_exists(
+        path: str | Path,
+        *,
+        must_exist: bool = True,
+    ) -> Path:
+        """Resolve a filesystem path while optionally ensuring it exists."""
         resolved = Path(path).resolve()
         if must_exist and not resolved.exists():
             raise FileNotFoundError(str(resolved))
@@ -145,6 +172,7 @@ class InputSanitizer:
 
 
 def sanitize_input(data: Dict[str, Any]) -> Dict[str, Any]:
+    """Return a shallow copy of incoming data after basic validation."""
     if not isinstance(data, dict):
         raise ValueError("Input data must be a dictionary")
     return dict(data)

@@ -32,7 +32,7 @@ logs/
 
 ### Log Rotation Configuration
 ```ini
-# config/log_rotator.ini
+# ops_config/log_rotator.ini
 [log_rotator]
 log_dir = logs
 max_size = 10MB

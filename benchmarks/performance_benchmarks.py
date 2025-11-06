@@ -14,7 +14,7 @@ import asyncio
 import time
 from typing import Any
 
-from resync.core.async_cache import AsyncTTLCache
+from resync.core._deprecated.async_cache_refactored import AsyncTTLCache
 
 
 class PerformanceBenchmarkSuite:

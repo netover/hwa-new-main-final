@@ -16,7 +16,7 @@ class TWSMonitor:
         """Return a stubbed performance report."""
         return {
             "current_metrics": {
-                "timestamp": _dt.datetime.utcnow().isoformat(),
+                "timestamp": _dt.datetime.now(_dt.timezone.utc).isoformat(),
                 "critical_alerts": 0,
                 "warning_alerts": 0,
             },

@@ -3,7 +3,7 @@
 import re
 from enum import Enum
 from pathlib import Path
-from typing import Any
+from typing import Any, Dict, List, Set
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
@@ -166,7 +166,7 @@ class ValidationConfigModel(BaseModel):
 
     @field_validator("skip_paths")
     @classmethod
-    def validate_skip_paths(cls, v):
+    def validate_skip_paths(cls, v: List[str]) -> List[str]:
         """Validate skip paths."""
         if not v:
             return v
@@ -177,8 +177,8 @@ class ValidationConfigModel(BaseModel):
             if ".." in path or "//" in path:
                 raise ValueError(f"Invalid skip path format: {path}")
         # Remove duplicates while preserving order
-        seen = set()
-        unique_paths = []
+        seen: Set[str] = set()
+        unique_paths: List[str] = []
         for path in v:
             if path not in seen:
                 seen.add(path)
@@ -187,7 +187,7 @@ class ValidationConfigModel(BaseModel):
 
     @field_validator("custom_validators")
     @classmethod
-    def validate_custom_validators(cls, v):
+    def validate_custom_validators(cls, v: Dict[str, Any]) -> Dict[str, Any]:
         """Validate custom validator configurations."""
         if not v:
             return v
@@ -212,7 +212,7 @@ class ValidationConfigModel(BaseModel):
 
     @field_validator("allowed_file_types")
     @classmethod
-    def validate_allowed_file_types(cls, v):
+    def validate_allowed_file_types(cls, v: List[str]) -> List[str]:
         """Validate allowed file types."""
         if not v:
             raise ValueError(
@@ -225,8 +225,8 @@ class ValidationConfigModel(BaseModel):
             ):
                 raise ValueError(f"Invalid MIME type format: {mime_type}")
         # Remove duplicates while preserving order
-        seen = set()
-        unique_types = []
+        seen: Set[str] = set()
+        unique_types: List[str] = []
         for mime_type in v:
             if mime_type not in seen:
                 seen.add(mime_type)
@@ -451,9 +451,9 @@ class ValidationSettings:
             # Use default configuration
             self._config = ValidationConfigModel()
 
-    def _parse_key_value_config(self, config_text: str) -> dict:
+    def _parse_key_value_config(self, config_text: str) -> Dict[str, Any]:
         """Parse simple key=value configuration format."""
-        config_dict = {}
+        config_dict: Dict[str, Any] = {}
         for line in config_text.splitlines():
             line = line.strip()
             if line and "=" in line and not line.startswith("#"):
@@ -496,9 +496,10 @@ class ValidationSettings:
         with open(self.config_file, "w") as f:
             import json
 
-            json.dump(self._config.model_dump(), f, indent=2)
+            if self._config:
+                json.dump(self._config.model_dump(), f, indent=2)
 
-    def update_config(self, **kwargs) -> None:
+    def update_config(self, **kwargs: Any) -> None:
         """
         Update configuration values.
 

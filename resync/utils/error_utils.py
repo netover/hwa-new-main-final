@@ -12,7 +12,7 @@ from fastapi import Request, status
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from pydantic import ValidationError
-from resync.config.settings import settings
+from resync.settings.settings import settings
 
 from resync.models.error_models import (
     AuthenticationErrorResponse,
@@ -533,6 +533,10 @@ def create_error_response_from_exception(
     return ErrorFactory.create_error_response(
         exception, request, correlation_id
     )
+
+
+
+
 
 
 

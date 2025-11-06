@@ -11,7 +11,7 @@ import pytest_asyncio
 from hypothesis import given, settings
 from hypothesis import strategies as st
 from hypothesis.core import HealthCheck
-from resync.core.cache.async_cache_refactored import AsyncTTLCache
+from resync.core._deprecated.async_cache_refactored import AsyncTTLCache
 
 
 @pytest_asyncio.fixture

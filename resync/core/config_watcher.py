@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import json
-from typing import Any, Iterable, cast
+from typing import Any, Dict, Iterable, List, cast
 
 from resync.core.agent_manager import AgentManager
 from resync.core.connection_manager import ConnectionManager
@@ -21,8 +21,8 @@ async def _resolve_dependency(interface: Any) -> Any:
     return await container.get(interface)
 
 
-def _serialise_agents(agents: Iterable[Any]) -> list[dict[str, Any]]:
-    serialised: list[dict[str, Any]] = []
+def _serialise_agents(agents: Iterable[Any]) -> List[Dict[str, Any]]:
+    serialised: List[Dict[str, Any]] = []
     for agent in agents:
         agent_id = getattr(agent, "id", None)
         agent_name = getattr(agent, "name", None)
@@ -40,7 +40,7 @@ async def handle_config_change() -> None:
             agent_manager_dep = await _resolve_dependency(IAgentManager)
             connection_manager_dep = await _resolve_dependency(IConnectionManager)
         except Exception as exc:  # pragma: no cover - defensive
-            logger.error(
+            logger.error(  # type: ignore
                 "dependency_resolution_failed",
                 extra={"error": str(exc)},
                 exc_info=True,
@@ -51,9 +51,9 @@ async def handle_config_change() -> None:
         connection_manager = cast(ConnectionManager, connection_manager_dep)
 
         try:
-            await agent_manager.load_agents_from_config()
+            await agent_manager.load_agents_from_config("config.yaml")
         except Exception as exc:
-            logger.error(
+            logger.error(  # type: ignore
                 "error_handling_config_change",
                 extra={"stage": "load_agents", "error": str(exc)},
                 exc_info=False,
@@ -63,7 +63,7 @@ async def handle_config_change() -> None:
         try:
             agents = await agent_manager.get_all_agents()
         except Exception as exc:  # pragma: no cover - defensive
-            logger.error(
+            logger.error(  # type: ignore
                 "error_handling_config_change",
                 extra={"stage": "get_all_agents", "error": str(exc)},
                 exc_info=False,
@@ -79,13 +79,13 @@ async def handle_config_change() -> None:
         try:
             await connection_manager.broadcast(json.dumps(payload))
         except Exception as exc:
-            logger.error(
+            logger.error(  # type: ignore
                 "broadcast_failure",
                 extra={"error": str(exc)},
                 exc_info=False,
             )
         else:
-            logger.info(
+            logger.info(  # type: ignore
                 "config_change_broadcasted",
                 extra={"agent_count": len(payload["agents"])},
             )

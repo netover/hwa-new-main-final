@@ -16,7 +16,7 @@ from datetime import datetime
 import psutil
 import structlog
 from resync.core.websocket_pool_manager import get_websocket_pool_manager
-from resync.config.settings import get_settings
+from resync.settings.settings import get_settings
 from resync.core.cache import get_cache_hierarchy
 from resync.core.connection_pool_manager import (
     get_advanced_connection_pool_manager,
@@ -707,6 +707,10 @@ class SimplifiedHealthService:
             "websocket_pool": ComponentType.WEBSOCKET,
         }
         return mapping.get(name, ComponentType.OTHER)
+
+
+
+
 
 
 

@@ -17,7 +17,7 @@ from resync.core.constants import (
     DEFAULT_READ_TIMEOUT,
     DEFAULT_WRITE_TIMEOUT,
 )
-from resync.config.settings import settings
+from resync.settings.settings import settings
 
 
 def create_async_http_client(
@@ -134,6 +134,10 @@ def create_tws_http_client(
         verify=verify_param,  # Apply TWS verification setting
         **kwargs,
     )
+
+
+
+
 
 
 

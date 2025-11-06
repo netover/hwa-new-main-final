@@ -21,7 +21,7 @@ from resync.core.cache_hierarchy import get_cache_hierarchy
 from resync.utils.exceptions import CircuitBreakerError
 from resync.core.health.circuit_breaker_manager import CircuitBreakerManager
 from resync.utils.retry_utils import retry_with_backoff_async
-from resync.config.settings import settings  # New import
+from resync.settings.settings import settings  # New import
 from resync.core.connection_pool_manager import get_connection_pool_manager
 from resync.utils.exceptions import TWSConnectionError
 
@@ -186,7 +186,7 @@ class OptimizedTWSClient:
         # should not occur.  Use an environment variable or the
         # ``tws_mock_mode`` flag in settings to control this behaviour.
         try:
-            from resync.config.settings import settings as _settings  # type: ignore
+            from resync.settings.settings import settings as _settings  # type: ignore
             read_only = getattr(_settings, "tws_mock_mode", False)
         except Exception:
             read_only = False
@@ -1276,6 +1276,11 @@ class OptimizedTWSClient:
             if hasattr(self, "client") and not self.client.is_closed:
                 await self.client.aclose()
                 logger.info("HTTPX client has been closed.")
+
+
+
+
+
 
 
 

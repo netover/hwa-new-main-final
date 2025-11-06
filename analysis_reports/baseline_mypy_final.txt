@@ -1,0 +1,9 @@
+.\mypy.ini: While reading from '.\\mypy.ini' [line 21]: option 'disallow_untyped_defs' in section 'mypy' already exists
+benchmarks\cache_benchmark.py:9: error: Cannot find implementation or library stub for module named "resync.core.async_cache"  [import-not-found]
+benchmarks\cache_benchmark.py:9: note: See https://mypy.readthedocs.io/en/stable/running_mypy.html#missing-imports
+benchmarks\cache_benchmark.py:10: error: Cannot find implementation or library stub for module named "resync.core.enhanced_async_cache"  [import-not-found]
+benchmarks\performance_benchmarks.py:17: error: Cannot find implementation or library stub for module named "resync.core.async_cache"  [import-not-found]
+resync\core\agent_manager.py: error: Source file found twice under different module names: "core.agent_manager" and "resync.core.agent_manager"
+resync\core\agent_manager.py: note: See https://mypy.readthedocs.io/en/stable/running_mypy.html#mapping-file-paths-to-modules for more info
+resync\core\agent_manager.py: note: Common resolutions include: a) adding `__init__.py` somewhere, b) using `--explicit-package-bases` or adjusting MYPYPATH
+Found 4 errors in 3 files (errors prevented further checking)

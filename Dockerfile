@@ -41,7 +41,7 @@ ENV PATH="/app/.venv/bin:$PATH"
 
 # Copy the application source code
 COPY ./resync ./resync
-COPY ./config ./config
+COPY ./ops_config ./ops_config
 COPY ./static ./static
 COPY ./templates ./templates
 
@@ -57,4 +57,4 @@ HEALTHCHECK --interval=30s --timeout=5s --retries=3 CMD [ "sh", "-c", "wget -qO-
 # The command to run the application using Gunicorn+Uvicorn for production
 # It will be run by a container orchestration system (e.g., Docker Compose, Kubernetes)
 # Use different configurations based on environment
-CMD ["sh", "-c", "if [ \"$RESYNC_ENV\" = \"production\" ]; then gunicorn --config python:config.gunicorn.production resync.main:app; elif [ \"$RESYNC_ENV\" = \"staging\" ]; then gunicorn --config python:config.gunicorn.staging resync.main:app; else gunicorn --config python:config.gunicorn.development --reload resync.main:app; fi"]
+CMD ["sh", "-c", "if [ \"$RESYNC_ENV\" = \"production\" ]; then gunicorn --config python:ops_config.gunicorn.production resync.main:app; elif [ \"$RESYNC_ENV\" = \"staging\" ]; then gunicorn --config python:ops_config.gunicorn.staging resync.main:app; else gunicorn --config python:ops_config.gunicorn.development --reload resync.main:app; fi"]

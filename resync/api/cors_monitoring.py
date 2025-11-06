@@ -8,7 +8,7 @@ access patterns and potential security threats.
 import logging
 
 from fastapi import APIRouter, Depends, Query
-from resync.config.settings import settings
+from resync.settings.settings import settings
 from starlette.requests import Request
 
 from resync.models.validation import (
@@ -121,6 +121,10 @@ async def get_cors_violations(
     """
     # Placeholder implementation
     return []
+
+
+
+
 
 
 

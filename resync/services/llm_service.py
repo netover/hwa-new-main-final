@@ -12,7 +12,7 @@ from collections.abc import AsyncGenerator
 from functools import lru_cache, wraps
 from typing import Any
 
-from resync.config.settings import settings
+from resync.settings.settings import settings
 from resync.utils.exceptions import IntegrationError
 
 try:
@@ -645,6 +645,10 @@ class LLMService:
 def get_llm_service() -> LLMService:
     """Get or create global LLM service instance."""
     return LLMService()
+
+
+
+
 
 
 

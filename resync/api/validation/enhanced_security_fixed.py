@@ -33,7 +33,7 @@ except ImportError:
     HAS_PASSLIB = False
 
 from pydantic import BaseModel, Field
-from resync.config.settings import settings
+from resync.settings.settings import settings
 
 from resync.api.validation.common import SanitizationLevel, sanitize_input
 
@@ -1029,6 +1029,10 @@ __all__ = [
     "SecurityValidator",
     "AsyncSecurityContextManager",
 ]
+
+
+
+
 
 
 

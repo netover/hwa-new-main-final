@@ -41,7 +41,7 @@ async def test_cache_components():
         print(f"✓ CacheEntry created: {entry}")
 
         # Test refactored cache
-        from resync.core.cache.async_cache_refactored import AsyncTTLCache
+        from resync.core._deprecated.async_cache_refactored import AsyncTTLCache
 
         cache = AsyncTTLCache(
             ttl_seconds=60,

@@ -4,7 +4,7 @@ import logging
 
 from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
-from resync.config.settings import settings
+from resync.settings.settings import settings
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.types import ASGIApp
 
@@ -309,6 +309,10 @@ def get_test_cors_config() -> CORSPolicy:
         allow_credentials=True,
         log_violations=True,
     )
+
+
+
+
 
 
 

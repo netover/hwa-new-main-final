@@ -21,7 +21,7 @@ This implementation does not record latency or increment metrics.
 from __future__ import annotations
 
 import uuid
-from typing import Any, Awaitable, Callable, Optional
+from typing import Any, Optional
 
 from starlette.types import ASGIApp, Message, Receive, Scope, Send
 

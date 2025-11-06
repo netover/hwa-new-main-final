@@ -99,7 +99,7 @@ class SimplifiedHealthMetrics:
         Returns:
             str: Prometheus metrics in text format
         """
-        return generate_latest()
+        return generate_latest().decode('utf-8')
 
     def get_content_type(self) -> str:
         """

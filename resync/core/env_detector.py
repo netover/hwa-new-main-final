@@ -7,7 +7,8 @@ from typing import Literal
 
 EnvironmentName = Literal["production", "staging", "development", "testing"]
 
-_CURRENT_ENV: EnvironmentName = "production"
+# Lazy initialization of current environment
+_current_env: EnvironmentName | None = None
 
 
 def _read_environment() -> EnvironmentName:
@@ -18,28 +19,31 @@ def _read_environment() -> EnvironmentName:
     return value  # type: ignore[return-value]
 
 
-def __init__() -> None:
-    global _CURRENT_ENV
-    _CURRENT_ENV = _read_environment()
+def _ensure_initialized() -> None:
+    global _current_env
+    if _current_env is None:
+        _current_env = _read_environment()
 
 
 def get_environment() -> EnvironmentName:
-    return _CURRENT_ENV
+    _ensure_initialized()
+    assert _current_env is not None  # Should be initialized by _ensure_initialized
+    return _current_env
 
 
 def is_testing() -> bool:
-    return _CURRENT_ENV == "testing"
+    return get_environment() == "testing"
 
 
 def is_development() -> bool:
-    return _CURRENT_ENV == "development"
+    return get_environment() == "development"
 
 
 def is_production() -> bool:
-    return _CURRENT_ENV == "production"
+    return get_environment() == "production"
 
 
-__init__()
+_ensure_initialized()
 
 __all__ = [
     "get_environment",

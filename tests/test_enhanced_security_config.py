@@ -6,7 +6,7 @@ import pytest
 from fastapi import FastAPI
 from starlette.testclient import TestClient
 
-from resync.config.enhanced_security import (
+from resync.settings.enhanced_security import (
     EnhancedSecurityMiddleware,
     configure_enhanced_security,
     validate_security_headers,
@@ -171,6 +171,11 @@ class TestEnhancedSecurityConfiguration:
 
 if __name__ == "__main__":
     pytest.main([__file__])
+
+
+
+
+
 
 
 

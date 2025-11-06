@@ -191,7 +191,7 @@ def test_settings_backward_compatibility_properties():
     assert (
         400 if settings.environment == Environment.PRODUCTION else 0
     ) == settings.JINJA2_TEMPLATE_CACHE_SIZE
-    assert settings.base_dir / "config" / "agents.json" == settings.AGENT_CONFIG_PATH
+    assert settings.base_dir / "ops_config" / "agents.json" == settings.AGENT_CONFIG_PATH
     assert settings.MAX_CONCURRENT_AGENT_CREATIONS == 5
     assert settings.TWS_ENGINE_NAME == "TWS"
     assert settings.TWS_ENGINE_OWNER == "twsuser"

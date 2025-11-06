@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Callable
+from typing import Any
 
 from fastapi import Request
 from fastapi.exceptions import HTTPException
@@ -9,7 +10,7 @@ from resync.security.oauth2 import verify_oauth2_token
 
 
 # --- OAuth2 Middleware ---
-async def oauth2_middleware(request: Request, call_next: Callable):
+async def oauth2_middleware(request: Request, call_next: Callable[..., Any]) -> Any:  # type: ignore
     """
     Middleware to enforce OAuth2/JWT authentication for all routes.
     """

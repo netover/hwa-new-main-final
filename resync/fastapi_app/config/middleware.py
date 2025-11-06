@@ -19,7 +19,7 @@ from .app_state import initialize_state
 # application startup to avoid multiple limiters being created. See
 # ``resync/core/rate_limiter.py`` for details.
 try:
-    from resync.core.rate_limiter import init_rate_limiter  # type: ignore[attr-defined]
+    from resync.core.rate_limiter import init_rate_limiter  # type: ignore[attr-defined]  # noqa: E501
 except Exception:
     # If the rate limiter is unavailable the application will run
     # without rate limiting. This can occur in minimal test
@@ -27,7 +27,7 @@ except Exception:
     init_rate_limiter = None  # type: ignore
 
 try:
-    from resync.api.exception_handlers import register_exception_handlers
+    from resync.api.exception_handlers import register_exception_handlers  # type: ignore
 except Exception:  # pragma: no cover - optional dependency
     register_exception_handlers = None  # type: ignore
 
@@ -54,7 +54,7 @@ def setup_middleware(app: FastAPI) -> None:
     )
 
     if register_exception_handlers:
-        register_exception_handlers(app)
+        register_exception_handlers(app)  # type: ignore
 
     # Initialize a global rate limiter. When available this configures a
     # single Limiter instance and adds the CustomRateLimitMiddleware

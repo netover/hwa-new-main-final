@@ -4,7 +4,7 @@ import os
 import re
 from datetime import datetime
 from enum import Enum
-from typing import Annotated, Any
+from typing import Annotated, Any, Dict
 
 from pydantic import (
     ConfigDict,
@@ -96,7 +96,7 @@ class FileUploadRequest(BaseValidatedModel):
 
     @field_validator("filename")
     @classmethod
-    def validate_filename(cls, v):
+    def validate_filename(cls, v: str) -> str:
         """Validate filename for security and format."""
         if not v or not v.strip():
             raise ValueError("Filename cannot be empty")
@@ -118,7 +118,7 @@ class FileUploadRequest(BaseValidatedModel):
 
     @field_validator("content_type")
     @classmethod
-    def validate_content_type(cls, v):
+    def validate_content_type(cls, v: str) -> str:
         """Validate MIME content type."""
         if not v or not v.strip():
             raise ValueError("Content type cannot be empty")
@@ -153,7 +153,7 @@ class FileUploadRequest(BaseValidatedModel):
 
     @field_validator("file_size")
     @classmethod
-    def validate_file_size(cls, v):
+    def validate_file_size(cls, v: int) -> int:
         """Validate file size limits."""
         if v > NumericConstraints.MAX_FILE_SIZE:
             raise ValueError(
@@ -167,7 +167,7 @@ class FileUploadRequest(BaseValidatedModel):
 
     @field_validator("purpose")
     @classmethod
-    def validate_purpose(cls, v):
+    def validate_purpose(cls, v: str) -> str:
         """Validate file upload purpose."""
         if not v or not v.strip():
             raise ValueError("Purpose cannot be empty")
@@ -178,7 +178,7 @@ class FileUploadRequest(BaseValidatedModel):
 
     @field_validator("metadata")
     @classmethod
-    def validate_metadata(cls, v):
+    def validate_metadata(cls, v: Dict[str, Any]) -> Dict[str, Any]:
         """Validate metadata dictionary."""
         if not v:
             return v
@@ -289,7 +289,7 @@ class FileChunkUploadRequest(BaseValidatedModel):
 
     @field_validator("chunk_index")
     @classmethod
-    def validate_chunk_index(cls, v, info):
+    def validate_chunk_index(cls, v: int, info) -> int:  # type: ignore
         """Validate chunk index."""
         total_chunks = info.data.get("total_chunks")
         if total_chunks is not None and v >= total_chunks:
@@ -298,7 +298,7 @@ class FileChunkUploadRequest(BaseValidatedModel):
 
     @field_validator("total_chunks")
     @classmethod
-    def validate_total_chunks(cls, v, info):
+    def validate_total_chunks(cls, v: int, info) -> int:  # type: ignore
         """Validate total chunks."""
         chunk_index = info.data.get("chunk_index")
         if chunk_index is not None and chunk_index >= v:
@@ -307,7 +307,7 @@ class FileChunkUploadRequest(BaseValidatedModel):
 
     @field_validator("file_size")
     @classmethod
-    def validate_total_size(cls, v, info):
+    def validate_total_size(cls, v: int, info) -> int:  # type: ignore
         """Validate total file size."""
         chunk_size = info.data.get("chunk_size")
         total_chunks = info.data.get("total_chunks")
@@ -353,7 +353,7 @@ class FileUpdateRequest(BaseValidatedModel):
 
     @field_validator("filename")
     @classmethod
-    def validate_filename(cls, v):
+    def validate_filename(cls, v: str | None) -> str | None:
         """Validate filename if provided."""
         if v is None:
             return v

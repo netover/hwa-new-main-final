@@ -15,7 +15,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import Response
 from fastapi.responses import JSONResponse
 
-from resync.config.settings import settings
+from resync.settings.settings import settings
 
 # Import runtime metrics lazily to avoid circular dependencies.  When
 # monitoring is unavailable the import will fail silently.
@@ -554,5 +554,9 @@ __all__ = [
     "init_rate_limiter",
     "CustomRateLimitMiddleware",
 ]
+
+
+
+
 
 

@@ -6,8 +6,9 @@ import statistics
 import time
 from typing import Any
 
-from resync.core.async_cache import AsyncTTLCache
-from resync.core.enhanced_async_cache import TWS_OptimizedAsyncCache
+from resync.core._deprecated.async_cache_refactored import AsyncTTLCache
+# TWS_OptimizedAsyncCache não existe - usar AsyncTTLCache como alternativa
+from resync.core._deprecated.async_cache_refactored import AsyncTTLCache as TWS_OptimizedAsyncCache
 
 
 class CacheBenchmark:

@@ -13,7 +13,7 @@ import time
 from datetime import datetime
 
 import structlog
-from resync.config.settings import settings
+from resync.settings.settings import settings
 from resync.models.health_models import (
     ComponentHealth,
     ComponentType,
@@ -216,6 +216,10 @@ class RedisHealthMonitor:
         """Clear the cached health result."""
         self._cached_result = None
         self._last_check = None
+
+
+
+
 
 
 

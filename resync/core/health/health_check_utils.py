@@ -268,7 +268,7 @@ class HealthCheckUtils:
         for component in components.values():
             if component.response_time_ms is not None:
                 total_response_time += component.response_time_ms
-                response_times.append(component.response_time_ms)
+                response_times.append(component.response_time_ms)  # type: ignore
 
             if component.status in [
                 HealthStatus.UNHEALTHY,
@@ -291,10 +291,10 @@ class HealthCheckUtils:
             ),
             "avg_response_time_ms": avg_response_time,
             "min_response_time_ms": (
-                min(response_times) if response_times else 0
+                min(response_times) if response_times else 0  # type: ignore
             ),
             "max_response_time_ms": (
-                max(response_times) if response_times else 0
+                max(response_times) if response_times else 0  # type: ignore
             ),
         }
 

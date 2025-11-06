@@ -65,3 +65,19 @@ ignore = [
 [tool.ruff.lint.per-file-ignores]
 "resync/core/__init__.py" = ["F401"]  # Barrel module - re-exports symbols
 "resync/core/health/__init__.py" = ["F401"]  # Barrel module - re-exports symbols
+
+[tool.flake8]
+exclude = [
+  "tests",
+  "**/tests/**",
+  "**/test_*.py",
+  "**/*_test.py",
+  ".venv",
+  "venv",
+  "build",
+  "dist"
+]
+max-line-length = 100
+extend-ignore = ["E203", "W503"]
+per-file-ignores =
+  __init__.py: F401

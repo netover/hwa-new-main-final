@@ -46,7 +46,7 @@ class TWSMonitorHealthChecker(BaseHealthChecker):
 
         try:
             # Check TWS configuration
-            from resync.config.settings import settings
+            from resync.settings.settings import settings
 
             tws_config = settings.get("tws_monitor", {})
             if not tws_config or not tws_config.get("enabled", False):
@@ -97,6 +97,10 @@ class TWSMonitorHealthChecker(BaseHealthChecker):
             "timeout_seconds": self.config.timeout_seconds,
             "retry_attempts": 1,
         }
+
+
+
+
 
 
 

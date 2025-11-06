@@ -9,7 +9,7 @@ router = APIRouter(prefix="/api/v1/tws", tags=["tws"])
 
 try:
     from resync.services.tws_service import OptimizedTWSClient  # type: ignore
-    from resync.config.settings import settings as app_settings  # type: ignore
+    from resync.settings.settings import settings as app_settings  # type: ignore
 except Exception:  # pragma: no cover - optional dependency
     OptimizedTWSClient = None  # type: ignore
     app_settings = None  # type: ignore
@@ -163,3 +163,7 @@ async def critical_path(request: Request) -> list[dict]:
         return [cj.dict() for cj in critical_jobs]
     except Exception as exc:
         raise HTTPException(status_code=500, detail=str(exc)) from exc
+
+
+
+

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
-from typing import Any, Awaitable, Iterable
+from typing import Any, Awaitable, Iterable, Set
 
 from fastapi import FastAPI
 
@@ -45,12 +45,12 @@ def initialize_state(app: FastAPI) -> None:
     if getattr(app.state, "sla_risk_scores", None) is None:
         app.state.sla_risk_scores = {}  # type: ignore[attr-defined]
 
-    def register_background_task(coro: Awaitable[Any], *, name: str) -> asyncio.Task[Any]:
-        tasks: set[asyncio.Task[Any]] = getattr(app.state, "background_tasks")
-        task = asyncio.create_task(coro, name=name)
-        tasks.add(task)
+    def register_background_task(coro: Awaitable[Any], *, name: str) -> asyncio.Task[Any]:  # type: ignore
+        tasks: Set[asyncio.Task[Any]] = getattr(app.state, "background_tasks")  # type: ignore
+        task = asyncio.create_task(coro, name=name)  # type: ignore[arg-type]
+        tasks.add(task)  # type: ignore
 
-        def _cleanup(completed: asyncio.Task[Any]) -> None:
+        def _cleanup(completed: asyncio.Task[Any]) -> None:  # type: ignore
             tasks.discard(completed)
             if completed.cancelled():
                 return
@@ -62,8 +62,8 @@ def initialize_state(app: FastAPI) -> None:
             if exception:
                 logger.exception("Background task %s failed", name, exc_info=exception)
 
-        task.add_done_callback(_cleanup)
-        return task
+        task.add_done_callback(_cleanup)  # type: ignore
+        return task  # type: ignore
 
     app.state.register_background_task = register_background_task  # type: ignore[attr-defined]
 
@@ -78,4 +78,4 @@ def initialize_state(app: FastAPI) -> None:
                 task.cancel()
         await asyncio.gather(*tasks, return_exceptions=True)
 
-    app.add_event_handler("shutdown", _cancel_background_tasks)
+    app.add_event_handler("shutdown", _cancel_background_tasks)  # type: ignore

@@ -46,7 +46,7 @@ class RedisHealthChecker(BaseHealthChecker):
 
         try:
             # Check Redis configuration
-            from resync.config.settings import settings
+            from resync.settings.settings import settings
 
             if not settings.REDIS_URL:
                 return ComponentHealth(
@@ -144,6 +144,10 @@ class RedisHealthChecker(BaseHealthChecker):
             "timeout_seconds": self.config.timeout_seconds,
             "retry_attempts": 2,
         }
+
+
+
+
 
 
 

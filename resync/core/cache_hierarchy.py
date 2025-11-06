@@ -51,7 +51,7 @@ class _L2Cache:
         self.num_shards = num_shards
         self._data: Dict[str, Tuple[Any, float]] = {}
         self._lock = asyncio.Lock()
-        self._cleanup_task: asyncio.Task | None = None
+        self._cleanup_task: asyncio.Task | None = None  # type: ignore
         if cleanup_interval > 0:
             self._cleanup_task = asyncio.create_task(self._cleanup_loop())
 
@@ -71,9 +71,9 @@ class _L2Cache:
                 self._data.pop(key, None)
 
     async def close(self) -> None:
-        if self._cleanup_task:
-            self._cleanup_task.cancel()
-            self._cleanup_task = None
+        if self._cleanup_task:  # type: ignore
+            self._cleanup_task.cancel()  # type: ignore
+            self._cleanup_task = None  # type: ignore
 
     async def get(self, key: str) -> Any:
         async with self._lock:

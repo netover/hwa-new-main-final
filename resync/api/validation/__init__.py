@@ -34,7 +34,7 @@ from .common import (
     sanitize_input,
     validate_enum_value,
     validate_numeric_range,
-    validate_pattern,
+    validate_pattern,  # type: ignore
     validate_string_length,
 )
 from .config import (

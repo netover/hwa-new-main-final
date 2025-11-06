@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from typing import AsyncIterator, Any
 
-from resync.config.settings import settings
-from resync.core.agent_manager import AgentManager, _get_tws_client
+from resync.settings.settings import settings
+from resync.core.agent_manager import AgentManager
 from resync.services.mock_tws_service import MockTWSClient
 
 agent_manager = AgentManager()
@@ -21,10 +21,14 @@ async def get_tws_client() -> AsyncIterator[Any]:
     else:
         try:
             if getattr(agent_manager, "tws_client", None) is None:
-                agent_manager.tws_client = await _get_tws_client()
+                agent_manager.tws_client = await agent_manager.get_tws_client()  # type: ignore
             yield agent_manager.tws_client
         except Exception:
             raise
 
 
 __all__ = ["get_tws_client", "agent_manager"]
+
+
+
+

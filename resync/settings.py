@@ -10,10 +10,10 @@ from typing import Any, Callable, Dict
 
 from pydantic import Field
 
-from resync.config.settings import Settings as CoreSettings
+from resync.settings.settings import Settings as CoreSettings
 
 try:  # pragma: no cover - make Environment optional during docs builds
-    from resync.config.settings_types import Environment  # type: ignore[attr-defined]
+    from resync.settings.settings_types import Environment  # type: ignore[attr-defined]
 except ImportError:  # pragma: no cover
     from enum import Enum
 
@@ -95,7 +95,7 @@ LEGACY_ALIASES: Dict[str, LegacyResolver] = {
     "JINJA2_TEMPLATE_CACHE_SIZE": lambda s: 400
     if s.environment == Environment.PRODUCTION
     else 0,
-    "AGENT_CONFIG_PATH": lambda s: Path(s.base_dir) / "config" / "agents.json",
+    "AGENT_CONFIG_PATH": lambda s: Path(s.base_dir) / "ops_config" / "agents.json",
     "MAX_CONCURRENT_AGENT_CREATIONS": lambda s: 5,
     "TWS_ENGINE_NAME": lambda s: "TWS",
     "TWS_ENGINE_OWNER": lambda s: "twsuser",
@@ -164,3 +164,7 @@ settings = get_settings()
 BaseSettings = Settings
 
 __all__ = ["settings", "Settings", "Environment", "get_settings", "BaseSettings"]
+
+
+
+

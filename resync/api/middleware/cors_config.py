@@ -4,6 +4,7 @@ import logging
 import re
 import socket
 from enum import Enum
+from typing import Any, Dict, List, Union
 from urllib.parse import urlparse
 
 from pydantic import (
@@ -96,9 +97,9 @@ class CORSPolicy(BaseModel):
 
     @field_validator("environment", mode="before")
     @classmethod
-    def validate_environment(cls, v):
+    def validate_environment(cls, v: str) -> Union[str, Environment]:
         """Validate environment value."""
-        if isinstance(v, str):
+        if isinstance(v, str):  # type: ignore
             v = v.lower()
             if v in ["dev", "development"]:
                 return Environment.DEVELOPMENT
@@ -112,12 +113,12 @@ class CORSPolicy(BaseModel):
     @classmethod
     def validate_origin(
         cls,
-        origins: list[str],
-        info: FieldValidationInfo,
-    ) -> list[str]:
+        origins: List[str],
+        info: FieldValidationInfo,  # type: ignore
+    ) -> List[str]:
         """Validate the allowed origin list while keeping wildcard rules intact."""
-        environment = info.data.get("environment") if info.data else None
-        validated: list[str] = []
+        environment: Any = info.data.get("environment") if info.data else None  # type: ignore
+        validated: List[str] = []
 
         for origin in origins:
             if not origin:
@@ -155,7 +156,7 @@ class CORSPolicy(BaseModel):
 
     @field_validator("max_age")
     @classmethod
-    def validate_max_age(cls, v):
+    def validate_max_age(cls, v: int) -> int:
         """Validate max age is reasonable."""
         if v < 0:
             raise ValueError("max_age must be non-negative")
@@ -276,7 +277,7 @@ class CORSPolicy(BaseModel):
 
         return False
 
-    def get_cors_config_dict(self) -> dict:
+    def get_cors_config_dict(self) -> Dict[str, Any]:
         """
         Get CORS configuration as a dictionary for FastAPI middleware.
 
@@ -339,7 +340,7 @@ class CORSConfig(BaseModel):
         description="CORS policy for test environment",
     )
 
-    def get_policy(self, environment: str | Environment) -> CORSPolicy:
+    def get_policy(self, environment: Union[str, Environment]) -> CORSPolicy:
         """
         Get CORS policy for a specific environment.
 
@@ -349,8 +350,7 @@ class CORSConfig(BaseModel):
         Returns:
             CORSPolicy for the specified environment
         """
-        if isinstance(environment, str):
-            environment = Environment(environment.lower())
+        environment = Environment(environment.lower()) if isinstance(environment, str) else environment  # type: ignore
 
         if environment == Environment.DEVELOPMENT:
             return self.development
@@ -361,7 +361,7 @@ class CORSConfig(BaseModel):
         raise ValueError(f"Unknown environment: {environment}")
 
     def update_policy(
-        self, environment: str | Environment, policy: CORSPolicy
+        self, environment: Union[str, Environment], policy: CORSPolicy
     ) -> None:
         """
         Update CORS policy for a specific environment.
@@ -370,8 +370,7 @@ class CORSConfig(BaseModel):
             environment: Environment name or Environment enum value
             policy: New CORS policy to apply
         """
-        if isinstance(environment, str):
-            environment = Environment(environment.lower())
+        environment = Environment(environment.lower()) if isinstance(environment, str) else environment  # type: ignore
 
         if environment == Environment.DEVELOPMENT:
             self.development = policy

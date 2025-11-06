@@ -49,7 +49,7 @@ class ProactiveHealthMonitor:
             Dictionary containing proactive health check results
         """
         # Check if proactive monitoring is disabled
-        from resync.config.settings import get_settings
+        from resync.settings.settings import get_settings
 
         settings = get_settings()
         if not settings.health_enable_proactive:
@@ -435,6 +435,10 @@ class ProactiveHealthMonitor:
             "history_size": len(self._monitoring_history),
             "max_history_entries": self._max_history_entries,
         }
+
+
+
+
 
 
 

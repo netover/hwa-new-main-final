@@ -1,5 +1,5 @@
 import logging
-from typing import Any, Dict, List
+from typing import Any, Dict
 
 from fastapi import APIRouter, Depends, Request
 from resync.core.exceptions_enhanced import NotFoundError
@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 @agents_router.get("/all")
 async def list_all_agents(
-    request: Request, agent_manager=agent_manager_dependency
+    request: Request, agent_manager: Any = agent_manager_dependency
 ) -> list[Dict[str, Any]]:
     """
     Lists the configuration of all available agents.
@@ -45,7 +45,7 @@ async def list_all_agents(
 async def get_agent_details(
     agent_id: SafeAgentID,
     request: Request,
-    agent_manager=agent_manager_dependency,
+    agent_manager: Any = agent_manager_dependency,
 ):
     """
     Retrieves the detailed configuration of a specific agent by its ID.

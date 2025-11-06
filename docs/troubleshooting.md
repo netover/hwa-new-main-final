@@ -31,7 +31,7 @@ Erros desta categoria geralmente ocorrem durante a inicialização da aplicaçã
 
 ### 1.3 `DataParsingError` (em `agent_manager.py`)
 
-- **Erro de Exemplo no Log**: `ERROR: Error decoding JSON from config/runtime.json: ...`
+- **Erro de Exemplo no Log**: `ERROR: Error decoding JSON from ops_config/runtime.json: ...`
 - **Causa Provável**: O arquivo de configuração dos agentes (`agents.json` ou `runtime.json`) contém um erro de sintaxe JSON (ex: uma vírgula a mais, aspas faltando).
 - **Solução**:
   1. Abra o arquivo de configuração dos agentes.

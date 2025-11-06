@@ -58,7 +58,7 @@ from resync.cqrs.queries import (
     GetResourceUsageQuery,
     GetWorkstationsStatusQuery,
 )
-from resync.config.settings import settings
+from resync.settings.settings import settings
 from resync.core.monitoring.metrics import runtime_metrics  # type: ignore[attr-defined]
 from resync.utils.interfaces import IAgentManager, ITWSClient
 
@@ -1403,6 +1403,10 @@ async def get_benchmark_results(
 
 # Register circuit breaker metrics endpoints
 api_router.include_router(circuit_breaker_router)
+
+
+
+
 
 
 

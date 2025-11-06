@@ -93,7 +93,7 @@ class CSPMiddleware(BaseHTTPMiddleware):
             CSP policy string
         """
         # Import settings lazily to avoid circular imports
-        from resync.config.settings import settings
+        from resync.settings.settings import settings
 
         # Always get fresh settings to support mocking in tests
         # In production, settings is a singleton so this has minimal overhead
@@ -219,7 +219,7 @@ def create_csp_middleware(app) -> CSPMiddleware:
         Configured CSPMiddleware instance
     """
     # Import settings lazily to avoid circular imports
-    from resync.config.settings import settings
+    from resync.settings.settings import settings
 
     # Check if CSP should be in report-only mode
     report_only = getattr(settings, "CSP_REPORT_ONLY", False)
@@ -234,6 +234,10 @@ def create_csp_middleware(app) -> CSPMiddleware:
 
     logger.info(f"CSP middleware initialized (report_only={report_only})")
     return CSPMiddleware(app, report_only=report_only)
+
+
+
+
 
 
 

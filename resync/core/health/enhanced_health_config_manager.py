@@ -7,7 +7,7 @@ integrating with the new health checker architecture.
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, Dict
 
 import structlog
 from resync.models.health_models import HealthCheckConfig
@@ -48,7 +48,7 @@ class EnhancedHealthConfigurationManager(HealthCheckConfigurationManager):
 
     def get_checker_specific_config(
         self, component_name: str
-    ) -> dict[str, Any]:
+    ) -> Dict[str, Any]:
         """
         Get configuration specific to a health checker component.
 
@@ -80,7 +80,7 @@ class EnhancedHealthConfigurationManager(HealthCheckConfigurationManager):
 
     def get_component_thresholds_enhanced(
         self, component_name: str
-    ) -> dict[str, float]:
+    ) -> Dict[str, float]:
         """
         Get enhanced threshold values for a specific component.
 
@@ -137,7 +137,7 @@ class EnhancedHealthConfigurationManager(HealthCheckConfigurationManager):
         """
         base_export = self.export_config()
 
-        enhanced_export = {
+        enhanced_export: Dict[str, Any] = {
             "config": base_export["config"],
             "exported_at": base_export["exported_at"],
             "validation_errors": base_export["validation_errors"],
@@ -161,7 +161,7 @@ class EnhancedHealthConfigurationManager(HealthCheckConfigurationManager):
 
         return enhanced_export
 
-    def get_config_summary_enhanced(self) -> dict[str, Any]:
+    def get_config_summary_enhanced(self) -> Dict[str, Any]:
         """
         Get enhanced configuration summary.
 
@@ -170,7 +170,7 @@ class EnhancedHealthConfigurationManager(HealthCheckConfigurationManager):
         """
         base_summary = self.get_config_summary()
 
-        enhanced_summary = {
+        enhanced_summary: Dict[str, Any] = {
             "base_config": base_summary,
             "checker_validation": self.validate_all_checkers_config(),
             "enabled_checkers": [],
@@ -188,14 +188,14 @@ class EnhancedHealthConfigurationManager(HealthCheckConfigurationManager):
 
         return enhanced_summary
 
-    def optimize_config_for_performance(self) -> dict[str, Any]:
+    def optimize_config_for_performance(self) -> Dict[str, Any]:
         """
         Optimize configuration for better performance.
 
         Returns:
             Dictionary with optimization recommendations
         """
-        recommendations = {
+        recommendations: Dict[str, Dict[str, Any]] = {
             "interval_optimizations": {},
             "threshold_adjustments": {},
             "resource_savings": {},

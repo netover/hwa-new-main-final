@@ -24,7 +24,7 @@ from fastapi import (
     HTTPException,
     UploadFile,
 )
-from resync.core.fastapi_di import get_file_ingestor
+from resync.core.fastapi_di import get_file_ingestor  # type: ignore
 from resync.utils.exceptions import FileProcessingError
 from resync.utils.interfaces import IFileIngestor
 
@@ -34,7 +34,7 @@ logger = logging.getLogger(__name__)
 
 # Module-level dependencies to avoid B008 errors
 file_dependency = File(...)
-file_ingestor_dependency = Depends(get_file_ingestor)
+file_ingestor_dependency = Depends(get_file_ingestor)  # type: ignore
 
 router = APIRouter(prefix="/rag", tags=["rag"])
 

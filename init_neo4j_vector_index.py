@@ -5,7 +5,7 @@ import traceback
 
 from neo4j import AsyncGraphDatabase
 
-from resync.config.settings import settings
+from resync.settings.settings import settings
 
 
 async def create_vector_index() -> None:
@@ -55,3 +55,7 @@ async def create_vector_index() -> None:
 
 if __name__ == "__main__":
     asyncio.run(create_vector_index())
+
+
+
+

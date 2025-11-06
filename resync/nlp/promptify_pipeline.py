@@ -22,9 +22,9 @@ try:
     # structured outputs.  Installation is optional; if unavailable
     # at runtime this module will still import but the extractor
     # cannot be instantiated.
-    from promptify import Prompter
-    from promptify import OpenAI
-    from promptify.pipeline import Pipeline
+    from promptify import Prompter  # pyright: ignore[reportMissingImports]  # Optional NLP dependency
+    from promptify import OpenAI  # pyright: ignore[reportMissingImports]  # Optional NLP dependency
+    from promptify.pipeline import Pipeline  # pyright: ignore[reportMissingImports]  # Optional NLP dependency
 except Exception:
     # Fall back to None if Promptify is not installed.  This allows
     # tests to monkeypatch the extractor class without requiring the

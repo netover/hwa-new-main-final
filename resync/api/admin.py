@@ -14,7 +14,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request, status
 from fastapi.responses import HTMLResponse
 from pydantic import BaseModel, Field
 from resync.core.teams_integration import TeamsIntegration
-from resync.config.settings import settings
+from resync.settings.settings import settings
 from resync.core.fastapi_di import get_teams_integration, get_tws_client
 from resync.utils.interfaces import ITWSClient
 
@@ -385,6 +385,10 @@ async def get_admin_status(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to get system status: {str(e)}",
         ) from e
+
+
+
+
 
 
 

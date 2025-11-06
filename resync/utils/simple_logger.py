@@ -23,7 +23,7 @@ from contextvars import ContextVar
 # Lazy import of settings to avoid circular dependencies
 def _get_settings():
     """Lazy import of settings to avoid circular dependencies."""
-    from resync.config.settings import settings
+    from resync.settings.settings import settings
 
     return settings
 
@@ -434,6 +434,10 @@ __all__ = [
     "PerformanceLogger",
     "StructuredErrorLogger",
 ]
+
+
+
+
 
 
 

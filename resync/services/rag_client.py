@@ -10,7 +10,7 @@ import httpx
 from pydantic import BaseModel
 from resync.core.health.circuit_breaker_manager import CircuitBreakerManager
 from resync.utils.retry_utils import retry_with_backoff_async
-from resync.config.settings import settings
+from resync.settings.settings import settings
 from resync.utils.simple_logger import get_logger
 
 logger = get_logger(__name__)
@@ -150,6 +150,10 @@ class RAGServiceClient:
 # Global instance
 rag_client = RAGServiceClient()
 """Global RAG service client instance"""
+
+
+
+
 
 
 

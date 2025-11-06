@@ -534,10 +534,10 @@ class AuditLogger:
 
         record = AuditRecordResponse(
             id=str(uuid.uuid4()),
+            timestamp=datetime.now().isoformat(),
             user_id=user_id,
             action=action,
             details=details or {},
-            timestamp="now",
         )
         self.records.append(record)
         return record

@@ -8,7 +8,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from pydantic import BaseModel, Field
 
-from resync.config.settings import settings
+from resync.settings.settings import settings
 from resync.services.mock_tws_service import MockTWSClient
 from resync.tool_definitions.tws_tools import (
     tws_status_tool,
@@ -126,3 +126,7 @@ async def _get_tws_client() -> Any:
 
 
 __all__ = ["AgentConfig", "AgentsConfig", "AgentManager"]
+
+
+
+

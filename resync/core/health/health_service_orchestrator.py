@@ -340,7 +340,7 @@ class HealthServiceOrchestrator:
 
         try:
             # Check Redis configuration
-            from resync.config.settings import settings
+            from resync.settings.settings import settings
 
             if not settings.REDIS_URL:
                 return ComponentHealth(
@@ -656,7 +656,7 @@ class HealthServiceOrchestrator:
 
         try:
             # Check TWS configuration
-            from resync.config.settings import settings
+            from resync.settings.settings import settings
 
             tws_config = settings.get("tws_monitor", {})
             if not tws_config or not tws_config.get("enabled", False):
@@ -917,6 +917,10 @@ class HealthServiceOrchestrator:
     def get_last_check_time(self) -> datetime | None:
         """Get the timestamp of the last health check."""
         return self.last_health_check
+
+
+
+
 
 
 

@@ -33,6 +33,7 @@ class AlertSeverity(str, Enum):
     WARNING = "warning"
     ERROR = "error"
     CRITICAL = "critical"
+    EMERGENCY = "emergency"
 
 
 class AlertStatus(str, Enum):

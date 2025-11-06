@@ -9,7 +9,7 @@ from dataclasses import dataclass, field
 from typing import Any, Awaitable, Callable, Dict, List, Optional
 
 from resync.core.agent_manager import AgentManager
-from resync.core.cache.async_cache_refactored import AsyncTTLCache
+from resync.core._deprecated.async_cache_refactored import AsyncTTLCache
 from resync.core.write_ahead_log import (
     WalOperationType,
     WalEntry,

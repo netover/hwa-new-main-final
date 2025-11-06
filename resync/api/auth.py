@@ -19,12 +19,12 @@ import hmac
 import secrets
 import os
 from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 import jwt
 from fastapi import Depends, HTTPException, Request, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
-from resync.config.settings import settings
+from resync.settings.settings import settings
 from resync.utils.simple_logger import get_logger
 
 logger = get_logger(__name__)
@@ -36,19 +36,22 @@ security = HTTPBearer(auto_error=False)
 # Secret key for JWT tokens - CRITICAL SECURITY FIX
 DEFAULT_DEV_SECRET = "dev-secret-key-for-tests-only-0123456789abcd"
 
-SECRET_KEY = getattr(settings, "SECRET_KEY", None) or os.getenv("SECRET_KEY") or ""
-SECRET_KEY = str(SECRET_KEY)
+# Initialize SECRET_KEY with proper validation
+_secret_key = getattr(settings, "SECRET_KEY", None) or os.getenv("SECRET_KEY") or ""
+_secret_key = str(_secret_key)
 
-if not SECRET_KEY:
-    SECRET_KEY = DEFAULT_DEV_SECRET
+if not _secret_key:
+    _secret_key = DEFAULT_DEV_SECRET
     logger.warning("Using fallback SECRET_KEY intended for development/testing only.")
-elif len(SECRET_KEY) < 32:
+elif len(_secret_key) < 32:
     if getattr(settings, "environment", "development") == "production":
         raise ValueError(
             "CRITICAL SECURITY ERROR: SECRET_KEY must be at least 32 characters long in production environments."
         )
     logger.warning("SECRET_KEY shorter than 32 characters; padding for non-production usage.")
-    SECRET_KEY = (SECRET_KEY + DEFAULT_DEV_SECRET)[:32]
+    _secret_key = (_secret_key + DEFAULT_DEV_SECRET)[:32]
+
+SECRET_KEY = _secret_key  # Final assignment
 
 if getattr(settings, "environment", "development") == "production" and SECRET_KEY == DEFAULT_DEV_SECRET:
     raise ValueError(
@@ -310,6 +313,10 @@ async def authenticate_admin(username: str, password: str) -> bool:
         username, password, client_ip
     )
     return is_valid
+
+
+
+
 
 
 

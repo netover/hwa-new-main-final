@@ -21,7 +21,7 @@ def test_structured_logging():
 
     try:
         # Import structured logging components
-        from config.structured_logging_basic import (
+        from ops_config.structured_logging_basic import (
             LoggingContext,
             log_critical,
             log_debug,

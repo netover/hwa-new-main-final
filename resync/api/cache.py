@@ -23,7 +23,7 @@ except ImportError:
 
 from pydantic import BaseModel
 from resync.core.rate_limiter import authenticated_rate_limit
-from resync.config.settings import settings
+from resync.settings.settings import settings
 from resync.core.fastapi_di import get_tws_client
 from resync.utils.interfaces import ITWSClient
 
@@ -41,7 +41,7 @@ tws_client_dependency = Depends(get_tws_client)
 # Redis client singleton
 _redis_client = None
 
-async def get_redis_client() -> redis.Redis:
+async def get_redis_client() -> "redis.Redis":
     """Get Redis client singleton with lazy initialization."""
     global _redis_client
     if _redis_client is None:
@@ -128,7 +128,7 @@ class ConnectionPoolValidator:
         return True
 
 
-def get_redis_connection() -> redis.Redis | None:
+def get_redis_connection() -> "redis.Redis | None":
     """
     Get a Redis connection using connection pooling and validation.
 
@@ -493,6 +493,10 @@ def get_database_connection(
         "Database connection retrieved successfully after pool validation"
     )
     return object()  # Placeholder for actual connection
+
+
+
+
 
 
 

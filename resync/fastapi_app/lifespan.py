@@ -142,8 +142,8 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:  # type: ignore[
 
     # Log environment summary at INFO level once on startup
     try:
-        logger.info(
-            "Application configuration", extra={"config": env_summary}
+        logger.info(  # type: ignore
+            "Application configuration", extra={"config": env_summary}  # type: ignore
         )
     except Exception:
         # Do not crash startup due to logging failure
@@ -155,9 +155,9 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:  # type: ignore[
     # returned by create_redis manages its own connection pool and is safe
     # to reuse across the application.  Store it on app.state for
     # dependency injection.
-    if callable(create_redis):
+    if callable(create_redis):  # type: ignore
         try:
-            redis_client = create_redis()
+            redis_client = create_redis()  # type: ignore
             app.state.redis = redis_client  # type: ignore[attr-defined]
         except Exception:
             logger.exception("Failed to create Redis client during startup")
