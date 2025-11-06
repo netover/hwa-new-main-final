@@ -8,7 +8,7 @@ Este módulo demonstra o uso completo de:
 """
 
 from datetime import datetime
-from typing import Annotated, Any, Dict, List, Optional
+from typing import Annotated, Any
 from uuid import uuid4
 
 from fastapi import APIRouter, Query, Request, status
@@ -35,8 +35,8 @@ class Book(BaseModel):
     id: str = Field(..., description="ID único do livro")
     title: str = Field(..., description="Título do livro")
     author: str = Field(..., description="Autor do livro")
-    isbn: Optional[str] = Field(None, description="ISBN")
-    published_year: Optional[int] = Field(None, description="Ano de publicação")
+    isbn: str | None = Field(None, description="ISBN")
+    published_year: int | None = Field(None, description="Ano de publicação")
     created_at: str = Field(..., description="Data de criação")
 
     model_config = ConfigDict(
@@ -53,7 +53,7 @@ class Book(BaseModel):
 
 
 class BookOut(Book):
-    _links: Dict[str, Any]
+    _links: dict[str, Any]
 
 
 ISBN = Annotated[str, StringConstraints(pattern=r"^[\d-]+$")]
@@ -64,14 +64,14 @@ class BookCreate(BaseModel):
 
     title: str = Field(..., description="Título do livro", min_length=1, max_length=200)
     author: str = Field(..., description="Autor do livro", min_length=1, max_length=100)
-    isbn: Optional[ISBN] = Field(None, description="ISBN")
-    published_year: Optional[int] = Field(
+    isbn: ISBN | None = Field(None, description="ISBN")
+    published_year: int | None = Field(
         None, description="Ano de publicação", ge=1000, le=9999
     )
 
 
 # Simulação de banco de dados em memória
-_books_db: List[Book] = [
+_books_db: list[Book] = [
     Book(
         id=str(uuid4()),
         title="Clean Code",
@@ -131,7 +131,7 @@ async def list_books(
     request: Request,
     page: int = Query(1, ge=1, description="Número da página"),
     page_size: int = Query(10, ge=1, le=100, description="Tamanho da página"),
-    author: Optional[str] = Query(None, description="Filtrar por autor"),
+    author: str | None = Query(None, description="Filtrar por autor"),
 ):
     """Lista livros com paginação e HATEOAS."""
 
@@ -176,7 +176,7 @@ async def list_books(
     if author:
         query_params["author"] = author
 
-    response = create_paginated_response(
+    return create_paginated_response(
         items=items_with_links,
         total=total,
         page=page,
@@ -184,8 +184,6 @@ async def list_books(
         base_path="/api/v1/examples/books",
         query_params=query_params,
     )
-
-    return response
 
 
 @router.get(
@@ -382,7 +380,7 @@ async def delete_book(book_id: str):
 
     logger.info("Book deleted", book_id=book_id, title=deleted_book.title)
 
-    return None
+    return
 
 
 @router.get(

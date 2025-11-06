@@ -16,16 +16,16 @@ from typing import Any
 
 import httpx
 from dateutil import parser
+from resync.settings import settings
+from resync.core.connection_pool_manager import get_connection_pool_manager
+from resync.core.exceptions import TWSConnectionError
+
 from resync.core.cache_hierarchy import get_cache_hierarchy
 from resync.core.resilience import (
     CircuitBreakerError,
     CircuitBreakerManager,
     retry_with_backoff_async,
 )
-from resync_new.config.settings import settings  # New import
-from resync_new.core.connection_pool_manager import get_connection_pool_manager
-from resync_new.utils.exceptions import TWSConnectionError
-
 from resync.models.tws import (
     CriticalJob,
     DependencyTree,
@@ -108,9 +108,7 @@ class OptimizedTWSClient:
 
         # Caching layer to reduce redundant API calls - using a direct Redis cache
         self.cache = get_cache_hierarchy()
-        logger.info(
-            "OptimizedTWSClient initialized for base URL: %s", self.base_url
-        )
+        logger.info("OptimizedTWSClient initialized for base URL: %s", self.base_url)
 
         # Initialize centralized resilience manager
         self.cbm = CircuitBreakerManager()
@@ -127,9 +125,7 @@ class OptimizedTWSClient:
         self.cbm.register("tws_job_dependencies", fail_max=3, reset_timeout=30)
         self.cbm.register("tws_resource_usage", fail_max=3, reset_timeout=30)
         self.cbm.register("tws_event_log", fail_max=3, reset_timeout=30)
-        self.cbm.register(
-            "tws_performance_metrics", fail_max=2, reset_timeout=60
-        )
+        self.cbm.register("tws_performance_metrics", fail_max=2, reset_timeout=60)
 
     async def _get_http_client(self) -> Any:
         """Get HTTP client from connection pool or use direct client."""
@@ -192,7 +188,7 @@ class OptimizedTWSClient:
         try:
             response = await self._make_request(method, url, **kwargs)
             data = response.json()
-            if isinstance(data, (dict, list)):
+            if isinstance(data, dict | list):
                 yield data
             else:
                 yield {}
@@ -212,13 +208,11 @@ class OptimizedTWSClient:
                 original_exception=e,
             )
         except Exception as e:
-            logger.error(
-                "An unexpected error occurred during API request: %s", e
-            )
+            logger.error("An unexpected error occurred during API request: %s", e)
             # Wrap unexpected errors for consistent error handling
             raise TWSConnectionError(
                 "An unexpected error occurred", original_exception=e
-            )
+            ) from e
 
     async def ping(self) -> None:
         """
@@ -259,19 +253,15 @@ class OptimizedTWSClient:
             )
         except httpx.TimeoutException as e:
             logger.warning("TWS server ping timed out")
-            raise TWSConnectionError(
-                "TWS server ping timed out", original_exception=e
-            )
+            raise TWSConnectionError("TWS server ping timed out", original_exception=e)
         except httpx.RequestError as e:
             logger.error(f"TWS server ping failed: {e}")
-            raise TWSConnectionError(
-                "TWS server unreachable", original_exception=e
-            )
+            raise TWSConnectionError("TWS server unreachable", original_exception=e)
         except Exception as e:
             logger.error(f"Unexpected error during TWS ping: {e}")
             raise TWSConnectionError(
                 "TWS ping failed unexpectedly", original_exception=e
-            )
+            ) from e
 
     async def check_connection(self) -> bool:
         """Verifies the connection to the TWS server is active."""
@@ -348,9 +338,7 @@ class OptimizedTWSClient:
         async def _once():
             async with self._api_request("GET", url) as data:
                 return (
-                    [JobStatus(**job) for job in data]
-                    if isinstance(data, list)
-                    else []
+                    [JobStatus(**job) for job in data] if isinstance(data, list) else []
                 )
 
         async def _call():
@@ -384,9 +372,7 @@ class OptimizedTWSClient:
 
         async def _once():
             async with self._api_request("GET", url) as data:
-                jobs_data = (
-                    data.get("jobs", []) if isinstance(data, dict) else []
-                )
+                jobs_data = data.get("jobs", []) if isinstance(data, dict) else []
                 return (
                     [CriticalJob(**job) for job in jobs_data]
                     if isinstance(jobs_data, list)
@@ -418,9 +404,7 @@ class OptimizedTWSClient:
         # Execute all three calls concurrently
         workstations_task = asyncio.create_task(self.get_workstations_status())
         jobs_task = asyncio.create_task(self.get_jobs_status())
-        critical_jobs_task = asyncio.create_task(
-            self.get_critical_path_status()
-        )
+        critical_jobs_task = asyncio.create_task(self.get_critical_path_status())
 
         workstations: list[WorkstationStatus] | Exception
         jobs: list[JobStatus] | Exception
@@ -442,9 +426,7 @@ class OptimizedTWSClient:
             jobs = []
 
         if isinstance(critical_jobs, Exception):
-            logger.error(
-                f"Failed to get critical path status: {critical_jobs}"
-            )
+            logger.error(f"Failed to get critical path status: {critical_jobs}")
             critical_jobs = []
 
         return SystemStatus(
@@ -476,18 +458,14 @@ class OptimizedTWSClient:
                     try:
                         history = await self.get_job_history(job_id)
                     except Exception as e:
-                        logger.warning(
-                            f"Failed to get job history for {job_id}: {e}"
-                        )
+                        logger.warning(f"Failed to get job history for {job_id}: {e}")
                         history = []
 
                     # Get dependencies
                     try:
                         dependencies = await self.get_job_dependencies(job_id)
                     except Exception as e:
-                        logger.warning(
-                            f"Failed to get dependencies for {job_id}: {e}"
-                        )
+                        logger.warning(f"Failed to get dependencies for {job_id}: {e}")
                         dependencies = []
 
                     return JobDetails(
@@ -498,12 +476,8 @@ class OptimizedTWSClient:
                         job_stream=data.get("job_stream", ""),
                         full_definition=data,
                         dependencies=dependencies.dependencies,
-                        resource_requirements=data.get(
-                            "resource_requirements", {}
-                        ),
-                        execution_history=history[
-                            :10
-                        ],  # Limit to last 10 executions
+                        resource_requirements=data.get("resource_requirements", {}),
+                        execution_history=history[:10],  # Limit to last 10 executions
                     )
                 raise ValueError(f"Unexpected data format for job {job_id}")
 
@@ -568,24 +542,16 @@ class OptimizedTWSClient:
                                         end_time = None
 
                                 execution = JobExecution(
-                                    job_id=execution_data.get(
-                                        "job_id", job_name
-                                    ),
-                                    status=execution_data.get(
-                                        "status", "UNKNOWN"
-                                    ),
+                                    job_id=execution_data.get("job_id", job_name),
+                                    status=execution_data.get("status", "UNKNOWN"),
                                     start_time=start_time or None,
                                     end_time=end_time,
                                     duration=execution_data.get("duration"),
-                                    error_message=execution_data.get(
-                                        "error_message"
-                                    ),
+                                    error_message=execution_data.get("error_message"),
                                 )
                                 executions.append(execution)
                             except Exception as e:
-                                logger.warning(
-                                    f"Failed to parse execution data: {e}"
-                                )
+                                logger.warning(f"Failed to parse execution data: {e}")
 
                 return executions
 
@@ -674,13 +640,9 @@ class OptimizedTWSClient:
                         except Exception:
                             creation_date = None
 
-                    if estimated_completion and isinstance(
-                        estimated_completion, str
-                    ):
+                    if estimated_completion and isinstance(estimated_completion, str):
                         try:
-                            estimated_completion = parser.parse(
-                                estimated_completion
-                            )
+                            estimated_completion = parser.parse(estimated_completion)
                         except Exception:
                             estimated_completion = None
 
@@ -787,12 +749,8 @@ class OptimizedTWSClient:
                                     resource_type=resource_data.get(
                                         "resource_type", ""
                                     ),
-                                    total_capacity=resource_data.get(
-                                        "total_capacity"
-                                    ),
-                                    used_capacity=resource_data.get(
-                                        "used_capacity"
-                                    ),
+                                    total_capacity=resource_data.get("total_capacity"),
+                                    used_capacity=resource_data.get("used_capacity"),
                                     available_capacity=resource_data.get(
                                         "available_capacity"
                                     ),
@@ -802,9 +760,7 @@ class OptimizedTWSClient:
                                 )
                                 resources.append(resource)
                             except Exception as e:
-                                logger.warning(
-                                    f"Failed to parse resource data: {e}"
-                                )
+                                logger.warning(f"Failed to parse resource data: {e}")
 
                 return resources
 
@@ -857,12 +813,8 @@ class OptimizedTWSClient:
                                 event = Event(
                                     event_id=event_data.get("event_id", ""),
                                     timestamp=timestamp or None,
-                                    event_type=event_data.get(
-                                        "event_type", ""
-                                    ),
-                                    severity=event_data.get(
-                                        "severity", "INFO"
-                                    ),
+                                    event_type=event_data.get("event_type", ""),
+                                    severity=event_data.get("severity", "INFO"),
                                     source=event_data.get("source", ""),
                                     message=event_data.get("message", ""),
                                     job_id=event_data.get("job_id"),
@@ -870,9 +822,7 @@ class OptimizedTWSClient:
                                 )
                                 events.append(event)
                             except Exception as e:
-                                logger.warning(
-                                    f"Failed to parse event data: {e}"
-                                )
+                                logger.warning(f"Failed to parse event data: {e}")
 
                 return events
 
@@ -923,15 +873,11 @@ class OptimizedTWSClient:
                         api_response_times=data.get("api_response_times", {}),
                         cache_hit_rate=data.get("cache_hit_rate", 0.0),
                         memory_usage_mb=data.get("memory_usage_mb", 0.0),
-                        cpu_usage_percentage=data.get(
-                            "cpu_usage_percentage", 0.0
-                        ),
+                        cpu_usage_percentage=data.get("cpu_usage_percentage", 0.0),
                         active_connections=data.get("active_connections", 0),
                         jobs_per_minute=data.get("jobs_per_minute", 0.0),
                     )
-                raise ValueError(
-                    "Unexpected data format for performance metrics"
-                )
+                raise ValueError("Unexpected data format for performance metrics")
 
         async def _call():
             return await self.cbm.call("tws_performance_metrics", _once)
@@ -951,9 +897,7 @@ class OptimizedTWSClient:
         await self.cache.set(cache_key, performance_data.dict())
         return performance_data
 
-    async def get_job_status_batch(
-        self, job_ids: list[str]
-    ) -> dict[str, JobStatus]:
+    async def get_job_status_batch(self, job_ids: list[str]) -> dict[str, JobStatus]:
         """
         Batch multiple job status queries using parallel execution.
 
@@ -1006,23 +950,17 @@ class OptimizedTWSClient:
                             )
                             return job_id, None
                     except Exception as e:
-                        logger.warning(
-                            f"Failed to get status for job {job_id}: {e}"
-                        )
+                        logger.warning(f"Failed to get status for job {job_id}: {e}")
                         return job_id, None
 
             # Execute all requests concurrently
             tasks = [fetch_single_job(job_id) for job_id in uncached_jobs]
-            parallel_results = await asyncio.gather(
-                *tasks, return_exceptions=True
-            )
+            parallel_results = await asyncio.gather(*tasks, return_exceptions=True)
 
             # Process results
             for result in parallel_results:
                 if isinstance(result, Exception):
-                    logger.error(
-                        f"Error in parallel job status fetch: {result}"
-                    )
+                    logger.error(f"Error in parallel job status fetch: {result}")
                 elif isinstance(result, tuple) and len(result) == 2:
                     job_id, job_status = result
                     if job_status is not None:
@@ -1079,14 +1017,12 @@ class OptimizedTWSClient:
 
         except asyncio.TimeoutError:
             logger.error(f"Timeout getting job status for {job_id}")
-            raise TWSConnectionError(
-                f"Timeout getting job status for {job_id}"
-            )
+            raise TWSConnectionError(f"Timeout getting job status for {job_id}")
         except Exception as e:
             logger.error(f"Error getting job status for {job_id}: {e}")
             raise TWSConnectionError(
                 f"Error getting job status for {job_id}: {e}"
-            )
+            ) from e
 
     async def validate_connection(
         self,
@@ -1166,9 +1102,7 @@ class OptimizedTWSClient:
                 "port": test_port,
             }
         except Exception as e:
-            logger.error(
-                f"Unexpected error during TWS connection validation: {e}"
-            )
+            logger.error(f"Unexpected error during TWS connection validation: {e}")
             if "test_client" in locals():
                 try:
                     await test_client.aclose()

@@ -7,7 +7,6 @@ It supports both memory and Redis-based caching with detailed metrics.
 
 import logging
 import secrets
-from typing import Optional, Union
 
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
@@ -98,7 +97,7 @@ class ConnectionPoolValidator:
         return True
 
 
-def get_redis_connection() -> Optional[Redis]:
+def get_redis_connection() -> Redis | None:
     """
     Get a Redis connection using connection pooling and validation.
 
@@ -133,7 +132,7 @@ class RedisCacheManager:
     def __init__(self, redis_client: Redis):
         self.redis_client = redis_client
 
-    def get(self, key: str) -> Optional[str]:
+    def get(self, key: str) -> str | None:
         """
         Retrieve a value from Redis cache.
 
@@ -232,7 +231,7 @@ class RedisCacheManager:
 
 
 # Global Redis cache manager instance
-redis_manager: Optional[RedisCacheManager] = None
+redis_manager: RedisCacheManager | None = None
 
 
 def validate_connection_pool() -> bool:
@@ -426,7 +425,7 @@ async def get_cache_stats(
 
 def get_database_connection(
     min_connections: int = 1, max_connections: int = 10, timeout: float = 30.0
-) -> Union[object, None]:
+) -> object | None:
     """
     Get a database connection with pool validation.
 

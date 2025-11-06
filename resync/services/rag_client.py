@@ -4,7 +4,7 @@ RAG Service Client for API Gateway
 This module provides a client to communicate with the standalone RAG microservice.
 """
 
-from typing import Any, Optional
+from typing import Any
 
 import httpx
 from pydantic import BaseModel
@@ -21,8 +21,8 @@ class RAGJobStatus(BaseModel):
 
     job_id: str
     status: str  # queued, processing, completed, failed
-    progress: Optional[int] = None
-    message: Optional[str] = None
+    progress: int | None = None
+    message: str | None = None
 
 
 class RAGUploadResponse(BaseModel):
@@ -135,7 +135,7 @@ class RAGServiceClient:
             resp.raise_for_status()
             return RAGJobStatus(**resp.json())
 
-        job_status = await retry_with_backoff_async(
+        return await retry_with_backoff_async(
             _call,
             retries=self.max_retries,
             base_delay=self.retry_backoff,
@@ -143,7 +143,6 @@ class RAGServiceClient:
             jitter=True,
             retry_on=(httpx.RequestError, httpx.TimeoutException),
         )
-        return job_status
 
 
 # Global instance

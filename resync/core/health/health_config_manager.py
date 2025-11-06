@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import os
 from datetime import datetime
-from typing import Any, Optional
+from typing import Any
 
 import structlog
 
@@ -29,7 +29,7 @@ class HealthCheckConfigurationManager:
     - Providing configuration validation and defaults
     """
 
-    def __init__(self, config: Optional[HealthCheckConfig] = None):
+    def __init__(self, config: HealthCheckConfig | None = None):
         """
         Initialize the configuration manager.
 
@@ -176,7 +176,7 @@ class HealthCheckConfigurationManager:
         }
 
         updates = {}
-        for config_key, (env_var, converter, default) in env_mappings.items():
+        for config_key, (env_var, converter, _default) in env_mappings.items():
             env_value = os.getenv(env_var)
             if env_value is not None:
                 try:
@@ -286,7 +286,7 @@ class HealthCheckConfigurationManager:
         if len(self._config_history) > self._max_history_size:
             self._config_history = self._config_history[-self._max_history_size :]
 
-    def get_config_history(self, limit: Optional[int] = None) -> list[dict[str, Any]]:
+    def get_config_history(self, limit: int | None = None) -> list[dict[str, Any]]:
         """
         Get configuration change history.
 
@@ -386,13 +386,12 @@ class HealthCheckConfigurationManager:
             component_name: Name of the component
             thresholds: Dictionary with threshold values
         """
-        if component_name == "database":
-            if "connection_usage_warning" in thresholds:
-                self.update_config(
-                    database_connection_threshold_percent=int(
-                        thresholds["connection_usage_warning"]
-                    )
+        if component_name == "database" and "connection_usage_warning" in thresholds:
+            self.update_config(
+                database_connection_threshold_percent=int(
+                    thresholds["connection_usage_warning"]
                 )
+            )
 
         logger.info(
             "component_thresholds_updated",

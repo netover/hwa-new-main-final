@@ -3,7 +3,6 @@ from __future__ import annotations
 import time
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Optional
 
 from resync.core.health_models import ComponentHealth, ComponentType, HealthStatus
 from resync.core.structured_logger import get_logger
@@ -59,7 +58,7 @@ class ReplicationStatus:
     replication_lag_seconds: float = 0.0
 
     # Replication nodes
-    master_node: Optional[str] = None
+    master_node: str | None = None
     replica_nodes: list[str] = None
 
     # Replication metrics
@@ -68,11 +67,11 @@ class ReplicationStatus:
 
     # Health indicators
     replication_health: HealthStatus = HealthStatus.UNKNOWN
-    last_sync_timestamp: Optional[datetime] = None
+    last_sync_timestamp: datetime | None = None
 
     # Error tracking
     replication_errors: int = 0
-    last_error_message: Optional[str] = None
+    last_error_message: str | None = None
 
     def __post_init__(self):
         """Initialize mutable defaults."""
@@ -307,9 +306,7 @@ class DatabaseHealthMonitor:
                     pool_stats = self.connection_pool_manager.get_pool_stats()
                     if pool_stats:
                         # Check if we have multiple database nodes indicating replication
-                        db_pools = [
-                            k for k in pool_stats.keys() if "database" in k.lower()
-                        ]
+                        db_pools = [k for k in pool_stats if "database" in k.lower()]
                         if len(db_pools) > 1:
                             replication_status.is_enabled = True
                             replication_status.replica_nodes = db_pools
@@ -340,9 +337,7 @@ class DatabaseHealthMonitor:
         if len(self._metrics_history) > self._max_history_size:
             self._metrics_history = self._metrics_history[-self._max_history_size :]
 
-    def get_metrics_history(
-        self, limit: Optional[int] = None
-    ) -> list[PerformanceMetrics]:
+    def get_metrics_history(self, limit: int | None = None) -> list[PerformanceMetrics]:
         """
         Get historical performance metrics.
 

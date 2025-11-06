@@ -10,7 +10,7 @@ from __future__ import annotations
 import asyncio
 import time
 from datetime import datetime
-from typing import Any, Optional
+from typing import Any
 
 import structlog
 
@@ -36,7 +36,7 @@ class HealthServiceOrchestrator:
     - Providing a unified health check interface
     """
 
-    def __init__(self, config: Optional[HealthCheckConfig] = None):
+    def __init__(self, config: HealthCheckConfig | None = None):
         """
         Initialize the health service orchestrator.
 
@@ -44,15 +44,15 @@ class HealthServiceOrchestrator:
             config: Health check configuration (uses default if None)
         """
         self.config = config or HealthCheckConfig()
-        self.last_health_check: Optional[datetime] = None
+        self.last_health_check: datetime | None = None
         self._component_results: dict[str, ComponentHealth] = {}
         self._lock = asyncio.Lock()
 
     async def perform_comprehensive_health_check(
         self,
-        proactive_monitor: Optional[Any] = None,
-        performance_collector: Optional[Any] = None,
-        cache_manager: Optional[Any] = None,
+        proactive_monitor: Any | None = None,
+        performance_collector: Any | None = None,
+        cache_manager: Any | None = None,
     ) -> HealthCheckResult:
         """
         Perform comprehensive health check with coordination of all subsystems.
@@ -113,7 +113,7 @@ class HealthServiceOrchestrator:
             logger.error("health_check_timed_out", timeout_seconds=30)
             check_results = [
                 asyncio.TimeoutError(f"Health check component {name} timed out")
-                for name in health_checks.keys()
+                for name in health_checks
             ]
 
         # Process results
@@ -862,9 +862,7 @@ class HealthServiceOrchestrator:
                     alerts.append(f"{name} is degraded")
         return alerts
 
-    async def get_component_health(
-        self, component_name: str
-    ) -> Optional[ComponentHealth]:
+    async def get_component_health(self, component_name: str) -> ComponentHealth | None:
         """Get the current health status of a specific component."""
         async with self._lock:
             return self._component_results.get(component_name)
@@ -874,6 +872,6 @@ class HealthServiceOrchestrator:
         async with self._lock:
             return self._component_results.copy()
 
-    def get_last_check_time(self) -> Optional[datetime]:
+    def get_last_check_time(self) -> datetime | None:
         """Get the timestamp of the last health check."""
         return self.last_health_check

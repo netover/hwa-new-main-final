@@ -4,7 +4,6 @@ Este módulo fornece funções de dependência para injeção em endpoints,
 incluindo gerenciamento de idempotência, autenticação, e obtenção de IDs de contexto.
 """
 
-from typing import Optional
 
 from fastapi import Depends, Header, Request
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
@@ -43,8 +42,7 @@ async def get_idempotency_manager() -> IdempotencyManager:
 
     # Fallback to DI container
     try:
-        manager = await app_container.get(IdempotencyManager)
-        return manager
+        return await app_container.get(IdempotencyManager)
     except Exception as e:
         logger.error("idempotency_manager_unavailable", error=str(e), exc_info=True)
         raise ServiceUnavailableError("Idempotency service is not available.")
@@ -133,7 +131,6 @@ async def initialize_idempotency_manager(redis_client):
         # Create in-memory fallback
         # Note: In production, this should not be used
         # For now, we'll just log the error and continue
-        pass
 
 
 # ============================================================================
@@ -178,7 +175,7 @@ security = HTTPBearer(auto_error=False)
 
 
 async def get_current_user(
-    credentials: Optional[HTTPAuthorizationCredentials] = Depends(security),
+    credentials: HTTPAuthorizationCredentials | None = Depends(security),
 ) -> dict | None:
     """Obtém usuário atual (placeholder).
 

@@ -2,7 +2,7 @@
 
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any
 from uuid import uuid4
 
 from pydantic import BaseModel, ConfigDict, Field
@@ -42,17 +42,17 @@ class BaseErrorResponse(BaseModel):
         ErrorSeverity.MEDIUM, description="Error severity level"
     )
     category: ErrorCategory = Field(..., description="Error category")
-    path: Optional[str] = Field(None, description="Request path that caused the error")
-    method: Optional[str] = Field(
+    path: str | None = Field(None, description="Request path that caused the error")
+    method: str | None = Field(
         None, description="HTTP method of the request that caused the error"
     )
-    user_friendly_message: Optional[str] = Field(
+    user_friendly_message: str | None = Field(
         None, description="User-friendly error message"
     )
-    troubleshooting_hints: Optional[List[str]] = Field(
+    troubleshooting_hints: list[str] | None = Field(
         None, description="Troubleshooting suggestions"
     )
-    stack_trace: Optional[str] = Field(
+    stack_trace: str | None = Field(
         None, description="Stack trace for debugging (production disabled)"
     )
 
@@ -68,7 +68,7 @@ class ValidationErrorDetail(BaseModel):
     field: str = Field(..., description="Field that failed validation")
     message: str = Field(..., description="Validation error message")
     value: Any = Field(None, description="Value that caused the validation error")
-    location: Optional[str] = Field(
+    location: str | None = Field(
         None, description="Location of the field (body, query, path, header)"
     )
 
@@ -77,17 +77,17 @@ class ValidationErrorResponse(BaseErrorResponse):
     """Error response model for validation errors with detailed field information."""
 
     category: ErrorCategory = ErrorCategory.VALIDATION
-    details: List[ValidationErrorDetail] = Field(
+    details: list[ValidationErrorDetail] = Field(
         ..., description="List of validation error details"
     )
 
     @classmethod
     def from_pydantic_errors(
         cls,
-        errors: List[Dict[str, Any]],
-        correlation_id: Optional[str] = None,
-        path: Optional[str] = None,
-        method: Optional[str] = None,
+        errors: list[dict[str, Any]],
+        correlation_id: str | None = None,
+        path: str | None = None,
+        method: str | None = None,
     ) -> "ValidationErrorResponse":
         """Create validation error response from Pydantic validation errors."""
         details = []
@@ -130,9 +130,9 @@ class AuthenticationErrorResponse(BaseErrorResponse):
     @classmethod
     def unauthorized(
         cls,
-        correlation_id: Optional[str] = None,
-        path: Optional[str] = None,
-        method: Optional[str] = None,
+        correlation_id: str | None = None,
+        path: str | None = None,
+        method: str | None = None,
     ) -> "AuthenticationErrorResponse":
         """Create unauthorized error response."""
         # Build contextual message with request information
@@ -159,9 +159,9 @@ class AuthenticationErrorResponse(BaseErrorResponse):
     @classmethod
     def invalid_credentials(
         cls,
-        correlation_id: Optional[str] = None,
-        path: Optional[str] = None,
-        method: Optional[str] = None,
+        correlation_id: str | None = None,
+        path: str | None = None,
+        method: str | None = None,
     ) -> "AuthenticationErrorResponse":
         """Create invalid credentials error response."""
         # Build contextual message with request information
@@ -190,10 +190,10 @@ class AuthorizationErrorResponse(BaseErrorResponse):
     """Error response model for authorization errors."""
 
     category: ErrorCategory = ErrorCategory.AUTHORIZATION
-    required_permissions: Optional[List[str]] = Field(
+    required_permissions: list[str] | None = Field(
         None, description="Required permissions"
     )
-    user_permissions: Optional[List[str]] = Field(
+    user_permissions: list[str] | None = Field(
         None, description="User's current permissions"
     )
 
@@ -201,9 +201,9 @@ class AuthorizationErrorResponse(BaseErrorResponse):
     def forbidden(
         cls,
         resource: str,
-        correlation_id: Optional[str] = None,
-        path: Optional[str] = None,
-        method: Optional[str] = None,
+        correlation_id: str | None = None,
+        path: str | None = None,
+        method: str | None = None,
     ) -> "AuthorizationErrorResponse":
         """Create forbidden error response."""
         # Build contextual message with request information
@@ -232,12 +232,12 @@ class AuthorizationErrorResponse(BaseErrorResponse):
     @classmethod
     def insufficient_permissions(
         cls,
-        required: Optional[List[str]] = None,
-        user: Optional[List[str]] = None,
-        resource: Optional[str] = None,
-        correlation_id: Optional[str] = None,
-        path: Optional[str] = None,
-        method: Optional[str] = None,
+        required: list[str] | None = None,
+        user: list[str] | None = None,
+        resource: str | None = None,
+        correlation_id: str | None = None,
+        path: str | None = None,
+        method: str | None = None,
     ) -> "AuthorizationErrorResponse":
         """Create insufficient permissions error response."""
         # Handle case where resource is provided instead of required/user permissions
@@ -276,20 +276,20 @@ class BusinessLogicErrorResponse(BaseErrorResponse):
     """Error response model for business logic errors."""
 
     category: ErrorCategory = ErrorCategory.BUSINESS_LOGIC
-    business_rule: Optional[str] = Field(
+    business_rule: str | None = Field(
         None, description="Business rule that was violated"
     )
 
     @classmethod
     def resource_not_found(
         cls,
-        resource_type: Optional[str] = None,
-        resource_id: Optional[str] = None,
-        resource: Optional[str] = None,
-        identifier: Optional[str] = None,
-        correlation_id: Optional[str] = None,
-        path: Optional[str] = None,
-        method: Optional[str] = None,
+        resource_type: str | None = None,
+        resource_id: str | None = None,
+        resource: str | None = None,
+        identifier: str | None = None,
+        correlation_id: str | None = None,
+        path: str | None = None,
+        method: str | None = None,
     ) -> "BusinessLogicErrorResponse":
         """Create resource not found error response."""
         # Handle case where resource and identifier are provided instead of resource_type and resource_id
@@ -326,9 +326,9 @@ class BusinessLogicErrorResponse(BaseErrorResponse):
         cls,
         rule: str,
         details: str,
-        correlation_id: Optional[str] = None,
-        path: Optional[str] = None,
-        method: Optional[str] = None,
+        correlation_id: str | None = None,
+        path: str | None = None,
+        method: str | None = None,
     ) -> "BusinessLogicErrorResponse":
         """Create business rule violation error response."""
         return cls(
@@ -353,17 +353,17 @@ class SystemErrorResponse(BaseErrorResponse):
     """Error response model for system/internal errors."""
 
     category: ErrorCategory = ErrorCategory.SYSTEM
-    error_details: Optional[Dict[str, Any]] = Field(
+    error_details: dict[str, Any] | None = Field(
         None, description="Additional error details"
     )
 
     @classmethod
     def internal_server_error(
         cls,
-        correlation_id: Optional[str] = None,
-        error_details: Optional[Dict[str, Any]] = None,
-        path: Optional[str] = None,
-        method: Optional[str] = None,
+        correlation_id: str | None = None,
+        error_details: dict[str, Any] | None = None,
+        path: str | None = None,
+        method: str | None = None,
     ) -> "SystemErrorResponse":
         """Create internal server error response."""
         # Build contextual message with request information
@@ -391,9 +391,9 @@ class SystemErrorResponse(BaseErrorResponse):
     def service_unavailable(
         cls,
         service: str,
-        correlation_id: Optional[str] = None,
-        path: Optional[str] = None,
-        method: Optional[str] = None,
+        correlation_id: str | None = None,
+        path: str | None = None,
+        method: str | None = None,
     ) -> "SystemErrorResponse":
         """Create service unavailable error response."""
         # Build contextual message with request information
@@ -424,10 +424,8 @@ class ExternalServiceErrorResponse(BaseErrorResponse):
     """Error response model for external service errors."""
 
     category: ErrorCategory = ErrorCategory.EXTERNAL_SERVICE
-    service_name: Optional[str] = Field(
-        None, description="Name of the external service"
-    )
-    http_status: Optional[int] = Field(
+    service_name: str | None = Field(None, description="Name of the external service")
+    http_status: int | None = Field(
         None, description="HTTP status code from external service"
     )
 
@@ -437,9 +435,9 @@ class ExternalServiceErrorResponse(BaseErrorResponse):
         service_name: str,
         http_status: int,
         error_message: str,
-        correlation_id: Optional[str] = None,
-        path: Optional[str] = None,
-        method: Optional[str] = None,
+        correlation_id: str | None = None,
+        path: str | None = None,
+        method: str | None = None,
     ) -> "ExternalServiceErrorResponse":
         """Create external service error response."""
         return cls(
@@ -465,20 +463,18 @@ class RateLimitErrorResponse(BaseErrorResponse):
     """Error response model for rate limiting errors."""
 
     category: ErrorCategory = ErrorCategory.RATE_LIMIT
-    limit: Optional[int] = Field(None, description="Rate limit threshold")
-    reset_time: Optional[datetime] = Field(
-        None, description="When the rate limit resets"
-    )
+    limit: int | None = Field(None, description="Rate limit threshold")
+    reset_time: datetime | None = Field(None, description="When the rate limit resets")
 
     @classmethod
     def rate_limit_exceeded(
         cls,
         limit: int,
-        reset_time: Optional[datetime] = None,
-        window: Optional[str] = None,
-        correlation_id: Optional[str] = None,
-        path: Optional[str] = None,
-        method: Optional[str] = None,
+        reset_time: datetime | None = None,
+        window: str | None = None,
+        correlation_id: str | None = None,
+        path: str | None = None,
+        method: str | None = None,
     ) -> "RateLimitErrorResponse":
         """Create rate limit exceeded error response."""
         # Handle case where window is provided instead of reset_time

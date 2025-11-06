@@ -9,7 +9,6 @@ status reporting.
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Optional
 
 import structlog
 
@@ -97,7 +96,7 @@ class HealthAlerting:
             self.alert_history = self.alert_history[-self.max_alert_history :]
 
     def get_alert_history(
-        self, hours: int = 24, limit: Optional[int] = None
+        self, hours: int = 24, limit: int | None = None
     ) -> list[dict[str, any]]:
         """
         Get alert history for the specified time period.
@@ -160,8 +159,8 @@ class HealthReporting:
 
     def __init__(self):
         """Initialize the health reporting system."""
-        self._report_cache: Optional[dict[str, any]] = None
-        self._last_report_time: Optional[datetime] = None
+        self._report_cache: dict[str, any] | None = None
+        self._last_report_time: datetime | None = None
         self.cache_duration_seconds = 30  # Cache reports for 30 seconds
 
     def generate_summary(
@@ -255,7 +254,7 @@ class HealthReporting:
 
         return report
 
-    def get_cached_report(self) -> Optional[dict[str, any]]:
+    def get_cached_report(self) -> dict[str, any] | None:
         """
         Get cached report if available and recent.
 
@@ -333,8 +332,8 @@ class HealthStatusAggregator:
 
     def __init__(self):
         """Initialize the health status aggregator."""
-        self._aggregation_cache: Optional[dict[str, any]] = None
-        self._last_aggregation: Optional[datetime] = None
+        self._aggregation_cache: dict[str, any] | None = None
+        self._last_aggregation: datetime | None = None
 
     def aggregate_health_status(
         self, health_results: list[dict[str, any]]
@@ -414,7 +413,7 @@ class HealthStatusAggregator:
         self, components: dict[str, ComponentHealth]
     ) -> dict[str, any]:
         """Calculate health trends and patterns."""
-        trends = {
+        return {
             "improving": 0,
             "degrading": 0,
             "stable": 0,
@@ -423,9 +422,8 @@ class HealthStatusAggregator:
 
         # This would implement trend analysis based on historical data
         # For now, return basic structure
-        return trends
 
-    def get_aggregation_cache(self) -> Optional[dict[str, any]]:
+    def get_aggregation_cache(self) -> dict[str, any] | None:
         """Get cached aggregation if available."""
         if self._aggregation_cache is None or self._last_aggregation is None:
             return None

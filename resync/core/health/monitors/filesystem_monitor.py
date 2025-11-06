@@ -5,7 +5,7 @@ import stat
 import time
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 from resync.core.health_models import HealthStatus
 from resync.core.structured_logger import get_logger
@@ -121,7 +121,7 @@ class FileSystemHealthMonitor:
     - File system performance metrics
     """
 
-    def __init__(self, config: Optional[dict[str, Any]] = None):
+    def __init__(self, config: dict[str, Any] | None = None):
         """
         Initialize the filesystem health monitor.
 
@@ -150,7 +150,7 @@ class FileSystemHealthMonitor:
         Returns:
             DiskSpaceStatus: Current disk space status
         """
-        start_time = time.time()
+        time.time()
 
         try:
             disk_status = DiskSpaceStatus()
@@ -224,7 +224,7 @@ class FileSystemHealthMonitor:
         Returns:
             IntegrityStatus: Current file integrity status
         """
-        start_time = time.time()
+        time.time()
 
         try:
             integrity_status = IntegrityStatus()
@@ -286,7 +286,7 @@ class FileSystemHealthMonitor:
         Returns:
             PermissionStatus: Current permission status
         """
-        start_time = time.time()
+        time.time()
 
         try:
             permission_status = PermissionStatus()
@@ -423,11 +423,7 @@ class FileSystemHealthMonitor:
         """Check if a path should be excluded from scanning."""
         path_str = str(path)
 
-        for pattern in self.exclude_patterns:
-            if pattern in path_str:
-                return True
-
-        return False
+        return any(pattern in path_str for pattern in self.exclude_patterns)
 
     def _has_suspicious_permissions(self, path: Path, mode: int) -> bool:
         """Check if file has suspicious permissions."""
@@ -462,7 +458,7 @@ class FileSystemHealthMonitor:
             self._check_history = self._check_history[-self._max_history_size :]
 
     def get_check_history(
-        self, check_type: Optional[str] = None, limit: Optional[int] = None
+        self, check_type: str | None = None, limit: int | None = None
     ) -> list[dict[str, Any]]:
         """
         Get historical check results.

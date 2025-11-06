@@ -10,7 +10,6 @@ from __future__ import annotations
 
 import asyncio
 from datetime import datetime, timedelta
-from typing import Optional
 
 import structlog
 
@@ -47,10 +46,10 @@ class ComponentCacheManager:
         self._cache_evictions = 0
 
         # Cache maintenance
-        self._last_cleanup: Optional[datetime] = None
+        self._last_cleanup: datetime | None = None
         self.cleanup_interval = timedelta(minutes=5)  # Cleanup every 5 minutes
 
-    async def get_component(self, component_name: str) -> Optional[ComponentHealth]:
+    async def get_component(self, component_name: str) -> ComponentHealth | None:
         """
         Get a component from cache with expiry validation.
 
@@ -260,7 +259,7 @@ class ComponentCacheManager:
         }
 
     async def get_stale_components(
-        self, max_age_seconds: Optional[int] = None
+        self, max_age_seconds: int | None = None
     ) -> dict[str, ComponentHealth]:
         """
         Get components that are stale based on age.

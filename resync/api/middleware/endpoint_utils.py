@@ -6,8 +6,8 @@ from business logic in endpoints.
 
 import logging
 import time
+from collections.abc import Callable
 from functools import wraps
-from typing import Callable
 
 from fastapi import Request
 

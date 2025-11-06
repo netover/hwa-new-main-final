@@ -9,9 +9,10 @@ system with improved modularity and maintainability.
 from __future__ import annotations
 
 import asyncio
+import contextlib
 import time
 from datetime import datetime, timedelta
-from typing import Any, Optional
+from typing import Any
 
 import structlog
 
@@ -45,7 +46,7 @@ class EnhancedHealthService:
     to provide comprehensive health checking with improved maintainability.
     """
 
-    def __init__(self, config: Optional[HealthCheckConfig] = None):
+    def __init__(self, config: HealthCheckConfig | None = None):
         """
         Initialize the enhanced health service.
 
@@ -54,7 +55,7 @@ class EnhancedHealthService:
         """
         self.config = config or HealthCheckConfig()
         self.health_history: list[HealthStatusHistory] = []
-        self.last_health_check: Optional[datetime] = None
+        self.last_health_check: datetime | None = None
 
         # Initialize component monitors
         self.redis_monitor = RedisHealthMonitor()
@@ -77,7 +78,7 @@ class EnhancedHealthService:
         self._cache_misses = 0
 
         # Monitoring control
-        self._monitoring_task: Optional[asyncio.Task] = None
+        self._monitoring_task: asyncio.Task | None = None
         self._is_monitoring = False
 
     async def start_monitoring(self) -> None:
@@ -94,10 +95,8 @@ class EnhancedHealthService:
         self._is_monitoring = False
         if self._monitoring_task:
             self._monitoring_task.cancel()
-            try:
+            with contextlib.suppress(asyncio.CancelledError):
                 await self._monitoring_task
-            except asyncio.CancelledError:
-                pass
             self._monitoring_task = None
         logger.info("enhanced_health_check_monitoring_stopped")
 
@@ -167,7 +166,7 @@ class EnhancedHealthService:
             logger.error("enhanced_health_check_timed_out", timeout_seconds=30)
             check_results = [
                 asyncio.TimeoutError(f"Health check component {name} timed out")
-                for name in health_checks.keys()
+                for name in health_checks
             ]
 
         # Process results
@@ -463,7 +462,7 @@ class EnhancedHealthService:
         self.health_history.append(history_entry)
 
     def get_health_history(
-        self, hours: int = 24, max_entries: Optional[int] = None
+        self, hours: int = 24, max_entries: int | None = None
     ) -> list[HealthStatusHistory]:
         """Get health history for specified time period."""
         cutoff_time = datetime.now() - timedelta(hours=hours)
@@ -510,7 +509,7 @@ class EnhancedHealthService:
 
 
 # Global enhanced health service instance
-_enhanced_health_service: Optional[EnhancedHealthService] = None
+_enhanced_health_service: EnhancedHealthService | None = None
 _enhanced_health_service_lock = asyncio.Lock()
 
 

@@ -8,8 +8,9 @@ through OpenAI library, which has been tested and confirmed to work.
 from __future__ import annotations
 
 import logging
+from collections.abc import AsyncGenerator
 from functools import lru_cache
-from typing import Any, AsyncGenerator, Optional
+from typing import Any
 
 from resync.core.exceptions import IntegrationError
 from resync.settings import settings
@@ -34,7 +35,7 @@ except ImportError:  # pragma: no cover
 logger = logging.getLogger(__name__)
 
 
-def _coerce_secret(value: Any) -> Optional[str]:
+def _coerce_secret(value: Any) -> str | None:
     """Accept str or pydantic SecretStr; return plain str or None."""
     if value is None:
         return None
@@ -133,11 +134,11 @@ class LLMService:
     async def generate_response(
         self,
         messages: list[dict[str, str]],
-        temperature: Optional[float] = None,
-        top_p: Optional[float] = None,
-        max_tokens: Optional[int] = None,
-        frequency_penalty: Optional[float] = None,
-        presence_penalty: Optional[float] = None,
+        temperature: float | None = None,
+        top_p: float | None = None,
+        max_tokens: int | None = None,
+        frequency_penalty: float | None = None,
+        presence_penalty: float | None = None,
         stream: bool = False,
     ) -> str:
         """
@@ -336,8 +337,8 @@ class LLMService:
         self,
         agent_id: str,
         user_message: str,
-        conversation_history: Optional[list[dict[str, str]]] = None,
-        agent_config: Optional[dict[str, Any]] = None,
+        conversation_history: list[dict[str, str]] | None = None,
+        agent_config: dict[str, Any] | None = None,
     ) -> str:
         """
         Generate a response from an AI agent
@@ -374,7 +375,7 @@ class LLMService:
         self,
         query: str,
         context: str,
-        conversation_history: Optional[list[dict[str, str]]] = None,
+        conversation_history: list[dict[str, str]] | None = None,
     ) -> str:
         """
         Generate a response using RAG (Retrieval-Augmented Generation)
@@ -455,8 +456,8 @@ class LLMService:
         self,
         user_message: str,
         agent_id: str,
-        agent_config: Optional[dict[str, Any]] = None,
-        conversation_history: Optional[list[dict[str, str]]] = None,
+        agent_config: dict[str, Any] | None = None,
+        conversation_history: list[dict[str, str]] | None = None,
         stream: bool = False,  # pylint: disable=unused-argument
     ) -> str:
         """

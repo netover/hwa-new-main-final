@@ -6,7 +6,6 @@ access patterns and potential security threats.
 """
 
 import logging
-from typing import List
 
 from fastapi import APIRouter, Depends, Query
 from starlette.requests import Request
@@ -116,7 +115,7 @@ async def validate_origins(
 async def get_cors_violations(
     limit: int = Query(100, ge=1, le=1000),
     hours: int = Query(24, ge=1, le=168),
-) -> List[dict]:
+) -> list[dict]:
     """
     Retrieves a list of recent CORS violations.
     """

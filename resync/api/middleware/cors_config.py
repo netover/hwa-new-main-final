@@ -4,7 +4,6 @@ import logging
 import re
 import socket
 from enum import Enum
-from typing import Union
 from urllib.parse import urlparse
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, validator
@@ -155,7 +154,7 @@ class CORSPolicy(BaseModel):
     @validator("origin_regex_patterns", each_item=True)
     def validate_regex_pattern(cls, v, values):
         """Validate regex patterns are compilable and not allowed in production."""
-        environment = values.get("environment")
+        values.get("environment")
 
         try:
             re.compile(v)
@@ -226,10 +225,7 @@ class CORSPolicy(BaseModel):
                     # Not IPv4, check if it's a valid domain name
                     # Simple domain validation using regex
                     domain_pattern = r"^[a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?)*$"
-                    if re.match(domain_pattern, host):
-                        return True
-                    else:
-                        return False
+                    return bool(re.match(domain_pattern, host))
         return False
 
     def is_origin_allowed(self, origin: str) -> bool:
@@ -324,7 +320,7 @@ class CORSConfig(BaseModel):
         description="CORS policy for test environment",
     )
 
-    def get_policy(self, environment: Union[str, Environment]) -> CORSPolicy:
+    def get_policy(self, environment: str | Environment) -> CORSPolicy:
         """
         Get CORS policy for a specific environment.
 
@@ -346,9 +342,7 @@ class CORSConfig(BaseModel):
         else:
             raise ValueError(f"Unknown environment: {environment}")
 
-    def update_policy(
-        self, environment: Union[str, Environment], policy: CORSPolicy
-    ) -> None:
+    def update_policy(self, environment: str | Environment, policy: CORSPolicy) -> None:
         """
         Update CORS policy for a specific environment.
 

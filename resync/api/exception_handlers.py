@@ -4,7 +4,6 @@ Este módulo implementa handlers para todas as exceções da aplicação,
 convertendo-as em respostas HTTP padronizadas seguindo RFC 7807.
 """
 
-from typing import Union
 
 from fastapi import Request, status
 from fastapi.exceptions import RequestValidationError
@@ -148,7 +147,7 @@ async def resync_exception_handler(
 
 
 async def validation_exception_handler(
-    request: Request, exc: Union[RequestValidationError, PydanticValidationError]
+    request: Request, exc: RequestValidationError | PydanticValidationError
 ) -> JSONResponse:
     """Handler para erros de validação do Pydantic/FastAPI.
 
@@ -228,29 +227,19 @@ async def http_exception_handler(
 
     # Mapear para nossa exceção
     if exc.status_code == 404:
-        app_exc = ResourceNotFoundError(
-            message=str(exc.detail), correlation_id=correlation_id
-        )
+        ResourceNotFoundError(message=str(exc.detail), correlation_id=correlation_id)
     elif exc.status_code == 401:
-        app_exc = AuthenticationError(
-            message=str(exc.detail), correlation_id=correlation_id
-        )
+        AuthenticationError(message=str(exc.detail), correlation_id=correlation_id)
     elif exc.status_code == 403:
-        app_exc = AuthorizationError(
-            message=str(exc.detail), correlation_id=correlation_id
-        )
+        AuthorizationError(message=str(exc.detail), correlation_id=correlation_id)
     elif exc.status_code == 409:
-        app_exc = ResourceConflictError(
-            message=str(exc.detail), correlation_id=correlation_id
-        )
+        ResourceConflictError(message=str(exc.detail), correlation_id=correlation_id)
     elif exc.status_code == 429:
-        app_exc = RateLimitError(message=str(exc.detail), correlation_id=correlation_id)
+        RateLimitError(message=str(exc.detail), correlation_id=correlation_id)
     elif exc.status_code >= 500:
-        app_exc = InternalError(message=str(exc.detail), correlation_id=correlation_id)
+        InternalError(message=str(exc.detail), correlation_id=correlation_id)
     else:
-        app_exc = ValidationError(
-            message=str(exc.detail), correlation_id=correlation_id
-        )
+        ValidationError(message=str(exc.detail), correlation_id=correlation_id)
 
     # Criar problem detail
     problem = create_problem_detail(
@@ -295,7 +284,7 @@ async def unhandled_exception_handler(request: Request, exc: Exception) -> JSONR
     )
 
     # Criar exceção interna
-    app_exc = InternalError(
+    InternalError(
         message="An unexpected error occurred",
         details={"exception_type": type(exc).__name__, "exception_message": str(exc)},
         correlation_id=correlation_id,

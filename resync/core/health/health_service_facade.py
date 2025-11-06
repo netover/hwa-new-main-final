@@ -11,7 +11,7 @@ from __future__ import annotations
 import asyncio
 import time
 from datetime import datetime
-from typing import Any, Optional
+from typing import Any
 
 import structlog
 
@@ -52,7 +52,7 @@ class HealthServiceFacade:
     - HealthMonitoringSubject: Observer pattern coordination
     """
 
-    def __init__(self, config: Optional[HealthCheckConfig] = None):
+    def __init__(self, config: HealthCheckConfig | None = None):
         """
         Initialize the health service facade.
 
@@ -234,7 +234,7 @@ class HealthServiceFacade:
             logger.error("facade_comprehensive_health_check_failed", error=str(e))
 
             # Return error result
-            error_result = HealthCheckResult(
+            return HealthCheckResult(
                 overall_status=HealthStatus.UNKNOWN,
                 timestamp=datetime.now(),
                 correlation_id=correlation_id,
@@ -246,11 +246,7 @@ class HealthServiceFacade:
                 },
             )
 
-            return error_result
-
-    async def get_component_health(
-        self, component_name: str
-    ) -> Optional[ComponentHealth]:
+    async def get_component_health(self, component_name: str) -> ComponentHealth | None:
         """
         Get health status for a specific component.
 
@@ -339,7 +335,7 @@ class HealthServiceFacade:
             return False
 
     async def get_health_history(
-        self, hours: int = 24, max_entries: Optional[int] = None
+        self, hours: int = 24, max_entries: int | None = None
     ) -> list[HealthStatusHistory]:
         """
         Get health status history.

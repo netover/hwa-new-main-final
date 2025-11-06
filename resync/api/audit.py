@@ -8,7 +8,7 @@ It handles audit data retrieval with proper pagination, filtering, and access co
 # resync/api/audit.py
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from pydantic import BaseModel, Field, field_validator
@@ -46,14 +46,14 @@ class AuditRecordResponse(BaseModel):
     timestamp: str = Field(..., description="ISO format timestamp of the audit event")
     user_id: str = Field(..., description="ID of the user performing the action")
     action: AuditAction = Field(..., description="Type of action being audited")
-    details: Dict[str, Any] = Field(
+    details: dict[str, Any] = Field(
         ..., description="Additional details about the action"
     )
-    correlation_id: Optional[str] = Field(
+    correlation_id: str | None = Field(
         None, description="Correlation ID for tracking requests"
     )
-    ip_address: Optional[str] = Field(None, description="IP address of the requester")
-    user_agent: Optional[str] = Field(
+    ip_address: str | None = Field(None, description="IP address of the requester")
+    user_agent: str | None = Field(
         None, description="User agent string of the requester"
     )
 
@@ -61,10 +61,10 @@ class AuditRecordResponse(BaseModel):
 def generate_audit_log(
     user_id: str,
     action: AuditAction,
-    details: Dict[str, Any],
-    correlation_id: Optional[str] = None,
-    ip_address: Optional[str] = None,
-    user_agent: Optional[str] = None,
+    details: dict[str, Any],
+    correlation_id: str | None = None,
+    ip_address: str | None = None,
+    user_agent: str | None = None,
 ) -> AuditRecordResponse:
     """
     Generate an audit log entry with proper structure.
@@ -129,19 +129,20 @@ class ReviewAction(BaseModel):
         return v.lower()
 
 
-@router.get("/flags", response_model=List[Dict[str, Any]])
+@router.get("/flags", response_model=list[dict[str, Any]])
 def get_flagged_memories(
     request: Request,
     status: str = Query(
         "pending",
         description="Filter by audit status (pending, approved, rejected, all)",
     ),
-    query: Optional[str] = Query(
+    query: str
+    | None = Query(
         None,
         description="Search query in user_query or agent_response",
     ),
     audit_queue: IAuditQueue = audit_queue_dependency,
-) -> List[Dict[str, Any]]:
+) -> list[dict[str, Any]]:
     """
     Retrieves memories from the audit queue based on status and search query.
     """
@@ -204,7 +205,7 @@ async def review_memory(
     review: ReviewAction,
     audit_queue: IAuditQueue = audit_queue_dependency,
     knowledge_graph: IKnowledgeGraph = knowledge_graph_dependency,
-) -> Dict[str, str]:
+) -> dict[str, str]:
     """
     Processes a human review action for a flagged memory, updating its status in the database.
     """
@@ -300,11 +301,11 @@ async def review_memory(
     raise HTTPException(status_code=400, detail="Invalid action")
 
 
-@router.get("/metrics", response_model=Dict[str, int])  # New endpoint for metrics
+@router.get("/metrics", response_model=dict[str, int])  # New endpoint for metrics
 def get_audit_metrics(
     request: Request,
     audit_queue: IAuditQueue = audit_queue_dependency,
-) -> Dict[str, int]:
+) -> dict[str, int]:
     """
     Returns metrics for the audit queue (total pending, approved, rejected).
     """
@@ -345,14 +346,14 @@ def get_audit_metrics(
 
 
 # Additional audit endpoints for enhanced functionality
-@router.get("/logs", response_model=List[AuditRecordResponse])
+@router.get("/logs", response_model=list[AuditRecordResponse])
 def get_audit_logs(
     request: Request,
     limit: int = Query(100, description="Maximum number of logs to return"),
     offset: int = Query(0, description="Offset for pagination"),
-    action: Optional[AuditAction] = Query(None, description="Filter by action type"),
-    user_id: Optional[str] = Query(None, description="Filter by user ID"),
-) -> List[AuditRecordResponse]:
+    action: AuditAction | None = Query(None, description="Filter by action type"),
+    user_id: str | None = Query(None, description="Filter by user ID"),
+) -> list[AuditRecordResponse]:
     """
     Retrieves audit logs with optional filtering and pagination.
     """

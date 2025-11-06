@@ -8,9 +8,10 @@ functionality for health checks and system monitoring.
 from __future__ import annotations
 
 import asyncio
+import contextlib
 import gc
 from datetime import datetime, timedelta
-from typing import Any, Optional
+from typing import Any
 
 import psutil
 import structlog
@@ -53,7 +54,7 @@ class MemoryUsageTracker:
 
         self.memory_history: list[dict[str, Any]] = []
         self._monitoring_active = False
-        self._monitoring_task: Optional[asyncio.Task] = None
+        self._monitoring_task: asyncio.Task | None = None
         self._last_gc_collection = 0
 
     async def start_monitoring(self) -> None:
@@ -70,10 +71,8 @@ class MemoryUsageTracker:
         self._monitoring_active = False
         if self._monitoring_task:
             self._monitoring_task.cancel()
-            try:
+            with contextlib.suppress(asyncio.CancelledError):
                 await self._monitoring_task
-            except asyncio.CancelledError:
-                pass
             self._monitoring_task = None
         logger.info("memory_usage_monitoring_stopped")
 
@@ -187,7 +186,7 @@ class MemoryUsageTracker:
         return self.memory_history[-1].copy()
 
     def get_memory_history(
-        self, hours: int = 24, max_entries: Optional[int] = None
+        self, hours: int = 24, max_entries: int | None = None
     ) -> list[dict[str, Any]]:
         """
         Get memory usage history for the specified time period.

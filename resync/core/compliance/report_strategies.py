@@ -9,20 +9,16 @@ testable, and maintainable.
 import logging
 from abc import ABC, abstractmethod
 from collections import defaultdict
-from typing import Any, Dict, List, Optional, Protocol, runtime_checkable
+from typing import Any, Protocol, runtime_checkable
 
 
 # Custom exceptions for better error handling
 class ComplianceCalculationError(Exception):
     """Raised when there's an error in compliance calculation."""
 
-    pass
-
 
 class StrategyValidationError(ValueError):
     """Raised when strategy validation fails."""
-
-    pass
 
 
 # Lazy import to avoid circular dependency
@@ -45,27 +41,27 @@ class ComplianceManagerProtocol(Protocol):
     """Protocol defining the interface expected by report strategies."""
 
     @property
-    def controls(self) -> Dict[str, Any]:
+    def controls(self) -> dict[str, Any]:
         """Dictionary of compliance controls."""
         ...
 
     @property
-    def evidence(self) -> Dict[str, Any]:
+    def evidence(self) -> dict[str, Any]:
         """Dictionary of compliance evidence."""
         ...
 
     @property
-    def availability_metrics(self) -> List[Any]:
+    def availability_metrics(self) -> list[Any]:
         """List of availability metrics."""
         ...
 
     @property
-    def processing_checks(self) -> List[Any]:
+    def processing_checks(self) -> list[Any]:
         """List of processing integrity checks."""
         ...
 
     @property
-    def confidentiality_incidents(self) -> List[Any]:
+    def confidentiality_incidents(self) -> list[Any]:
         """List of confidentiality incidents."""
         ...
 
@@ -97,7 +93,7 @@ class ReportStrategy(ABC):
                 "Manager must implement ComplianceManagerProtocol"
             )
 
-    def execute(self, manager: Any, context: Optional[Dict[str, Any]] = None) -> Any:
+    def execute(self, manager: Any, context: dict[str, Any] | None = None) -> Any:
         """Execute the strategy and return the report component.
 
         Args:
@@ -116,12 +112,12 @@ class ReportStrategy(ABC):
             return self._execute_strategy(manager, context or {})
         except Exception as e:
             logger.error(f"Error executing strategy {self.__class__.__name__}: {e}")
-            if isinstance(e, (StrategyValidationError, ComplianceCalculationError)):
+            if isinstance(e, StrategyValidationError | ComplianceCalculationError):
                 raise
             raise ComplianceCalculationError(f"Strategy execution failed: {e}")
 
     @abstractmethod
-    def _execute_strategy(self, manager: Any, context: Dict[str, Any]) -> Any:
+    def _execute_strategy(self, manager: Any, context: dict[str, Any]) -> Any:
         """Internal strategy execution method to be implemented by subclasses.
 
         Args:
@@ -148,8 +144,8 @@ class ControlComplianceStrategy(ReportStrategy):
     """
 
     def _execute_strategy(
-        self, manager: Any, context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+        self, manager: Any, context: dict[str, Any]
+    ) -> dict[str, Any]:
         """Calculate control compliance statistics with enhanced error handling."""
         try:
             total_controls = len(manager.controls)
@@ -200,8 +196,8 @@ class CriteriaScoresStrategy(ReportStrategy):
     """
 
     def _execute_strategy(
-        self, manager: Any, context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+        self, manager: Any, context: dict[str, Any]
+    ) -> dict[str, Any]:
         """Calculate criteria scores with enhanced error handling."""
         try:
             criteria_compliance = defaultdict(lambda: {"total": 0, "compliant": 0})
@@ -255,7 +251,7 @@ class OverallComplianceStrategy(ReportStrategy):
         Float representing the overall compliance score (0.0 to 1.0)
     """
 
-    def _execute_strategy(self, manager: Any, context: Dict[str, Any]) -> float:
+    def _execute_strategy(self, manager: Any, context: dict[str, Any]) -> float:
         """Calculate weighted average overall compliance score with enhanced error handling."""
         try:
             # Get criteria scores from context if available, otherwise calculate
@@ -317,8 +313,8 @@ class ControlStatusSummaryStrategy(ReportStrategy):
     """
 
     def _execute_strategy(
-        self, manager: Any, context: Dict[str, Any]
-    ) -> Dict[str, int]:
+        self, manager: Any, context: dict[str, Any]
+    ) -> dict[str, int]:
         """Generate summary of control status counts with enhanced error handling."""
         try:
             status_counts = defaultdict(int)
@@ -352,8 +348,8 @@ class EvidenceSummaryStrategy(ReportStrategy):
     """
 
     def _execute_strategy(
-        self, manager: Any, context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+        self, manager: Any, context: dict[str, Any]
+    ) -> dict[str, Any]:
         """Generate summary of valid evidence with enhanced error handling."""
         try:
             evidence_counts = defaultdict(int)
@@ -399,8 +395,8 @@ class AvailabilitySummaryStrategy(ReportStrategy):
     """
 
     def _execute_strategy(
-        self, manager: Any, context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+        self, manager: Any, context: dict[str, Any]
+    ) -> dict[str, Any]:
         """Generate summary of availability metrics with enhanced error handling."""
         try:
             if not manager.availability_metrics:
@@ -459,8 +455,8 @@ class ProcessingIntegritySummaryStrategy(ReportStrategy):
     """
 
     def _execute_strategy(
-        self, manager: Any, context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+        self, manager: Any, context: dict[str, Any]
+    ) -> dict[str, Any]:
         """Generate summary of processing integrity metrics with enhanced error handling."""
         try:
             if not manager.processing_checks:
@@ -521,8 +517,8 @@ class ConfidentialityIncidentsSummaryStrategy(ReportStrategy):
     """
 
     def _execute_strategy(
-        self, manager: Any, context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+        self, manager: Any, context: dict[str, Any]
+    ) -> dict[str, Any]:
         """Generate summary of confidentiality incidents with enhanced error handling."""
         try:
             incident_counts = defaultdict(int)
@@ -568,8 +564,8 @@ class RecommendationsStrategy(ReportStrategy):
     """
 
     def _execute_strategy(
-        self, manager: Any, context: Dict[str, Any]
-    ) -> List[Dict[str, Any]]:
+        self, manager: Any, context: dict[str, Any]
+    ) -> list[dict[str, Any]]:
         """Generate recommendations based on compliance report with enhanced error handling."""
         try:
             # Get report from context or create basic structure
@@ -595,8 +591,8 @@ class RecommendationsStrategy(ReportStrategy):
             raise ComplianceCalculationError(f"Error generating recommendations: {e}")
 
     def execute(
-        self, manager: Any, report: Dict[str, Any] = None
-    ) -> List[Dict[str, Any]]:
+        self, manager: Any, report: dict[str, Any] = None
+    ) -> list[dict[str, Any]]:
         """Legacy method for backward compatibility.
 
         Args:
@@ -626,7 +622,7 @@ class ReportGenerator:
             "recommendations": RecommendationsStrategy(),
         }
 
-    def generate_report(self, manager: Any) -> Dict[str, Any]:
+    def generate_report(self, manager: Any) -> dict[str, Any]:
         """Generate a complete compliance report using all strategies with enhanced error handling."""
         try:
             # Validate manager before proceeding

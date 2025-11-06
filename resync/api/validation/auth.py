@@ -1,7 +1,7 @@
 """Authentication and authorization validation models."""
 
 from enum import Enum
-from typing import List, Optional
+from typing import Annotated
 
 from pydantic import (
     ConfigDict,
@@ -11,7 +11,6 @@ from pydantic import (
     field_validator,
     validator,
 )
-from typing_extensions import Annotated
 
 from .common import BaseValidatedModel
 
@@ -129,32 +128,30 @@ class TokenRequest(BaseValidatedModel):
         description="OAuth2 grant type",
     )
 
-    username: Optional[str] = Field(
+    username: str | None = Field(
         None,
         min_length=3,
         max_length=50,
         description="Username (required for password grant)",
     )
 
-    password: Optional[
-        Annotated[
-            str, StringConstraints(min_length=8, max_length=128, strip_whitespace=True)
-        ]
-    ] = Field(None, description="Password (required for password grant)")
+    password: Annotated[
+        str, StringConstraints(min_length=8, max_length=128, strip_whitespace=True)
+    ] | None = Field(None, description="Password (required for password grant)")
 
-    refresh_token: Optional[str] = Field(
+    refresh_token: str | None = Field(
         None, description="Refresh token (required for refresh_token grant)"
     )
 
-    client_id: Optional[str] = Field(
+    client_id: str | None = Field(
         None, description="Client ID (required for client_credentials grant)"
     )
 
-    client_secret: Optional[str] = Field(
+    client_secret: str | None = Field(
         None, description="Client secret (required for client_credentials grant)"
     )
 
-    scope: Optional[List[str]] = Field(
+    scope: list[str] | None = Field(
         default_factory=list, description="Requested scopes", max_length=10
     )
 
@@ -259,17 +256,13 @@ class UserRegistrationRequest(BaseValidatedModel):
         str, StringConstraints(min_length=8, max_length=128, strip_whitespace=True)
     ] = Field(..., description="Password")
 
-    first_name: Optional[
-        Annotated[
-            str, StringConstraints(min_length=1, max_length=50, strip_whitespace=True)
-        ]
-    ] = Field(None, description="First name")
+    first_name: Annotated[
+        str, StringConstraints(min_length=1, max_length=50, strip_whitespace=True)
+    ] | None = Field(None, description="First name")
 
-    last_name: Optional[
-        Annotated[
-            str, StringConstraints(min_length=1, max_length=50, strip_whitespace=True)
-        ]
-    ] = Field(None, description="Last name")
+    last_name: Annotated[
+        str, StringConstraints(min_length=1, max_length=50, strip_whitespace=True)
+    ] | None = Field(None, description="Last name")
 
     role: UserRole = Field(default=UserRole.USER, description="User role")
 
@@ -368,7 +361,7 @@ class TokenRefreshRequest(BaseValidatedModel):
         str, StringConstraints(min_length=10, max_length=500)
     ] = Field(..., description="Refresh token")
 
-    client_id: Optional[str] = Field(None, description="Client ID")
+    client_id: str | None = Field(None, description="Client ID")
 
     model_config = ConfigDict(
         extra="forbid",
@@ -378,11 +371,9 @@ class TokenRefreshRequest(BaseValidatedModel):
 class LogoutRequest(BaseValidatedModel):
     """Logout request validation model."""
 
-    access_token: Optional[str] = Field(None, description="Access token to invalidate")
+    access_token: str | None = Field(None, description="Access token to invalidate")
 
-    refresh_token: Optional[str] = Field(
-        None, description="Refresh token to invalidate"
-    )
+    refresh_token: str | None = Field(None, description="Refresh token to invalidate")
 
     logout_all_sessions: bool = Field(
         default=False, description="Whether to logout all active sessions"
@@ -400,17 +391,15 @@ class APIKeyRequest(BaseValidatedModel):
         str, StringConstraints(min_length=3, max_length=50, strip_whitespace=True)
     ] = Field(..., description="API key name")
 
-    description: Optional[
-        Annotated[
-            str, StringConstraints(min_length=5, max_length=200, strip_whitespace=True)
-        ]
-    ] = Field(None, description="API key description")
+    description: Annotated[
+        str, StringConstraints(min_length=5, max_length=200, strip_whitespace=True)
+    ] | None = Field(None, description="API key description")
 
-    scopes: List[str] = Field(
+    scopes: list[str] = Field(
         default_factory=list, description="API key scopes", max_length=10
     )
 
-    expires_in_days: Optional[int] = Field(
+    expires_in_days: int | None = Field(
         None, ge=1, le=365, description="Number of days until expiration"
     )
 

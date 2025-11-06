@@ -6,7 +6,7 @@ Este módulo implementa helpers para criar links seguindo o padrão RFC 8288
 Referência: https://tools.ietf.org/html/rfc8288
 """
 
-from typing import Any, Dict, Optional
+from typing import Any
 from urllib.parse import urlencode
 
 from pydantic import BaseModel, ConfigDict, Field
@@ -41,13 +41,13 @@ class Link(BaseModel):
         default="GET", description="Método HTTP", json_schema_extra={"example": "GET"}
     )
 
-    title: Optional[str] = Field(
+    title: str | None = Field(
         None,
         description="Título descritivo",
         json_schema_extra={"example": "Get resource details"},
     )
 
-    type: Optional[str] = Field(
+    type: str | None = Field(
         None, description="Tipo de mídia", examples=["application/json"]
     )
 
@@ -62,7 +62,7 @@ class HATEOASResponse(BaseModel):
 
     data: Any = Field(..., description="Dados do recurso")
 
-    links: Dict[str, Link] = Field(
+    links: dict[str, Link] = Field(
         default_factory=dict,
         alias="_links",
         description="Links relacionados ao recurso",
@@ -92,9 +92,9 @@ class LinkBuilder:
         path: str,
         rel: str,
         method: str = "GET",
-        title: Optional[str] = None,
+        title: str | None = None,
         type: str = "application/json",
-        query_params: Optional[Dict[str, Any]] = None,
+        query_params: dict[str, Any] | None = None,
     ) -> Link:
         """Constrói um link.
 
@@ -119,7 +119,7 @@ class LinkBuilder:
 
         return Link(href=href, rel=rel, method=method, title=title, type=type)
 
-    def build_self_link(self, path: str, title: Optional[str] = None) -> Link:
+    def build_self_link(self, path: str, title: str | None = None) -> Link:
         """Constrói link 'self'.
 
         Args:
@@ -133,7 +133,7 @@ class LinkBuilder:
             path=path, rel="self", method="GET", title=title or "Current resource"
         )
 
-    def build_collection_link(self, path: str, title: Optional[str] = None) -> Link:
+    def build_collection_link(self, path: str, title: str | None = None) -> Link:
         """Constrói link para coleção.
 
         Args:
@@ -156,8 +156,8 @@ class LinkBuilder:
         page: int,
         page_size: int,
         total_pages: int,
-        query_params: Optional[Dict[str, Any]] = None,
-    ) -> Dict[str, Link]:
+        query_params: dict[str, Any] | None = None,
+    ) -> dict[str, Link]:
         """Constrói links de paginação.
 
         Args:
@@ -213,9 +213,9 @@ class LinkBuilder:
     def build_crud_links(
         self,
         resource_path: str,
-        resource_id: Optional[str] = None,
-        collection_path: Optional[str] = None,
-    ) -> Dict[str, Link]:
+        resource_id: str | None = None,
+        collection_path: str | None = None,
+    ) -> dict[str, Link]:
         """Constrói links CRUD para um recurso.
 
         Args:
@@ -275,7 +275,7 @@ class LinkBuilder:
 # ============================================================================
 
 
-def add_hateoas_links(data: Any, links: Dict[str, Link]) -> HATEOASResponse:
+def add_hateoas_links(data: Any, links: dict[str, Link]) -> HATEOASResponse:
     """Adiciona links HATEOAS a uma resposta.
 
     Args:
@@ -288,7 +288,7 @@ def add_hateoas_links(data: Any, links: Dict[str, Link]) -> HATEOASResponse:
     return HATEOASResponse(data=data, links=links)
 
 
-def build_link_header(links: Dict[str, Link]) -> str:
+def build_link_header(links: dict[str, Link]) -> str:
     """Constrói header Link (RFC 8288).
 
     Args:

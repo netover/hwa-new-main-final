@@ -238,7 +238,7 @@ async def get_performance_health() -> dict[str, Any]:
         # Get cache health
         cache_health = "healthy"
         cache_issues = 0
-        for cache_name, monitor in performance_service.cache_monitors.items():
+        for _cache_name, monitor in performance_service.cache_monitors.items():
             metrics = await monitor.get_current_metrics()
             if metrics.hit_rate < 0.5 or metrics.calculate_efficiency_score() < 50:
                 cache_health = "degraded"
@@ -248,7 +248,7 @@ async def get_performance_health() -> dict[str, Any]:
         pool_health = "healthy"
         pool_issues = 0
         pool_stats = pool_manager.get_pool_stats()
-        for pool_name, stats in pool_stats.items():
+        for _pool_name, stats in pool_stats.items():
             if (
                 stats.get("connection_errors", 0) > 10
                 or stats.get("pool_exhaustions", 0) > 0

@@ -5,7 +5,7 @@ ser duplicadas, como criação de recursos, transações, etc.
 """
 
 from datetime import datetime
-from typing import Annotated, Optional
+from typing import Annotated
 from uuid import uuid4
 
 from fastapi import APIRouter, Depends, status
@@ -33,10 +33,10 @@ class CreateResourceRequest(BaseModel):
     """Request para criar um recurso."""
 
     name: str = Field(..., description="Nome do recurso", min_length=1, max_length=100)
-    description: Optional[str] = Field(
+    description: str | None = Field(
         None, description="Descrição do recurso", max_length=500
     )
-    metadata: Optional[dict] = Field(
+    metadata: dict | None = Field(
         default_factory=dict, description="Metadados adicionais"
     )
 
@@ -56,7 +56,7 @@ class ResourceResponse(BaseModel):
 
     id: str = Field(..., description="ID único do recurso")
     name: str = Field(..., description="Nome do recurso")
-    description: Optional[str] = Field(None, description="Descrição do recurso")
+    description: str | None = Field(None, description="Descrição do recurso")
     metadata: dict = Field(default_factory=dict, description="Metadados")
     created_at: str = Field(..., description="Timestamp de criação")
     idempotency_key: str = Field(..., description="Chave de idempotência usada")

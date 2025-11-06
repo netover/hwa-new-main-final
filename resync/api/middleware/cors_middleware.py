@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-from typing import Union
 
 from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
@@ -115,8 +114,7 @@ class LoggingCORSMiddleware(BaseHTTPMiddleware):
 
         # If no origin header, proceed normally (same-origin request)
         if not origin:
-            response = await call_next(request)
-            return response
+            return await call_next(request)
 
         # Validate origin against policy
         is_allowed = self.policy.is_origin_allowed(origin)
@@ -212,7 +210,7 @@ class LoggingCORSMiddleware(BaseHTTPMiddleware):
 
 def add_cors_middleware(
     app: FastAPI,
-    environment: Union[str, Environment] = None,
+    environment: str | Environment = None,
     custom_policy: CORSPolicy = None,
 ) -> None:
     """
@@ -236,10 +234,7 @@ def add_cors_middleware(
         environment = Environment(environment.lower())
 
     # Get CORS policy
-    if custom_policy:
-        policy = custom_policy
-    else:
-        policy = cors_config.get_policy(environment)
+    policy = custom_policy if custom_policy else cors_config.get_policy(environment)
 
     logger.info(
         f"Adding CORS middleware for environment: {policy.environment} "

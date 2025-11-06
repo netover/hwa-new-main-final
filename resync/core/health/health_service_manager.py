@@ -8,7 +8,6 @@ including singleton pattern implementation and service lifecycle management.
 from __future__ import annotations
 
 import asyncio
-from typing import Optional
 
 import structlog
 
@@ -35,13 +34,13 @@ class HealthServiceManager:
 
     def __init__(self):
         """Initialize the health service manager."""
-        self._health_check_service: Optional[HealthCheckService] = None
-        self._enhanced_health_service: Optional[EnhancedHealthService] = None
+        self._health_check_service: HealthCheckService | None = None
+        self._enhanced_health_service: EnhancedHealthService | None = None
         self._service_lock = asyncio.Lock()
         self._initialized = False
 
     async def initialize_basic_service(
-        self, config: Optional[HealthCheckConfig] = None
+        self, config: HealthCheckConfig | None = None
     ) -> HealthCheckService:
         """
         Initialize and get the basic health check service instance.
@@ -66,7 +65,7 @@ class HealthServiceManager:
         return self._health_check_service
 
     async def initialize_enhanced_service(
-        self, config: Optional[HealthCheckConfig] = None
+        self, config: HealthCheckConfig | None = None
     ) -> EnhancedHealthService:
         """
         Initialize and get the enhanced health service instance.
@@ -93,7 +92,7 @@ class HealthServiceManager:
 
         return self._enhanced_health_service
 
-    async def get_basic_service(self) -> Optional[HealthCheckService]:
+    async def get_basic_service(self) -> HealthCheckService | None:
         """
         Get the basic health check service instance.
 
@@ -102,7 +101,7 @@ class HealthServiceManager:
         """
         return self._health_check_service
 
-    async def get_enhanced_service(self) -> Optional[EnhancedHealthService]:
+    async def get_enhanced_service(self) -> EnhancedHealthService | None:
         """
         Get the enhanced health service instance.
 
@@ -196,7 +195,7 @@ class HealthServiceManager:
 
 
 # Global service manager instance
-_health_service_manager: Optional[HealthServiceManager] = None
+_health_service_manager: HealthServiceManager | None = None
 _manager_lock = asyncio.Lock()
 
 
@@ -223,7 +222,7 @@ async def get_health_service_manager() -> HealthServiceManager:
 
 
 async def initialize_basic_health_service(
-    config: Optional[HealthCheckConfig] = None,
+    config: HealthCheckConfig | None = None,
 ) -> HealthCheckService:
     """
     Initialize and get the basic health check service.
@@ -239,7 +238,7 @@ async def initialize_basic_health_service(
 
 
 async def initialize_enhanced_health_service(
-    config: Optional[HealthCheckConfig] = None,
+    config: HealthCheckConfig | None = None,
 ) -> EnhancedHealthService:
     """
     Initialize and get the enhanced health service.
@@ -254,7 +253,7 @@ async def initialize_enhanced_health_service(
     return await manager.initialize_enhanced_service(config)
 
 
-async def get_basic_health_service() -> Optional[HealthCheckService]:
+async def get_basic_health_service() -> HealthCheckService | None:
     """
     Get the basic health check service instance if initialized.
 
@@ -265,7 +264,7 @@ async def get_basic_health_service() -> Optional[HealthCheckService]:
     return await manager.get_basic_service()
 
 
-async def get_enhanced_health_service() -> Optional[EnhancedHealthService]:
+async def get_enhanced_health_service() -> EnhancedHealthService | None:
     """
     Get the enhanced health service instance if initialized.
 

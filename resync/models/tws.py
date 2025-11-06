@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Any, Optional
+from typing import Any
 
 from pydantic import BaseModel, Field
 
@@ -51,11 +51,9 @@ class JobExecution(BaseModel):
     job_id: str = Field(..., description="The unique identifier for the job execution")
     status: str = Field(..., description="The status of this execution")
     start_time: datetime = Field(..., description="When the job execution started")
-    end_time: Optional[datetime] = Field(
-        None, description="When the job execution ended"
-    )
-    duration: Optional[str] = Field(None, description="Duration of the execution")
-    error_message: Optional[str] = Field(
+    end_time: datetime | None = Field(None, description="When the job execution ended")
+    duration: str | None = Field(None, description="Duration of the execution")
+    error_message: str | None = Field(
         None, description="Error message if execution failed"
     )
 
@@ -88,7 +86,7 @@ class PlanDetails(BaseModel):
     plan_id: str = Field(..., description="The unique identifier for the plan")
     creation_date: datetime = Field(..., description="When the plan was created")
     jobs_count: int = Field(..., description="Total number of jobs in the plan")
-    estimated_completion: Optional[datetime] = Field(
+    estimated_completion: datetime | None = Field(
         None, description="Estimated completion time"
     )
     status: str = Field(..., description="Current status of the plan")
@@ -101,12 +99,12 @@ class ResourceStatus(BaseModel):
     resource_type: str = Field(
         ..., description="The type of resource (CPU, memory, etc.)"
     )
-    total_capacity: Optional[float] = Field(
+    total_capacity: float | None = Field(
         None, description="Total capacity of the resource"
     )
-    used_capacity: Optional[float] = Field(None, description="Currently used capacity")
-    available_capacity: Optional[float] = Field(None, description="Available capacity")
-    utilization_percentage: Optional[float] = Field(
+    used_capacity: float | None = Field(None, description="Currently used capacity")
+    available_capacity: float | None = Field(None, description="Available capacity")
+    utilization_percentage: float | None = Field(
         None, description="Utilization as percentage"
     )
 
@@ -120,8 +118,8 @@ class Event(BaseModel):
     severity: str = Field(..., description="The severity level of the event")
     source: str = Field(..., description="The source of the event")
     message: str = Field(..., description="The event message")
-    job_id: Optional[str] = Field(None, description="Associated job ID if applicable")
-    workstation: Optional[str] = Field(
+    job_id: str | None = Field(None, description="Associated job ID if applicable")
+    workstation: str | None = Field(
         None, description="Associated workstation if applicable"
     )
 

@@ -9,7 +9,6 @@ from __future__ import annotations
 
 import asyncio
 from datetime import datetime, timedelta
-from typing import Optional
 
 import structlog
 
@@ -114,9 +113,7 @@ class HealthHistoryManager:
         async with self._cleanup_lock:
             try:
                 current_size = len(self.health_history)
-                cleanup_threshold = int(
-                    self.max_history_entries * self.history_cleanup_threshold
-                )
+                int(self.max_history_entries * self.history_cleanup_threshold)
 
                 # Check if cleanup is needed based on size
                 if current_size > self.max_history_entries:
@@ -223,8 +220,8 @@ class HealthHistoryManager:
     def get_health_history(
         self,
         hours: int = 24,
-        max_entries: Optional[int] = None,
-        component_filter: Optional[str] = None,
+        max_entries: int | None = None,
+        component_filter: str | None = None,
     ) -> list[HealthStatusHistory]:
         """
         Get health history for the specified time period.
@@ -260,7 +257,7 @@ class HealthHistoryManager:
         return filtered_history
 
     def get_component_status_history(
-        self, component_name: str, hours: int = 24, max_entries: Optional[int] = None
+        self, component_name: str, hours: int = 24, max_entries: int | None = None
     ) -> list[dict[str, Any]]:
         """
         Get status history for a specific component.

@@ -1,7 +1,7 @@
 """Shared types and interfaces for compliance modules."""
 
 from enum import Enum
-from typing import Any, Dict, Protocol
+from typing import Any, Protocol
 
 
 class SOC2TrustServiceCriteria(Enum):
@@ -19,15 +19,15 @@ class SOC2TrustServiceCriteria(Enum):
 class SOC2ComplianceManagerProtocol(Protocol):
     """Protocol for SOC2 compliance manager."""
 
-    def generate_report(self, report_type: str, **kwargs) -> Dict[str, Any]:
+    def generate_report(self, report_type: str, **kwargs) -> dict[str, Any]:
         """Generate a compliance report."""
         ...
 
-    def get_compliance_status(self) -> Dict[str, Any]:
+    def get_compliance_status(self) -> dict[str, Any]:
         """Get current compliance status."""
         ...
 
-    def update_compliance_record(self, record_id: str, data: Dict[str, Any]) -> bool:
+    def update_compliance_record(self, record_id: str, data: dict[str, Any]) -> bool:
         """Update a compliance record."""
         ...
 
@@ -45,17 +45,17 @@ class SOC2ComplianceManager:
         self.controls = {}
         self.control_tests = {}
 
-    def generate_report(self, report_type: str, **kwargs) -> Dict[str, Any]:
+    def generate_report(self, report_type: str, **kwargs) -> dict[str, Any]:
         """Generate a compliance report."""
         # This will be overridden by the full implementation
         return {"report_type": report_type, "status": "placeholder"}
 
-    def get_compliance_status(self) -> Dict[str, Any]:
+    def get_compliance_status(self) -> dict[str, Any]:
         """Get current compliance status."""
         # This will be overridden by the full implementation
         return {"status": "placeholder"}
 
-    def update_compliance_record(self, record_id: str, data: Dict[str, Any]) -> bool:
+    def update_compliance_record(self, record_id: str, data: dict[str, Any]) -> bool:
         """Update a compliance record."""
         # This will be overridden by the full implementation
         return True

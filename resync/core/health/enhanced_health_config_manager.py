@@ -7,7 +7,7 @@ integrating with the new health checker architecture.
 
 from __future__ import annotations
 
-from typing import Any, Optional
+from typing import Any
 
 import structlog
 
@@ -26,7 +26,7 @@ class EnhancedHealthConfigurationManager(HealthCheckConfigurationManager):
     Provides comprehensive configuration management with health checker integration.
     """
 
-    def __init__(self, config: Optional[HealthCheckConfig] = None):
+    def __init__(self, config: HealthCheckConfig | None = None):
         """
         Initialize the enhanced configuration manager.
 
@@ -34,7 +34,7 @@ class EnhancedHealthConfigurationManager(HealthCheckConfigurationManager):
             config: Base health check configuration
         """
         super().__init__(config)
-        self._checker_factory: Optional[HealthCheckerFactory] = None
+        self._checker_factory: HealthCheckerFactory | None = None
 
     def set_health_checker_factory(self, factory: HealthCheckerFactory) -> None:
         """
@@ -98,7 +98,7 @@ class EnhancedHealthConfigurationManager(HealthCheckConfigurationManager):
                 # Merge with base thresholds
                 for key, value in config.items():
                     if "threshold" in key.lower() or "percent" in key.lower():
-                        if isinstance(value, (int, float)):
+                        if isinstance(value, int | float):
                             base_thresholds[f"checker_{key}"] = float(value)
 
         return base_thresholds
@@ -203,7 +203,7 @@ class EnhancedHealthConfigurationManager(HealthCheckConfigurationManager):
             for name in self._checker_factory.get_enabled_health_checker_names():
                 checker = self._checker_factory.get_health_checker(name)
                 if checker:
-                    config = checker.get_component_config()
+                    checker.get_component_config()
 
                     # Recommend interval adjustments based on component type
                     if name in ["memory", "cpu"]:

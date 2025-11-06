@@ -136,10 +136,9 @@ async def _get_optimized_response(
     optimizations like template matching, caching, and model selection.
     """
     try:
-        response = await optimized_llm.get_response(
+        return await optimized_llm.get_response(
             query=query, context=context or {}, use_cache=use_cache, stream=stream
         )
-        return response
     except (LLMError, asyncio.TimeoutError) as exc:
         logger.error("LLM optimization failed (expected): %s", exc)
         return query

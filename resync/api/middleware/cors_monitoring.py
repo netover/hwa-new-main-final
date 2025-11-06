@@ -8,7 +8,7 @@ for security and compliance purposes.
 import logging
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any
 from urllib.parse import urlparse
 
 from fastapi import Request
@@ -38,7 +38,7 @@ class CORSMonitor:
 
     def monitor_request(
         self, request: Request, operation: CORSOperation = CORSOperation.REQUEST
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Monitor an incoming request for CORS-related information.
 
@@ -133,7 +133,7 @@ class CORSMonitor:
             f"CORS violation: {origin} -> {path} ({method}). Details: {details}"
         )
 
-    def get_violations(self, limit: int = 100) -> List[Dict[str, Any]]:
+    def get_violations(self, limit: int = 100) -> list[dict[str, Any]]:
         """
         Get recent CORS violations.
 
@@ -145,7 +145,7 @@ class CORSMonitor:
         """
         return self.violations[-limit:]
 
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> dict[str, Any]:
         """
         Get CORS monitoring statistics.
 
@@ -186,13 +186,13 @@ class CORSLogEntry(BaseModel):
     timestamp: str
     origin: str
     method: str
-    requested_headers: Optional[str] = None
-    access_control_method: Optional[str] = None
+    requested_headers: str | None = None
+    access_control_method: str | None = None
     path: str
-    user_agent: Optional[str] = None
+    user_agent: str | None = None
     operation: str
     is_violation: bool = False
-    details: Optional[str] = ""
+    details: str | None = ""
 
 
 def monitor_cors() -> CORSMonitor:
@@ -210,7 +210,7 @@ class CORSMonitoringMiddleware:
     Middleware to monitor and log CORS-related activities.
     """
 
-    def __init__(self, app, allowed_origins: List[str] = None):
+    def __init__(self, app, allowed_origins: list[str] = None):
         self.app = app
         self.cors_monitor = monitor_cors()
         self.allowed_origins = set(allowed_origins or [])

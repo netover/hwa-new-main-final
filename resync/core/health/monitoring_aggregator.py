@@ -3,7 +3,7 @@ from __future__ import annotations
 from collections import Counter, defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any, Optional
+from typing import Any
 
 from resync.core.health_models import (
     ComponentHealth,
@@ -24,7 +24,7 @@ class ComponentHealthSummary:
     degraded_count: int
     unhealthy_count: int
     unknown_count: int
-    average_response_time_ms: Optional[float] = None
+    average_response_time_ms: float | None = None
     components: list[ComponentHealth] = field(default_factory=list)
 
     @property
@@ -93,7 +93,7 @@ class HealthMonitoringAggregator:
     health, generating overall system status, and identifying trends and issues.
     """
 
-    def __init__(self, health_service: Optional[HealthCheckService] = None):
+    def __init__(self, health_service: HealthCheckService | None = None):
         """
         Initialize the HealthMonitoringAggregator.
 
@@ -102,8 +102,8 @@ class HealthMonitoringAggregator:
                           a new instance will be created when needed.
         """
         self.health_service = health_service
-        self._last_collection_time: Optional[datetime] = None
-        self._cached_report: Optional[HealthReport] = None
+        self._last_collection_time: datetime | None = None
+        self._cached_report: HealthReport | None = None
 
     async def get_health_service(self) -> HealthCheckService:
         """Get or create the health check service instance."""
@@ -184,7 +184,7 @@ class HealthMonitoringAggregator:
         return summaries
 
     async def generate_overall_health_status(
-        self, health_result: Optional[HealthCheckResult] = None
+        self, health_result: HealthCheckResult | None = None
     ) -> OverallHealthStatus:
         """
         Generate overall health status for the system.
@@ -370,7 +370,7 @@ class HealthMonitoringAggregator:
         age = datetime.now() - self._last_collection_time
         return age.total_seconds() > max_age_seconds
 
-    async def get_cached_report(self) -> Optional[HealthReport]:
+    async def get_cached_report(self) -> HealthReport | None:
         """Get cached health report if available and fresh."""
         if self._should_refresh_cache():
             return None

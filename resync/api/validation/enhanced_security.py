@@ -7,19 +7,14 @@ import secrets
 import time
 import uuid
 from abc import ABC, abstractmethod
+from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 from datetime import datetime, timezone
 from enum import Enum
 from ipaddress import IPv4Address, IPv6Address
+from re import Pattern
 from typing import (
     Any,
-    AsyncGenerator,
-    Dict,
-    List,
-    Optional,
-    Pattern,
-    Tuple,
-    Type,
     TypeVar,
     Union,
 )
@@ -44,8 +39,8 @@ from resync.settings import settings
 
 # Type aliases for better readability
 IPAddress = Union[IPv4Address, IPv6Address]
-SecurityEvent = Dict[str, Any]
-ValidationResult = Tuple[bool, Optional[str]]
+SecurityEvent = dict[str, Any]
+ValidationResult = tuple[bool, str | None]
 
 # Generic type for validation models
 T = TypeVar("T", bound=BaseModel)
@@ -75,7 +70,7 @@ JWT_PATTERN: Pattern[str] = re.compile(
 )
 
 # Trusted IP ranges for production environments
-TRUSTED_IP_RANGES: List[str] = [
+TRUSTED_IP_RANGES: list[str] = [
     "127.0.0.0/8",  # localhost
     "10.0.0.0/8",  # private network
     "172.16.0.0/12",  # private network
@@ -83,7 +78,7 @@ TRUSTED_IP_RANGES: List[str] = [
 ]
 
 # Suspicious patterns to detect in inputs
-SUSPICIOUS_PATTERNS: List[Pattern[str]] = [
+SUSPICIOUS_PATTERNS: list[Pattern[str]] = [
     re.compile(r"(?i)<script[^>]*>.*?</script>", re.DOTALL),
     re.compile(r"(?i)javascript\s*:"),
     re.compile(r"(?i)vbscript\s*:"),
@@ -143,13 +138,13 @@ class SecurityEventType(str, Enum):
 class SecurityContext(BaseModel):
     """Context for security operations."""
 
-    user_id: Optional[str] = None
-    ip_address: Optional[str] = None
-    user_agent: Optional[str] = None
-    session_id: Optional[str] = None
+    user_id: str | None = None
+    ip_address: str | None = None
+    user_agent: str | None = None
+    session_id: str | None = None
     threat_level: SecurityLevel = SecurityLevel.LOW
     timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-    metadata: Dict[str, Any] = Field(default_factory=dict)
+    metadata: dict[str, Any] = Field(default_factory=dict)
 
 
 class SecurityEventLog(BaseModel):
@@ -157,13 +152,13 @@ class SecurityEventLog(BaseModel):
 
     event_type: SecurityEventType
     severity: SecurityEventSeverity
-    source_ip: Optional[str] = None
-    user_id: Optional[str] = None
-    session_id: Optional[str] = None
-    threat_type: Optional[ThreatType] = None
-    details: Dict[str, Any] = Field(default_factory=dict)
+    source_ip: str | None = None
+    user_id: str | None = None
+    session_id: str | None = None
+    threat_type: ThreatType | None = None
+    details: dict[str, Any] = Field(default_factory=dict)
     timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-    correlation_id: Optional[str] = None
+    correlation_id: str | None = None
 
 
 class TokenPayload(BaseModel):
@@ -173,9 +168,9 @@ class TokenPayload(BaseModel):
     exp: int = Field(..., description="Expiration timestamp")
     iat: int = Field(..., description="Issued at timestamp")
     jti: str = Field(..., description="JWT ID")
-    scopes: List[str] = Field(default_factory=list, description="Token scopes")
-    session_id: Optional[str] = Field(None, description="Session identifier")
-    ip_address: Optional[str] = Field(None, description="IP address at token issuance")
+    scopes: list[str] = Field(default_factory=list, description="Token scopes")
+    session_id: str | None = Field(None, description="Session identifier")
+    ip_address: str | None = Field(None, description="IP address at token issuance")
 
 
 class SecurityToken(BaseModel):
@@ -184,8 +179,8 @@ class SecurityToken(BaseModel):
     access_token: str = Field(..., description="Access token")
     token_type: str = Field(default="bearer", description="Token type")
     expires_in: int = Field(..., description="Seconds until expiration")
-    refresh_token: Optional[str] = Field(None, description="Refresh token")
-    csrf_token: Optional[str] = Field(None, description="CSRF protection token")
+    refresh_token: str | None = Field(None, description="Refresh token")
+    csrf_token: str | None = Field(None, description="CSRF protection token")
 
 
 class RateLimitInfo(BaseModel):
@@ -201,11 +196,9 @@ class InputValidationResult(BaseModel):
     """Result of input validation."""
 
     is_valid: bool = Field(..., description="Whether input is valid")
-    sanitized_value: Optional[str] = Field(None, description="Sanitized input value")
-    error_message: Optional[str] = Field(None, description="Error message if invalid")
-    threat_detected: Optional[ThreatType] = Field(
-        None, description="Detected threat type"
-    )
+    sanitized_value: str | None = Field(None, description="Sanitized input value")
+    error_message: str | None = Field(None, description="Error message if invalid")
+    threat_detected: ThreatType | None = Field(None, description="Detected threat type")
     security_context: SecurityContext = Field(default_factory=SecurityContext)
 
 
@@ -222,7 +215,7 @@ class AsyncSecurityContextManager:
 
     def __init__(self, context: SecurityContext):
         self.context = context
-        self.start_time: Optional[float] = None
+        self.start_time: float | None = None
 
     async def __aenter__(self) -> "AsyncSecurityContextManager":
         """Enter the async context."""
@@ -232,9 +225,9 @@ class AsyncSecurityContextManager:
 
     async def __aexit__(
         self,
-        exc_type: Optional[Type[BaseException]],
-        exc_val: Optional[BaseException],
-        exc_tb: Optional[Any],
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: Any | None,
     ) -> bool:
         """Exit the async context."""
         duration = time.time() - self.start_time if self.start_time else 0
@@ -252,9 +245,9 @@ class EnhancedSecurityValidator:
     def __init__(self, settings_module: Any = None):
         """Initialize the security validator."""
         self.settings = settings_module or settings
-        self.failed_attempts: Dict[str, int] = {}
-        self.lockout_times: Dict[str, float] = {}
-        self.session_store: Dict[str, SecurityContext] = {}
+        self.failed_attempts: dict[str, int] = {}
+        self.lockout_times: dict[str, float] = {}
+        self.session_store: dict[str, SecurityContext] = {}
 
     @asynccontextmanager
     async def security_context(
@@ -484,8 +477,8 @@ class EnhancedSecurityValidator:
         )
 
     async def validate_jwt_token(
-        self, token: str, secret_key: str, algorithms: Optional[List[str]] = None
-    ) -> Tuple[bool, Optional[TokenPayload], Optional[str]]:
+        self, token: str, secret_key: str, algorithms: list[str] | None = None
+    ) -> tuple[bool, TokenPayload | None, str | None]:
         """
         Validate JWT token with enhanced security.
 
@@ -528,7 +521,7 @@ class EnhancedSecurityValidator:
             return False, None, f"Unexpected error: {str(e)}"
 
     async def validate_ip_address(
-        self, ip: str, trusted_ranges: Optional[List[str]] = None
+        self, ip: str, trusted_ranges: list[str] | None = None
     ) -> InputValidationResult:
         """
         Validate IP address against trusted ranges.
@@ -580,7 +573,7 @@ class EnhancedSecurityValidator:
         self,
         input_data: str,
         security_level: SecurityLevel = SecurityLevel.MEDIUM,
-        _allowed_patterns: Optional[List[Pattern[str]]] = None,
+        _allowed_patterns: list[Pattern[str]] | None = None,
     ) -> InputValidationResult:
         """
         Comprehensive input validation with threat detection.
@@ -653,7 +646,7 @@ class EnhancedSecurityValidator:
             security_context=context,
         )
 
-    def _detect_threats(self, input_data: str) -> Optional[ThreatType]:
+    def _detect_threats(self, input_data: str) -> ThreatType | None:
         """
         Detect security threats in input data.
 
@@ -704,7 +697,7 @@ class EnhancedSecurityValidator:
         # In a real implementation, this would use Redis or similar
         # For now, we'll simulate with in-memory storage
         current_time = time.time()
-        window_start = current_time - window_seconds
+        current_time - window_seconds
 
         # Simulate rate limiting logic
         # In production, this would use atomic operations in Redis

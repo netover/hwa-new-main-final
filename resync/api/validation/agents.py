@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import Any, Optional
+from typing import Annotated, Any
 
 from pydantic import (
     BaseModel,
@@ -13,7 +13,6 @@ from pydantic import (
     field_validator,
     model_validator,
 )
-from typing_extensions import Annotated
 
 from .common import NumericConstraints, StringConstraints, ValidationPatterns
 
@@ -114,16 +113,14 @@ class AgentConfig(BaseModel):
         default=AgentStatus.ACTIVE, description="Current agent status"
     )
 
-    description: Optional[
-        Annotated[
-            str,
-            StringConstraints(
-                min_length=NumericConstraints.MIN_AGENT_DESCRIPTION_LENGTH,
-                max_length=NumericConstraints.MAX_AGENT_DESCRIPTION_LENGTH,
-                strip_whitespace=True,
-            ),
-        ]
-    ] = Field(None, description="Detailed agent description")
+    description: Annotated[
+        str,
+        StringConstraints(
+            min_length=NumericConstraints.MIN_AGENT_DESCRIPTION_LENGTH,
+            max_length=NumericConstraints.MAX_AGENT_DESCRIPTION_LENGTH,
+            strip_whitespace=True,
+        ),
+    ] | None = Field(None, description="Detailed agent description")
 
     configuration: dict[str, Any] = Field(
         default_factory=dict,
@@ -135,11 +132,11 @@ class AgentConfig(BaseModel):
         default_factory=list, description="Agent tags for categorization", max_length=10
     )
 
-    max_tokens: Optional[int] = Field(
+    max_tokens: int | None = Field(
         None, ge=100, le=100000, description="Maximum tokens for model responses"
     )
 
-    temperature: Optional[float] = Field(
+    temperature: float | None = Field(
         None, ge=0.0, le=2.0, description="Model temperature setting"
     )
 
@@ -240,69 +237,65 @@ class AgentCreateRequest(AgentConfig):
 class AgentUpdateRequest(BaseModel):
     """Request model for updating an existing agent."""
 
-    name: Optional[
-        Annotated[
-            str,
-            StringConstraints(
-                min_length=NumericConstraints.MIN_AGENT_NAME_LENGTH,
-                max_length=NumericConstraints.MAX_AGENT_NAME_LENGTH,
-                strip_whitespace=True,
-            ),
-        ]
-    ] = Field(None, description="Updated agent name")
+    name: Annotated[
+        str,
+        StringConstraints(
+            min_length=NumericConstraints.MIN_AGENT_NAME_LENGTH,
+            max_length=NumericConstraints.MAX_AGENT_NAME_LENGTH,
+            strip_whitespace=True,
+        ),
+    ] | None = Field(None, description="Updated agent name")
 
-    role: Optional[StringConstraints.ROLE_TEXT] = Field(
+    role: StringConstraints.ROLE_TEXT | None = Field(
         None, description="Updated agent role"
     )
 
-    goal: Optional[StringConstraints.ROLE_TEXT] = Field(
+    goal: StringConstraints.ROLE_TEXT | None = Field(
         None, description="Updated agent goal"
     )
 
-    backstory: Optional[StringConstraints.ROLE_TEXT] = Field(
+    backstory: StringConstraints.ROLE_TEXT | None = Field(
         None, description="Updated agent backstory"
     )
 
-    tools: Optional[list[StringConstraints.TOOL_NAME]] = Field(
+    tools: list[StringConstraints.TOOL_NAME] | None = Field(
         None, description="Updated tools list", max_length=20
     )
 
-    model_name: Optional[StringConstraints.MODEL_NAME] = Field(
+    model_name: StringConstraints.MODEL_NAME | None = Field(
         None, description="Updated model name"
     )
 
-    memory: Optional[bool] = Field(None, description="Updated memory setting")
+    memory: bool | None = Field(None, description="Updated memory setting")
 
-    verbose: Optional[bool] = Field(None, description="Updated verbose setting")
+    verbose: bool | None = Field(None, description="Updated verbose setting")
 
-    type: Optional[AgentType] = Field(None, description="Updated agent type")
+    type: AgentType | None = Field(None, description="Updated agent type")
 
-    status: Optional[AgentStatus] = Field(None, description="Updated agent status")
+    status: AgentStatus | None = Field(None, description="Updated agent status")
 
-    description: Optional[
-        Annotated[
-            str,
-            StringConstraints(
-                min_length=NumericConstraints.MIN_AGENT_DESCRIPTION_LENGTH,
-                max_length=NumericConstraints.MAX_AGENT_DESCRIPTION_LENGTH,
-                strip_whitespace=True,
-            ),
-        ]
-    ] = Field(None, description="Updated agent description")
+    description: Annotated[
+        str,
+        StringConstraints(
+            min_length=NumericConstraints.MIN_AGENT_DESCRIPTION_LENGTH,
+            max_length=NumericConstraints.MAX_AGENT_DESCRIPTION_LENGTH,
+            strip_whitespace=True,
+        ),
+    ] | None = Field(None, description="Updated agent description")
 
-    configuration: Optional[dict[str, Any]] = Field(
+    configuration: dict[str, Any] | None = Field(
         None, description="Updated configuration", max_length=50
     )
 
-    tags: Optional[
-        list[Annotated[str, StringConstraints(min_length=1, max_length=50)]]
-    ] = Field(None, description="Updated tags", max_length=10)
+    tags: list[
+        Annotated[str, StringConstraints(min_length=1, max_length=50)]
+    ] | None = Field(None, description="Updated tags", max_length=10)
 
-    max_tokens: Optional[int] = Field(
+    max_tokens: int | None = Field(
         None, ge=100, le=100000, description="Updated max tokens"
     )
 
-    temperature: Optional[float] = Field(
+    temperature: float | None = Field(
         None, ge=0.0, le=2.0, description="Updated temperature"
     )
 
@@ -357,33 +350,33 @@ class AgentUpdateRequest(BaseModel):
 class AgentQueryParams(BaseModel):
     """Query parameters for agent-related endpoints."""
 
-    agent_id: Optional[StringConstraints.AGENT_ID] = Field(
+    agent_id: StringConstraints.AGENT_ID | None = Field(
         None, description="Filter by specific agent ID"
     )
 
-    name: Optional[
-        Annotated[str, StringConstraints(min_length=1, max_length=100)]
-    ] = Field(None, description="Filter by agent name (partial match)")
+    name: Annotated[
+        str, StringConstraints(min_length=1, max_length=100)
+    ] | None = Field(None, description="Filter by agent name (partial match)")
 
-    type: Optional[AgentType] = Field(None, description="Filter by agent type")
+    type: AgentType | None = Field(None, description="Filter by agent type")
 
-    status: Optional[AgentStatus] = Field(None, description="Filter by agent status")
+    status: AgentStatus | None = Field(None, description="Filter by agent status")
 
-    tags: Optional[
-        list[Annotated[str, StringConstraints(min_length=1, max_length=50)]]
-    ] = Field(None, description="Filter by tags", max_length=5)
+    tags: list[
+        Annotated[str, StringConstraints(min_length=1, max_length=50)]
+    ] | None = Field(None, description="Filter by tags", max_length=5)
 
     include_inactive: bool = Field(
         default=False, description="Include inactive agents in results"
     )
 
-    sort_by: Optional[str] = Field(
+    sort_by: str | None = Field(
         default="name",
         pattern=r"^(name|id|type|status|created_at|updated_at)$",
         description="Field to sort results by",
     )
 
-    sort_order: Optional[str] = Field(
+    sort_order: str | None = Field(
         default="asc",
         pattern=r"^(asc|desc)$",
         description="Sort order (ascending or descending)",
@@ -421,7 +414,7 @@ class AgentBulkActionRequest(BaseModel):
         description="Bulk action to perform",
     )
 
-    confirmation_token: Optional[str] = Field(
+    confirmation_token: str | None = Field(
         None, description="Confirmation token for destructive actions"
     )
 

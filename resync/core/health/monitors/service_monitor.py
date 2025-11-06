@@ -3,7 +3,7 @@ from __future__ import annotations
 import time
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
-from typing import Any, Optional
+from typing import Any
 
 import structlog
 
@@ -20,8 +20,8 @@ class ServiceDependencyStatus:
     status: HealthStatus
     dependencies: list[str] = field(default_factory=list)
     dependency_status: dict[str, HealthStatus] = field(default_factory=dict)
-    last_check: Optional[datetime] = None
-    response_time_ms: Optional[float] = None
+    last_check: datetime | None = None
+    response_time_ms: float | None = None
     metadata: dict[str, Any] = field(default_factory=dict)
 
 
@@ -32,10 +32,10 @@ class ExternalServiceStatus:
     service_name: str
     service_type: str
     status: HealthStatus
-    endpoint: Optional[str] = None
-    last_check: Optional[datetime] = None
-    response_time_ms: Optional[float] = None
-    error_message: Optional[str] = None
+    endpoint: str | None = None
+    last_check: datetime | None = None
+    response_time_ms: float | None = None
+    error_message: str | None = None
     metadata: dict[str, Any] = field(default_factory=dict)
 
 
@@ -251,14 +251,14 @@ class ServiceHealthMonitor:
             return True
         return datetime.now() > self._cache_expiry[cache_key]
 
-    def _get_cached_result(self, cache_key: str) -> Optional[Any]:
+    def _get_cached_result(self, cache_key: str) -> Any | None:
         """Get a cached result if it exists and hasn't expired."""
         if self._is_cache_expired(cache_key):
             return None
         return self._cache.get(cache_key)
 
     def _set_cached_result(
-        self, cache_key: str, result: Any, ttl_seconds: Optional[int] = None
+        self, cache_key: str, result: Any, ttl_seconds: int | None = None
     ) -> None:
         """Cache a result with optional TTL."""
         if ttl_seconds is None:

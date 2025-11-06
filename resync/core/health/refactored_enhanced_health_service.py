@@ -8,9 +8,10 @@ modular architecture with dependency injection and extracted health checkers.
 from __future__ import annotations
 
 import asyncio
+import contextlib
 import time
 from datetime import datetime, timedelta
-from typing import Any, Optional
+from typing import Any
 
 import structlog
 
@@ -37,7 +38,7 @@ class RefactoredEnhancedHealthService:
     using the new architecture with improved maintainability.
     """
 
-    def __init__(self, config: Optional[HealthCheckConfig] = None):
+    def __init__(self, config: HealthCheckConfig | None = None):
         """
         Initialize the refactored enhanced health service.
 
@@ -51,14 +52,14 @@ class RefactoredEnhancedHealthService:
         self.config_manager.set_health_checker_factory(self.checker_factory)
 
         self.health_history: list[HealthStatusHistory] = []
-        self.last_health_check: Optional[datetime] = None
+        self.last_health_check: datetime | None = None
 
         # Performance metrics
         self._cache_hits = 0
         self._cache_misses = 0
 
         # Monitoring control
-        self._monitoring_task: Optional[asyncio.Task] = None
+        self._monitoring_task: asyncio.Task | None = None
         self._is_monitoring = False
 
     async def start_monitoring(self) -> None:
@@ -75,10 +76,8 @@ class RefactoredEnhancedHealthService:
         self._is_monitoring = False
         if self._monitoring_task:
             self._monitoring_task.cancel()
-            try:
+            with contextlib.suppress(asyncio.CancelledError):
                 await self._monitoring_task
-            except asyncio.CancelledError:
-                pass
             self._monitoring_task = None
         logger.info("refactored_enhanced_health_check_monitoring_stopped")
 
@@ -149,7 +148,7 @@ class RefactoredEnhancedHealthService:
             )
             check_results = [
                 asyncio.TimeoutError(f"Health check component {name} timed out")
-                for name in check_tasks.keys()
+                for name in check_tasks
             ]
 
         # Process results
@@ -287,7 +286,7 @@ class RefactoredEnhancedHealthService:
         self.health_history.append(history_entry)
 
     def get_health_history(
-        self, hours: int = 24, max_entries: Optional[int] = None
+        self, hours: int = 24, max_entries: int | None = None
     ) -> list[HealthStatusHistory]:
         """Get health history for specified time period."""
         cutoff_time = datetime.now() - timedelta(hours=hours)
@@ -345,7 +344,7 @@ class RefactoredEnhancedHealthService:
 
 
 # Global refactored enhanced health service instance
-_refactored_enhanced_health_service: Optional[RefactoredEnhancedHealthService] = None
+_refactored_enhanced_health_service: RefactoredEnhancedHealthService | None = None
 _refactored_enhanced_health_service_lock = asyncio.Lock()
 
 

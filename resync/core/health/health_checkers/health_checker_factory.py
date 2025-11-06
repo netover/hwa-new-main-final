@@ -6,8 +6,6 @@ This module provides a factory for creating and managing health checker instance
 
 from __future__ import annotations
 
-from typing import Optional
-
 from resync.core.health_models import ComponentType, HealthCheckConfig
 
 from .base_health_checker import BaseHealthChecker
@@ -29,7 +27,7 @@ class HealthCheckerFactory:
     Provides dependency injection and centralized management of all health checkers.
     """
 
-    def __init__(self, config: Optional[HealthCheckConfig] = None):
+    def __init__(self, config: HealthCheckConfig | None = None):
         """
         Initialize the health checker factory.
 
@@ -56,7 +54,7 @@ class HealthCheckerFactory:
         for name, checker_class in self._checker_classes.items():
             self._checkers[name] = checker_class(self.config)
 
-    def get_health_checker(self, component_name: str) -> Optional[BaseHealthChecker]:
+    def get_health_checker(self, component_name: str) -> BaseHealthChecker | None:
         """
         Get a health checker instance by component name.
 
@@ -130,9 +128,7 @@ class HealthCheckerFactory:
         Returns:
             List of enabled component names
         """
-        return [
-            name for name in self._checkers.keys() if self._is_component_enabled(name)
-        ]
+        return [name for name in self._checkers if self._is_component_enabled(name)]
 
     def register_health_checker(
         self, component_name: str, checker_class: type[BaseHealthChecker]

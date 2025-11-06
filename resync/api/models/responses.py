@@ -1,7 +1,7 @@
 """Modelos de resposta de erro padronizados (RFC 7807 - Problem Details)."""
 
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -19,10 +19,8 @@ class HealthCheckResponse(BaseModel):
 
     status: str = Field(..., json_schema_extra={"example": "UP"})
     timestamp: str = Field(default_factory=lambda: datetime.utcnow().isoformat() + "Z")
-    version: Optional[str] = Field(None, json_schema_extra={"example": "1.0.0"})
-    environment: Optional[str] = Field(
-        None, json_schema_extra={"example": "production"}
-    )
+    version: str | None = Field(None, json_schema_extra={"example": "1.0.0"})
+    environment: str | None = Field(None, json_schema_extra={"example": "production"})
 
     model_config = ConfigDict(
         json_schema_extra={
@@ -42,8 +40,8 @@ class ProblemDetail(BaseModel):
 
     type: str = Field(..., description="URI reference identifying the problem type")
     title: str = Field(..., description="Human-readable summary of the problem")
-    detail: Optional[str] = Field(None, description="Human-readable explanation")
-    instance: Optional[str] = Field(
+    detail: str | None = Field(None, description="Human-readable explanation")
+    instance: str | None = Field(
         None, description="URI reference identifying specific occurrence"
     )
     status: int = Field(..., description="HTTP status code")
@@ -66,8 +64,8 @@ class ValidationErrorDetail(BaseModel):
 
     field: str = Field(..., description="Field that failed validation")
     message: str = Field(..., description="Validation error message")
-    code: Optional[str] = Field(None, description="Error code")
-    value: Optional[Any] = Field(None, description="Invalid value provided")
+    code: str | None = Field(None, description="Error code")
+    value: Any | None = Field(None, description="Invalid value provided")
 
     model_config = ConfigDict(
         json_schema_extra={
@@ -84,7 +82,7 @@ class ValidationErrorDetail(BaseModel):
 class ValidationProblemDetail(ProblemDetail):
     """Problem Details with validation errors."""
 
-    errors: List[ValidationErrorDetail] = Field(
+    errors: list[ValidationErrorDetail] = Field(
         default_factory=list, description="List of validation errors"
     )
 
@@ -112,7 +110,7 @@ class SuccessResponse(BaseModel):
 
     success: bool = Field(True, description="Success indicator")
     message: str = Field(..., description="Success message")
-    data: Optional[Any] = Field(None, description="Response data")
+    data: Any | None = Field(None, description="Response data")
 
     model_config = ConfigDict(
         json_schema_extra={
@@ -128,7 +126,7 @@ class SuccessResponse(BaseModel):
 class PaginatedResponse(BaseModel):
     """Paginated response with metadata."""
 
-    items: List[Any] = Field(..., description="List of items")
+    items: list[Any] = Field(..., description="List of items")
     total: int = Field(..., description="Total number of items")
     page: int = Field(..., description="Current page number")
     page_size: int = Field(..., description="Items per page")
@@ -152,8 +150,8 @@ def create_problem_detail(
     type_uri: str,
     title: str,
     status: int,
-    detail: Optional[str] = None,
-    instance: Optional[str] = None,
+    detail: str | None = None,
+    instance: str | None = None,
 ) -> ProblemDetail:
     """Create a ProblemDetail instance."""
     return ProblemDetail(
@@ -164,9 +162,9 @@ def create_problem_detail(
 def create_validation_problem_detail(
     title: str,
     detail: str,
-    errors: List[ValidationErrorDetail],
+    errors: list[ValidationErrorDetail],
     status: int = 400,
-    instance: Optional[str] = None,
+    instance: str | None = None,
 ) -> ValidationProblemDetail:
     """Create a ValidationProblemDetail instance."""
     return ValidationProblemDetail(
@@ -179,15 +177,13 @@ def create_validation_problem_detail(
     )
 
 
-def create_success_response(
-    message: str, data: Optional[Any] = None
-) -> SuccessResponse:
+def create_success_response(message: str, data: Any | None = None) -> SuccessResponse:
     """Create a SuccessResponse instance."""
     return SuccessResponse(success=True, message=message, data=data)
 
 
 def create_paginated_response(
-    items: List[Any], total: int, page: int, page_size: int
+    items: list[Any], total: int, page: int, page_size: int
 ) -> PaginatedResponse:
     """Create a PaginatedResponse instance."""
     total_pages = (total + page_size - 1) // page_size  # Ceiling division
@@ -202,8 +198,8 @@ def create_paginated_response(
 
 # Response helpers
 def error_response(
-    status_code: int, message: str, details: Optional[Any] = None
-) -> Dict[str, Any]:
+    status_code: int, message: str, details: Any | None = None
+) -> dict[str, Any]:
     """Create a standardized error response."""
     return {
         "success": False,
@@ -212,7 +208,7 @@ def error_response(
     }
 
 
-def success_response(message: str, data: Optional[Any] = None) -> Dict[str, Any]:
+def success_response(message: str, data: Any | None = None) -> dict[str, Any]:
     """Create a standardized success response."""
     return {
         "success": True,
@@ -223,8 +219,8 @@ def success_response(message: str, data: Optional[Any] = None) -> Dict[str, Any]
 
 
 def paginated_response(
-    items: List[Any], total: int, page: int, page_size: int
-) -> Dict[str, Any]:
+    items: list[Any], total: int, page: int, page_size: int
+) -> dict[str, Any]:
     """Create a standardized paginated response."""
     total_pages = (total + page_size - 1) // page_size
     return {

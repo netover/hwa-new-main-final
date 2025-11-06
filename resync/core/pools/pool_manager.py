@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING
 
 from resync.core.exceptions import TWSConnectionError
 from resync.core.pools.base_pool import (
@@ -29,7 +29,7 @@ if TYPE_CHECKING:
 
 # Global lock and instance for thread-safe singleton
 _manager_lock = asyncio.Lock()
-_manager_instance: Optional[ConnectionPoolManager] = None
+_manager_instance: ConnectionPoolManager | None = None
 
 
 async def get_connection_pool_manager() -> ConnectionPoolManager:
@@ -186,7 +186,7 @@ class ConnectionPoolManager:
                     f"Failed to initialize connection pool manager: {e}"
                 ) from e
 
-    async def get_pool(self, pool_name: str) -> Optional[ConnectionPool]:
+    async def get_pool(self, pool_name: str) -> ConnectionPool | None:
         """Get a specific connection pool by name."""
         return self.pools.get(pool_name)
 

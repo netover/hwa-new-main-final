@@ -10,7 +10,7 @@ from __future__ import annotations
 import asyncio
 from abc import ABC, abstractmethod
 from datetime import datetime
-from typing import Any, Optional
+from typing import Any
 
 import structlog
 
@@ -27,8 +27,8 @@ class HealthMonitoringEvent:
         event_type: str,
         component_name: str,
         health_status: HealthStatus,
-        timestamp: Optional[datetime] = None,
-        metadata: Optional[dict[str, Any]] = None,
+        timestamp: datetime | None = None,
+        metadata: dict[str, Any] | None = None,
     ):
         self.event_type = event_type
         self.component_name = component_name
@@ -43,17 +43,14 @@ class HealthMonitorObserver(ABC):
     @abstractmethod
     async def on_health_status_changed(self, event: HealthMonitoringEvent) -> None:
         """Called when a component's health status changes."""
-        pass
 
     @abstractmethod
     async def on_component_check_completed(self, event: HealthMonitoringEvent) -> None:
         """Called when a component health check is completed."""
-        pass
 
     @abstractmethod
     async def on_system_health_summary(self, event: HealthMonitoringEvent) -> None:
         """Called when system health summary is generated."""
-        pass
 
 
 class HealthMonitoringSubject:

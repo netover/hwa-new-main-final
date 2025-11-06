@@ -10,7 +10,6 @@ from __future__ import annotations
 
 import time
 from datetime import datetime
-from typing import Optional
 
 import structlog
 
@@ -33,7 +32,7 @@ class ConnectionPoolMonitor:
 
     def __init__(self):
         """Initialize the connection pool monitor."""
-        self._last_check: Optional[datetime] = None
+        self._last_check: datetime | None = None
         self._cached_results: dict[str, ComponentHealth] = {}
 
     async def check_connection_pools_health(self) -> ComponentHealth:
@@ -213,7 +212,7 @@ class ConnectionPoolMonitor:
             "websocket_pool": websocket_pool_health,
         }
 
-    def get_cached_health(self, component_name: str) -> Optional[ComponentHealth]:
+    def get_cached_health(self, component_name: str) -> ComponentHealth | None:
         """
         Get cached health result for a specific component.
 

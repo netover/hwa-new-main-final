@@ -9,7 +9,6 @@ from __future__ import annotations
 
 import time
 from datetime import datetime
-from typing import Optional
 
 import structlog
 
@@ -36,7 +35,7 @@ class RefactoredHealthCheckService:
     the new architecture with improved modularity and maintainability.
     """
 
-    def __init__(self, config: Optional[HealthCheckConfig] = None):
+    def __init__(self, config: HealthCheckConfig | None = None):
         """
         Initialize the refactored health check service.
 
@@ -50,7 +49,7 @@ class RefactoredHealthCheckService:
         self.config_manager.set_health_checker_factory(self.checker_factory)
 
         self._component_cache: dict[str, ComponentHealth] = {}
-        self._last_system_check: Optional[datetime] = None
+        self._last_system_check: datetime | None = None
 
     async def run_all_checks(self) -> list[HealthCheckResult]:
         """

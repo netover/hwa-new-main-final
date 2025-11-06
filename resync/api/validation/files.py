@@ -4,7 +4,7 @@ import os
 import re
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Annotated, Any
 
 from pydantic import (
     ConfigDict,
@@ -14,7 +14,6 @@ from pydantic import (
     model_validator,
     validator,
 )
-from typing_extensions import Annotated
 
 from .common import (
     BaseValidatedModel,
@@ -58,13 +57,13 @@ class FileUploadRequest(BaseValidatedModel):
 
     content_type: str = Field(..., description="MIME content type")
 
-    file_type: Optional[FileType] = Field(None, description="Categorized file type")
+    file_type: FileType | None = Field(None, description="Categorized file type")
 
     purpose: Annotated[
         str, StringConstraints(min_length=1, max_length=100, strip_whitespace=True)
     ] = Field(..., description="Purpose of file upload")
 
-    metadata: Optional[Dict[str, Any]] = Field(
+    metadata: dict[str, Any] | None = Field(
         default_factory=dict, description="Additional file metadata", max_length=50
     )
 
@@ -102,9 +101,8 @@ class FileUploadRequest(BaseValidatedModel):
             raise ValueError("Filename has too many extensions")
         # Validate extension
         extension = os.path.splitext(v)[1].lower()
-        if extension:
-            if not re.match(r"^\.[a-zA-Z0-9]{1,10}$", extension):
-                raise ValueError("Invalid file extension")
+        if extension and not re.match(r"^\.[a-zA-Z0-9]{1,10}$", extension):
+            raise ValueError("Invalid file extension")
         return v
 
     @field_validator("content_type")
@@ -254,7 +252,7 @@ class FileChunkUploadRequest(BaseValidatedModel):
 
     content_type: str = Field(..., description="MIME content type")
 
-    checksum: Optional[str] = Field(
+    checksum: str | None = Field(
         None, description="MD5 hash of chunk data", pattern=r"^[a-fA-F0-9]{32}$"
     )
 
@@ -292,23 +290,21 @@ class FileChunkUploadRequest(BaseValidatedModel):
 class FileUpdateRequest(BaseValidatedModel):
     """File update request validation."""
 
-    filename: Optional[StringConstraints.FILENAME] = Field(
+    filename: StringConstraints.FILENAME | None = Field(
         None, description="New filename"
     )
 
-    purpose: Optional[
-        Annotated[
-            str, StringConstraints(min_length=1, max_length=100, strip_whitespace=True)
-        ]
-    ] = Field(None, description="New purpose")
+    purpose: Annotated[
+        str, StringConstraints(min_length=1, max_length=100, strip_whitespace=True)
+    ] | None = Field(None, description="New purpose")
 
-    metadata: Optional[Dict[str, Any]] = Field(
+    metadata: dict[str, Any] | None = Field(
         None, description="Updated metadata", max_length=50
     )
 
-    tags: Optional[
-        List[Annotated[str, StringConstraints(min_length=1, max_length=50)]]
-    ] = Field(None, description="File tags", max_length=10)
+    tags: list[
+        Annotated[str, StringConstraints(min_length=1, max_length=50)]
+    ] | None = Field(None, description="File tags", max_length=10)
 
     model_config = ConfigDict(
         extra="forbid",
@@ -380,11 +376,11 @@ class FileUpdateRequest(BaseValidatedModel):
 class FileProcessingRequest(BaseValidatedModel):
     """File processing request validation."""
 
-    operations: List[str] = Field(
+    operations: list[str] = Field(
         ..., description="Processing operations to perform", min_length=1, max_length=10
     )
 
-    configuration: Optional[Dict[str, Any]] = Field(
+    configuration: dict[str, Any] | None = Field(
         default_factory=dict, description="Processing configuration", max_length=20
     )
 
@@ -394,7 +390,7 @@ class FileProcessingRequest(BaseValidatedModel):
         description="Processing priority",
     )
 
-    callback_url: Optional[str] = Field(
+    callback_url: str | None = Field(
         None, description="Callback URL for processing completion"
     )
 
@@ -467,7 +463,7 @@ class FileProcessingRequest(BaseValidatedModel):
 class RAGUploadRequest(BaseValidatedModel):
     """RAG (Retrieval-Augmented Generation) file upload request."""
 
-    files: List[FileUploadRequest] = Field(
+    files: list[FileUploadRequest] = Field(
         ..., description="Files to process for RAG", min_length=1, max_length=10
     )
 
@@ -483,11 +479,11 @@ class RAGUploadRequest(BaseValidatedModel):
         default=200, ge=0, le=1000, description="Overlap between chunks"
     )
 
-    embedding_model: Optional[StringConstraints.MODEL_NAME] = Field(
+    embedding_model: StringConstraints.MODEL_NAME | None = Field(
         None, description="Embedding model to use"
     )
 
-    metadata_template: Optional[Dict[str, str]] = Field(
+    metadata_template: dict[str, str] | None = Field(
         default_factory=dict,
         description="Template for document metadata",
         max_length=20,
@@ -564,9 +560,9 @@ class FileInfo(BaseValidatedModel):
     file_type: FileType = Field(..., description="Categorized file type")
     status: ProcessingStatus = Field(..., description="Processing status")
     upload_date: datetime = Field(..., description="Upload timestamp")
-    checksum: Optional[str] = Field(None, description="File checksum")
-    metadata: Dict[str, Any] = Field(default_factory=dict, description="File metadata")
-    tags: List[str] = Field(default_factory=list, description="File tags")
+    checksum: str | None = Field(None, description="File checksum")
+    metadata: dict[str, Any] = Field(default_factory=dict, description="File metadata")
+    tags: list[str] = Field(default_factory=list, description="File tags")
 
     model_config = ConfigDict(
         extra="forbid",

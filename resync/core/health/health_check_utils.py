@@ -9,7 +9,8 @@ check patterns.
 from __future__ import annotations
 
 import asyncio
-from typing import Any, Callable, Optional, TypeVar
+from collections.abc import Callable
+from typing import Any, TypeVar
 
 import structlog
 
@@ -76,6 +77,7 @@ class HealthCheckUtils:
                     error=str(e),
                 )
                 await asyncio.sleep(wait_time)
+        return None
 
     @staticmethod
     def calculate_overall_status(
@@ -139,7 +141,7 @@ class HealthCheckUtils:
     @staticmethod
     def check_alerts(
         components: dict[str, ComponentHealth],
-        thresholds: Optional[dict[str, float]] = None,
+        thresholds: dict[str, float] | None = None,
     ) -> list[str]:
         """
         Check for alert conditions in component health results.

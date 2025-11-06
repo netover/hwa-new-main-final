@@ -5,7 +5,6 @@ This module provides standardized error handling and response mapping
 for consistent API error responses across all endpoints.
 """
 
-from typing import Dict, Tuple
 
 from fastapi import HTTPException, status
 
@@ -15,7 +14,7 @@ from resync.core.structured_logger import get_logger
 logger = get_logger(__name__)
 
 # Error status code mapping for consistent API responses
-ERROR_STATUS_MAP: Dict[str, Tuple[int, str]] = {
+ERROR_STATUS_MAP: dict[str, tuple[int, str]] = {
     "timeout": (status.HTTP_504_GATEWAY_TIMEOUT, ErrorMessages.TIMEOUT.value),
     "connection": (status.HTTP_504_GATEWAY_TIMEOUT, ErrorMessages.CONNECTION.value),
     "auth": (status.HTTP_401_UNAUTHORIZED, ErrorMessages.AUTH_REQUIRED.value),

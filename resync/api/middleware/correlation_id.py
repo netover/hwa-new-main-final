@@ -12,7 +12,7 @@ O Correlation ID é:
 
 import logging
 import uuid
-from typing import Callable, Optional
+from collections.abc import Callable
 
 from fastapi import Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware
@@ -118,7 +118,7 @@ class CorrelationIdMiddleware(BaseHTTPMiddleware):
         return str(uuid.uuid4())
 
 
-def get_correlation_id_from_request(request: Request) -> Optional[str]:
+def get_correlation_id_from_request(request: Request) -> str | None:
     """Extrai Correlation ID da requisição.
 
     Args:

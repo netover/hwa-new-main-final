@@ -1,7 +1,6 @@
 """Base models and common classes."""
 
 from datetime import datetime
-from typing import Optional
 
 from pydantic import BaseModel
 
@@ -9,8 +8,8 @@ from pydantic import BaseModel
 class BaseModelWithTime(BaseModel):
     """Base model with automatic timestamp fields."""
 
-    created_at: Optional[datetime] = None
-    updated_at: Optional[datetime] = None
+    created_at: datetime | None = None
+    updated_at: datetime | None = None
 
 
 class PaginationRequest(BaseModel):

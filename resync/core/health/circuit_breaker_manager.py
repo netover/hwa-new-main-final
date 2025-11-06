@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import asyncio
 from datetime import datetime, timedelta
-from typing import Any, Optional
+from typing import Any
 
 import structlog
 
@@ -105,7 +105,7 @@ class CircuitBreakerManager:
 
     async def get_circuit_breaker_status(
         self, breaker_name: str
-    ) -> Optional[dict[str, Any]]:
+    ) -> dict[str, Any] | None:
         """
         Get the status of a specific circuit breaker.
 
@@ -168,7 +168,7 @@ class CircuitBreakerManager:
         """
         statuses = {}
 
-        for breaker_name in self._circuit_breakers.keys():
+        for breaker_name in self._circuit_breakers:
             status = await self.get_circuit_breaker_status(breaker_name)
             if status:
                 statuses[breaker_name] = status
@@ -223,7 +223,7 @@ class CircuitBreakerManager:
         """
         results = {}
 
-        for breaker_name in self._circuit_breakers.keys():
+        for breaker_name in self._circuit_breakers:
             results[breaker_name] = await self.reset_circuit_breaker(breaker_name)
 
         logger.info("all_circuit_breakers_reset", results=results)

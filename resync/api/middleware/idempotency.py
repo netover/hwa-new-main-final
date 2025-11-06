@@ -17,7 +17,7 @@ Date: October 2025
 """
 
 import json
-from typing import Callable, Dict, List, Optional, Set
+from collections.abc import Callable
 
 from fastapi import HTTPException, Request, Response
 from fastapi.responses import JSONResponse
@@ -44,8 +44,8 @@ class IdempotencyMiddleware(BaseHTTPMiddleware):
         app: Callable,
         idempotency_manager: IdempotencyManager,
         idempotency_header: str = "Idempotency-Key",
-        exclude_paths: Optional[Set[str]] = None,
-        exclude_methods: Optional[Set[str]] = None,
+        exclude_paths: set[str] | None = None,
+        exclude_methods: set[str] | None = None,
     ):
         """
         Inicializa middleware de idempotency
@@ -216,7 +216,7 @@ class IdempotencyMiddleware(BaseHTTPMiddleware):
         # Métodos que modificam estado requerem idempotency
         return request.method in {"POST", "PUT", "PATCH", "DELETE"}
 
-    def _extract_idempotency_key(self, request: Request) -> Optional[str]:
+    def _extract_idempotency_key(self, request: Request) -> str | None:
         """
         Extrai chave de idempotência do header
 
@@ -228,7 +228,7 @@ class IdempotencyMiddleware(BaseHTTPMiddleware):
         """
         return request.headers.get(self.idempotency_header)
 
-    async def _extract_request_data(self, request: Request) -> Dict:
+    async def _extract_request_data(self, request: Request) -> dict:
         """
         Extrai dados relevantes da requisição para hash
 
@@ -338,7 +338,7 @@ class IdempotencyMiddleware(BaseHTTPMiddleware):
                 error=str(e),
             )
 
-    async def _extract_response_data(self, response: Response) -> Dict:
+    async def _extract_response_data(self, response: Response) -> dict:
         """
         Extrai dados da resposta para cache
 
@@ -353,7 +353,7 @@ class IdempotencyMiddleware(BaseHTTPMiddleware):
             if hasattr(response, "body") and response.body:
                 try:
                     # Handle different types of response body
-                    if isinstance(response.body, (bytes, bytearray)):
+                    if isinstance(response.body, bytes | bytearray):
                         return json.loads(response.body.decode("utf-8"))
                     elif isinstance(response.body, str):
                         return json.loads(response.body)
@@ -372,7 +372,7 @@ class IdempotencyMiddleware(BaseHTTPMiddleware):
             logger.warning("Failed to extract response data", error=str(e))
             return {"cached": True, "status_code": response.status_code}
 
-    def _create_response_from_cache(self, cached: Dict) -> Response:
+    def _create_response_from_cache(self, cached: dict) -> Response:
         """
         Cria resposta HTTP a partir do cache
 
@@ -409,8 +409,8 @@ class IdempotencyConfig:
     def __init__(
         self,
         header_name: str = "Idempotency-Key",
-        exclude_paths: Optional[List[str]] = None,
-        exclude_methods: Optional[List[str]] = None,
+        exclude_paths: list[str] | None = None,
+        exclude_methods: list[str] | None = None,
         required_for_mutations: bool = True,
     ):
         self.header_name = header_name
@@ -422,7 +422,7 @@ class IdempotencyConfig:
 
 
 def create_idempotency_middleware(
-    idempotency_manager: IdempotencyManager, config: Optional[IdempotencyConfig] = None
+    idempotency_manager: IdempotencyManager, config: IdempotencyConfig | None = None
 ) -> Callable:
     """
     Factory function para criar middleware de idempotency

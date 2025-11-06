@@ -22,8 +22,7 @@ from pydantic import Field, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 # Import shared types, validators and legacy properties from separate modules
-from .settings_types import Environment
-from .settings_legacy import SettingsLegacyProperties
+from .settings_types import Environment, SettingsLegacyProperties
 from .settings_validators import SettingsValidators
 
 
@@ -373,7 +372,7 @@ class Settings(BaseSettings, SettingsValidators, SettingsLegacyProperties):
     # ============================================================================
     # BACKWARD COMPATIBILITY PROPERTIES
     # ============================================================================
-    # Legacy properties are now imported from settings_legacy.py
+    # Legacy properties are inherited from SettingsLegacyProperties in settings_types.py
 
     # End of legacy block
 

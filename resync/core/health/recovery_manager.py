@@ -11,7 +11,7 @@ from __future__ import annotations
 import asyncio
 import time
 from datetime import datetime, timedelta
-from typing import Any, Optional
+from typing import Any
 
 import structlog
 
@@ -482,9 +482,9 @@ class HealthRecoveryManager:
 
     def get_recovery_history(
         self,
-        component_name: Optional[str] = None,
+        component_name: str | None = None,
         hours: int = 24,
-        limit: Optional[int] = None,
+        limit: int | None = None,
     ) -> list[RecoveryResult]:
         """
         Get recovery history with optional filtering.

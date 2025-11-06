@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import time
 from datetime import datetime
-from typing import Any, Optional
+from typing import Any
 
 import psutil
 import structlog
@@ -30,8 +30,8 @@ class PerformanceMetricsCollector:
 
     def __init__(self):
         """Initialize the performance metrics collector."""
-        self._last_collection_time: Optional[datetime] = None
-        self._cached_metrics: Optional[dict[str, Any]] = None
+        self._last_collection_time: datetime | None = None
+        self._cached_metrics: dict[str, Any] | None = None
 
     async def get_system_performance_metrics(self) -> dict[str, Any]:
         """
@@ -49,7 +49,7 @@ class PerformanceMetricsCollector:
             process = psutil.Process()
             process_memory_mb = process.memory_info().rss / (1024**2)
 
-            metrics = {
+            return {
                 "cpu_percent": cpu_percent,
                 "memory_percent": memory.percent,
                 "memory_used_gb": memory.used / (1024**3),
@@ -59,8 +59,6 @@ class PerformanceMetricsCollector:
                 "timestamp": time.time(),
                 "collection_time": datetime.now().isoformat(),
             }
-
-            return metrics
 
         except Exception as e:
             logger.warning("failed_to_get_system_performance_metrics", error=str(e))
@@ -129,7 +127,7 @@ class PerformanceMetricsCollector:
                 "collection_time": datetime.now().isoformat(),
             }
 
-    def get_cached_metrics(self) -> Optional[dict[str, Any]]:
+    def get_cached_metrics(self) -> dict[str, Any] | None:
         """
         Get cached performance metrics if available and recent.
 

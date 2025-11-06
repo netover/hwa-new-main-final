@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import time
 from datetime import datetime
-from typing import Optional
 
 from resync.core.health_models import (
     ComponentHealth,
@@ -24,7 +23,7 @@ class HealthCheckService:
     def __init__(self):
         """Initialize the health check service."""
         self._component_cache: dict[str, ComponentHealth] = {}
-        self._last_system_check: Optional[datetime] = None
+        self._last_system_check: datetime | None = None
 
     async def run_all_checks(self) -> list[HealthCheckResult]:
         """

@@ -75,8 +75,7 @@ class CSRFProtectionMiddleware(BaseHTTPMiddleware):
         random_bytes = secrets.token_bytes(32)
         signature = hmac.new(self.secret_key, random_bytes, digestmod="sha256").digest()
 
-        token = (random_bytes + signature).hex()
-        return token
+        return (random_bytes + signature).hex()
 
     def _validate_csrf_tokens(self, cookie_token: str, header_token: str) -> bool:
         """Validate CSRF tokens using constant-time comparison."""

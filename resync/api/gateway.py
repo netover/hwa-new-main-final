@@ -17,14 +17,16 @@ This module provides a comprehensive API Gateway with enterprise-grade features 
 from __future__ import annotations
 
 import asyncio
+import contextlib
 import hashlib
 import re
 import time
 from collections import defaultdict, deque
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Callable, Optional
+from typing import Any
 from urllib.parse import urljoin, urlparse
 
 import aiohttp
@@ -81,7 +83,7 @@ class ServiceEndpoint:
     service_name: str
     url: str
     weight: int = 1
-    health_check_url: Optional[str] = None
+    health_check_url: str | None = None
     timeout_seconds: float = 30.0
     retry_count: int = 3
     circuit_breaker_enabled: bool = True
@@ -111,7 +113,7 @@ class RouteConfiguration:
     strip_prefix: bool = True
     add_prefix: str = ""
     timeout_seconds: float = 30.0
-    rate_limit: Optional[dict[str, Any]] = None
+    rate_limit: dict[str, Any] | None = None
     authentication_required: bool = False
     authorization_required: bool = False
     cors_enabled: bool = True
@@ -132,7 +134,7 @@ class RateLimitRule:
     limit_type: RateLimitType
     limit_value: int
     window_seconds: int
-    burst_limit: Optional[int] = None
+    burst_limit: int | None = None
     key_strategy: str = "ip"  # ip, user, api_key, custom
     exclude_paths: set[str] = field(default_factory=set)
 
@@ -164,7 +166,7 @@ class APIGateway:
     - Monitoring and observability
     """
 
-    def __init__(self, config: Optional[dict[str, Any]] = None):
+    def __init__(self, config: dict[str, Any] | None = None):
         self.config = config or {}
 
         # Core components
@@ -202,9 +204,9 @@ class APIGateway:
         }
 
         # Background tasks
-        self._cleanup_task: Optional[asyncio.Task] = None
-        self._health_check_task: Optional[asyncio.Task] = None
-        self._metrics_task: Optional[asyncio.Task] = None
+        self._cleanup_task: asyncio.Task | None = None
+        self._health_check_task: asyncio.Task | None = None
+        self._metrics_task: asyncio.Task | None = None
         self._running = False
 
         # Initialize components
@@ -268,10 +270,8 @@ class APIGateway:
         for task in [self._cleanup_task, self._health_check_task, self._metrics_task]:
             if task:
                 task.cancel()
-                try:
+                with contextlib.suppress(asyncio.CancelledError):
                     await task
-                except asyncio.CancelledError:
-                    pass
 
         logger.info("API Gateway stopped")
 
@@ -504,7 +504,7 @@ class APIGateway:
 
         return {"authenticated": False, "reason": "Invalid authentication"}
 
-    def _find_route(self, request: web.Request) -> Optional[RouteConfiguration]:
+    def _find_route(self, request: web.Request) -> RouteConfiguration | None:
         """Find matching route configuration."""
         for route in self.routes:
             if route.matches_path(request.path) and request.method in [
@@ -518,7 +518,7 @@ class APIGateway:
         service_name: str,
         request: web.Request,
         strategy: LoadBalancingStrategy = LoadBalancingStrategy.ROUND_ROBIN,
-    ) -> Optional[ServiceEndpoint]:
+    ) -> ServiceEndpoint | None:
         """Select service endpoint using load balancing strategy."""
         available_endpoints = [
             ep for ep in self.services.get(service_name, []) if ep.is_healthy
@@ -648,13 +648,11 @@ class APIGateway:
                 ) as response:
                     # Create response
                     response_data = await response.read()
-                    gateway_response = web.Response(
+                    return web.Response(
                         status=response.status,
                         headers=dict(response.headers),
                         body=response_data,
                     )
-
-                    return gateway_response
 
         except asyncio.TimeoutError:
             raise web.HTTPGatewayTimeout(text="Service timeout")
@@ -690,7 +688,7 @@ class APIGateway:
         key_string = "|".join(key_parts)
         return hashlib.md5(key_string.encode()).hexdigest()
 
-    def _get_cached_response(self, cache_key: str) -> Optional[web.Response]:
+    def _get_cached_response(self, cache_key: str) -> web.Response | None:
         """Get cached response if available and valid."""
         if cache_key in self.cache and cache_key in self.cache_ttl:
             if time.time() < self.cache_ttl[cache_key]:
@@ -789,7 +787,7 @@ class APIGateway:
                 await asyncio.sleep(60)  # Every minute
 
                 # Perform health checks on all service endpoints
-                for service_name, endpoints in self.services.items():
+                for _service_name, endpoints in self.services.items():
                     for endpoint in endpoints:
                         if endpoint.health_check_url:
                             # This would perform actual health checks
