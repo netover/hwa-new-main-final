@@ -20,9 +20,11 @@ import pytest
 import pytest_asyncio
 import structlog
 
-from resync.core.connection_pool_manager import (ConnectionPoolConfig,
-                                                 ConnectionPoolManager,
-                                                 DatabaseConnectionPool)
+from resync.core.connection_pool_manager import (
+    ConnectionPoolConfig,
+    ConnectionPoolManager,
+    DatabaseConnectionPool,
+)
 from resync.core.exceptions import PoolExhaustedError, TimeoutError
 
 # Configure structured logging for tests
@@ -196,7 +198,7 @@ class TestConnectionPoolMetrics:
             start_time = time.perf_counter()
 
             try:
-                async with monitored_pool.get_connection() as engine:
+                async with monitored_pool.get_connection():
                     # Simulate work
                     await asyncio.sleep(0.001 * operation_id)
 
@@ -231,7 +233,7 @@ class TestConnectionPoolMetrics:
         # Run timed operations
         num_operations = 10
         tasks = [timed_operation(i) for i in range(num_operations)]
-        results = await asyncio.gather(*tasks, return_exceptions=True)
+        await asyncio.gather(*tasks, return_exceptions=True)
 
         # Analyze metrics
         successful_metrics = [m for m in metrics if "error" not in m]
@@ -259,7 +261,7 @@ class TestConnectionPoolMetrics:
         async def exhaust_pool_operation(operation_id: int):
             """Operation that might exhaust the pool."""
             try:
-                async with monitored_pool.get_connection() as engine:
+                async with monitored_pool.get_connection():
                     # Hold connection to exhaust pool
                     await asyncio.sleep(0.1)
                     return f"success_{operation_id}"
@@ -286,7 +288,7 @@ class TestConnectionPoolMetrics:
         # Create more operations than pool can handle
         num_operations = 5
         tasks = [exhaust_pool_operation(i) for i in range(num_operations)]
-        results = await asyncio.gather(*tasks, return_exceptions=True)
+        await asyncio.gather(*tasks, return_exceptions=True)
 
         # Should have some exhaustion events
         assert len(exhaustion_events) > 0
@@ -390,7 +392,7 @@ class TestConnectionLeakDetection:
         await asyncio.sleep(0.2)  # Allow cleanup time
 
         # Should detect potential leaks
-        stats = leaky_pool.get_stats()
+        leaky_pool.get_stats()
 
         # Some connections might be leaked
         potential_leaks = sum(1 for r in results if r.startswith("leaked"))
@@ -431,7 +433,7 @@ class TestConnectionLeakDetection:
 
         # Use connections
         async def tracked_operation(operation_id: int):
-            async with leaky_pool.get_connection() as engine:
+            async with leaky_pool.get_connection():
                 await asyncio.sleep(0.01)
                 return f"success_{operation_id}"
 
@@ -466,7 +468,7 @@ class TestConnectionLeakDetection:
         # Simulate connection health issues
         async def unhealthy_operation(operation_id: int):
             """Operation that might create unhealthy connections."""
-            async with leaky_pool.get_connection() as engine:
+            async with leaky_pool.get_connection():
                 # Simulate work
                 await asyncio.sleep(0.01)
 
@@ -545,7 +547,6 @@ class TestPoolManagerMonitoring:
     @pytest.mark.asyncio
     async def test_manager_performance_metrics(self, monitored_manager):
         """Test manager-level performance metrics."""
-        performance_metrics = []
 
         # Add mock pools with performance data
         for i in range(3):
@@ -571,7 +572,7 @@ class TestPoolManagerMonitoring:
         total_active = 0
         total_errors = 0
 
-        for pool_name, pool in all_pools.items():
+        for _pool_name, pool in all_pools.items():
             stats = pool.get_stats()
             total_hits += stats.pool_hits
             total_misses += stats.pool_misses
@@ -712,7 +713,7 @@ class TestWebSocketPoolMonitoring:
         await asyncio.gather(*tasks)
 
         # Analyze metrics
-        connect_events = [m for m in connection_metrics if m["event"] == "connected"]
-        disconnect_events = [
+        [m for m in connection_metrics if m["event"] == "connected"]
+        [
             m for m in connection_metrics if m["event"] == "disconnected"
         ]

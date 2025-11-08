@@ -5,7 +5,8 @@ import re
 import traceback
 import uuid
 from functools import lru_cache
-from typing import Any, Dict, FrozenSet, List, Optional, Pattern, Union
+from re import Pattern
+from typing import Any
 
 from fastapi import Request, status
 from fastapi.exceptions import RequestValidationError
@@ -33,9 +34,9 @@ class ErrorResponseBuilder:
     """Builder class for creating standardized error responses."""
 
     def __init__(self) -> None:
-        self._correlation_id: Optional[str] = None
-        self._path: Optional[str] = None
-        self._method: Optional[str] = None
+        self._correlation_id: str | None = None
+        self._path: str | None = None
+        self._method: str | None = None
         self._include_stack_trace: bool = False
 
     def with_correlation_id(self, correlation_id: str) -> "ErrorResponseBuilder":
@@ -55,7 +56,7 @@ class ErrorResponseBuilder:
         return self
 
     def build_validation_error(
-        self, validation_errors: List[Dict[str, Any]], message: Optional[str] = None
+        self, validation_errors: list[dict[str, Any]], message: str | None = None
     ) -> ValidationErrorResponse:
         """Build validation error response."""
         response = ValidationErrorResponse.from_pydantic_errors(
@@ -79,30 +80,29 @@ class ErrorResponseBuilder:
                 method=self._method,
                 **kwargs,
             )
-        elif error_type == "invalid_credentials":
+        if error_type == "invalid_credentials":
             return AuthenticationErrorResponse.invalid_credentials(
                 correlation_id=self._correlation_id,
                 path=self._path,
                 method=self._method,
                 **kwargs,
             )
-        elif error_type == "token_expired":
+        if error_type == "token_expired":
             return AuthenticationErrorResponse.token_expired(
                 correlation_id=self._correlation_id,
                 path=self._path,
                 method=self._method,
                 **kwargs,
             )
-        else:
-            return AuthenticationErrorResponse(
-                error_code="AUTHENTICATION_ERROR",
-                message="Authentication failed",
-                category=ErrorCategory.AUTHENTICATION,
-                correlation_id=self._correlation_id,
-                path=self._path,
-                method=self._method,
-                **kwargs,
-            )
+        return AuthenticationErrorResponse(
+            error_code="AUTHENTICATION_ERROR",
+            message="Authentication failed",
+            category=ErrorCategory.AUTHENTICATION,
+            correlation_id=self._correlation_id,
+            path=self._path,
+            method=self._method,
+            **kwargs,
+        )
 
     def build_authorization_error(
         self, error_type: str, **kwargs: Any
@@ -115,14 +115,13 @@ class ErrorResponseBuilder:
                 method=self._method,
                 **kwargs,
             )
-        else:
-            return AuthorizationErrorResponse.insufficient_permissions(
-                resource=kwargs.pop("resource", "resource"),
-                correlation_id=self._correlation_id,
-                path=self._path,
-                method=self._method,
-                **kwargs,
-            )
+        return AuthorizationErrorResponse.insufficient_permissions(
+            resource=kwargs.pop("resource", "resource"),
+            correlation_id=self._correlation_id,
+            path=self._path,
+            method=self._method,
+            **kwargs,
+        )
 
     def build_business_logic_error(
         self, error_type: str, **kwargs: Any
@@ -137,7 +136,7 @@ class ErrorResponseBuilder:
                 method=self._method,
                 **kwargs,
             )
-        elif error_type == "resource_already_exists":
+        if error_type == "resource_already_exists":
             return BusinessLogicErrorResponse.resource_already_exists(
                 resource=kwargs.pop("resource", "Resource"),
                 identifier=kwargs.pop("identifier", None),
@@ -146,7 +145,7 @@ class ErrorResponseBuilder:
                 method=self._method,
                 **kwargs,
             )
-        elif error_type == "invalid_operation":
+        if error_type == "invalid_operation":
             return BusinessLogicErrorResponse.invalid_operation(
                 operation=kwargs.pop("operation", "operation"),
                 reason=kwargs.pop("reason", None),
@@ -155,19 +154,18 @@ class ErrorResponseBuilder:
                 method=self._method,
                 **kwargs,
             )
-        else:
-            return BusinessLogicErrorResponse(
-                error_code="BUSINESS_LOGIC_ERROR",
-                message="Business logic error occurred",
-                category=ErrorCategory.BUSINESS_LOGIC,
-                correlation_id=self._correlation_id,
-                path=self._path,
-                method=self._method,
-                **kwargs,
-            )
+        return BusinessLogicErrorResponse(
+            error_code="BUSINESS_LOGIC_ERROR",
+            message="Business logic error occurred",
+            category=ErrorCategory.BUSINESS_LOGIC,
+            correlation_id=self._correlation_id,
+            path=self._path,
+            method=self._method,
+            **kwargs,
+        )
 
     def build_system_error(
-        self, error_type: str, exception: Optional[Exception] = None, **kwargs: Any
+        self, error_type: str, exception: Exception | None = None, **kwargs: Any
     ) -> SystemErrorResponse:
         """Build system error response."""
         if self._include_stack_trace and exception:
@@ -181,30 +179,29 @@ class ErrorResponseBuilder:
                 method=self._method,
                 **kwargs,
             )
-        elif error_type == "service_unavailable":
+        if error_type == "service_unavailable":
             return SystemErrorResponse.service_unavailable(
                 correlation_id=self._correlation_id,
                 path=self._path,
                 method=self._method,
                 **kwargs,
             )
-        elif error_type == "database_error":
+        if error_type == "database_error":
             return SystemErrorResponse.database_error(
                 correlation_id=self._correlation_id,
                 path=self._path,
                 method=self._method,
                 **kwargs,
             )
-        else:
-            return SystemErrorResponse(
-                error_code="SYSTEM_ERROR",
-                message="System error occurred",
-                category=ErrorCategory.SYSTEM,
-                correlation_id=self._correlation_id,
-                path=self._path,
-                method=self._method,
-                **kwargs,
-            )
+        return SystemErrorResponse(
+            error_code="SYSTEM_ERROR",
+            message="System error occurred",
+            category=ErrorCategory.SYSTEM,
+            correlation_id=self._correlation_id,
+            path=self._path,
+            method=self._method,
+            **kwargs,
+        )
 
     def build_external_service_error(
         self, service: str, error_type: str = "service_error", **kwargs: Any
@@ -218,17 +215,16 @@ class ErrorResponseBuilder:
                 method=self._method,
                 **kwargs,
             )
-        else:
-            return ExternalServiceErrorResponse.service_error(
-                service=service,
-                correlation_id=self._correlation_id,
-                path=self._path,
-                method=self._method,
-                **kwargs,
-            )
+        return ExternalServiceErrorResponse.service_error(
+            service=service,
+            correlation_id=self._correlation_id,
+            path=self._path,
+            method=self._method,
+            **kwargs,
+        )
 
     def build_rate_limit_error(
-        self, limit: int, window: Optional[str] = None, **kwargs
+        self, limit: int, window: str | None = None, **kwargs
     ) -> RateLimitErrorResponse:
         """Build rate limit error response."""
         return RateLimitErrorResponse.rate_limit_exceeded(
@@ -247,22 +243,12 @@ def generate_correlation_id() -> str:
 
 
 def extract_validation_errors(
-    validation_error: Union[RequestValidationError, ValidationError],
-) -> List[Dict[str, Any]]:
+    validation_error: RequestValidationError | ValidationError,
+) -> list[dict[str, Any]]:
     """Extract validation error details from FastAPI or Pydantic validation errors."""
     errors = []
 
-    if isinstance(validation_error, RequestValidationError):
-        for error in validation_error.errors():
-            errors.append(
-                {
-                    "loc": error["loc"],
-                    "msg": error["msg"],
-                    "type": error["type"],
-                    "input": error.get("input"),
-                }
-            )
-    elif isinstance(validation_error, ValidationError):
+    if isinstance(validation_error, RequestValidationError | ValidationError):
         for error in validation_error.errors():
             errors.append(
                 {
@@ -291,7 +277,7 @@ def should_include_stack_trace() -> bool:
 
 
 def log_error_response(
-    error_response: BaseErrorResponse, original_exception: Optional[Exception] = None
+    error_response: BaseErrorResponse, original_exception: Exception | None = None
 ) -> None:
     """Log error response with appropriate level based on severity."""
     log_data = {
@@ -378,7 +364,7 @@ class ErrorSanitizer:
 
 
 @lru_cache(maxsize=128)
-def get_sensitive_patterns() -> FrozenSet[Pattern]:
+def get_sensitive_patterns() -> frozenset[Pattern]:
     """
     Get cached sensitive patterns for efficient reuse.
 
@@ -462,21 +448,17 @@ def register_exception_handlers(app):
         if exc.status_code == 404:
             error_response = builder.build_business_logic_error(
                 "resource_not_found", resource="Resource"
-            )[assignment]
+            )
         elif exc.status_code == 401:
-            error_response = builder.build_authentication_error("unauthorized")[
-                assignment
-            ]
+            error_response = builder.build_authentication_error("unauthorized")
         elif exc.status_code == 403:
-            error_response = builder.build_authorization_error("forbidden")[assignment]
+            error_response = builder.build_authorization_error("forbidden")
         elif exc.status_code == 429:
             error_response = builder.build_rate_limit_error(
                 limit=getattr(request.state, "rate_limit", {}).get("limit", 0)
-            )[assignment]
+            )
         else:
-            error_response = builder.build_system_error("internal_server_error")[
-                assignment
-            ]
+            error_response = builder.build_system_error("internal_server_error")
 
         error_response.error_code = f"HTTP_{exc.status_code}"
         error_response.message = (
@@ -495,7 +477,7 @@ def register_exception_handlers(app):
         correlation_id = generate_correlation_id()
         error_response = create_error_response_from_exception(
             exc, request, correlation_id
-        )[assignment]
+        )
 
         log_error_response(error_response, exc)
 
@@ -507,7 +489,7 @@ def register_exception_handlers(app):
         correlation_id = generate_correlation_id()
         error_response = create_error_response_from_exception(
             exc, request, correlation_id
-        )[assignment]
+        )
 
         log_error_response(error_response, exc)
 
@@ -518,8 +500,8 @@ def register_exception_handlers(app):
 
 def create_error_response_from_exception(
     exception: Exception,
-    request: Optional[Request] = None,
-    correlation_id: Optional[str] = None,
+    request: Request | None = None,
+    correlation_id: str | None = None,
 ) -> BaseErrorResponse:
     """Create standardized error response from any exception with security considerations."""
     # Lazy import to avoid circular dependency

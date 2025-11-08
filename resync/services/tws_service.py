@@ -16,11 +16,10 @@ from typing import Any
 
 import httpx
 from dateutil import parser
-from resync.settings import settings
-from resync.core.connection_pool_manager import get_connection_pool_manager
-from resync.core.exceptions import TWSConnectionError
 
 from resync.core.cache_hierarchy import get_cache_hierarchy
+from resync.core.connection_pool_manager import get_connection_pool_manager
+from resync.core.exceptions import TWSConnectionError
 from resync.core.resilience import (
     CircuitBreakerError,
     CircuitBreakerManager,
@@ -43,6 +42,7 @@ from resync.services.http_client_factory import (
     create_async_http_client,
     create_tws_http_client,
 )
+from resync.settings import settings
 
 # --- Logging Setup ---
 logger = logging.getLogger(__name__)
@@ -200,13 +200,13 @@ class OptimizedTWSClient:
             )
             raise TWSConnectionError(
                 f"HTTP error: {e.response.status_code}", original_exception=e
-            )
+            ) from e
         except httpx.RequestError as e:
             logger.error("Network error during API request: %s", str(e))
             raise TWSConnectionError(
                 f"Network error during API request: {e.request.url}",
                 original_exception=e,
-            )
+            ) from e
         except Exception as e:
             logger.error("An unexpected error occurred during API request: %s", e)
             # Wrap unexpected errors for consistent error handling
@@ -253,10 +253,14 @@ class OptimizedTWSClient:
             )
         except httpx.TimeoutException as e:
             logger.warning("TWS server ping timed out")
-            raise TWSConnectionError("TWS server ping timed out", original_exception=e)
+            raise TWSConnectionError(
+                "TWS server ping timed out", original_exception=e
+            ) from e
         except httpx.RequestError as e:
             logger.error(f"TWS server ping failed: {e}")
-            raise TWSConnectionError("TWS server unreachable", original_exception=e)
+            raise TWSConnectionError(
+                "TWS server unreachable", original_exception=e
+            ) from e
         except Exception as e:
             logger.error(f"Unexpected error during TWS ping: {e}")
             raise TWSConnectionError(
@@ -1015,9 +1019,9 @@ class OptimizedTWSClient:
                 await self.cache.set(cache_key, job_status)
                 return job_status
 
-        except asyncio.TimeoutError:
+        except asyncio.TimeoutError as e:
             logger.error(f"Timeout getting job status for {job_id}")
-            raise TWSConnectionError(f"Timeout getting job status for {job_id}")
+            raise TWSConnectionError(f"Timeout getting job status for {job_id}") from e
         except Exception as e:
             logger.error(f"Error getting job status for {job_id}: {e}")
             raise TWSConnectionError(

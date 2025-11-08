@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import os
 from datetime import datetime, timedelta
-from typing import Optional
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
@@ -29,7 +28,7 @@ class Token(BaseModel):
 
 
 class TokenData(BaseModel):
-    username: Optional[str] = None
+    username: str | None = None
 
 
 # --- Simulated User Database ---
@@ -46,17 +45,17 @@ fake_users_db = {
 
 
 # --- Token Functions ---
-def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
+def create_access_token(data: dict, expires_delta: timedelta | None = None):
     to_encode = data.copy()
     expire = datetime.utcnow() + (expires_delta or timedelta(minutes=15))
     to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-    return encoded_jwt
+    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
 
 def get_user(db, username: str):
     if username in db:
         return db[username]
+    return None
 
 
 def authenticate_user(fake_db, username: str, password: str):
@@ -85,5 +84,5 @@ def verify_oauth2_token(token: str = Depends(oauth2_scheme)):
         if user is None:
             raise credentials_exception
         return user
-    except JWTError:
-        raise credentials_exception
+    except JWTError as e:
+        raise credentials_exception from e

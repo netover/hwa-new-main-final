@@ -1,9 +1,11 @@
-import pytest
-from unittest.mock import MagicMock
 from datetime import datetime, timedelta
+from unittest.mock import MagicMock
+
+import pytest
+
 from resync.core.cache_with_stampede_protection import (
-    CacheWithStampedeProtection,
     CacheEntry,
+    CacheWithStampedeProtection,
 )
 
 

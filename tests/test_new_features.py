@@ -2,25 +2,27 @@
 Tests for the new features implemented as part of the optimization and refactoring plan.
 """
 
+from pathlib import Path
+from unittest.mock import Mock, patch
+
 import pytest
 from fastapi.testclient import TestClient
 from pydantic import ValidationError
-from unittest.mock import Mock, patch
-from pathlib import Path
 
-from resync.api.cache import (
-    ConnectionPoolValidator,
-    get_redis_connection,
-    RedisCacheManager,
-)
-from resync.api.middleware.cors_monitoring import CORSMonitor, CORSOperation
 from resync.api.audit import (
     AuditAction,
     AuditLogger,
-    generate_audit_log,
     AuditRecordResponse,
+    generate_audit_log,
 )
-from resync.settings import Settings as ApplicationSettings, Environment
+from resync.api.cache import (
+    ConnectionPoolValidator,
+    RedisCacheManager,
+    get_redis_connection,
+)
+from resync.api.middleware.cors_monitoring import CORSMonitor, CORSOperation
+from resync.settings import Environment
+from resync.settings import Settings as ApplicationSettings
 
 
 class TestTypeAnnotationsAndDataValidation:
@@ -291,8 +293,9 @@ class TestErrorHandling:
     @pytest.fixture
     def client(self) -> TestClient:
         """Create a TestClient for the FastAPI app."""
-        from resync.api.endpoints import api_router
         from fastapi import FastAPI
+
+        from resync.api.endpoints import api_router
 
         app = FastAPI()
         app.include_router(api_router)

@@ -10,8 +10,15 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-from resync.core.health_models import ComponentHealth, ComponentType, HealthCheckConfig, HealthStatus
-from resync.core.health.refactored_health_service_orchestrator import RefactoredHealthServiceOrchestrator
+from resync.core.health.refactored_health_service_orchestrator import (
+    RefactoredHealthServiceOrchestrator,
+)
+from resync.core.health_models import (
+    ComponentHealth,
+    ComponentType,
+    HealthCheckConfig,
+    HealthStatus,
+)
 
 
 class TestRefactoredHealthServiceOrchestrator:

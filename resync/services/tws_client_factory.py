@@ -223,8 +223,7 @@ class TWSClientFactory:
 
         if config.mock_mode:
             return TestTWSClient(config)
-        else:
-            return ProductionTWSClient(config)
+        return ProductionTWSClient(config)
 
     @staticmethod
     def create_from_settings(settings: any) -> BaseTWSClient:

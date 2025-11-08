@@ -3,7 +3,7 @@
 import logging
 import os
 import re
-from typing import Annotated, Any, Type
+from typing import Annotated, Any
 
 from fastapi import Path
 
@@ -20,7 +20,7 @@ class InputSanitizer:
 
     @staticmethod
     def sanitize_environment_value(
-        env_var_name: str, default_value: Any, value_type: Type = str
+        env_var_name: str, default_value: Any, value_type: type = str
     ) -> Any:
         """
         Sanitize and validate environment variable values.
@@ -38,18 +38,17 @@ class InputSanitizer:
         try:
             if value_type == str:
                 return str(raw_value)
-            elif value_type == int:
+            if value_type == int:
                 return int(raw_value)
-            elif value_type == float:
+            if value_type == float:
                 return float(raw_value)
-            elif value_type == bool:
+            if value_type == bool:
                 # Handle boolean conversion from string
                 if isinstance(raw_value, str):
                     return raw_value.lower() in ("true", "1", "yes", "on")
                 return bool(raw_value)
-            else:
-                # For other types, try to convert using the type constructor
-                return value_type(raw_value)
+            # For other types, try to convert using the type constructor
+            return value_type(raw_value)
         except (ValueError, TypeError):
             # If conversion fails, return the default value
             logger = logging.getLogger(__name__)
@@ -79,8 +78,7 @@ class InputSanitizer:
 
         # Exemplo simples: remove tudo que não corresponder ao padrão seguro.
         # Em um cenário real, pode-se usar bibliotecas como `bleach` para sanitizar HTML.
-        sanitized_text = "".join(SAFE_STRING_PATTERN.findall(text))
-        return sanitized_text
+        return "".join(SAFE_STRING_PATTERN.findall(text))
 
     @staticmethod
     def sanitize_dict(data: dict, max_depth: int = 3, current_depth: int = 0) -> dict:
@@ -114,7 +112,7 @@ class InputSanitizer:
                 sanitized[clean_key] = InputSanitizer.sanitize_list(
                     value, max_depth, current_depth + 1
                 )
-            elif isinstance(value, (int, float, bool)):
+            elif isinstance(value, int | float | bool):
                 sanitized[clean_key] = value
             else:
                 # Convert other types to string and sanitize
@@ -150,7 +148,7 @@ class InputSanitizer:
                 sanitized.append(
                     InputSanitizer.sanitize_list(item, max_depth, current_depth + 1)
                 )
-            elif isinstance(item, (int, float, bool)):
+            elif isinstance(item, int | float | bool):
                 sanitized.append(item)
             else:
                 # Convert other types to string and sanitize
@@ -172,8 +170,7 @@ def sanitize_input(text: str) -> str:
     """
     # Exemplo simples: remove tudo que não corresponder ao padrão seguro.
     # Em um cenário real, pode-se usar bibliotecas como `bleach` para sanitizar HTML.
-    sanitized_text = "".join(SAFE_STRING_PATTERN.findall(text))
-    return sanitized_text
+    return "".join(SAFE_STRING_PATTERN.findall(text))
 
 
 # Tipo anotado para IDs, garantindo que eles sigam um formato seguro.

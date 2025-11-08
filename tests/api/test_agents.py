@@ -4,8 +4,8 @@ from unittest.mock import AsyncMock
 import pytest
 from fastapi.testclient import TestClient
 
-from resync.models.agents import AgentConfig, AgentType
 from resync.core.fastapi_di import get_agent_manager
+from resync.models.agents import AgentConfig, AgentType
 
 # --- Sample Data for Mocking ---
 sample_agent_config_1 = AgentConfig(
@@ -36,9 +36,10 @@ sample_agent_config_2 = AgentConfig(
 @pytest.fixture
 def client(mock_agent_manager: AsyncMock) -> TestClient:
     """Create a TestClient for the FastAPI app."""
+    from fastapi import FastAPI
+
     from resync.api.agents import agents_router
     from resync.api.exception_handlers import register_exception_handlers
-    from fastapi import FastAPI
 
     app = FastAPI()
     app.include_router(agents_router, prefix="/api/v1/agents")

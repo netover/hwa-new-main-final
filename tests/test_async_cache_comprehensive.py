@@ -7,10 +7,11 @@ health checks, and edge cases.
 """
 
 import asyncio
-import pytest
 import tempfile
 import time
 from unittest.mock import patch
+
+import pytest
 
 from resync.core.async_cache import AsyncTTLCache, CacheEntry, get_redis_client
 
@@ -665,7 +666,7 @@ class TestAsyncTTLCacheSnapshot:
         assert "created_at" in snapshot["_metadata"]
 
         # Check that shards are included
-        shard_keys = [k for k in snapshot.keys() if k.startswith("shard_")]
+        shard_keys = [k for k in snapshot if k.startswith("shard_")]
         assert len(shard_keys) > 0
 
     @pytest.mark.asyncio

@@ -58,18 +58,19 @@ Optional but Recommended:
 """
 
 # Standard library imports
-import signal
 import asyncio
+import platform
+import signal
 import sys
 import threading
-import platform
-from typing import TYPE_CHECKING, Optional, Any, Dict
+from typing import TYPE_CHECKING, Any, Optional
+
+import aiohttp
+import structlog
+import uvicorn
 
 # Third-party imports
 from dotenv import load_dotenv
-import structlog
-import uvicorn
-import aiohttp
 
 # Local imports
 from resync.core.encoding_utils import symbol
@@ -77,8 +78,8 @@ from resync.core.startup_validation import (
     ConfigurationValidationError,
     DependencyUnavailableError,
     StartupError,
-    validate_redis_connection,
     validate_all_settings,
+    validate_redis_connection,
 )
 from resync.fastapi_app.main import app
 
@@ -98,7 +99,7 @@ class SettingsCache:
     """Thread-safe cache for validated settings."""
 
     def __init__(self) -> None:
-        self._cache: Optional["Settings"] = None
+        self._cache: "Settings" | None = None
         self._lock = asyncio.Lock()
 
     async def get_validated_settings(self, fail_fast: bool = True) -> "Settings":
@@ -144,7 +145,7 @@ async def _check_tcp(host: str, port: int, timeout: float = 3.0) -> bool:
         return False
 
 
-async def run_startup_health_checks(settings: "Settings") -> Dict[str, Any]:
+async def run_startup_health_checks(settings: "Settings") -> dict[str, Any]:
     """
     Run comprehensive health checks before full application startup.
 

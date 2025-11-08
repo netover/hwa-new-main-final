@@ -8,8 +8,9 @@ broadcasting functionality.
 
 import asyncio
 import json
-import pytest
 from unittest.mock import AsyncMock, MagicMock, patch
+
+import pytest
 
 from resync.core.config_watcher import handle_config_change
 
@@ -141,7 +142,7 @@ class TestConfigWatcher:
         # Patch the container and its dependencies
         with patch('resync.core.config_watcher.container', mock_container), \
              patch('resync.core.config_watcher.cast') as mock_cast, \
-             patch('resync.core.config_watcher.logger') as mock_logger:
+             patch('resync.core.config_watcher.logger'):
 
             # Setup cast to return the mocked objects
             def cast_side_effect(type_to_cast, obj):
@@ -373,7 +374,7 @@ class TestConfigWatcher:
         # Patch the container and its dependencies
         with patch('resync.core.config_watcher.container', mock_container), \
              patch('resync.core.config_watcher.cast') as mock_cast, \
-             patch('resync.core.config_watcher.logger') as mock_logger:
+             patch('resync.core.config_watcher.logger'):
 
             # Setup cast to return the mocked objects
             def cast_side_effect(type_to_cast, obj):
@@ -429,7 +430,7 @@ class TestConfigWatcher:
         # Patch the container and its dependencies
         with patch('resync.core.config_watcher.container', mock_container), \
              patch('resync.core.config_watcher.cast') as mock_cast, \
-             patch('resync.core.config_watcher.logger') as mock_logger:
+             patch('resync.core.config_watcher.logger'):
 
             # Setup cast to return the mocked objects
             def cast_side_effect(type_to_cast, obj):
@@ -493,7 +494,7 @@ class TestConfigWatcher:
         # Patch the container and its dependencies
         with patch('resync.core.config_watcher.container', mock_container), \
              patch('resync.core.config_watcher.cast') as mock_cast, \
-             patch('resync.core.config_watcher.logger') as mock_logger:
+             patch('resync.core.config_watcher.logger'):
 
             # Setup cast to return the mocked objects
             def cast_side_effect(type_to_cast, obj):
@@ -610,7 +611,7 @@ class TestConfigWatcher:
         # Patch the container and its dependencies
         with patch('resync.core.config_watcher.container', mock_container), \
              patch('resync.core.config_watcher.cast') as mock_cast, \
-             patch('resync.core.config_watcher.logger') as mock_logger:
+             patch('resync.core.config_watcher.logger'):
 
             # Setup cast to return the mocked objects
             def cast_side_effect(type_to_cast, obj):

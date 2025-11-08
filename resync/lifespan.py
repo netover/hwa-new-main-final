@@ -13,15 +13,21 @@ managing the lifecycle of critical application components including:
 from __future__ import annotations
 
 import asyncio
+import os
 import sys
+from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
-from typing import AsyncIterator
 
 from fastapi import FastAPI
 from redis.exceptions import (
     AuthenticationError as RedisAuthError,
-    BusyLoadingError as RedisBusyLoadingError,
+    BusyLoadingError,
+    ResponseError,
+)
+from redis.exceptions import (
     ConnectionError as RedisConnectionError,
+)
+from redis.exceptions import (
     TimeoutError as RedisTimeoutError,
 )
 

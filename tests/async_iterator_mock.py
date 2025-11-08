@@ -1,4 +1,4 @@
-from typing import AsyncIterator
+from collections.abc import AsyncIterator
 
 
 async def create_text_stream(chunks: list[str]) -> AsyncIterator[str]:

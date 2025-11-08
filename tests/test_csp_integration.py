@@ -1,10 +1,10 @@
 """Integration tests for CSP functionality with the full FastAPI application."""
 
 import pytest
+from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
 from resync.api.endpoints import api_router as csp_router
-from fastapi import FastAPI
 
 app = FastAPI()
 app.include_router(csp_router)

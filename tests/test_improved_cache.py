@@ -2,17 +2,18 @@
 Testes para o sistema de cache melhorado.
 """
 
-import pytest
 import asyncio
 import time
 from unittest.mock import AsyncMock
 
+import pytest
+
 from resync.core.improved_cache import (
-    ImprovedAsyncCache,
     CacheEntry,
-    InMemoryCacheStorage,
     CacheMetricsCollector,
     CacheTTLManager,
+    ImprovedAsyncCache,
+    InMemoryCacheStorage,
 )
 
 

@@ -7,7 +7,7 @@ from LLMs, making the code more modular, testable, and maintainable.
 
 import json
 import logging
-from typing import Any, Dict, List
+from typing import Any
 
 from ..exceptions import ParsingError
 from .common_error_handlers import handle_parsing_errors
@@ -25,7 +25,7 @@ class JSONParseCommand:
     def __init__(
         self,
         text: str,
-        required_keys: List[str],
+        required_keys: list[str],
         max_size: int = MAX_JSON_SIZE,
         strict: bool = True,
     ):
@@ -35,7 +35,7 @@ class JSONParseCommand:
         self.strict = strict
         self.result = None
 
-    def execute(self) -> Dict[str, Any]:
+    def execute(self) -> dict[str, Any]:
         """Execute the parsing command."""
         self._validate_input()
         self._extract_json()
@@ -84,7 +84,7 @@ class JSONParseCommand:
             logger.warning(
                 "JSON decode error", error=str(e), json_length=len(self.json_str)
             )
-            raise ParsingError(f"Invalid JSON format: {str(e)}")
+            raise ParsingError(f"Invalid JSON format: {str(e)}") from e
 
     def _validate_structure(self) -> None:
         """Validate that result is a dictionary."""
@@ -102,7 +102,7 @@ class JSONParseCommand:
         # Optional strict validation: ensure no extra keys
         if self.strict and self.required_keys:
             extra_keys = [
-                key for key in self.result.keys() if key not in self.required_keys
+                key for key in self.result if key not in self.required_keys
             ]
             if extra_keys:
                 raise ParsingError(
@@ -133,7 +133,7 @@ class JSONParseCommandFactory:
     @staticmethod
     def create_command(
         text: str,
-        required_keys: List[str],
+        required_keys: list[str],
         max_size: int = MAX_JSON_SIZE,
         strict: bool = True,
     ) -> JSONParseCommand:
@@ -148,10 +148,10 @@ class JSONParseCommandExecutor:
     @handle_parsing_errors("Failed to parse LLM JSON response")
     def execute_command(
         text: str,
-        required_keys: List[str],
+        required_keys: list[str],
         max_size: int = MAX_JSON_SIZE,
         strict: bool = True,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Execute a JSON parsing command."""
         command = JSONParseCommandFactory.create_command(
             text, required_keys, max_size, strict

@@ -15,7 +15,10 @@ from typing import Any
 
 import structlog
 
-from resync.core.connection_pool_manager import get_advanced_connection_pool_manager
+from resync.core.connection_pool_manager import (
+    get_advanced_connection_pool_manager,
+    get_connection_pool_manager,
+)
 from resync.core.health_models import RecoveryResult
 
 logger = structlog.get_logger(__name__)
@@ -545,7 +548,7 @@ class HealthRecoveryManager:
                 component_stats[component]["successes"] += 1
 
         # Calculate success rates
-        for component, stats in component_stats.items():
+        for _, stats in component_stats.items():
             stats["success_rate"] = stats["successes"] / stats["attempts"]
 
         return {

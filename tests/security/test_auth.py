@@ -1,5 +1,6 @@
-import pytest
 from unittest.mock import patch
+
+import pytest
 
 from resync.api.auth import SecureAuthenticator
 from resync.settings import settings

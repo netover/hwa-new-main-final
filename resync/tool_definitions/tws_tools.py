@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-from typing import Optional
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -23,7 +22,7 @@ class TWSToolReadOnly(BaseModel):
     This prevents each tool from creating its own client instance.
     """
 
-    tws_client: Optional[OptimizedTWSClient] = Field(
+    tws_client: OptimizedTWSClient | None = Field(
         default=None,
         exclude=True,
         description="The TWS client instance, injected at runtime.",

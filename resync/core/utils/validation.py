@@ -6,9 +6,9 @@ common input validation scenarios in the application.
 """
 
 from enum import Enum
-from typing import Any, Dict, List, Optional, Type
+from typing import Any
 
-from pydantic import field_validator, BaseModel, ConfigDict, Field, ValidationError
+from pydantic import BaseModel, ConfigDict, Field, ValidationError, field_validator
 
 
 class LLMProvider(str, Enum):
@@ -39,7 +39,7 @@ class LLMRequest(BaseModel):
     timeout: float = Field(
         default=30.0, ge=1.0, le=300.0, description="Request timeout in seconds"
     )
-    provider: Optional[LLMProvider] = Field(default=None, description="LLM provider")
+    provider: LLMProvider | None = Field(default=None, description="LLM provider")
 
     model_config = ConfigDict(validate_assignment=True, extra="forbid")
 
@@ -65,7 +65,7 @@ class PaginationRequest(BaseModel):
 
     page: int = Field(default=1, ge=1, description="Page number (1-based)")
     page_size: int = Field(default=50, ge=1, le=1000, description="Items per page")
-    sort_by: Optional[str] = Field(
+    sort_by: str | None = Field(
         default=None, description="Sort field", pattern=r"^[a-zA-Z_][a-zA-Z0-9_]*$"
     )
     sort_order: str = Field(
@@ -82,7 +82,7 @@ class SearchRequest(BaseModel):
     """Validation model for search requests."""
 
     query: str = Field(..., min_length=1, max_length=500, description="Search query")
-    filters: Optional[Dict[str, Any]] = Field(
+    filters: dict[str, Any] | None = Field(
         default=None, description="Search filters"
     )
     limit: int = Field(default=100, ge=1, le=1000, description="Maximum results")
@@ -126,11 +126,11 @@ class APIKeyRequest(BaseModel):
     """Validation model for API key operations."""
 
     name: str = Field(..., min_length=1, max_length=100, description="API key name")
-    description: Optional[str] = Field(
+    description: str | None = Field(
         default=None, max_length=500, description="API key description"
     )
-    scopes: List[str] = Field(default_factory=list, description="API key permissions")
-    expires_at: Optional[str] = Field(default=None, description="Expiration timestamp")
+    scopes: list[str] = Field(default_factory=list, description="API key permissions")
+    expires_at: str | None = Field(default=None, description="Expiration timestamp")
 
     @field_validator("name")
     @classmethod
@@ -167,7 +167,7 @@ class ConfigurationUpdate(BaseModel):
         return v.strip()
 
 
-def validate_input(data: Dict[str, Any], model_class: Type[BaseModel]) -> BaseModel:
+def validate_input(data: dict[str, Any], model_class: type[BaseModel]) -> BaseModel:
     """
     Validate input data against a Pydantic model.
 
@@ -208,8 +208,7 @@ def create_validation_middleware():
     async def validation_middleware(request: Request, call_next: Any):
         """Middleware to validate requests and provide better error responses."""
         try:
-            response = await call_next(request)
-            return response
+            return await call_next(request)
         except ValidationError as e:
             # Return structured validation errors
             return JSONResponse(
@@ -226,7 +225,7 @@ def create_validation_middleware():
                     ],
                 },
             )
-        except Exception as e:
+        except Exception:
             # Re-raise other exceptions
             raise
 

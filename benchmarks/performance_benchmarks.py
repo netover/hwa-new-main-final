@@ -152,7 +152,7 @@ class PerformanceBenchmarkSuite:
 
         # Simulate sequential agent creation for comparison
         start_time = time.time()
-        for config in agent_configs:
+        for _ in agent_configs:
             await asyncio.sleep(0.05)  # Simulate initialization time
         end_time = time.time()
         sequential_time = end_time - start_time

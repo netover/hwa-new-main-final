@@ -6,10 +6,12 @@ com suporte a concorrência e métricas detalhadas.
 """
 
 import asyncio
+import contextlib
 import time
 from collections import deque
+from collections.abc import Callable
 from functools import wraps
-from typing import Any, Callable, Optional
+from typing import Any
 
 import structlog
 
@@ -61,9 +63,8 @@ class TokenBucketRateLimiter:
                 self.requests_allowed += 1
                 self.tokens_consumed += tokens
                 return True
-            else:
-                self.requests_denied += 1
-                return False
+            self.requests_denied += 1
+            return False
 
     async def wait_and_acquire(self, tokens: int = 1) -> None:
         """Aguarda até poder adquirir tokens."""
@@ -124,7 +125,7 @@ class LeakyBucketRateLimiter:
         self.name = name
         self.queue = deque(maxlen=capacity)
         self._lock = asyncio.Lock()
-        self._leak_task: Optional[asyncio.Task] = None
+        self._leak_task: asyncio.Task | None = None
 
         # Métricas
         self.requests_allowed = 0
@@ -141,10 +142,8 @@ class LeakyBucketRateLimiter:
         """Para o processo de vazamento."""
         if self._leak_task:
             self._leak_task.cancel()
-            try:
+            with contextlib.suppress(asyncio.CancelledError):
                 await self._leak_task
-            except asyncio.CancelledError:
-                pass
             self._leak_task = None
             logger.info("leaky_bucket_stopped", name=self.name)
 
@@ -164,9 +163,8 @@ class LeakyBucketRateLimiter:
                 self.queue.append(time.monotonic())
                 self.requests_allowed += 1
                 return True
-            else:
-                self.requests_denied += 1
-                return False
+            self.requests_denied += 1
+            return False
 
     async def wait_and_acquire(self) -> None:
         """Aguarda até poder adicionar requisição ao bucket."""
@@ -242,9 +240,8 @@ class SlidingWindowRateLimiter:
                 self.requests.append(now)
                 self.requests_allowed += 1
                 return True
-            else:
-                self.requests_denied += 1
-                return False
+            self.requests_denied += 1
+            return False
 
     async def wait_and_acquire(self) -> None:
         """Aguarda até poder processar requisição."""

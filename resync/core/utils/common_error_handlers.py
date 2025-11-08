@@ -8,8 +8,9 @@ across multiple modules in the application.
 import asyncio
 import logging
 import time
+from collections.abc import Callable
 from functools import wraps
-from typing import Any, Callable, Optional, Type, TypeVar, cast
+from typing import Any, TypeVar, cast
 
 from ..exceptions import ResyncException
 
@@ -72,7 +73,7 @@ def handle_llm_errors(
 
 
 def handle_api_errors(
-    exception_class: Type[ResyncException],
+    exception_class: type[ResyncException],
     error_message: str = "Error occurred in API call",
 ) -> Callable[[F], F]:
     """
@@ -102,7 +103,7 @@ def retry_on_exception(
     delay: float = 1.0,
     backoff: float = 2.0,
     exceptions: tuple = (Exception,),
-    logger: Optional[logging.Logger] = None,
+    logger: logging.Logger | None = None,
 ) -> Callable[[F], F]:
     """
     Decorator to retry a function if specific exceptions are raised.
@@ -154,39 +155,38 @@ def retry_on_exception(
                 return None  # This should never be reached
 
             return cast(F, async_wrapper)
-        else:
 
-            @wraps(func)
-            def sync_wrapper(*args, **kwargs):
-                logger_instance = logger or logging.getLogger(func.__module__)
-                current_delay = delay
+        @wraps(func)
+        def sync_wrapper(*args, **kwargs):
+            logger_instance = logger or logging.getLogger(func.__module__)
+            current_delay = delay
 
-                for attempt in range(max_retries + 1):
-                    try:
-                        return func(*args, **kwargs)
-                    except exceptions as e:
-                        if attempt < max_retries:
-                            logger_instance.info(
-                                f"Attempt {attempt + 1} failed: {e}. "
-                                f"Retrying in {current_delay:.2f} seconds..."
-                            )
-                            time.sleep(current_delay)
-                            current_delay *= backoff
-                        else:
-                            logger_instance.error(
-                                f"Failed after {max_retries} retries: {e}",
-                                exc_info=True,
-                            )
-                            raise
-                return None  # This should never be reached
+            for attempt in range(max_retries + 1):
+                try:
+                    return func(*args, **kwargs)
+                except exceptions as e:
+                    if attempt < max_retries:
+                        logger_instance.info(
+                            f"Attempt {attempt + 1} failed: {e}. "
+                            f"Retrying in {current_delay:.2f} seconds..."
+                        )
+                        time.sleep(current_delay)
+                        current_delay *= backoff
+                    else:
+                        logger_instance.error(
+                            f"Failed after {max_retries} retries: {e}",
+                            exc_info=True,
+                        )
+                        raise
+            return None  # This should never be reached
 
-            return cast(F, sync_wrapper)
+        return cast(F, sync_wrapper)
 
     return decorator
 
 
 def log_and_handle_exception(
-    exception_class: Type[ResyncException], message: str, log_level: int = logging.ERROR
+    exception_class: type[ResyncException], message: str, log_level: int = logging.ERROR
 ) -> Callable[[F], F]:
     """
     Context manager or decorator to handle exceptions consistently.

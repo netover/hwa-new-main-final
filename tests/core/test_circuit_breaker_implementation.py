@@ -7,15 +7,16 @@ This file tests the circuit breaker implementation we added to:
 - resync/core/async_cache.py (get_redis_client)
 """
 
-import pytest
-from unittest.mock import patch, AsyncMock, MagicMock
 from datetime import timedelta
+from unittest.mock import AsyncMock, MagicMock, patch
 
-from resync.core.circuit_breakers import redis_breaker, tws_breaker, llm_breaker
-from resync.core.exceptions import AuthenticationError
+import pytest
+
 from resync.core.async_cache import get_redis_client
+from resync.core.circuit_breakers import llm_breaker, redis_breaker, tws_breaker
+from resync.core.exceptions import AuthenticationError, RedisAuthError, RedisConnectionError
 from resync.lifespan import initialize_redis_with_retry
-from resync.core.exceptions import RedisAuthError, RedisConnectionError
+
 
 # Mock the logger and metrics to capture calls
 @pytest.fixture
@@ -81,11 +82,11 @@ async def test_redis_breaker_listener_logs_state_changes(mock_logger, mock_runti
     mock_breaker.fail_counter = 3
     mock_breaker.current_state = "OPEN"
     mock_last_failure = Exception("Test failure")
-    
+
     # Call the listener directly
     from resync.core.circuit_breakers import redis_breaker_listener
     redis_breaker_listener(mock_breaker, mock_last_failure)
-    
+
     # Verify logger was called with correct parameters
     mock_logger.warning.assert_called_once_with(
         "redis_circuit_breaker_opened",
@@ -93,11 +94,11 @@ async def test_redis_breaker_listener_logs_state_changes(mock_logger, mock_runti
         last_failure=str(mock_last_failure),
         state="OPEN"
     )
-    
+
     # Verify metrics were recorded
     mock_runtime_metrics.record_health_check.assert_called_once_with(
-        "redis_circuit_breaker", 
-        "opened", 
+        "redis_circuit_breaker",
+        "opened",
         {"failure_count": 3}
     )
 
@@ -106,10 +107,10 @@ async def test_initialize_redis_with_retry_circuit_breaker_success(mock_redis_co
     """Test that initialize_redis_with_retry works normally when Redis is available."""
     # The mock client will succeed on first attempt
     mock_redis_client.ping.return_value = True
-    
+
     # Call the function
     await initialize_redis_with_retry()
-    
+
     # Verify the circuit breaker was used (decorator should have been applied)
     # We can't directly test the decorator, but we can verify the function executed normally
     mock_redis_connection_manager.assert_called_once()
@@ -126,12 +127,12 @@ async def test_initialize_redis_with_retry_circuit_breaker_failure(mock_redis_co
         # The 4th attempt should be blocked by circuit breaker
         RedisConnectionError("Connection failed")
     ]
-    
+
     # We expect the circuit breaker to open after 3 failures
     # and the 4th attempt to fail fast
     with pytest.raises(RedisConnectionError):
         await initialize_redis_with_retry(max_retries=4)
-    
+
     # Verify we attempted 4 times (circuit breaker should have opened after 3)
     assert mock_redis_client.ping.call_count == 4
 
@@ -140,11 +141,11 @@ async def test_initialize_redis_with_retry_auth_error_not_protected(mock_redis_c
     """Test that RedisAuthError is not protected by circuit breaker and is raised immediately."""
     # Make the first attempt fail with RedisAuthError
     mock_redis_client.ping.side_effect = RedisAuthError("Authentication failed")
-    
+
     # We expect the function to raise RedisAuthError immediately
     with pytest.raises(RedisAuthError):
         await initialize_redis_with_retry()
-    
+
     # Verify we only attempted once
     mock_redis_client.ping.assert_called_once()
 
@@ -155,7 +156,7 @@ async def test_get_redis_client_circuit_breaker_success(mock_redis_client):
     with patch('resync.core.async_cache.redis.Redis.from_url', return_value=mock_redis_client):
         # Call the function
         client = await get_redis_client()
-        
+
         # Verify we got the client
         assert client == mock_redis_client
         # Verify ping was called (validation)
@@ -174,12 +175,12 @@ async def test_get_redis_client_circuit_breaker_failure(mock_redis_client):
             # The 4th attempt should be blocked by circuit breaker
             RedisConnectionError("Connection failed")
         ]
-        
+
         # We expect the circuit breaker to open after 3 failures
         # and the 4th attempt to fail fast
         with pytest.raises(RedisConnectionError):
             await get_redis_client()
-        
+
         # Verify we attempted 4 times (circuit breaker should have opened after 3)
         assert mock_redis_client.ping.call_count == 4
 
@@ -188,22 +189,22 @@ async def test_circuit_breaker_excludes_validation_errors(mock_redis_connection_
     """Test that validation errors (ValueError, TypeError) don't trigger the circuit breaker."""
     # Make the first attempt fail with a ValueError (excluded)
     mock_redis_client.ping.side_effect = ValueError("Validation error")
-    
+
     # We expect the function to raise ValueError immediately
     # and not open the circuit breaker
     with pytest.raises(ValueError):
         await initialize_redis_with_retry()
-    
+
     # Verify we only attempted once
     mock_redis_client.ping.assert_called_once()
-    
+
     # Try again - should still work since circuit breaker wasn't opened
     mock_redis_client.ping.side_effect = None  # Reset to success
     mock_redis_client.ping.return_value = True
-    
+
     # This should succeed
     await initialize_redis_with_retry()
-    
+
     # Verify we attempted again
     assert mock_redis_client.ping.call_count == 2
 
@@ -216,23 +217,23 @@ async def test_circuit_breaker_recovers_after_timeout(mock_redis_connection_mana
         RedisConnectionError("Connection failed"),
         RedisConnectionError("Connection failed"),
     ]
-    
+
     # First 3 attempts should fail
     for _ in range(3):
         with pytest.raises(RedisConnectionError):
             await initialize_redis_with_retry()
-    
+
     # Circuit breaker should now be OPEN
-    
+
     # Wait for timeout (30 seconds) - we can't actually wait 30s in tests
     # Instead, we'll simulate the recovery by resetting the side_effect
     mock_redis_client.ping.side_effect = None
     mock_redis_client.ping.return_value = True
-    
+
     # After timeout, the circuit breaker should be in HALF-OPEN state
     # and the next attempt should succeed
     await initialize_redis_with_retry()
-    
+
     # Verify we attempted 4 times total
     assert mock_redis_client.ping.call_count == 4
 
@@ -241,17 +242,17 @@ async def test_circuit_breaker_recovers_after_timeout(mock_redis_connection_mana
 async def test_circuit_breaker_listener_integration(mock_logger, mock_runtime_metrics):
     """Test the circuit breaker listener with actual logger and metrics integration."""
     # Create a real circuit breaker instance
-    
+
     # Create a mock breaker state
     mock_breaker = MagicMock()
     mock_breaker.fail_counter = 5
     mock_breaker.current_state = "OPEN"
     mock_last_failure = Exception("Test failure")
-    
+
     # Call the listener
     from resync.core.circuit_breakers import redis_breaker_listener
     redis_breaker_listener(mock_breaker, mock_last_failure)
-    
+
     # Verify logger was called with correct parameters
     mock_logger.warning.assert_called_once_with(
         "redis_circuit_breaker_opened",
@@ -259,11 +260,11 @@ async def test_circuit_breaker_listener_integration(mock_logger, mock_runtime_me
         last_failure=str(mock_last_failure),
         state="OPEN"
     )
-    
+
     # Verify metrics were recorded
     mock_runtime_metrics.record_health_check.assert_called_once_with(
-        "redis_circuit_breaker", 
-        "opened", 
+        "redis_circuit_breaker",
+        "opened",
         {"failure_count": 5}
     )
 
@@ -271,22 +272,21 @@ async def test_circuit_breaker_listener_integration(mock_logger, mock_runtime_me
 @pytest.mark.asyncio
 async def test_circuit_breaker_decorator_applied_to_initialize_redis_with_retry():
     """Test that the circuit breaker decorator is actually applied to initialize_redis_with_retry."""
-    from resync.lifespan import initialize_redis_with_retry
     from resync.core.circuit_breakers import redis_breaker
-    
+    from resync.lifespan import initialize_redis_with_retry
+
     # Check that the function has the circuit breaker decorator
     # This is a bit tricky since decorators wrap functions
     # We can check if the function has been wrapped by the circuit breaker
     assert hasattr(initialize_redis_with_retry, '__wrapped__') or hasattr(initialize_redis_with_retry, 'call')
-    
+
     # We can also check if the function is an instance of the circuit breaker
     # This is a more direct way to verify the decorator was applied
     # The aiobreaker decorator wraps the function in a CircuitBreaker object
     # We can check if the function has been wrapped by checking its type
-    
+
     # Get the original function
-    original_func = initialize_redis_with_retry
-    
+
     # Check if it's wrapped by the circuit breaker
     # The aiobreaker decorator creates a wrapper that has a 'breaker' attribute
     if hasattr(initialize_redis_with_retry, 'breaker'):
@@ -301,7 +301,7 @@ async def test_circuit_breaker_decorator_applied_to_get_redis_client():
     """Test that the circuit breaker decorator is actually applied to get_redis_client."""
     from resync.core.async_cache import get_redis_client
     from resync.core.circuit_breakers import redis_breaker
-    
+
     # Check that the function has the circuit breaker decorator
     # Similar to above
     if hasattr(get_redis_client, 'breaker'):
@@ -317,22 +317,22 @@ async def test_circuit_breaker_does_not_interfere_with_connection_pooling(mock_r
     """Test that the circuit breaker doesn't interfere with Redis connection pooling."""
     # Make the first attempt fail with ConnectionError
     mock_redis_client.ping.side_effect = RedisConnectionError("Connection failed")
-    
+
     # First attempt should fail
     with pytest.raises(RedisConnectionError):
         await initialize_redis_with_retry()
-    
+
     # Verify connection pool was properly closed
     mock_redis_client.close.assert_called_once()
     mock_redis_client.connection_pool.disconnect.assert_called_once()
-    
+
     # Reset the side_effect for next test
     mock_redis_client.ping.side_effect = None
     mock_redis_client.ping.return_value = True
-    
+
     # Second attempt should succeed
     await initialize_redis_with_retry()
-    
+
     # Verify connection pool was properly closed again
     mock_redis_client.close.assert_called()
     mock_redis_client.connection_pool.disconnect.assert_called()

@@ -1,6 +1,8 @@
 import asyncio
-import pytest
+import contextlib
 import time
+
+import pytest
 
 from resync.core.async_cache import AsyncTTLCache
 
@@ -13,10 +15,8 @@ async def cache():
     # Ensure cleanup task is stopped
     if cache.cleanup_task and not cache.cleanup_task.done():
         cache.cleanup_task.cancel()
-        try:
+        with contextlib.suppress(asyncio.CancelledError):
             await cache.cleanup_task
-        except asyncio.CancelledError:
-            pass
 
 
 @pytest.mark.asyncio
@@ -193,10 +193,8 @@ async def test_lru_eviction(cache):
     # Cleanup
     if small_cache.cleanup_task and not small_cache.cleanup_task.done():
         small_cache.cleanup_task.cancel()
-        try:
+        with contextlib.suppress(asyncio.CancelledError):
             await small_cache.cleanup_task
-        except asyncio.CancelledError:
-            pass
 
 
 @pytest.mark.asyncio
@@ -431,25 +429,19 @@ async def test_persistence_wal_simulation():
         # Cleanup
         if cache.cleanup_task and not cache.cleanup_task.done():
             cache.cleanup_task.cancel()
-            try:
+            with contextlib.suppress(asyncio.CancelledError):
                 await cache.cleanup_task
-            except asyncio.CancelledError:
-                pass
 
         if new_cache.cleanup_task and not new_cache.cleanup_task.done():
             new_cache.cleanup_task.cancel()
-            try:
+            with contextlib.suppress(asyncio.CancelledError):
                 await new_cache.cleanup_task
-            except asyncio.CancelledError:
-                pass
     except Exception as e:
         # Cleanup in case of error
         if cache.cleanup_task and not cache.cleanup_task.done():
             cache.cleanup_task.cancel()
-            try:
+            with contextlib.suppress(asyncio.CancelledError):
                 await cache.cleanup_task
-            except asyncio.CancelledError:
-                pass
         raise e
 
 

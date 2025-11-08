@@ -10,7 +10,6 @@ import logging.config
 import sys
 import time
 import uuid
-from typing import Optional
 
 try:
     import structlog
@@ -122,7 +121,7 @@ class LoggingContext:
         self.token.__exit__(exc_type, exc_val, exc_tb)
 
 # Utility functions for common logging patterns
-def log_request_start(method: str, endpoint: str, request_id: Optional[str] = None) -> None:
+def log_request_start(method: str, endpoint: str, request_id: str | None = None) -> None:
     """Log the start of a request."""
     with LoggingContext(
         request_type="start",
@@ -132,7 +131,7 @@ def log_request_start(method: str, endpoint: str, request_id: Optional[str] = No
     ):
         logger.info("Request started")
 
-def log_request_end(method: str, endpoint: str, status_code: int, duration: float, request_id: Optional[str] = None) -> None:
+def log_request_end(method: str, endpoint: str, status_code: int, duration: float, request_id: str | None = None) -> None:
     """Log the end of a request."""
     with LoggingContext(
         request_type="end",

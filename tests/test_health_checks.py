@@ -132,113 +132,92 @@ class TestHealthCheckService:
                 status=HealthStatus.HEALTHY,
                 message="Database healthy",
             ),
+        ), patch.object(
+            health_service,
+            "_check_redis_health",
+            return_value=ComponentHealth(
+                name="redis",
+                component_type=ComponentType.REDIS,
+                status=HealthStatus.HEALTHY,
+                message="Redis healthy",
+            ),
+        ), patch.object(
+            health_service,
+            "_check_cache_health",
+            return_value=ComponentHealth(
+                name="cache_hierarchy",
+                component_type=ComponentType.CACHE,
+                status=HealthStatus.HEALTHY,
+                message="Cache healthy",
+            ),
+        ), patch.object(
+            health_service,
+            "_check_file_system_health",
+            return_value=ComponentHealth(
+                name="file_system",
+                component_type=ComponentType.FILE_SYSTEM,
+                status=HealthStatus.HEALTHY,
+                message="File system healthy",
+            ),
+        ), patch.object(
+            health_service,
+            "_check_memory_health",
+            return_value=ComponentHealth(
+                name="memory",
+                component_type=ComponentType.MEMORY,
+                status=HealthStatus.HEALTHY,
+                message="Memory healthy",
+            ),
+        ), patch.object(
+            health_service,
+            "_check_cpu_health",
+            return_value=ComponentHealth(
+                name="cpu",
+                component_type=ComponentType.CPU,
+                status=HealthStatus.HEALTHY,
+                message="CPU healthy",
+            ),
+        ), patch.object(
+            health_service,
+            "_check_tws_monitor_health",
+            return_value=ComponentHealth(
+                name="tws_monitor",
+                component_type=ComponentType.EXTERNAL_API,
+                status=HealthStatus.HEALTHY,
+                message="TWS monitor healthy",
+            ),
+        ), patch.object(
+            health_service,
+            "_check_connection_pools_health",
+            return_value=ComponentHealth(
+                name="connection_pools",
+                component_type=ComponentType.CONNECTION_POOL,
+                status=HealthStatus.HEALTHY,
+                message="Connection pools healthy",
+            ),
+        ), patch.object(
+            health_service,
+            "_check_websocket_pool_health",
+            return_value=ComponentHealth(
+                name="websocket_pool",
+                component_type=ComponentType.WEBSOCKET,
+                status=HealthStatus.HEALTHY,
+                message="WebSocket pool healthy",
+            ),
         ):
-            with patch.object(
-                health_service,
-                "_check_redis_health",
-                return_value=ComponentHealth(
-                    name="redis",
-                    component_type=ComponentType.REDIS,
-                    status=HealthStatus.HEALTHY,
-                    message="Redis healthy",
-                ),
-            ):
-                with patch.object(
-                    health_service,
-                    "_check_cache_health",
-                    return_value=ComponentHealth(
-                        name="cache_hierarchy",
-                        component_type=ComponentType.CACHE,
-                        status=HealthStatus.HEALTHY,
-                        message="Cache healthy",
-                    ),
-                ):
-                    with patch.object(
-                        health_service,
-                        "_check_file_system_health",
-                        return_value=ComponentHealth(
-                            name="file_system",
-                            component_type=ComponentType.FILE_SYSTEM,
-                            status=HealthStatus.HEALTHY,
-                            message="File system healthy",
-                        ),
-                    ):
-                        with patch.object(
-                            health_service,
-                            "_check_memory_health",
-                            return_value=ComponentHealth(
-                                name="memory",
-                                component_type=ComponentType.MEMORY,
-                                status=HealthStatus.HEALTHY,
-                                message="Memory healthy",
-                            ),
-                        ):
-                            with patch.object(
-                                health_service,
-                                "_check_cpu_health",
-                                return_value=ComponentHealth(
-                                    name="cpu",
-                                    component_type=ComponentType.CPU,
-                                    status=HealthStatus.HEALTHY,
-                                    message="CPU healthy",
-                                ),
-                            ):
-                                with patch.object(
-                                    health_service,
-                                    "_check_tws_monitor_health",
-                                    return_value=ComponentHealth(
-                                        name="tws_monitor",
-                                        component_type=ComponentType.EXTERNAL_API,
-                                        status=HealthStatus.HEALTHY,
-                                        message="TWS monitor healthy",
-                                    ),
-                                ):
-                                    with patch.object(
-                                        health_service,
-                                        "_check_connection_pools_health",
-                                        return_value=ComponentHealth(
-                                            name="connection_pools",
-                                            component_type=ComponentType.CONNECTION_POOL,
-                                            status=HealthStatus.HEALTHY,
-                                            message="Connection pools healthy",
-                                        ),
-                                    ):
-                                        with patch.object(
-                                            health_service,
-                                            "_check_websocket_pool_health",
-                                            return_value=ComponentHealth(
-                                                name="websocket_pool",
-                                                component_type=ComponentType.WEBSOCKET,
-                                                status=HealthStatus.HEALTHY,
-                                                message="WebSocket pool healthy",
-                                            ),
-                                        ):
+            # Perform health check
+            result = await health_service.perform_comprehensive_health_check()
 
-                                            # Perform health check
-                                            result = (
-                                                await health_service.perform_comprehensive_health_check()
-                                            )
-
-                                            # Verify results
-                                            assert (
-                                                result.overall_status
-                                                == HealthStatus.HEALTHY
-                                            )
-                                            assert len(result.components) == 9
-                                            assert all(
-                                                comp.status == HealthStatus.HEALTHY
-                                                for comp in result.components.values()
-                                            )
-                                            assert result.timestamp is not None
-                                            assert (
-                                                result.performance_metrics is not None
-                                            )
-                                            assert (
-                                                result.performance_metrics[
-                                                    "total_check_time_ms"
-                                                ]
-                                                > 0
-                                            )
+            # Verify results
+            assert result.overall_status == HealthStatus.HEALTHY
+            assert len(result.components) == 9
+            assert all(
+                comp.status == HealthStatus.HEALTHY
+                for comp in result.components.values()
+            )
+            assert result.timestamp is not None
+            assert result.performance_metrics is not None
+            assert result.performance_metrics["total_check_time_ms"] > 0
 
     def test_calculate_overall_status(self, health_service):
         """Test overall status calculation from component statuses."""

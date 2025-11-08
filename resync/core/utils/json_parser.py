@@ -1,6 +1,6 @@
 # resync/core/utils/json_parser.py
 import logging
-from typing import Any, Dict, List
+from typing import Any
 
 from .common_error_handlers import handle_parsing_errors
 from .json_commands import JSONParseCommandExecutor
@@ -15,10 +15,10 @@ MAX_TEXT_SIZE = 10 * 1024 * 1024  # 10MB limit for input text
 @handle_parsing_errors("Failed to parse LLM JSON response")
 def parse_llm_json_response(
     text: str,
-    required_keys: List[str],
+    required_keys: list[str],
     max_size: int = MAX_JSON_SIZE,
     strict: bool = True,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Extracts, parses, and validates a JSON object from a string,
     often from an LLM response.

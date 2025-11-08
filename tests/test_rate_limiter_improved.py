@@ -2,15 +2,16 @@
 Testes para os algoritmos de rate limiting melhorados.
 """
 
-import pytest
 import asyncio
 import time
 
+import pytest
+
 from resync.core.rate_limiter_improved import (
-    TokenBucketRateLimiter,
     LeakyBucketRateLimiter,
-    SlidingWindowRateLimiter,
     RateLimiterManager,
+    SlidingWindowRateLimiter,
+    TokenBucketRateLimiter,
 )
 
 
@@ -112,7 +113,7 @@ class TestLeakyBucketRateLimiter:
     @pytest.mark.asyncio
     async def test_acquire_within_capacity(self, limiter):
         """Testa aquisição dentro da capacidade."""
-        for i in range(5):
+        for _i in range(5):
             assert await limiter.acquire() is True
 
         assert len(limiter.queue) == 5
@@ -122,7 +123,7 @@ class TestLeakyBucketRateLimiter:
     async def test_acquire_exceeds_capacity(self, limiter):
         """Testa aquisição que excede capacidade."""
         # Preenche o bucket
-        for i in range(5):
+        for _i in range(5):
             assert await limiter.acquire() is True
 
         # Próxima deve falhar
@@ -133,7 +134,7 @@ class TestLeakyBucketRateLimiter:
     async def test_leakage(self, limiter):
         """Testa vazamento ao longo do tempo."""
         # Preenche o bucket
-        for i in range(5):
+        for _i in range(5):
             assert await limiter.acquire() is True
 
         # Espera vazamento (0.6 segundos = ~1.2 vazamentos)
@@ -146,7 +147,7 @@ class TestLeakyBucketRateLimiter:
     async def test_wait_and_acquire(self, limiter):
         """Testa wait_and_acquire."""
         # Preenche o bucket
-        for i in range(5):
+        for _i in range(5):
             assert await limiter.acquire() is True
 
         start_time = time.time()
@@ -159,7 +160,7 @@ class TestLeakyBucketRateLimiter:
     @pytest.mark.asyncio
     async def test_stats(self, limiter):
         """Testa coleta de estatísticas."""
-        for i in range(3):
+        for _i in range(3):
             await limiter.acquire()
 
         await asyncio.sleep(1.1)  # Espera processamento
@@ -190,7 +191,7 @@ class TestSlidingWindowRateLimiter:
     @pytest.mark.asyncio
     async def test_acquire_within_window(self, limiter):
         """Testa aquisição dentro da janela."""
-        for i in range(3):
+        for _i in range(3):
             assert await limiter.acquire() is True
 
         assert len(limiter.requests) == 3
@@ -200,7 +201,7 @@ class TestSlidingWindowRateLimiter:
     async def test_acquire_exceeds_window(self, limiter):
         """Testa aquisição que excede janela."""
         # Preenche a janela
-        for i in range(3):
+        for _i in range(3):
             assert await limiter.acquire() is True
 
         # Próxima deve falhar
@@ -211,7 +212,7 @@ class TestSlidingWindowRateLimiter:
     async def test_window_sliding(self, limiter):
         """Testa deslizamento da janela."""
         # Preenche a janela
-        for i in range(3):
+        for _i in range(3):
             assert await limiter.acquire() is True
 
         # Espera a janela deslizar
@@ -224,7 +225,7 @@ class TestSlidingWindowRateLimiter:
     @pytest.mark.asyncio
     async def test_stats(self, limiter):
         """Testa coleta de estatísticas."""
-        for i in range(2):
+        for _i in range(2):
             await limiter.acquire()
         await limiter.acquire()  # Deve falhar
 

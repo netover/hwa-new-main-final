@@ -2,11 +2,11 @@
 Unit tests for new features without importing the main application modules
 """
 
-from unittest.mock import Mock, patch
 import sys
 
 # Create a mock for settings to avoid loading the real settings module
 import unittest.mock
+from unittest.mock import Mock, patch
 
 # Mock the settings module to avoid loading issues
 with unittest.mock.patch.dict(
@@ -21,9 +21,9 @@ with unittest.mock.patch.dict(
     },
 ):
     # Import modules after mocking the dependencies
+    from resync.api.audit import AuditAction, AuditLogger, AuditRecordResponse
     from resync.api.cache import ConnectionPoolValidator
     from resync.api.middleware.cors_monitoring import CORSMonitor, CORSOperation
-    from resync.api.audit import AuditAction, AuditLogger, AuditRecordResponse
 
 
 def test_connection_pool_validator():
@@ -94,20 +94,21 @@ def test_audit_logger_functionality():
     # Mock the logger
     mock_logger = Mock()
 
-    with patch("resync.api.audit.logger", mock_logger):
-        with patch("resync.core.logger.log_with_correlation"):
-            logger = AuditLogger()
+    with patch("resync.api.audit.logger", mock_logger), patch(
+        "resync.core.logger.log_with_correlation"
+    ):
+        logger = AuditLogger()
 
-            result = logger.generate_audit_log(
-                user_id="test_user",
-                action=AuditAction.API_ACCESS,
-                details={"resource": "/api/test", "method": "GET"},
-            )
+        result = logger.generate_audit_log(
+            user_id="test_user",
+            action=AuditAction.API_ACCESS,
+            details={"resource": "/api/test", "method": "GET"},
+        )
 
-            assert isinstance(result, AuditRecordResponse)
-            assert result.user_id == "test_user"
-            assert result.action == AuditAction.API_ACCESS
-            assert "resource" in result.details
+        assert isinstance(result, AuditRecordResponse)
+        assert result.user_id == "test_user"
+        assert result.action == AuditAction.API_ACCESS
+        assert "resource" in result.details
 
 
 def test_redis_connection_functionality():
@@ -129,7 +130,7 @@ def test_redis_connection_functionality():
         mock_redis_client.ping.return_value = True
 
         # Now import the Redis-related functions
-        from resync.api.cache import get_redis_connection, RedisCacheManager
+        from resync.api.cache import RedisCacheManager, get_redis_connection
 
         # Test get_redis_connection
         result = get_redis_connection()

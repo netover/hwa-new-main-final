@@ -5,16 +5,16 @@ Comprehensive test suite for CQRS query implementations.
 import pytest
 
 from resync.cqrs.queries import (
+    CheckTWSConnectionQuery,
+    GetCriticalPathStatusQuery,
+    GetJobsStatusQuery,
+    GetJobStatusBatchQuery,
+    GetJobStatusQuery,
+    GetPerformanceMetricsQuery,
+    GetSystemHealthQuery,
     GetSystemStatusQuery,
     GetWorkstationsStatusQuery,
-    GetJobsStatusQuery,
-    GetCriticalPathStatusQuery,
-    GetJobStatusQuery,
-    GetJobStatusBatchQuery,
-    GetSystemHealthQuery,
     SearchJobsQuery,
-    GetPerformanceMetricsQuery,
-    CheckTWSConnectionQuery,
 )
 
 

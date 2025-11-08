@@ -8,8 +8,10 @@ rate limit exceeded responses.
 
 from __future__ import annotations
 
+import json
+from collections.abc import Callable
+from dataclasses import dataclass
 from datetime import datetime, timedelta
-from typing import Callable, Optional
 
 import structlog
 from fastapi import Request, Response
@@ -20,8 +22,6 @@ from slowapi.util import get_remote_address
 from resync.settings import settings
 
 logger = structlog.get_logger(__name__)
-
-from dataclasses import dataclass
 
 
 @dataclass
@@ -95,7 +95,7 @@ limiter = Limiter(
 
 
 def create_rate_limit_exceeded_response(
-    request: Request, exc: RateLimitExceeded, retry_after: Optional[int] = None
+    request: Request, exc: RateLimitExceeded, retry_after: int | None = None
 ) -> Response:
     """
     Create a custom response for rate limit exceeded errors.
@@ -112,8 +112,6 @@ def create_rate_limit_exceeded_response(
         retry_after = exc.retry_after or 60  # Default to 60 seconds
 
     reset_time = datetime.utcnow() + timedelta(seconds=retry_after)
-
-    import json
 
     response = Response(
         content=json.dumps(

@@ -4,8 +4,8 @@ import os
 from pathlib import Path
 
 from dotenv import load_dotenv
-from pydantic import ConfigDict, BaseModel as AgnoSettings
-from pydantic import Field
+from pydantic import BaseModel as AgnoSettings
+from pydantic import ConfigDict, Field
 
 # --- Environment Setup ---
 # Load environment variables from .env file if it exists

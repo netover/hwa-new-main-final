@@ -8,12 +8,13 @@ for better modularity and maintainability while preserving all existing function
 from __future__ import annotations
 
 import asyncio
+import contextlib
 import logging
 from time import time
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 from resync.core.cache.base_cache import BaseCache
-from resync.core.cache.memory_manager import CacheMemoryManager, CacheEntry
+from resync.core.cache.memory_manager import CacheEntry, CacheMemoryManager
 from resync.core.cache.persistence_manager import CachePersistenceManager
 from resync.core.cache.transaction_manager import CacheTransactionManager
 from resync.core.exceptions import CacheError
@@ -53,7 +54,7 @@ class AsyncTTLCache(BaseCache):
         cleanup_interval: int = 30,
         num_shards: int = 16,
         enable_wal: bool = False,
-        wal_path: Optional[str] = None,
+        wal_path: str | None = None,
         max_entries: int = 100000,
         max_memory_mb: int = 100,
         paranoia_mode: bool = False,
@@ -111,7 +112,7 @@ class AsyncTTLCache(BaseCache):
                 )
                 self.enable_wal = (
                     enable_wal
-                    if enable_wal != False
+                    if enable_wal is not False
                     else getattr(settings, "ASYNC_CACHE_ENABLE_WAL", enable_wal)
                 )
                 self.wal_path = (
@@ -131,7 +132,7 @@ class AsyncTTLCache(BaseCache):
                 )
                 self.paranoia_mode = (
                     paranoia_mode
-                    if paranoia_mode != False
+                    if paranoia_mode is not False
                     else getattr(settings, "ASYNC_CACHE_PARANOIA_MODE", paranoia_mode)
                 )
 
@@ -162,11 +163,11 @@ class AsyncTTLCache(BaseCache):
                 self.max_memory_mb = min(self.max_memory_mb, 10)
 
             # Initialize cache shards and locks
-            self.shards: List[Dict[str, CacheEntry]] = [
+            self.shards: list[dict[str, CacheEntry]] = [
                 {} for _ in range(self.num_shards)
             ]
             self.shard_locks = [asyncio.Lock() for _ in range(self.num_shards)]
-            self.cleanup_task: Optional[asyncio.Task[None]] = None
+            self.cleanup_task: asyncio.Task[None] | None = None
             self.is_running = False
 
             # Initialize component managers
@@ -183,7 +184,7 @@ class AsyncTTLCache(BaseCache):
             self.transaction_manager = CacheTransactionManager()
 
             # Initialize WAL if enabled
-            self.wal: Optional[WriteAheadLog] = None
+            self.wal: WriteAheadLog | None = None
             if self.enable_wal:
                 wal_path_to_use = self.wal_path or "./cache_wal"
                 self.wal = WriteAheadLog(wal_path_to_use)
@@ -236,10 +237,9 @@ class AsyncTTLCache(BaseCache):
             return 0
 
         # Replay the WAL to rebuild cache state
-        replayed_ops = await self.wal.replay_log(self)
-        return replayed_ops
+        return await self.wal.replay_log(self)
 
-    def _get_shard(self, key: str) -> Tuple[Dict[str, CacheEntry], asyncio.Lock]:
+    def _get_shard(self, key: str) -> tuple[dict[str, CacheEntry], asyncio.Lock]:
         """Get the shard and lock for a given key with bounds checking."""
         try:
             key_hash = hash(key)
@@ -348,7 +348,7 @@ class AsyncTTLCache(BaseCache):
 
         runtime_metrics.close_correlation_id(correlation_id)
 
-    async def get(self, key: str) -> Optional[Any]:
+    async def get(self, key: str) -> Any | None:
         """
         Asynchronously retrieve an item from the cache.
 
@@ -430,7 +430,7 @@ class AsyncTTLCache(BaseCache):
         finally:
             runtime_metrics.close_correlation_id(correlation_id)
 
-    async def set(self, key: str, value: Any, ttl: Optional[int] = None) -> bool:
+    async def set(self, key: str, value: Any, ttl: int | None = None) -> bool:
         """
         Asynchronously add an item to the cache.
 
@@ -492,7 +492,7 @@ class AsyncTTLCache(BaseCache):
                     self.shards, current_size + 1
                 ):
                     # Need to evict entries to make room
-                    bytes_freed = self.memory_manager.evict_to_fit(
+                    self.memory_manager.evict_to_fit(
                         self.shards, self.shard_locks, 0, key
                     )
 
@@ -591,11 +591,11 @@ class AsyncTTLCache(BaseCache):
         if value is None:
             raise ValueError("Cache value cannot be None")
 
-    def _validate_ttl(self, ttl: Optional[int]) -> float:
+    def _validate_ttl(self, ttl: int | None) -> float:
         """Validate the TTL value."""
         if ttl is None:
             return float(self.ttl_seconds)
-        elif not isinstance(ttl, (int, float)):
+        elif not isinstance(ttl, int | float):
             raise TypeError(f"TTL must be numeric: {type(ttl)}")
         elif ttl < 0:
             raise ValueError(f"TTL cannot be negative: {ttl}")
@@ -675,7 +675,7 @@ class AsyncTTLCache(BaseCache):
         return self.persistence_manager.cleanup_old_snapshots(max_age_seconds)
 
     # Health check and monitoring
-    def get_detailed_metrics(self) -> Dict[str, Any]:
+    def get_detailed_metrics(self) -> dict[str, Any]:
         """Get comprehensive cache metrics for monitoring."""
         total_requests = (
             runtime_metrics.cache_hits.value + runtime_metrics.cache_misses.value
@@ -712,7 +712,7 @@ class AsyncTTLCache(BaseCache):
             "memory_info": self.memory_manager.get_memory_info(self.shards),
         }
 
-    async def health_check(self) -> Dict[str, Any]:
+    async def health_check(self) -> dict[str, Any]:
         """Perform comprehensive health check."""
         try:
             correlation_id = runtime_metrics.create_correlation_id(
@@ -721,7 +721,7 @@ class AsyncTTLCache(BaseCache):
 
             from resync.core import env_detector
 
-            is_production = env_detector.is_production()
+            env_detector.is_production()
 
             # Basic functionality test
             test_key = f"health_check_{correlation_id.id}_{int(time())}"
@@ -786,13 +786,11 @@ class AsyncTTLCache(BaseCache):
         self.is_running = False
         if self.cleanup_task and not self.cleanup_task.done():
             self.cleanup_task.cancel()
-            try:
+            with contextlib.suppress(asyncio.CancelledError):
                 await self.cleanup_task
-            except asyncio.CancelledError:
-                pass
         logger.debug("AsyncTTLCache (refactored) stopped")
 
-    async def __aenter__(self) -> "AsyncTTLCache":
+    async def __aenter__(self) -> AsyncTTLCache:
         """Async context manager entry."""
         return self
 
@@ -801,7 +799,7 @@ class AsyncTTLCache(BaseCache):
         await self.stop()
 
     # WAL replay methods
-    async def apply_wal_set(self, key: str, value: Any, ttl: Optional[float] = None):
+    async def apply_wal_set(self, key: str, value: Any, ttl: float | None = None):
         """Apply a SET operation from WAL replay without re-logging."""
         try:
             validated_key = self._validate_key(key)

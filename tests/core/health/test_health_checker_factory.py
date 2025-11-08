@@ -6,9 +6,9 @@ This module contains unit tests for the HealthCheckerFactory class.
 
 from unittest.mock import MagicMock, patch
 
-from resync.core.health_models import ComponentType, HealthCheckConfig
-from resync.core.health.health_checkers.health_checker_factory import HealthCheckerFactory
 from resync.core.health.health_checkers.base_health_checker import BaseHealthChecker
+from resync.core.health.health_checkers.health_checker_factory import HealthCheckerFactory
+from resync.core.health_models import ComponentType, HealthCheckConfig
 
 
 class MockHealthChecker(BaseHealthChecker):
@@ -128,7 +128,7 @@ class TestHealthCheckerFactory:
         assert len(validation_results) > 0
 
         # Each checker should have a validation result (list)
-        for checker_name, errors in validation_results.items():
+        for _checker_name, errors in validation_results.items():
             assert isinstance(errors, list)
 
     def test_get_component_type_mapping(self):

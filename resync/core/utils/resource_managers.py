@@ -8,8 +8,9 @@ LLM clients, file handles, and other resources that need proper cleanup.
 import asyncio
 import logging
 from abc import ABC, abstractmethod
+from collections.abc import AsyncIterator, Callable, Iterator
 from contextlib import asynccontextmanager, contextmanager
-from typing import Any, AsyncIterator, Callable, Generic, Iterator, Optional, TypeVar
+from typing import Any, Generic, TypeVar
 
 logger = logging.getLogger(__name__)
 
@@ -40,13 +41,9 @@ class LLMResourceManager(ResourceManager):
 
     async def acquire(self) -> Any:
         """Create and return an LLM client."""
-        try:
-            client = self.client_factory()
-            logger.debug("LLM client acquired")
-            return client
-        except Exception as e:
-            logger.error(f"Failed to acquire LLM client: {e}")
-            raise
+        client = self.client_factory()
+        logger.debug("LLM client acquired")
+        return client
 
     async def release(self, client: Any) -> None:
         """Close LLM client."""
@@ -70,7 +67,7 @@ class LLMResourceManager(ResourceManager):
 
 @asynccontextmanager
 async def managed_llm_call(
-    client_factory: Optional[Callable[[], Any]] = None,
+    client_factory: Callable[[], Any] | None = None,
 ) -> AsyncIterator[Any]:
     """
     Context manager for LLM client lifecycle.
@@ -93,7 +90,7 @@ async def managed_llm_call(
         yield client
     except Exception as e:
         logger.error(f"Error in managed LLM call: {e}")
-        raise
+        raise e
     finally:
         if client:
             await manager.release(client)
@@ -116,7 +113,7 @@ async def managed_database_connection(
         yield conn
     except Exception as e:
         logger.error(f"Database operation error: {e}")
-        raise
+        raise e
     finally:
         if conn:
             try:
@@ -135,25 +132,17 @@ def managed_file_operation(file_path: str, mode: str = "r", **kwargs) -> Iterato
         with managed_file_operation('file.txt', 'r') as f:
             content = f.read()
     """
-    file_obj = None
     try:
-        file_obj = open(file_path, mode, **kwargs)
-        yield file_obj
+        with open(file_path, mode, **kwargs) as file_obj:
+            yield file_obj
     except Exception as e:
         logger.error(f"File operation error for {file_path}: {e}")
-        raise
-    finally:
-        if file_obj:
-            try:
-                file_obj.close()
-                logger.debug(f"File {file_path} closed")
-            except Exception as e:
-                logger.warning(f"Error closing file {file_path}: {e}")
+        raise e
 
 
 @asynccontextmanager
 async def managed_http_session(
-    session_factory: Optional[Callable[[], Any]] = None,
+    session_factory: Callable[[], Any] | None = None,
 ) -> AsyncIterator[Any]:
     """
     Context manager for HTTP session lifecycle.
@@ -168,12 +157,14 @@ async def managed_http_session(
         try:
             import aiohttp
 
-            session_factory = lambda: aiohttp.ClientSession()
+            def session_factory():
+                return aiohttp.ClientSession()
         except ImportError:
             try:
                 import httpx
 
-                session_factory = lambda: httpx.AsyncClient()
+                def session_factory():
+                    return httpx.AsyncClient()
             except ImportError:
                 raise ImportError(
                     "No HTTP client library available. Install aiohttp or httpx."
@@ -185,7 +176,7 @@ async def managed_http_session(
         yield session
     except Exception as e:
         logger.error(f"HTTP session error: {e}")
-        raise
+        raise e
     finally:
         if session:
             try:
@@ -205,7 +196,7 @@ class ResourcePoolManager:
     def __init__(self, resource_manager: ResourceManager[T], max_size: int = 10):
         self.resource_manager = resource_manager
         self.max_size = max_size
-        self.pool: asyncio.Queue[Optional[T]] = asyncio.Queue(maxsize=max_size)
+        self.pool: asyncio.Queue[T | None] = asyncio.Queue(maxsize=max_size)
         self.size = 0
         self._lock = asyncio.Lock()
 
@@ -335,6 +326,6 @@ async def managed_transaction(connection) -> AsyncIterator[Any]:
     try:
         yield connection
         await connection.commit()
-    except Exception:
+    except Exception as e:
         await connection.rollback()
-        raise
+        raise e

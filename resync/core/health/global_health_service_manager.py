@@ -8,6 +8,7 @@ ensuring thread-safe initialization and proper lifecycle management.
 from __future__ import annotations
 
 import asyncio
+from typing import Any
 
 import structlog
 

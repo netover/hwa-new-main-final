@@ -64,8 +64,7 @@ def mock_authenticated_request():
 @pytest.fixture
 def test_app():
     """Create a test FastAPI application."""
-    app = FastAPI()
-    return app
+    return FastAPI()
 
 
 class TestRateLimitConfiguration:
@@ -287,7 +286,7 @@ class TestErrorHandling:
             # Should return some default value or handle gracefully
         except Exception as e:
             # If it crashes, it should be a controlled error
-            assert isinstance(e, (AttributeError, TypeError))
+            assert isinstance(e, AttributeError | TypeError)
 
 
 if __name__ == "__main__":

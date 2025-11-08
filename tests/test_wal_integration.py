@@ -1,9 +1,11 @@
-import pytest
-import tempfile
 import asyncio
+import tempfile
 from pathlib import Path
+
+import pytest
+
 from resync.core.async_cache import AsyncTTLCache
-from resync.core.write_ahead_log import WriteAheadLog, WalEntry, WalOperationType
+from resync.core.write_ahead_log import WalEntry, WalOperationType, WriteAheadLog
 
 
 @pytest.mark.asyncio
@@ -167,7 +169,7 @@ async def test_wal_cleanup_old_logs():
         await wal.cleanup_old_logs(retention_hours=0)
 
         # Verify old log files were removed based on retention policy
-        log_files_final = list(wal_path.glob("wal_*.log"))
+        list(wal_path.glob("wal_*.log"))
 
         # Since we have files that were just created, they may not be old enough to be cleaned
         # But the cleanup operation should still run without error
@@ -271,7 +273,7 @@ async def test_wal_recovery():
         cache2 = AsyncTTLCache(ttl_seconds=60, enable_wal=True, wal_path=str(wal_path))
 
         # Trigger WAL replay manually since it may not happen automatically
-        replayed_ops = await cache2._replay_wal_on_startup()
+        await cache2._replay_wal_on_startup()
 
         # Verify data was recovered from WAL
         assert await cache2.get("recovery_key1") == "recovery_value1"

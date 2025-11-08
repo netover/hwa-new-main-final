@@ -142,12 +142,11 @@ class RateLimitRule:
         """Get rate limit key from request."""
         if self.key_strategy == "ip":
             return self._get_client_ip(request)
-        elif self.key_strategy == "user":
+        if self.key_strategy == "user":
             return request.get("user_id", "anonymous")
-        elif self.key_strategy == "api_key":
+        if self.key_strategy == "api_key":
             return request.headers.get("X-API-Key", "no_key")
-        else:
-            return "default"
+        return "default"
 
 
 class APIGateway:
@@ -496,11 +495,10 @@ class APIGateway:
 
         # API Key authentication
         api_key = request.headers.get("X-API-Key")
-        if api_key:
+        if api_key and api_key.startswith("api_key_"):
             # This would validate API key (simplified)
-            if api_key.startswith("api_key_"):
-                request["api_key_valid"] = True
-                return {"authenticated": True}
+            request["api_key_valid"] = True
+            return {"authenticated": True}
 
         return {"authenticated": False, "reason": "Invalid authentication"}
 
@@ -532,14 +530,14 @@ class APIGateway:
             self.service_index[service_name] = (index + 1) % len(available_endpoints)
             return available_endpoints[index]
 
-        elif strategy == LoadBalancingStrategy.LEAST_CONNECTIONS:
+        if strategy == LoadBalancingStrategy.LEAST_CONNECTIONS:
             # Select endpoint with least active connections
             return min(
                 available_endpoints,
                 key=lambda ep: self.active_connections.get(ep.url, 0),
             )
 
-        elif strategy == LoadBalancingStrategy.WEIGHTED_ROUND_ROBIN:
+        if strategy == LoadBalancingStrategy.WEIGHTED_ROUND_ROBIN:
             # Simple weighted selection
             total_weight = sum(ep.weight for ep in available_endpoints)
             if total_weight == 0:
@@ -637,28 +635,26 @@ class APIGateway:
             # Create HTTP client session
             timeout = aiohttp.ClientTimeout(total=route_config.timeout_seconds)
 
-            async with aiohttp.ClientSession(timeout=timeout) as session:
-                # Forward request
-                async with session.request(
-                    method=request.method,
-                    url=target_url,
-                    headers=headers,
-                    data=await request.read() if request.body_exists else None,
-                    allow_redirects=False,
-                ) as response:
-                    # Create response
-                    response_data = await response.read()
-                    return web.Response(
-                        status=response.status,
-                        headers=dict(response.headers),
-                        body=response_data,
-                    )
+            async with aiohttp.ClientSession(timeout=timeout) as session, session.request(
+                method=request.method,
+                url=target_url,
+                headers=headers,
+                data=await request.read() if request.body_exists else None,
+                allow_redirects=False,
+            ) as response:
+                # Create response
+                response_data = await response.read()
+                return web.Response(
+                    status=response.status,
+                    headers=dict(response.headers),
+                    body=response_data,
+                )
 
-        except asyncio.TimeoutError:
-            raise web.HTTPGatewayTimeout(text="Service timeout")
+        except asyncio.TimeoutError as e:
+            raise web.HTTPGatewayTimeout(text="Service timeout") from e
         except aiohttp.ClientError as e:
             logger.error(f"Service request failed: {e}")
-            raise web.HTTPBadGateway(text="Service unavailable")
+            raise web.HTTPBadGateway(text="Service unavailable") from e
         finally:
             # Decrement active connections
             self.active_connections[endpoint.url] -= 1
@@ -698,10 +694,9 @@ class APIGateway:
                     headers=cached_data["headers"],
                     body=cached_data["body"],
                 )
-            else:
-                # Cache expired
-                del self.cache[cache_key]
-                del self.cache_ttl[cache_key]
+            # Cache expired
+            del self.cache[cache_key]
+            del self.cache_ttl[cache_key]
 
         return None
 
@@ -766,7 +761,7 @@ class APIGateway:
 
                 # Clean old request counts (older than 1 hour)
                 cutoff_time = current_time - 3600
-                for key, requests in self.request_counts.items():
+                for _, requests in self.request_counts.items():
                     while requests and requests[0] < cutoff_time:
                         requests.popleft()
 

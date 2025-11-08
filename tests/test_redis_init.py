@@ -2,8 +2,10 @@
 Unit and integration tests for RedisInitializer.
 """
 
-import pytest
 from unittest.mock import AsyncMock, patch
+
+import pytest
+
 from resync.core.redis_init import RedisInitializer
 from resync.settings import settings
 
@@ -114,7 +116,7 @@ async def test_redis_initializer_health_check():
     ):
 
         # Initialize Redis
-        client = await initializer.initialize(
+        await initializer.initialize(
             redis_url="redis://mock:6379",
             max_retries=settings.redis_max_startup_retries,
             base_backoff=settings.redis_startup_backoff_base,

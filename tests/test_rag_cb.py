@@ -1,7 +1,8 @@
-import pytest
 import httpx
-from resync.services.rag_client import RAGServiceClient
+import pytest
+
 from resync.core.resilience import CircuitBreakerError
+from resync.services.rag_client import RAGServiceClient
 
 
 @pytest.mark.asyncio
