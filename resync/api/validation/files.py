@@ -7,7 +7,6 @@ from enum import Enum
 from typing import Any, Dict, List, Optional
 
 from pydantic import field_validator, StringConstraints, Field, model_validator, validator, ConfigDict
-from pydantic.types import constr
 
 from .common import (
     BaseValidatedModel,

@@ -8,7 +8,6 @@ from enum import Enum
 from typing import Any, Dict, List, Optional, Pattern, Union
 
 from pydantic import field_validator, StringConstraints, BaseModel, ConfigDict, Field
-from pydantic.types import constr
 from typing_extensions import Annotated
 
 

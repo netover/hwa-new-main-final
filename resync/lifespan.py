@@ -20,7 +20,6 @@ from typing import AsyncIterator
 from fastapi import FastAPI
 from redis.exceptions import (
     AuthenticationError as RedisAuthError,
-    BusyLoadingError as RedisBusyLoadingError,
     ConnectionError as RedisConnectionError,
     TimeoutError as RedisTimeoutError,
 )

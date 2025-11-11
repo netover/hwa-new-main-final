@@ -4,7 +4,6 @@ from enum import Enum
 from typing import List, Optional
 
 from pydantic import field_validator, StringConstraints, EmailStr, Field, validator, ConfigDict
-from pydantic.types import constr
 
 from .common import BaseValidatedModel
 from typing_extensions import Annotated
